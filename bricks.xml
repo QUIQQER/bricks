@@ -61,7 +61,7 @@
             </settings>
         </brick>
 
-        <brick control="\QUI\Controls\LangSwitch">
+        <brick control="\QUI\Bricks\Controls\LangSwitch">
             <title>
                 <locale group="quiqqer/bricks" var="brick.control.langSwitch.title"/>
             </title>

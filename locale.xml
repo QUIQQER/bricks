@@ -329,6 +329,14 @@
             <de><![CDATA[Baustein-Inhalt]]></de>
             <en><![CDATA[Brick content]]></en>
         </locale>
+        <locale name="brick.edit.footer">
+            <de><![CDATA[Baustein-Fußnote (Footer)]]></de>
+            <en><![CDATA[Brick footer]]></en>
+        </locale>
+        <locale name="brick.edit.footer.hint">
+            <de><![CDATA[Im Footer kannst du zusätzliche Inhalte ergänzen, die unterhalb des Bausteins angezeigt werden – z.B. Hinweise, Bedingungen, Sternchen-/Fußnoten, kleine Buttons/Links oder ergänzende Texte. Mehr dazu erfährst du hier: <a href="https://dev.quiqqer.com/quiqqer/bricks/-/wikis/home/Verwendung/Baustein-Footer" target="_blank">Baustein Footer</a></a>]]></de>
+            <en><![CDATA[In the footer, you can add additional content that will be displayed below the brick—for example notes, conditions, asterisks/footnotes, small buttons/links, or supplementary text. Learn more here: <a href="https://dev.quiqqer.com/quiqqer/bricks/-/wikis/home/Verwendung/Baustein-Footer" target="_blank">Brick footer</a>]]></en>
+        </locale>
         <locale name="brick.edit.extra.header">
             <de><![CDATA[Zusäzliche Einstellungen]]></de>
             <en><![CDATA[Extra settings]]></en>
@@ -784,6 +792,10 @@ This content does not replace the block content. You can still place the brick t
         <locale name="brick.panel.category.settings">
             <de><![CDATA[Verwaltung & Einstellungen]]></de>
             <en><![CDATA[Management & settings]]></en>
+        </locale>
+        <locale name="brick.panel.category.footer">
+            <de><![CDATA[Baustein-Fußnote (Footer)]]></de>
+            <en><![CDATA[Brick footer]]></en>
         </locale>
         <locale name="brick.panel.category.usage">
             <de><![CDATA[Verwendung]]></de>
