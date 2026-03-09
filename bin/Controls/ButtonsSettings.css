@@ -1,0 +1,25 @@
+.quiqqer-bricks-buttons-settings-entry-form table {
+    border: none;
+}
+
+.quiqqer-bricks-buttons-settings-entry-form td {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.quiqqer-bricks-buttons-settings-preview {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.quiqqer-bricks-buttons-settings-preview__text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.quiqqer-bricks-buttons-settings-preview--iconOnly {
+    min-width: 2.5rem;
+    justify-content: center;
+}

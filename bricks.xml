@@ -1783,6 +1783,37 @@
             </settings>
         </brick>
 
+        <brick control="\QUI\Bricks\Controls\Buttons">
+            <title>
+                <locale group="quiqqer/bricks" var="brick.buttons.title"/>
+            </title>
+            <description>
+                <locale group="quiqqer/bricks" var="brick.buttons.description"/>
+            </description>
+            <mockups>
+                <mockup src="/packages/quiqqer/bricks/bin/images/mockups/buttons-900x600.svg" type="preview"/>
+            </mockups>
+
+            <settings>
+                <setting name="displayMode" type="select">
+                    <locale group="quiqqer/bricks" var="brick.buttons.settings.displayMode"/>
+
+                    <option value="button" default="1">
+                        <locale group="quiqqer/bricks" var="brick.buttons.settings.displayMode.button"/>
+                    </option>
+                    <option value="icon-only">
+                        <locale group="quiqqer/bricks" var="brick.buttons.settings.displayMode.iconOnly"/>
+                    </option>
+                </setting>
+
+                <setting name="buttons" type="hidden"
+                         data-qui="package/quiqqer/bricks/bin/Controls/ButtonsSettings"
+                >
+                    <locale group="quiqqer/bricks" var="brick.buttons.settings.entries"/>
+                </setting>
+            </settings>
+        </brick>
+
         <!-- Accordion -->
         <brick control="\QUI\Bricks\Controls\Accordion">
             <title>

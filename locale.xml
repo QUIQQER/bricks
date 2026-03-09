@@ -2521,6 +2521,138 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
             <en><![CDATA[Text]]></en>
         </locale>
 
+        <!-- Buttons -->
+        <locale name="brick.buttons.title">
+            <de><![CDATA[Buttons]]></de>
+            <en><![CDATA[Buttons]]></en>
+        </locale>
+        <locale name="brick.buttons.description">
+            <de><![CDATA[Liste mit konfigurierbaren Buttons inkl. Icons und Link-Zielen.]]></de>
+            <en><![CDATA[List of configurable buttons including icons and link targets.]]></en>
+        </locale>
+        <locale name="brick.buttons.settings.displayMode">
+            <de><![CDATA[Darstellung]]></de>
+            <en><![CDATA[Display mode]]></en>
+        </locale>
+        <locale name="brick.buttons.settings.displayMode.button">
+            <de><![CDATA[Button]]></de>
+            <en><![CDATA[Button]]></en>
+        </locale>
+        <locale name="brick.buttons.settings.displayMode.iconOnly">
+            <de><![CDATA[Nur Icon]]></de>
+            <en><![CDATA[Icon only]]></en>
+        </locale>
+        <locale name="brick.buttons.settings.entries">
+            <de><![CDATA[Buttons]]></de>
+            <en><![CDATA[Buttons]]></en>
+        </locale>
+
+        <locale name="quiqqer.bricks.buttons.create.isDisabled.short">
+            <de><![CDATA[Deaktiviert]]></de>
+            <en><![CDATA[Disabled]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.create.preview">
+            <de><![CDATA[Vorschau]]></de>
+            <en><![CDATA[Preview]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.create.text">
+            <de><![CDATA[Text]]></de>
+            <en><![CDATA[Text]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.create.iconClass">
+            <de><![CDATA[Icon-Klasse]]></de>
+            <en><![CDATA[Icon class]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.create.btnType">
+            <de><![CDATA[Button-Typ]]></de>
+            <en><![CDATA[Button type]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.create.href">
+            <de><![CDATA[Link]]></de>
+            <en><![CDATA[Link]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.create.targetBlank.short">
+            <de><![CDATA[_blank]]></de>
+            <en><![CDATA[_blank]]></en>
+        </locale>
+
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.disable">
+            <de><![CDATA[Eintrag deaktivieren]]></de>
+            <en><![CDATA[Disable entry]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.text">
+            <de><![CDATA[Text]]></de>
+            <en><![CDATA[Text]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.iconClass">
+            <de><![CDATA[FontAwesome Icon-Klasse]]></de>
+            <en><![CDATA[FontAwesome icon class]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.iconPosition">
+            <de><![CDATA[Icon-Position]]></de>
+            <en><![CDATA[Icon position]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.iconPosition.start">
+            <de><![CDATA[Am Anfang]]></de>
+            <en><![CDATA[At start]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.iconPosition.end">
+            <de><![CDATA[Am Ende]]></de>
+            <en><![CDATA[At end]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.btnType">
+            <de><![CDATA[Button-Typ]]></de>
+            <en><![CDATA[Button type]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.size">
+            <de><![CDATA[Größe]]></de>
+            <en><![CDATA[Size]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.size.default">
+            <de><![CDATA[Standard]]></de>
+            <en><![CDATA[Default]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.size.small">
+            <de><![CDATA[Klein]]></de>
+            <en><![CDATA[Small]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.size.large">
+            <de><![CDATA[Groß]]></de>
+            <en><![CDATA[Large]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.href">
+            <de><![CDATA[Link]]></de>
+            <en><![CDATA[Link]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.targetBlank">
+            <de><![CDATA[In neuem Tab öffnen (_blank)]]></de>
+            <en><![CDATA[Open in new tab (_blank)]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.title">
+            <de><![CDATA[Title-Attribut]]></de>
+            <en><![CDATA[Title attribute]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.ariaLabel">
+            <de><![CDATA[Aria-Label]]></de>
+            <en><![CDATA[Aria label]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.disabled">
+            <de><![CDATA[Button deaktiviert]]></de>
+            <en><![CDATA[Button disabled]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.fullWidth">
+            <de><![CDATA[Volle Breite (btn-full)]]></de>
+            <en><![CDATA[Full width (btn-full)]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.onClick">
+            <de><![CDATA[JS-Funktion (onclick)]]></de>
+            <en><![CDATA[JS function (onclick)]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.customClass">
+            <de><![CDATA[Eigene CSS-Klasse]]></de>
+            <en><![CDATA[Custom CSS class]]></en>
+        </locale>
+
         <locale name="brick.textAndImage.textRatio">
             <de><![CDATA[Text und Bild Platzverhältnis]]></de>
             <en><![CDATA[Text ratio]]></en>
