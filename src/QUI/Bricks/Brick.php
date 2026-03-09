@@ -644,7 +644,7 @@ class Brick extends QUI\QDOM
 
         if (!empty($customJS)) {
             $extraJs = "
-            <script>
+            <script data-no-cache='1'>
               (function () {
                 const script = document.currentScript;
                 const prevEl = script.previousElementSibling;
