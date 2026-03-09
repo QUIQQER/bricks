@@ -2,3 +2,7 @@
     margin-bottom: 5rem;
     margin-top: 5rem;
 }
+
+.quiqqer-textImageMultiple > .grid-container {
+    padding-inline: 0;
+}

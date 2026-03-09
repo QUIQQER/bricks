@@ -652,7 +652,6 @@ class Brick extends QUI\QDOM
         
                 if (!prevEl) return;
                 if (brickId !== parseInt(prevEl.dataset.brickid, 10)) return;
-                if (!prevEl?.dataset?.qui) return;
                 
                 new Promise((resolve) => {
                     // Kein QUI-Kontext -> trotzdem Custom-JS ausführen
