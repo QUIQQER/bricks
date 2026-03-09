@@ -163,6 +163,7 @@ class Brick extends QUI\QDOM
 
         $this->settings['customCSS'] = '';
         $this->settings['customJS'] = '';
+        $this->settings['footer'] = '';
 
         // control default settings
         if (is_object($Control)) {
@@ -557,6 +558,7 @@ class Brick extends QUI\QDOM
             $result = $Engine->fetch(dirname(__FILE__) . '/Brick.html');
             $result = $this->extendCustomCSS($result);
             $result = $this->extendCustomJs($result);
+            $result = $this->extendFooter($result);
 
             QUI\Cache\Manager::set($cacheName, [
                 'html' => $result,
@@ -603,6 +605,7 @@ class Brick extends QUI\QDOM
         $result = $Control->create();
         $result = $this->extendCustomCSS($result);
         $result = $this->extendCustomJs($result);
+        $result = $this->extendFooter($result);
 
         $cssFiles = $Control->getCSSFiles();
 
@@ -687,6 +690,23 @@ class Brick extends QUI\QDOM
         }
 
         return $result . $extraJs;
+    }
+
+    protected function extendFooter(string $result = ''): string
+    {
+        $settings = $this->getSettings();
+
+        if (!isset($settings['footer']) || !is_string($settings['footer'])) {
+            return $result;
+        }
+
+        $footer = trim($settings['footer']);
+
+        if ($footer === '') {
+            return $result;
+        }
+
+        return $result . '<div class="quiqqer-brick-footer control-footer">' . $footer . '</div>';
     }
 
     /**
@@ -822,9 +842,7 @@ class Brick extends QUI\QDOM
      */
     public function setSetting(string $name, mixed $value): void
     {
-        if (isset($this->settings[$name])) {
-            $this->settings[$name] = $value;
-        }
+        $this->settings[$name] = $value;
 
         if ($this->Control instanceof Control) {
             $this->Control->setAttribute($name, $value);
