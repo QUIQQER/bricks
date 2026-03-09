@@ -624,37 +624,101 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
          * @returns {Promise}
          */
         showInformation: function () {
-            const self = this;
-
-            this.Loader.show();
+            const self = this,
+                data = self.getAttribute('data');
 
             return this.$hideCategory().then(function () {
-                return new Promise(function (resolve, reject) {
-                    Template.get('ajax/brick/templates/information', function (result) {
-                        const data = self.getAttribute('data');
-
-                        self.$Container.set('html', result);
-                        self.$load();
-
-                        if (data && data.attributes && typeof data.attributes.deprecated !== 'undefined' &&
-                            data.attributes.deprecated) {
-                            self.$Container.getElements('.deprecated-messages').setStyle('display', 'inline-block');
-                        }
-
-                        resolve();
-                    }, {
-                        'package': 'quiqqer/bricks',
-                        onError: reject
-                    });
+                return Template.get('ajax/brick/templates/information', false, {
+                    'package': 'quiqqer/bricks'
                 });
+            }).then(function (html) {
+                self.$Container.set('html', html);
+                self.$load();
+
+                if (typeof data.attributes.deprecated !== 'undefined' && data.attributes.deprecated) {
+                    self.$Container.getElements('.deprecated-messages').setStyle('display', 'inline-block');
+                }
             }).then(function () {
+                return Bricks.getAvailableBricks();
+            }).then(function (bricks) {
+                let type = self.getElm().getElement('#type').value;
+                let brick = null;
+
+                for (let i = 0, len = bricks.length; i < len; i++) {
+                    if (bricks[i].control === type) {
+                        brick = bricks[i];
+                        break;
+                    }
+                }
+
+                if (brick) {
+                    if (typeof brick.title[1] !== 'undefined') {
+                        self.getElm().getElement('#typeTitle').value = QUILocale.get(
+                            brick.title[0],
+                            brick.title[1]
+                        );
+                    } else {
+                        self.getElm().getElement('#typeTitle').value = QUILocale.get(
+                            brick.title.group,
+                            brick.title.var
+                        );
+                    }
+                }
+
+                // show brick data (JSON)
+                const ShowDataBtn = self.getElm().getElement('.quiqqer-bricks-brickedit-showBrickDataBtn');
+
+                if (ShowDataBtn) {
+                    ShowDataBtn.addEventListener('click', (event) => {
+                        event.preventDefault();
+
+                        require(['qui/controls/windows/Popup'], function (QUIPopup) {
+                            new QUIPopup({
+                                title: QUILocale.get(lg, 'brick.edit.showBrickData.window.title'),
+                                icon: 'fa fa-code',
+                                buttons: false,
+                                autoclose: true,
+                                events: {
+                                    onOpen: function (Win) {
+                                        const Body = Win.getContent(),
+                                            data = self.getAttribute('data'),
+                                            InfoText = QUILocale.get(lg, 'brick.edit.showBrickData.window.text'),
+                                            CopyBtnText = QUILocale.get(lg,
+                                                'brick.edit.showBrickData.window.copyBtn');
+
+                                        data.customfields = self.$customfields;
+
+                                        const CopyBtn = document.createElement('button');
+                                        CopyBtn.classList.add('qui-button');
+                                        CopyBtn.innerHTML = `<span class="fa fa-copy"></span> ${CopyBtnText}`;
+                                        CopyBtn.addEventListener('click', (event) => {
+                                            event.preventDefault();
+                                            navigator.clipboard.writeText(Body.querySelector('textarea').value);
+                                        });
+
+                                        Body.set('html',
+                                            `
+                                            <div class="showBrickData-window-body">
+                                            <p class="showBrickData-window-body-text">${InfoText}</p>
+                                            <textarea autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                                            </div>
+                                            `
+                                        );
+
+                                        Body.querySelector('textarea').value = JSON.stringify(data);
+                                        Body.querySelector('.showBrickData-window-body-text').appendChild(CopyBtn);
+                                    }
+                                }
+                            }).open();
+                        });
+                    })
+                }
+
                 return self.$showCategory();
             }).then(function () {
                 self.Loader.hide();
-            }).catch(function (err) {
-                console.error(err);
-                self.Loader.hide();
             });
+
         },
 
         /**
