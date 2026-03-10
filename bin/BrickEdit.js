@@ -45,6 +45,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
             'showSettings',
             'showExtras',
             'showContent',
+            'showFooterContent',
             'showUsage',
             'openCustomCSS',
             'openCustomJS',
@@ -70,6 +71,8 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
             this.$availableSettings = [];
             this.$customfields = [];
             this.$loaded = false;
+
+            this.$categoryAnimation = null;
 
             this.$Container = null;
             this.$Editor = false;
@@ -200,6 +203,15 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
             });
 
             this.addCategory({
+                name: 'footer',
+                icon: 'fa fa-file-text',
+                text: QUILocale.get(lg, 'brick.panel.category.footer'),
+                events: {
+                    onClick: this.showFooterContent
+                }
+            });
+
+            this.addCategory({
                 name: 'usage',
                 icon: 'fa fa-map-signs',
                 text: QUILocale.get(lg, 'brick.panel.category.usage'),
@@ -294,7 +306,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
                     resolve();
                 }, {
-                    'package': 'quiqqer/brick',
+                    'package': 'quiqqer/bricks',
                     brickId: this.getAttribute('id'),
                     onError: reject
                 });
@@ -420,6 +432,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                 case 'extra':
                 case 'settings':
                 case 'content':
+                case 'footer':
                     break;
 
                 case 'customCSS':
@@ -491,6 +504,11 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                 data.attributes.content = this.$Editor.getContent();
             }
 
+            if (unload === 'footer' && this.$Editor) {
+                data.settings = data.settings || {};
+                data.settings.footer = this.$Editor.getContent();
+            }
+
             this.setAttribute('data', data);
         },
 
@@ -511,7 +529,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                     const hint = QUILocale.get(lg, 'brick.panel.category.customCSS.hint');
 
                     self.$Container.set('html', `
-                    <div class="custom-css-js-wrapper"><form></form><div class="hint">${hint}</div></div>
+                    <div class="quiqqer-bricks-brickedit-wrapper"><form></form><div class="hint">${hint}</div></div>
                     `);
 
                     require(['package/quiqqer/bricks/bin/Controls/backend/CustomCSS'], function (CustomCSS) {
@@ -563,7 +581,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                     const hint = QUILocale.get(lg, 'brick.panel.category.customJS.hint');
 
                     self.$Container.set('html', `
-                    <div class="custom-css-js-wrapper"><form></form><div class="hint">${hint}</div></div>
+                    <div class="quiqqer-bricks-brickedit-wrapper"><form></form><div class="hint">${hint}</div></div>
                     `);
 
                     require(['package/quiqqer/bricks/bin/Controls/backend/CustomJS'], function (CustomJS) {
@@ -798,6 +816,31 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
         },
 
         /**
+         * Setting footer content
+         *
+         * @returns {Promise}
+         */
+        showFooterContent: function () {
+            const self = this;
+
+            return this.$hideCategory().then(function () {
+                return Template.get('ajax/brick/templates/footer', false, {
+                    'package': 'quiqqer/bricks'
+                });
+            }).then(function (html) {
+                self.$Container.set('html', html);
+                return self.$createFooterEditor();
+            }).then(function () {
+                return self.$showCategory();
+            }).then(function () {
+                self.Loader.hide();
+            }).catch(function (err) {
+                console.error(err);
+                self.Loader.hide();
+            });
+        },
+
+        /**
          *
          * @return {Promise<T>}
          */
@@ -845,6 +888,39 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
          * @return Promise
          */
         $createContentEditor: function () {
+            const data = this.getAttribute('data');
+            data.attributes = data.attributes || {};
+
+            if (typeof data.attributes.content === 'undefined') {
+                data.attributes.content = '';
+            }
+
+            return this.$createEditor(data.attributes.content);
+        },
+
+        /**
+         * Create the editor for the footer content
+         *
+         * @return Promise
+         */
+        $createFooterEditor: function () {
+            const data = this.getAttribute('data');
+            data.settings = data.settings || {};
+
+            if (typeof data.settings.footer === 'undefined') {
+                data.settings.footer = '';
+            }
+
+            return this.$createEditor(data.settings.footer);
+        },
+
+        /**
+         * Create the editor, if the brick type is a content type
+         *
+         * @param {String} initialContent
+         * @return Promise
+         */
+        $createEditor: function (initialContent) {
             const self = this;
 
             return new Promise(function (resolve) {
@@ -857,7 +933,8 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                 TD.inject(TR);
                 TR.inject(TableBody);
 
-                const contentSize = self.getContent().getSize();
+                const Wrapper = self.getContent().querySelector('form') || self.getContent();
+                Wrapper.querySelector('table').style.height = '100%';
 
                 // load ckeditor
                 require(['classes/editor/Manager'], function (EditorManager) {
@@ -874,27 +951,25 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
                         let height = 300;
 
-                        if ((contentSize.y - 100) > height) {
-                            height = contentSize.y - 100;
+                        if ((TD.getSize().y - 180) > height) {
+                            height = TD.getSize().y - 180;
                         }
-
 
                         const EditorContainer = new Element('div', {
                             styles: {
                                 clear: 'both',
                                 'float': 'left',
-                                height: height,
+                                height: '100%',
                                 width: '100%'
                             }
                         }).inject(TD);
 
                         self.$Editor.addEvent('onLoaded', resolve);
                         self.$Editor.inject(EditorContainer);
-                        self.$Editor.setHeight(EditorContainer.getSize().y);
+                        self.$Editor.setHeight(height - 180);
                         self.$Editor.setWidth(EditorContainer.getSize().x);
-                        self.$Editor.setContent(
-                            self.getAttribute('data').attributes.content
-                        );
+
+                        self.$Editor.setContent(initialContent);
                     });
                 });
             });
@@ -1097,7 +1172,10 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                 case 'extra':
                 case 'settings':
                 case 'content':
+                case 'footer':
                 case 'usage':
+                case 'customCSS':
+                case 'customJS':
                     return Promise.resolve();
             }
 
@@ -1161,15 +1239,33 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
         $showCategory: function () {
             const self = this;
 
-            return new Promise(function (resolve) {
+            if (this.$categoryAnimation) {
+                if (this.$categoryAnimation.type === 'show') {
+                    return this.$categoryAnimation.promise;
+                }
+
+                return this.$categoryAnimation.promise.then(function () {
+                    return self.$showCategory();
+                });
+            }
+
+            this.$categoryAnimation = {
+                type: 'show',
+                promise: new Promise(function (resolve) {
                 moofx(self.$Container).animate({
                     opacity: 1,
                     top: 0
                 }, {
                     duration: 250,
-                    callback: resolve
+                    callback: function () {
+                        self.$categoryAnimation = null;
+                        resolve();
+                    }
                 });
-            });
+                })
+            };
+
+            return this.$categoryAnimation.promise;
         },
 
         /**
@@ -1180,10 +1276,22 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
         $hideCategory: function () {
             const self = this;
 
+            if (this.$categoryAnimation) {
+                if (this.$categoryAnimation.type === 'hide') {
+                    return this.$categoryAnimation.promise;
+                }
+
+                return this.$categoryAnimation.promise.then(function () {
+                    return self.$hideCategory();
+                });
+            }
+
             // unload
             this.$unload();
 
-            return new Promise(function (resolve) {
+            this.$categoryAnimation = {
+                type: 'hide',
+                promise: new Promise(function (resolve) {
                 moofx(self.$Container).animate({
                     opacity: 0,
                     top: -20
@@ -1191,10 +1299,14 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                     duration: 250,
                     callback: function () {
                         self.$Container.set('html', '');
+                        self.$categoryAnimation = null;
                         resolve();
                     }
                 });
-            });
+                })
+            };
+
+            return this.$categoryAnimation.promise;
         }
     });
 });
