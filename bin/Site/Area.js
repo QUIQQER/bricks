@@ -32,6 +32,8 @@ define('package/quiqqer/bricks/bin/Site/Area', [
             'openBrickSettingDialog',
             'openSettingsDialog',
             'createNewBrick',
+            '$syncBrickLabel',
+            '$syncBrickLabels',
             '$onInject',
             '$onDestroy',
             '$onBrickRefresh'
@@ -269,7 +271,7 @@ define('package/quiqqer/bricks/bin/Site/Area', [
          * event : on brick changes
          */
         $onBrickRefresh: function () {
-            this.$refreshAvailableBricks();
+            this.$refreshAvailableBricks().then(this.$syncBrickLabels);
         },
 
         /**
@@ -399,6 +401,7 @@ define('package/quiqqer/bricks/bin/Site/Area', [
 
             BrickNode.getElement('select').set('value', brickId);
             BrickNode.getElement('select').set('disabled', true);
+            this.$syncBrickLabel(BrickNode.getElement('select'));
 
             this.refresh();
 
@@ -424,7 +427,12 @@ define('package/quiqqer/bricks/bin/Site/Area', [
 
             const Elm = new Element('li', {
                 'class': 'quiqqer-bricks-site-category-area-brick',
-                html: '<select></select><div class="btn-wrapper" data-name="btn-container"></div>',
+                html: '<select></select>' +
+                    '<div class="quiqqer-bricks-site-category-area-brick-display" data-name="brick-display">' +
+                    '   <span class="quiqqer-bricks-site-category-area-brick-title" data-name="brick-title"></span>' +
+                    '   <span class="badge badge-warning badge-sm" data-name="brick-badge"></span>' +
+                    '</div>' +
+                    '<div class="btn-wrapper" data-name="btn-container"></div>',
                 id: String.uniqueID()
             });
 
@@ -432,6 +440,9 @@ define('package/quiqqer/bricks/bin/Site/Area', [
 
             Select = Elm.getElement('select');
             Select.set('disabled', true);
+            Select.addEvent('change', function () {
+                self.$syncBrickLabel(Select);
+            });
 
             new QUIButton({
                 title: QUILocale.get(lg, 'brick.sheet.edit.title'),
@@ -471,11 +482,68 @@ define('package/quiqqer/bricks/bin/Site/Area', [
             for (i = 0, len = this.$availableBricks.length; i < len; i++) {
                 new Element('option', {
                     html: this.$availableBricks[i].title,
-                    value: this.$availableBricks[i].id
+                    value: this.$availableBricks[i].id,
+                    'data-active': parseInt(this.$availableBricks[i].active) ? 1 : 0
                 }).inject(Select);
             }
 
+            this.$syncBrickLabel(Select);
+
             return Elm;
+        },
+
+        /**
+         * Sync the visible brick label with the hidden select value.
+         *
+         * @param {HTMLSelectElement} Select
+         */
+        $syncBrickLabel: function (Select) {
+            if (!Select) {
+                return;
+            }
+
+            const BrickRow = Select.getParent('.quiqqer-bricks-site-category-area-brick');
+
+            if (!BrickRow) {
+                return;
+            }
+
+            const Title = BrickRow.getElement('[data-name="brick-title"]');
+            const Badge = BrickRow.getElement('[data-name="brick-badge"]');
+            const Option = Select.options[Select.selectedIndex];
+
+            if (!Title || !Badge || !Option) {
+                return;
+            }
+
+            const isActive = parseInt(Option.getAttribute('data-active')) === 1;
+
+            Title.set('text', Option.text);
+            Badge.set('text', QUILocale.get(lg, 'site.area.badge.disabled'));
+
+            Badge.setStyle('display', isActive ? 'none' : 'inline-flex');
+            BrickRow[isActive ? 'removeClass' : 'addClass'](
+                'quiqqer-bricks-site-category-area-brick--inactive'
+            );
+
+            const Placeholder = BrickRow.getElement('.quiqqer-bricks-site-category-area-placeholder');
+
+            if (Placeholder) {
+                Placeholder.set('html', BrickRow.getElement('[data-name="brick-display"]').get('html'));
+            }
+        },
+
+        /**
+         * Sync all brick labels in the area.
+         */
+        $syncBrickLabels: function () {
+            if (!this.$Elm) {
+                return;
+            }
+
+            this.$Elm.getElements('.quiqqer-bricks-site-category-area-brick select').each((Select) => {
+                this.$syncBrickLabel(Select);
+            });
         },
 
         /**
@@ -542,11 +610,11 @@ define('package/quiqqer/bricks/bin/Site/Area', [
                 }
 
                 const Select = Brick.getElement('select'),
-                    Option = Select.getElement('option[value="' + Select.value + '"]');
+                    Display = Brick.getElement('[data-name="brick-display"]');
 
                 new Element('div', {
                     'class': 'quiqqer-bricks-site-category-area-placeholder',
-                    html: Option.get('html')
+                    html: Display ? Display.get('html') : ''
                 }).inject(Brick);
             });
 

@@ -160,7 +160,8 @@ class Manager
                 'lang' => $Project->getLang(),
                 'title' => $Brick->getAttribute('title'),
                 'description' => $Brick->getAttribute('description'),
-                'type' => $Brick->getAttribute('type')
+                'type' => $Brick->getAttribute('type'),
+                'active' => (int)$Brick->getAttribute('active')
             ]
         );
 
@@ -823,6 +824,11 @@ class Manager
             try {
                 if (!empty($brickData['uid'])) {
                     $Brick = $this->getBrickByUID($brickData['uid'], $Site);
+
+                    if (!(int)$Brick->getAttribute('active')) {
+                        continue;
+                    }
+
                     $result[] = $Brick->check();
                     continue;
                 }
@@ -836,6 +842,11 @@ class Manager
 
                 // fallback
                 $Brick = $this->getBrickById($brickId);
+
+                if (!(int)$Brick->getAttribute('active')) {
+                    continue;
+                }
+
                 $Clone = clone $Brick;
 
                 if (!empty($brickData['customfields'])) {
@@ -1090,6 +1101,7 @@ class Manager
         // update
         QUI::getDataBase()->update($this->getTable(), [
             'title' => $Brick->getAttribute('title'),
+            'active' => (int)$Brick->getAttribute('active'),
             'frontendTitle' => $Brick->getAttribute('frontendTitle'),
             'description' => $Brick->getAttribute('description'),
             'content' => $Brick->getAttribute('content'),

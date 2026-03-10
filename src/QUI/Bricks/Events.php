@@ -308,6 +308,19 @@ class Events
             return;
         }
 
+        $bricksTable = Manager::getTable();
+        $tableManager = QUI::getDataBase()->table();
+
+        if ($tableManager !== null) {
+            $activeColumn = $tableManager->getColumn($bricksTable, 'active');
+
+            if (empty($activeColumn)) {
+                $tableManager->addColumn($bricksTable, [
+                    'active' => 'TINYINT(1) NOT NULL DEFAULT 1'
+                ]);
+            }
+        }
+
         QUI\Cache\Manager::clear('quiqqer/backendsearch/providers');
         QUI\Cache\Manager::clear('quiqqer/desktopsearch/filtergroups');
 

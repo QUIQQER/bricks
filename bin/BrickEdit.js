@@ -12,6 +12,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
     'qui/QUI',
     'qui/controls/desktop/Panel',
     'qui/controls/windows/Confirm',
+    'qui/controls/buttons/Switch',
     'package/quiqqer/bricks/bin/BrickAreas',
     'Ajax',
     'Locale',
@@ -24,7 +25,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
     'css!package/quiqqer/bricks/bin/BrickEdit.css'
 
-], function (QUI, QUIPanel, QUIConfirm, BrickAreas, QUIAjax, QUILocale,
+], function (QUI, QUIPanel, QUIConfirm, QUISwitch, BrickAreas, QUIAjax, QUILocale,
              Projects, Mustache, QUIFormUtils, ControlUtils, Template, Bricks
 ) {
     "use strict";
@@ -637,6 +638,42 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
                 if (typeof data.attributes.deprecated !== 'undefined' && data.attributes.deprecated) {
                     self.$Container.getElements('.deprecated-messages').setStyle('display', 'inline-block');
+                }
+
+                const ActiveInput = self.$Container.getElement('#active');
+                const ActiveSwitchContainer = self.$Container.getElement('#activeSwitch');
+                const InactiveMessage = self.$Container.getElement('.inactive-messages');
+
+                if (ActiveInput && ActiveSwitchContainer) {
+                    new QUISwitch({
+                        status: parseInt(ActiveInput.value || 0),
+                        events: {
+                            onChange: function (Switch) {
+                                const status = Switch.getStatus() ? 1 : 0;
+
+                                ActiveInput.value = status;
+
+                                if (!InactiveMessage) {
+                                    return;
+                                }
+
+                                InactiveMessage.setStyle(
+                                    'display',
+                                    status ? 'none' : 'inline-block'
+                                );
+                            },
+                            onLoad: function (Switch) {
+                                if (!InactiveMessage) {
+                                    return;
+                                }
+
+                                InactiveMessage.setStyle(
+                                    'display',
+                                    Switch.getStatus() ? 'none' : 'inline-block'
+                                );
+                            }
+                        }
+                    }).inject(ActiveSwitchContainer);
                 }
             }).then(function () {
                 return Bricks.getAvailableBricks();

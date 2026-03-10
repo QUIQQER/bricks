@@ -296,6 +296,14 @@
             <de><![CDATA[Bausteinbeschreibung]]></de>
             <en><![CDATA[Brick description]]></en>
         </locale>
+        <locale name="brick.edit.status">
+            <de><![CDATA[Aktiv]]></de>
+            <en><![CDATA[Active]]></en>
+        </locale>
+        <locale name="brick.edit.status.inactive.message">
+            <de><![CDATA[Dieser Baustein ist deaktiviert und wird im Frontend (für Besucher) nicht angezeigt.]]></de>
+            <en><![CDATA[This brick is disabled and will not be shown on the website (frontend).]]></en>
+        </locale>
         <locale name="brick.edit.type">
             <de><![CDATA[Bausteintyp]]></de>
             <en><![CDATA[Brick type]]></en>
@@ -1046,6 +1054,10 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
             Bricks can be under <b> Settings -> Blocks </ b> managed and assigned.
             ]]></en>
         </locale>
+        <locale name="site.area.badge.disabled">
+            <de><![CDATA[Deaktiviert]]></de>
+            <en><![CDATA[Disabled]]></en>
+        </locale>
 
         <locale name="manager.button.add">
             <de><![CDATA[Baustein hinzufügen]]></de>
@@ -1070,6 +1082,18 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
         <locale name="manager.button.delete">
             <de><![CDATA[Markierte Bausteine löschen]]></de>
             <en><![CDATA[Delete marked Bricks]]></en>
+        </locale>
+        <locale name="manager.grid.status">
+            <de><![CDATA[Aktiv]]></de>
+            <en><![CDATA[Active]]></en>
+        </locale>
+        <locale name="manager.grid.status.active">
+            <de><![CDATA[Baustein ist aktiv]]></de>
+            <en><![CDATA[Brick is active]]></en>
+        </locale>
+        <locale name="manager.grid.status.inactive">
+            <de><![CDATA[Baustein ist deaktiviert]]></de>
+            <en><![CDATA[Brick is disabled]]></en>
         </locale>
 
         <locale name="manager.window.delete.title">
