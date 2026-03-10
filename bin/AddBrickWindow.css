@@ -146,7 +146,7 @@
     border-bottom: 1px solid var(--line);
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.75rem;
 }
 
 .qui-addBrick__aside .toolbar {
@@ -234,22 +234,50 @@
     min-height: 1.8em;
 }
 
+.qui-addBrick__hintActions {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
 .qui-addBrick__aside .hint [data-name="selected-package"]:empty::before {
     content: '';
     display: inline-block;
     height: 1.8em;
 }
 
-.qui-addBrick__kbdLegend {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--muted);
-    font-size: 10px;
-    line-height: 1.2;
+.qui-addBrick__aside [hidden] {
+    display: none !important;
 }
 
-.qui-addBrick__kbdLegend .key {
+.qui-addBrick__aside .hint--shortcuts {
+    display: block;
+}
+
+.qui-addBrick__shortcutList {
+    display: grid;
+    gap: 0.45rem;
+}
+
+.qui-addBrick__shortcutItem {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.75rem;
+    align-items: center;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.35;
+}
+
+.qui-addBrick__shortcutKeys {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    white-space: nowrap;
+}
+
+.qui-addBrick__shortcutKeys .key {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -267,8 +295,24 @@
     box-shadow: 0 1px 0 rgba(2, 6, 23, 0.06);
 }
 
-.qui-addBrick__kbdLegend .label {
-    color: var(--muted);
+.qui-addBrick__shortcutKeys .sep {
+    color: #94a3b8;
+    font-weight: 600;
+}
+
+.qui-addBrick__shortcutText {
+    min-width: 0;
+}
+
+.qui-addBrick__aside .btn--shortcutToggle {
+    min-width: auto;
+    height: 2rem;
+    padding: 0 0.75rem;
+    flex-shrink: 0;
+}
+
+.qui-addBrick__aside .btn--shortcutToggle .label {
+    font-size: 12px;
 }
 
 .qui-addBrick-container--overlay-open {

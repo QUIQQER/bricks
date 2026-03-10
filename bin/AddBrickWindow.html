@@ -23,18 +23,49 @@
                     {{/packageList}}
                 </select>
             </div>
-            <div class="hint">
-                <div class="qui-addBrick__kbdLegend" aria-label="Tastatursteuerung">
-                    <span class="label">Navigieren mit </span>
-                    <kbd class="key" title="Pfeil hoch">↑</kbd>
-                    <kbd class="key" title="Pfeil runter">↓</kbd> |
-                    <kbd class="key" title="Enter">Enter</kbd>
-                    <span class="label">erstellt den ausgewählten Baustein</span>
+            <div class="hint hint--shortcuts" aria-label="Tastatursteuerung" data-name="shortcut-hints" hidden>
+                <div class="qui-addBrick__shortcutList">
+                    <div class="qui-addBrick__shortcutItem">
+                        <div class="qui-addBrick__shortcutKeys" aria-hidden="true">
+                            <kbd class="key" title="Pfeil hoch">↑</kbd>
+                            <kbd class="key" title="Pfeil runter">↓</kbd>
+                        </div>
+                        <div class="qui-addBrick__shortcutText">{{asideKeyboardNavigationDescription}}</div>
+                    </div>
+
+                    <div class="qui-addBrick__shortcutItem">
+                        <div class="qui-addBrick__shortcutKeys" aria-hidden="true">
+                            <kbd class="key" title="Enter">Enter</kbd>
+                        </div>
+                        <div class="qui-addBrick__shortcutText">{{asideKeyboardCreateDescription}}</div>
+                    </div>
+
+                    <div class="qui-addBrick__shortcutItem">
+                        <div class="qui-addBrick__shortcutKeys" aria-hidden="true">
+                            <kbd class="key" title="{{shortcutModifierLabel}}">{{shortcutModifierLabel}}</kbd>
+                            <span class="sep">+</span>
+                            <kbd class="key" title="Shift">Shift</kbd>
+                            <span class="sep">+</span>
+                            <kbd class="key" title="Punkt">.</kbd>
+                        </div>
+                        <div class="qui-addBrick__shortcutText">{{asideKeyboardImportText}}</div>
+                    </div>
                 </div>
             </div>
             <div class="hint">
                 <span data-name="brick-count"><strong>0</strong> Bricks</span>
-                <div data-name="selected-package"></div>
+                <div class="qui-addBrick__hintActions">
+                    <div data-name="selected-package"></div>
+                    <button class="btn btn-light-outline btn--shortcutToggle"
+                            type="button"
+                            data-name="toggle-shortcuts"
+                            title="{{shortcutToggleShowTitle}}"
+                            aria-label="{{shortcutToggleShowTitle}}"
+                            aria-expanded="false">
+                        <span class="fa fa-angle-down" aria-hidden="true"></span>
+                        <span class="label">{{shortcutToggleLabel}}</span>
+                    </button>
+                </div>
             </div>
         </div>
 

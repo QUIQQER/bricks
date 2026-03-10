@@ -1601,17 +1601,29 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
             <de><![CDATA[Alle]]></de>
             <en><![CDATA[All]]></en>
         </locale>
-        <locale name="addBrickWindow.aside.toolbar.keyboardNavigationText">
-            <de><![CDATA[<span class="label">Navigieren mit </span>
-                    <kbd class="key" title="Pfeil hoch">↑</kbd>
-                    <kbd class="key" title="Pfeil runter">↓</kbd> |
-                    <kbd class="key" title="Enter">Enter</kbd>
-                    <span class="label">erstellt den ausgewählten Baustein</span>]]></de>
-            <en><![CDATA[<span class="label">Navigate with </span>
-                    <kbd class="key" title="Arrow up">↑</kbd>
-                    <kbd class="key" title="Arrow down">↓</kbd> |
-                    <kbd class="key" title="Enter">Enter</kbd>
-                    <span class="label">creates the selected brick</span>]]></en>
+        <locale name="addBrickWindow.aside.toolbar.keyboardNavigationDescription">
+            <de><![CDATA[Auswahl navigieren]]></de>
+            <en><![CDATA[Navigate selection]]></en>
+        </locale>
+        <locale name="addBrickWindow.aside.toolbar.keyboardCreateDescription">
+            <de><![CDATA[Erstellt den ausgewählten Baustein]]></de>
+            <en><![CDATA[Creates the selected brick]]></en>
+        </locale>
+        <locale name="addBrickWindow.aside.toolbar.keyboardImportText">
+            <de><![CDATA[JSON-Baustein importieren]]></de>
+            <en><![CDATA[Import JSON brick]]></en>
+        </locale>
+        <locale name="addBrickWindow.aside.toolbar.shortcuts.show">
+            <de><![CDATA[Tastaturhinweise anzeigen]]></de>
+            <en><![CDATA[Show keyboard hints]]></en>
+        </locale>
+        <locale name="addBrickWindow.aside.toolbar.shortcuts.hide">
+            <de><![CDATA[Tastaturhinweise ausblenden]]></de>
+            <en><![CDATA[Hide keyboard hints]]></en>
+        </locale>
+        <locale name="addBrickWindow.aside.toolbar.shortcuts.label">
+            <de><![CDATA[Shortcuts]]></de>
+            <en><![CDATA[Shortcuts]]></en>
         </locale>
         <locale name="addBrickWindow.deprecated.badge">
             <de><![CDATA[Deprecated]]></de>
