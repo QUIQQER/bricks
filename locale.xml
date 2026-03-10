@@ -2771,6 +2771,14 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
             <en><![CDATA[If enabled a JSON-LD code snippet will be generated. This allows Google to display the FAQ entries directly in the search results. More on this topic at
             <a href="https://developers.google.com/search/docs/advanced/structured-data/faqpage" target="_blank">Mark up your FAQs with structured data</a>.]]></en>
         </locale>
+        <locale name="search.provider.bricks.filter.label">
+            <de><![CDATA[Bausteine]]></de>
+            <en><![CDATA[Bricks]]></en>
+        </locale>
+        <locale name="search.provider.bricks.group.label">
+            <de><![CDATA[Bausteine]]></de>
+            <en><![CDATA[Bricks]]></en>
+        </locale>
 
     </groups>
 </locales>

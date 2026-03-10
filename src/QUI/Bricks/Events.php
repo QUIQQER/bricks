@@ -308,6 +308,9 @@ class Events
             return;
         }
 
+        QUI\Cache\Manager::clear('quiqqer/backendsearch/providers');
+        QUI\Cache\Manager::clear('quiqqer/desktopsearch/filtergroups');
+
         // unique bricks cache patch
         $projects = QUI::getProjectManager()->getProjectList();
 
