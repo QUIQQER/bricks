@@ -42,7 +42,7 @@
             {{#brickList}}
             <div class="qui-addBrick__item" data-name="item" data-control="{{control}}" data-package="{{displayPackage}}" data-search="{{search}}" data-deprecated="{{deprecated}}" data-recommended="{{recommended}}">
                 <div class="thumb">
-                    <img src="{{mockup}}" alt="{{displayTitle}}">
+                    <img src="{{thumbnail}}" alt="{{displayTitle}}">
                 </div>
 
                 <div class="meta">
@@ -58,7 +58,7 @@
                         {{/recommended}}
                     </div>
 
-                    <div class="desc">{{displayDescription}}</div>
+                    <div class="desc">{{displayDescriptionPreview}}</div>
                 </div>
             </div>
             {{/brickList}}

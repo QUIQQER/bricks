@@ -2527,8 +2527,56 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
             <en><![CDATA[Buttons]]></en>
         </locale>
         <locale name="brick.buttons.description">
-            <de><![CDATA[Liste mit konfigurierbaren Buttons inkl. Icons und Link-Zielen.]]></de>
-            <en><![CDATA[List of configurable buttons including icons and link targets.]]></en>
+            <de><![CDATA[<p>Mit diesem Brick erstellst du eine Liste aus Buttons – z.B. für Downloads, Kontakt oder wichtige Aktionen. Du kannst jeden Button einzeln gestalten und verlinken.</p>
+
+<p><strong>Darstellung</strong></p>
+<ul>
+    <li><strong>Button</strong>: Text (optional mit Icon).</li>
+    <li><strong>Nur Icon</strong>: Es werden nur Icon-Buttons angezeigt (Einträge ohne Icon werden automatisch nicht angezeigt).</li>
+</ul>
+
+<p><strong>Pro Button konfigurierbar</strong></p>
+<ul>
+    <li><strong>Text</strong>: die Beschriftung.</li>
+    <li><strong>Icon</strong>: optionales Symbol (wenn du ein Icon-Set nutzt, z.B. Font Awesome).</li>
+    <li><strong>Icon-Position</strong>: Icon vor oder nach dem Text.</li>
+    <li><strong>Button-Design</strong>: z.B. primär/sekundär, Erfolg/Warnung (je nach Theme).</li>
+    <li><strong>Größe</strong>: Standard, klein oder groß.</li>
+    <li><strong>Link</strong>: interne Seite oder externe Adresse.</li>
+    <li><strong>In neuem Tab öffnen</strong>: öffnet den Link in einem neuen Tab/Fenster.</li>
+    <li><strong>Tooltip (Title)</strong>: kurzer Hinweis beim Darüberfahren mit der Maus.</li>
+    <li><strong>Barrierefreiheit (ARIA-Label)</strong>: hilfreich bei Icon-Buttons, damit Screenreader den Zweck vorlesen können.</li>
+    <li><strong>Deaktiviert</strong>: wird angezeigt, ist aber nicht klickbar.</li>
+    <li><strong>Volle Breite</strong>: Button nutzt die komplette verfügbare Breite.</li>
+    <li><strong>Aktion beim Klicken</strong>: optional (für Fortgeschrittene), um eine Funktion auszulösen.</li>
+    <li><strong>Zusätzliche CSS-Klasse</strong>: optional (für Fortgeschrittene), für individuelles Styling.</li>
+    <li><strong>Eintrag ausblenden</strong>: der Button wird gar nicht ausgegeben.</li>
+</ul>]]></de>
+            <en><![CDATA[<p>Use this brick to create a list of buttons – e.g. for downloads, contact links or important actions. You can style and link each button individually.</p>
+
+<p><strong>Display mode</strong></p>
+<ul>
+    <li><strong>Button</strong>: text (optionally with an icon).</li>
+    <li><strong>Icon only</strong>: only icon buttons are shown (entries without an icon are hidden automatically).</li>
+</ul>
+
+<p><strong>Configurable per button</strong></p>
+<ul>
+    <li><strong>Text</strong>: the label.</li>
+    <li><strong>Icon</strong>: optional symbol (if your site uses an icon set, e.g. Font Awesome).</li>
+    <li><strong>Icon position</strong>: icon before or after the text.</li>
+    <li><strong>Button style</strong>: e.g. primary/secondary, success/warning (depends on your theme).</li>
+    <li><strong>Size</strong>: default, small or large.</li>
+    <li><strong>Link</strong>: internal page or external address.</li>
+    <li><strong>Open in new tab</strong>: opens the link in a new tab/window.</li>
+    <li><strong>Tooltip (Title)</strong>: short hint shown on hover.</li>
+    <li><strong>Accessibility (ARIA label)</strong>: useful for icon-only buttons so screen readers can announce the purpose.</li>
+    <li><strong>Disabled</strong>: shown but not clickable.</li>
+    <li><strong>Full width</strong>: button uses the full available width.</li>
+    <li><strong>Action on click</strong>: optional (advanced) to trigger a function.</li>
+    <li><strong>Additional CSS class</strong>: optional (advanced) for custom styling.</li>
+    <li><strong>Hide entry</strong>: the button is not rendered at all.</li>
+</ul>]]></en>
         </locale>
         <locale name="brick.buttons.settings.displayMode">
             <de><![CDATA[Darstellung]]></de>

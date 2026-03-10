@@ -1791,7 +1791,8 @@
                 <locale group="quiqqer/bricks" var="brick.buttons.description"/>
             </description>
             <mockups>
-                <mockup src="/packages/quiqqer/bricks/bin/images/mockups/buttons-900x600.svg" type="preview"/>
+                <mockup src="/packages/quiqqer/bricks/bin/images/mockups/button-mockup-900x600.png" type="preview"/>
+                <mockup src="/packages/quiqqer/bricks/bin/images/mockups/button-thumbnail-100x80.png" type="thumbnail"/>
             </mockups>
 
             <settings>

@@ -1084,6 +1084,21 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             }).get('text') || '';
         },
 
+        toPreviewText: function (value, maxLength) {
+            const plain = this.toPlainText(value);
+            const normalized = plain
+                .replace(/\s+/g, ' ')
+                .trim();
+
+            const limit = (typeof maxLength === 'number' && maxLength > 0) ? maxLength : 140;
+
+            if (normalized.length <= limit) {
+                return normalized;
+            }
+
+            return normalized.slice(0, Math.max(0, limit - 1)).trimEnd() + '…';
+        },
+
         /**
          * Render the details panel for the currently selected brick.
          *
@@ -1163,8 +1178,8 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             if (this.$DetailGallery) {
                 this.$DetailGallery.set('html', '');
 
-                if (data.mockups && data.mockups.length) {
-                    data.mockups.each((mockup) => {
+                if (data.galleryMockups && data.galleryMockups.length) {
+                    data.galleryMockups.each((mockup) => {
                         let src = mockup;
 
                         if (typeof mockup === 'object' && mockup && 'src' in mockup) {
@@ -1383,9 +1398,12 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                     if (brick.control === 'content') {
                         const displayTitle = QUILocale.get(lg, 'addBrickWindow.details.brickTypeContent.title');
                         const displayDescription = QUILocale.get(lg, 'addBrickWindow.details.brickTypeContent.desc');
+                        const displayDescriptionPreview = this.toPreviewText(displayDescription);
                         const displayPackage = 'quiqqer/bricks';
                         const mockup = '/packages/quiqqer/bricks/bin/images/mockup-placeholder.svg';
+                        const thumbnail = mockup;
                         const mockups = [];
+                        const galleryMockups = [];
 
                         const searchText = [
                             this.toPlainText(displayTitle),
@@ -1398,9 +1416,12 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                             control: brick.control,
                             displayTitle: displayTitle,
                             displayDescription: displayDescription,
+                            displayDescriptionPreview: displayDescriptionPreview,
                             displayPackage: displayPackage,
                             mockup: mockup,
+                            thumbnail: thumbnail,
                             mockups: mockups,
+                            galleryMockups: galleryMockups,
                             search: searchText,
                             deprecated: 0,
                             recommended: 0
@@ -1441,6 +1462,7 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
 
                     const title = getLocaleString(brick.title);
                     const description = getLocaleString(brick.description);
+                    const displayDescriptionPreview = this.toPreviewText(description);
 
                     let pkg = getLocaleGroup(brick.title);
 
@@ -1456,7 +1478,9 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                     ].join(' ').toLowerCase();
 
                     const mockup = brick.mockup ? brick.mockup : '/packages/quiqqer/bricks/bin/images/mockup-placeholder.svg';
+                    const thumbnail = brick.thumbnail ? brick.thumbnail : mockup;
                     const mockups = Array.isArray(brick.mockups) ? brick.mockups : [];
+                    const galleryMockups = Array.isArray(brick.galleryMockups) ? brick.galleryMockups : mockups;
                     const deprecated = brick.deprecated ? 1 : 0;
                     let recommended = brick.recommended ? 1 : 0;
 
@@ -1464,9 +1488,12 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                         control: brick.control,
                         displayTitle: title,
                         displayDescription: description,
+                        displayDescriptionPreview: displayDescriptionPreview,
                         displayPackage: pkg,
                         mockup: mockup,
+                        thumbnail: thumbnail,
                         mockups: mockups,
+                        galleryMockups: galleryMockups,
                         search: searchText,
                         deprecated: deprecated,
                         recommended: recommended
