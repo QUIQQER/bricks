@@ -23,3 +23,21 @@
     min-width: 2.5rem;
     justify-content: center;
 }
+
+.quiqqer-bricks-buttons-settings-entry-openBrickRow {
+    display: flex;
+    gap: 1rem;
+}
+
+.quiqqer-bricks-buttons-settings-entry-openBrickId {
+    min-width: 0;
+    flex-grow: 1;
+}
+
+.quiqqer-bricks-buttons-settings-entry-openBrickTitle {
+    color: #777;
+    display: block;
+    font-size: 0.85rem;
+    line-height: 1.3;
+    margin-top: 0.25rem;
+}

@@ -12,7 +12,28 @@
 
 <div class="quiqqer-bricks-buttons btn-container">
     {foreach from=$buttons item=button}
-    {if $button.hasHref}
+    {if $button.hasOpenBrick}
+    <button type="button"
+            class="{$button.btnClass}{if $button.fullWidth} btn-full{/if}{if $displayMode === 'icon-only'} quiqqer-bricks-buttons__iconOnly{/if}{if $button.disabled} disabled{/if}"
+            data-qui="package/quiqqer/bricks/bin/Controls/Buttons/OpenBrick"
+            data-open-brick-id="{$button.openBrickId}"
+            {if $button.openBrickWinHeight > 0}data-win-height="{$button.openBrickWinHeight}"{/if}
+            {if $button.openBrickWinWidth > 0}data-win-width="{$button.openBrickWinWidth}"{/if}
+            {if $button.title}title="{$button.title|escape:'html'}"{/if}
+            {if $button.ariaLabel}aria-label="{$button.ariaLabel|escape:'html'}"{/if}
+            {if $button.disabled}disabled aria-disabled="true"{/if}>
+        {if $button.showIcon && $button.iconPosition === 'start'}
+        <span class="{$button.iconClass|escape:'html'}" aria-hidden="true"></span>
+        {/if}
+        {if $button.showText}
+        <span class="quiqqer-bricks-buttons__text">{$button.text|escape:'html'}</span>
+        {/if}
+
+        {if $button.showIcon && $button.iconPosition === 'end'}
+        <span class="{$button.iconClass|escape:'html'}" aria-hidden="true"></span>
+        {/if}
+    </button>
+    {elseif $button.hasHref}
     <a class="{$button.btnClass}{if $button.fullWidth} btn-full{/if}{if $displayMode === 'icon-only'} quiqqer-bricks-buttons__iconOnly{/if}{if $button.disabled} disabled{/if}"
        href="{$button.href|escape:'html'}"
        {if $button.title}title="{$button.title|escape:'html'}"{/if}

@@ -31,3 +31,11 @@
         display: flex;
     }
 }
+
+.quiqqer-bricks-controls-buttons-openBrickWindow {
+    --_content-padding: var(--quiqqer-bricks-controls-buttons-openBrickWindow-contentPadding, clamp(1rem, 2vw, 2rem));
+}
+
+.quiqqer-bricks-controls-buttons-openBrickWindow .qui-window-simpleWindow-content {
+    padding: var(--_content-padding);
+}

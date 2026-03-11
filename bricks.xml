@@ -1805,6 +1805,9 @@
                     <option value="icon-only">
                         <locale group="quiqqer/bricks" var="brick.buttons.settings.displayMode.iconOnly"/>
                     </option>
+                    <option value="icon-only-rounded">
+                        <locale group="quiqqer/bricks" var="brick.buttons.settings.displayMode.iconOnlyRounded"/>
+                    </option>
                 </setting>
 
                 <setting name="buttons" type="hidden"

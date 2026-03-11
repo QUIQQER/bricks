@@ -20,7 +20,7 @@ class Buttons extends QUI\Control
     {
         $this->setAttributes([
             'buttons' => false,
-            'displayMode' => 'button', // button, icon-only
+            'displayMode' => 'button', // button, icon-only, icon-only-rounded
         ]);
 
         parent::__construct($attributes);
@@ -34,9 +34,8 @@ class Buttons extends QUI\Control
     {
         $Engine = QUI::getTemplateManager()->getEngine();
 
-        $displayMode = $this->getAttribute('displayMode') === 'icon-only'
-            ? 'icon-only'
-            : 'button';
+        $displayMode = (string)$this->getAttribute('displayMode');
+        $displayMode = $this->isIconOnlyMode($displayMode) ? $displayMode : 'button';
 
         $buttons = $this->getAttribute('buttons');
         if (is_string($buttons)) {
@@ -86,7 +85,7 @@ class Buttons extends QUI\Control
         $text = isset($button['text']) ? trim((string)$button['text']) : '';
         $iconClass = $this->normalizeIconClass((string)($button['iconClass'] ?? ''));
 
-        if ($displayMode === 'icon-only' && $iconClass === '') {
+        if ($this->isIconOnlyMode($displayMode) && $iconClass === '') {
             return null;
         }
 
@@ -97,9 +96,19 @@ class Buttons extends QUI\Control
         $btnType = $this->normalizeButtonType((string)($button['btnType'] ?? 'primary'));
         $sizeClass = $this->normalizeSizeClass((string)($button['size'] ?? 'default'));
         $customClass = $this->normalizeCustomClass((string)($button['customClass'] ?? ''));
+        $displayModeClass = $this->isIconOnlyMode($displayMode) ? ' btn-icon' : '';
+        $displayModeClass .= $displayMode === 'icon-only-rounded' ? ' btn-rounded' : '';
+        $openBrickId = max(0, (int)($button['openBrickId'] ?? 0));
+        $hasOpenBrick = $openBrickId > 0;
+        $openBrickWinWidth = $hasOpenBrick
+            ? $this->normalizePopupDimension($button['openBrickWinWidth'] ?? '')
+            : 0;
+        $openBrickWinHeight = $hasOpenBrick
+            ? $this->normalizePopupDimension($button['openBrickWinHeight'] ?? '')
+            : 0;
 
         $href = trim((string)($button['href'] ?? ''));
-        $hasHref = $href !== '';
+        $hasHref = !$hasOpenBrick && $href !== '';
 
         $targetBlank = (bool)($button['targetBlank'] ?? false);
         $title = trim((string)($button['title'] ?? ''));
@@ -107,7 +116,9 @@ class Buttons extends QUI\Control
         $disabled = (bool)($button['disabled'] ?? false);
         $fullWidth = (bool)($button['fullWidth'] ?? false);
 
-        $onClick = $this->normalizeOnClick((string)($button['onClick'] ?? ''));
+        $onClick = $hasOpenBrick
+            ? ''
+            : $this->normalizeOnClick((string)($button['onClick'] ?? ''));
 
         return [
             'text' => $text,
@@ -115,7 +126,12 @@ class Buttons extends QUI\Control
             'iconPosition' => $iconPosition,
             'btnClass' => 'btn' . ($btnType !== '' ? ' btn-' . $btnType : '')
                 . ($sizeClass ? ' ' . $sizeClass : '')
-                . ($customClass ? ' ' . $customClass : ''),
+                . ($customClass ? ' ' . $customClass : '')
+                . $displayModeClass,
+            'hasOpenBrick' => $hasOpenBrick,
+            'openBrickId' => $openBrickId,
+            'openBrickWinWidth' => $openBrickWinWidth,
+            'openBrickWinHeight' => $openBrickWinHeight,
             'hasHref' => $hasHref,
             'href' => $href,
             'target' => $hasHref && $targetBlank ? '_blank' : '',
@@ -125,9 +141,17 @@ class Buttons extends QUI\Control
             'disabled' => $disabled,
             'fullWidth' => $fullWidth,
             'onClick' => $onClick,
-            'showText' => $displayMode !== 'icon-only',
+            'showText' => !$this->isIconOnlyMode($displayMode),
             'showIcon' => $iconClass !== '',
         ];
+    }
+
+    private function isIconOnlyMode(string $displayMode): bool
+    {
+        return match ($displayMode) {
+            'icon-only', 'icon-only-rounded' => true,
+            default => false,
+        };
     }
 
     private function normalizeIconClass(string $iconClass): string
@@ -231,5 +255,12 @@ class Buttons extends QUI\Control
         }
 
         return preg_replace('/[^A-Za-z0-9 _-]/', '', $customClass) ?? '';
+    }
+
+    private function normalizePopupDimension(mixed $value): int
+    {
+        $dimension = (int)$value;
+
+        return max(0, $dimension);
     }
 }

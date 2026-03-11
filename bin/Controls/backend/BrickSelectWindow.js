@@ -27,7 +27,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickSelectWindow', [
             // defaults
             this.setAttributes({
                 maxHeight: 800,
-                maxWidth: 800,
+                maxWidth: 1200,
                 icon: 'fa fa-cubes',
                 title: QUILocale.get(lg, 'window.brick.select.title')
             });

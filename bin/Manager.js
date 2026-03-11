@@ -280,7 +280,7 @@ define('package/quiqqer/bricks/bin/Manager', [
                         header: QUILocale.get('quiqqer/core', 'title'),
                         dataIndex: 'title',
                         dataType: 'string',
-                        width: 300
+                        width: 350
                     },
                     {
                         header: QUILocale.get('quiqqer/core', 'description'),
@@ -292,7 +292,7 @@ define('package/quiqqer/bricks/bin/Manager', [
                         header: QUILocale.get(lg, 'brick.type'),
                         dataIndex: 'type',
                         dataType: 'string',
-                        width: 300
+                        width: 350
                     }
                 ],
                 multipleSelection: true,

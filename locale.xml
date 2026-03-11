@@ -2626,6 +2626,10 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
             <de><![CDATA[Nur Icon]]></de>
             <en><![CDATA[Icon only]]></en>
         </locale>
+        <locale name="brick.buttons.settings.displayMode.iconOnlyRounded">
+            <de><![CDATA[Nur Icon - rund]]></de>
+            <en><![CDATA[Icon only - rounded]]></en>
+        </locale>
         <locale name="brick.buttons.settings.entries">
             <de><![CDATA[Buttons]]></de>
             <en><![CDATA[Buttons]]></en>
@@ -2703,6 +2707,30 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
         <locale name="quiqqer.bricks.buttons.settings.createPopup.size.large">
             <de><![CDATA[Groß]]></de>
             <en><![CDATA[Large]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick">
+            <de><![CDATA[Baustein im Popup öffnen]]></de>
+            <en><![CDATA[Open brick in popup]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.select">
+            <de><![CDATA[Baustein auswählen]]></de>
+            <en><![CDATA[Select brick]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.clear">
+            <de><![CDATA[Leeren]]></de>
+            <en><![CDATA[Clear]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.titleLabel">
+            <de><![CDATA[Baustein Titel]]></de>
+            <en><![CDATA[Brick title]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.winWidth">
+            <de><![CDATA[Popup Breite (px)]]></de>
+            <en><![CDATA[Popup width (px)]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.winHeight">
+            <de><![CDATA[Popup Höhe (px)]]></de>
+            <en><![CDATA[Popup height (px)]]></en>
         </locale>
         <locale name="quiqqer.bricks.buttons.settings.createPopup.href">
             <de><![CDATA[Link]]></de>
