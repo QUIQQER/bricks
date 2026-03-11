@@ -20,6 +20,19 @@
         </tr>
         <tr>
             <td>
+                <label for="active" class="field-container">
+                    <span class="field-container-item">
+                        {locale group="quiqqer/bricks" var="brick.edit.status"}
+                    </span>
+                    <span class="field-container-field">
+                        <input type="hidden" name="active" id="active" value="1"/>
+                        <span id="activeSwitch"></span>
+                    </span>
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
                 <label for="description" class="field-container">
                     <span class="field-container-item">
                         {locale group="quiqqer/bricks" var="brick.edit.description"}
@@ -62,9 +75,16 @@
     </table>
 
     <div class="deprecated-messages quiqqer-message quiqqer-message-error"
+         style="display: none; width: 100%; max-width: 100%; margin-bottom: 1rem;">
+        <div class="quiqqer-message-text">
+                {locale group="quiqqer/bricks" var="brick.deprecated"}
+        </div>
+    </div>
+
+    <div class="inactive-messages quiqqer-message quiqqer-message-attention"
          style="display: none; width: 100%; max-width: 100%">
         <div class="quiqqer-message-text">
-            {locale group="quiqqer/bricks" var="brick.deprecated"}
+            {locale group="quiqqer/bricks" var="brick.edit.status.inactive.message"}
         </div>
     </div>
 </form>

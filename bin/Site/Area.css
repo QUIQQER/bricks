@@ -53,6 +53,7 @@
     margin: 2px;
     padding: 2px;
     width: 100%;
+    display: none;
 }
 
 .quiqqer-bricks-site-category-area-brick select[disabled] {
@@ -63,6 +64,22 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+}
+
+.quiqqer-bricks-site-category-area-brick-display {
+    align-items: center;
+    display: flex;
+    gap: 0.5rem;
+    min-height: 30px;
+    padding: 4px 2px;
+}
+
+.quiqqer-bricks-site-category-area-brick-title {
+    color: #212527;
+}
+
+.quiqqer-bricks-site-category-area-brick--inactive .quiqqer-bricks-site-category-area-brick-title {
+    color: #aab0b6;
 }
 
 .quiqqer-bricks-site-category-area-brick .btn-wrapper {
@@ -93,8 +110,10 @@
 }
 
 .quiqqer-bricks-site-category-area-placeholder {
+    align-items: center;
     background: #fff;
     cursor: pointer;
+    display: flex;
     height: 100%;
     left: 0;
     padding: 5px;
@@ -145,4 +164,3 @@
     transform: translateY(-50%);
     opacity: 0.5;
 }
-

@@ -235,6 +235,8 @@ class Utils
         // mockups
         $mockupList = [];
         $mainMockup = null;
+        $thumbnailMockup = null;
+        $galleryMockups = [];
         $mockups = $Path->query('./mockups/mockup', $contextNode);
 
         if (
@@ -277,10 +279,20 @@ class Utils
                     $src
                 );
 
+                $type = $mockup->getAttribute('type');
+
                 $mockupList[] = $src;
 
-                if ($mockup->getAttribute('type') === 'preview') {
+                if ($type === 'preview') {
                     $mainMockup = $src;
+                }
+
+                if ($type === 'thumbnail') {
+                    $thumbnailMockup = $src;
+                }
+
+                if ($type !== 'thumbnail' && $type !== 'preview') {
+                    $galleryMockups[] = $src;
                 }
             }
 
@@ -291,6 +303,10 @@ class Utils
             ) {
                 $mainMockup = $mockups->item(0)->getAttribute('src');
             }
+        }
+
+        if (empty($thumbnailMockup)) {
+            $thumbnailMockup = $mainMockup;
         }
 
         return [
@@ -305,7 +321,9 @@ class Utils
             'priority' => method_exists($Brick, 'getAttribute') ? $Brick->getAttribute('priority') : '',
             'deprecated' => $deprecated,
             'mockups' => $mockupList,
-            'mockup' => $mainMockup
+            'galleryMockups' => $galleryMockups,
+            'mockup' => $mainMockup,
+            'thumbnail' => $thumbnailMockup
         ];
     }
 

@@ -96,6 +96,7 @@ class Brick extends QUI\QDOM
             'content' => '',
             'title' => '',
             'description' => '',
+            'active' => 1,
             'project' => '',
             'lang' => '',
             'areas' => '',

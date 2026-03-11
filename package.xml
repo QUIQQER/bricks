@@ -32,5 +32,9 @@
             <license><![CDATA[GPL-3.0+]]></license>
         </copyright>
 
+        <provider>
+            <desktopSearch src="\QUI\Bricks\BackendSearch\Provider\Bricks"/>
+        </provider>
+
     </package>
 </quiqqer>

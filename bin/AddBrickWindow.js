@@ -11,6 +11,7 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
     "use strict";
 
     const lg = 'quiqqer/bricks';
+    const SHORTCUT_HINTS_STORAGE_KEY = 'quiqqer.bricks.addBrickWindow.shortcutHintsExpanded';
 
     return new Class ({
         Extends: QUISimpleWindow,
@@ -24,6 +25,7 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             'onItemClick',
             'onItemDblClick',
             'onKeyDown',
+            'toggleShortcutHints',
             'createOverlay',
             'openCreateOverlay',
             'openCreateFromDataOverlay',
@@ -62,6 +64,8 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             this.$DeprecatedToggle = null;
             this.$SelectedPackage = null;
             this.$BrickCount = null;
+            this.$ShortcutHints = null;
+            this.$ShortcutToggle = null;
             this.$DetailTitle = null;
             this.$DetailPackage = null;
             this.$DetailHero = null;
@@ -87,6 +91,7 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             this.$OverlayPreviousActiveElement = null;
 
             this.$KeyboardBound = false;
+            this.$NativeKeyDownHandler = this.onKeyDown;
 
             this.addEvents({
                 onOpen: this.$onOpen
@@ -106,7 +111,27 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                 return;
             }
 
-            if (event.key !== 'up' && event.key !== 'down' && event.key !== 'enter') {
+            const nativeEvent = event.event || event;
+            const key = String(event.key || nativeEvent.key || '').toLowerCase();
+            const isImportShortcut = (event.metaKey || event.ctrlKey)
+                && event.shiftKey
+                && !event.altKey
+                && (
+                    key === '.'
+                    || key === ':'
+                    || nativeEvent.code === 'Period'
+                    || nativeEvent.which === 190
+                    || nativeEvent.keyCode === 190
+                );
+
+            if (isImportShortcut) {
+                event.preventDefault();
+                event.stopPropagation();
+                this.openCreateFromDataOverlay();
+                return;
+            }
+
+            if (key !== 'up' && key !== 'arrowup' && key !== 'down' && key !== 'arrowdown' && key !== 'enter') {
                 return;
             }
 
@@ -127,12 +152,12 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                 Current = visible[0];
             }
 
-            if (event.key === 'enter') {
+            if (key === 'enter') {
                 this.openCreateOverlay();
                 return;
             }
 
-            const delta = event.key === 'down' ? 1 : -1;
+            const delta = key === 'down' || key === 'arrowdown' ? 1 : -1;
             let index = visible.indexOf(Current);
 
             if (index === -1) {
@@ -347,6 +372,10 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
          * @returns {String}
          */
         getHtml: function (brickList, packageList) {
+            const shortcutModifierLabel = navigator.platform.toUpperCase().indexOf('MAC') >= 0
+                ? 'Cmd'
+                : 'Ctrl';
+
             return Mustache.render(template, {
                 brickList: brickList,
                 packageList: packageList,
@@ -356,7 +385,12 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                 asideInputPlaceholder: QUILocale.get(lg, 'addBrickWindow.aside.toolbar.input.placeholder'),
                 asideSelectTitle: QUILocale.get(lg, 'addBrickWindow.aside.toolbar.select.title'),
                 asideSelectOptionAll: QUILocale.get(lg, 'addBrickWindow.aside.toolbar.select.option.all'),
-                asideKeyboardNavigationText: QUILocale.get(lg, 'addBrickWindow.aside.toolbar.keyboardNavigationText'),
+                asideKeyboardNavigationDescription: QUILocale.get(lg, 'addBrickWindow.aside.toolbar.keyboardNavigationDescription'),
+                asideKeyboardCreateDescription: QUILocale.get(lg, 'addBrickWindow.aside.toolbar.keyboardCreateDescription'),
+                asideKeyboardImportText: QUILocale.get(lg, 'addBrickWindow.aside.toolbar.keyboardImportText'),
+                shortcutToggleLabel: QUILocale.get(lg, 'addBrickWindow.aside.toolbar.shortcuts.label'),
+                shortcutToggleShowTitle: QUILocale.get(lg, 'addBrickWindow.aside.toolbar.shortcuts.show'),
+                shortcutModifierLabel: shortcutModifierLabel,
                 asideFooterToggleDeprecated: QUILocale.get(lg, 'addBrickWindow.aside.footer.toggle.deprecated.show'),
                 deprecatedText: QUILocale.get(lg, 'addBrickWindow.deprecated.badge'),
                 recommendedText: QUILocale.get(lg, 'addBrickWindow.recommendedText.badge'),
@@ -385,6 +419,8 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             this.$DeprecatedToggle = this.$Content.getElement('[data-name="toggle-deprecated"]');
             this.$SelectedPackage = this.$Content.getElement('[data-name="selected-package"]');
             this.$BrickCount = this.$Content.getElement('[data-name="brick-count"]');
+            this.$ShortcutHints = this.$Content.getElement('[data-name="shortcut-hints"]');
+            this.$ShortcutToggle = this.$Content.getElement('[data-name="toggle-shortcuts"]');
             this.$DetailTitle = this.$Content.getElement('[data-name="detail-title"]');
             this.$DetailPackage = this.$Content.getElement('[data-name="detail-package"]');
             this.$DetailHero = this.$Content.getElement('[data-name="detail-hero"]');
@@ -402,6 +438,63 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             this.$ImportSubmitBtn = this.$Content.getElement('[data-name="import-submit"]');
             this.$ImportAdjustProject = this.$Content.getElement('[data-name="import-adjust-project"]');
             this.$ImportAdjustLang = this.$Content.getElement('[data-name="import-adjust-lang"]');
+        },
+
+        isShortcutHintsExpanded: function () {
+            try {
+                const value = window.localStorage.getItem(SHORTCUT_HINTS_STORAGE_KEY);
+
+                if (value === null) {
+                    return false;
+                }
+
+                return value === '1';
+            } catch (error) {
+                return false;
+            }
+        },
+
+        setShortcutHintsExpanded: function (expanded) {
+            try {
+                window.localStorage.setItem(SHORTCUT_HINTS_STORAGE_KEY, expanded ? '1' : '0');
+            } catch (error) {
+                // ignore storage access errors
+            }
+        },
+
+        syncShortcutHintsState: function () {
+            if (!this.$ShortcutHints || !this.$ShortcutToggle) {
+                return;
+            }
+
+            const expanded = this.isShortcutHintsExpanded();
+            const label = expanded
+                ? QUILocale.get(lg, 'addBrickWindow.aside.toolbar.shortcuts.hide')
+                : QUILocale.get(lg, 'addBrickWindow.aside.toolbar.shortcuts.show');
+            const Icon = this.$ShortcutToggle.getElement('.fa');
+
+            this.$ShortcutHints.hidden = !expanded;
+            this.$ShortcutToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+            this.$ShortcutToggle.set('title', label);
+            this.$ShortcutToggle.set('aria-label', label);
+
+            if (Icon) {
+                Icon.removeClass('fa-keyboard-o');
+                Icon.removeClass('fa-angle-down');
+                Icon.removeClass('fa-angle-up');
+                Icon.addClass(expanded ? 'fa-angle-up' : 'fa-angle-down');
+            }
+        },
+
+        toggleShortcutHints: function (event) {
+            if (event) {
+                event.preventDefault();
+            }
+
+            const expanded = !this.isShortcutHintsExpanded();
+
+            this.setShortcutHintsExpanded(expanded);
+            this.syncShortcutHintsState();
         },
 
         /**
@@ -1084,6 +1177,21 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             }).get('text') || '';
         },
 
+        toPreviewText: function (value, maxLength) {
+            const plain = this.toPlainText(value);
+            const normalized = plain
+                .replace(/\s+/g, ' ')
+                .trim();
+
+            const limit = (typeof maxLength === 'number' && maxLength > 0) ? maxLength : 140;
+
+            if (normalized.length <= limit) {
+                return normalized;
+            }
+
+            return normalized.slice(0, Math.max(0, limit - 1)).trimEnd() + '…';
+        },
+
         /**
          * Render the details panel for the currently selected brick.
          *
@@ -1163,8 +1271,8 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             if (this.$DetailGallery) {
                 this.$DetailGallery.set('html', '');
 
-                if (data.mockups && data.mockups.length) {
-                    data.mockups.each((mockup) => {
+                if (data.galleryMockups && data.galleryMockups.length) {
+                    data.galleryMockups.each((mockup) => {
                         let src = mockup;
 
                         if (typeof mockup === 'object' && mockup && 'src' in mockup) {
@@ -1383,9 +1491,12 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                     if (brick.control === 'content') {
                         const displayTitle = QUILocale.get(lg, 'addBrickWindow.details.brickTypeContent.title');
                         const displayDescription = QUILocale.get(lg, 'addBrickWindow.details.brickTypeContent.desc');
+                        const displayDescriptionPreview = this.toPreviewText(displayDescription);
                         const displayPackage = 'quiqqer/bricks';
                         const mockup = '/packages/quiqqer/bricks/bin/images/mockup-placeholder.svg';
+                        const thumbnail = mockup;
                         const mockups = [];
+                        const galleryMockups = [];
 
                         const searchText = [
                             this.toPlainText(displayTitle),
@@ -1398,9 +1509,12 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                             control: brick.control,
                             displayTitle: displayTitle,
                             displayDescription: displayDescription,
+                            displayDescriptionPreview: displayDescriptionPreview,
                             displayPackage: displayPackage,
                             mockup: mockup,
+                            thumbnail: thumbnail,
                             mockups: mockups,
+                            galleryMockups: galleryMockups,
                             search: searchText,
                             deprecated: 0,
                             recommended: 0
@@ -1441,6 +1555,7 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
 
                     const title = getLocaleString(brick.title);
                     const description = getLocaleString(brick.description);
+                    const displayDescriptionPreview = this.toPreviewText(description);
 
                     let pkg = getLocaleGroup(brick.title);
 
@@ -1456,7 +1571,9 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                     ].join(' ').toLowerCase();
 
                     const mockup = brick.mockup ? brick.mockup : '/packages/quiqqer/bricks/bin/images/mockup-placeholder.svg';
+                    const thumbnail = brick.thumbnail ? brick.thumbnail : mockup;
                     const mockups = Array.isArray(brick.mockups) ? brick.mockups : [];
+                    const galleryMockups = Array.isArray(brick.galleryMockups) ? brick.galleryMockups : mockups;
                     const deprecated = brick.deprecated ? 1 : 0;
                     let recommended = brick.recommended ? 1 : 0;
 
@@ -1464,9 +1581,12 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                         control: brick.control,
                         displayTitle: title,
                         displayDescription: description,
+                        displayDescriptionPreview: displayDescriptionPreview,
                         displayPackage: pkg,
                         mockup: mockup,
+                        thumbnail: thumbnail,
                         mockups: mockups,
+                        galleryMockups: galleryMockups,
                         search: searchText,
                         deprecated: deprecated,
                         recommended: recommended
@@ -1515,6 +1635,12 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                     this.onDeprecatedToggleChange();
                 }
 
+                if (this.$ShortcutToggle) {
+                    this.$ShortcutToggle.removeEvent('click', this.toggleShortcutHints);
+                    this.$ShortcutToggle.addEvent('click', this.toggleShortcutHints);
+                    this.syncShortcutHintsState();
+                }
+
                 if (this.$BrickList) {
                     const Items = this.$BrickList.getElements('[data-name="item"]');
 
@@ -1528,8 +1654,8 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                     });
                 }
 
-                document.removeEvent('keydown', this.onKeyDown);
-                document.addEvent('keydown', this.onKeyDown);
+                document.removeEventListener('keydown', this.$NativeKeyDownHandler, true);
+                document.addEventListener('keydown', this.$NativeKeyDownHandler, true);
                 this.$KeyboardBound = true;
 
                 this.applyFilters();
@@ -1573,7 +1699,7 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
 
         close: function () {
             if (this.$KeyboardBound) {
-                document.removeEvent('keydown', this.onKeyDown);
+                document.removeEventListener('keydown', this.$NativeKeyDownHandler, true);
                 this.$KeyboardBound = false;
             }
 

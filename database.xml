@@ -7,6 +7,7 @@
             <field type="VARCHAR(255)">project</field>
             <field type="VARCHAR(2)">lang</field>
             <field type="VARCHAR(255) NOT NULL">title</field>
+            <field type="TINYINT(1) NOT NULL DEFAULT 1">active</field>
             <field type="VARCHAR(255) NULL">frontendTitle</field>
             <field type="TEXT NOT NULL">description</field>
             <field type="TEXT NULL">settings</field>

@@ -1,0 +1,209 @@
+<form name="quiqqer-bricks-buttons-settings-entry"
+      class="quiqqer-bricks-buttons-settings-entry-form"
+>
+    <table class="data-table data-table-flexbox">
+        <tbody>
+        <tr>
+            <td>
+                <label class="field-container">
+                    <span class="field-container-item">{{fieldIsDisabled}}</span>
+                    <span id="isDisabledWrapper" class="field-container-field"></span>
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="field-container">
+                    <span class="field-container-item">{{fieldText}}</span>
+                    <input name="text" class="field-container-field"/>
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="field-container">
+                    <span class="field-container-item">{{fieldIconClass}}</span>
+                    <input name="iconClass"
+                           class="field-container-field"
+                           type="text"
+                           data-qui="controls/projects/project/media/Input"
+                           data-qui-options-cssclasses="1"
+                           data-qui-options-mediabutton="0"
+                    />
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="field-container">
+                    <span class="field-container-item">{{fieldIconPosition}}</span>
+                    <select name="iconPosition" class="field-container-field">
+                        <option value="start">{{fieldIconPositionStart}}</option>
+                        <option value="end">{{fieldIconPositionEnd}}</option>
+                    </select>
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="field-container">
+                    <span class="field-container-item">{{fieldButtonType}}</span>
+                    <select name="btnType" class="field-container-field">
+                        <option value="primary">primary</option>
+                        <option value="primary-outline">primary-outline</option>
+                        <option value="secondary">secondary</option>
+                        <option value="secondary-outline">secondary-outline</option>
+                        <option value="success">success</option>
+                        <option value="success-outline">success-outline</option>
+                        <option value="danger">danger</option>
+                        <option value="danger-outline">danger-outline</option>
+                        <option value="warning">warning</option>
+                        <option value="warning-outline">warning-outline</option>
+                        <option value="info">info</option>
+                        <option value="info-outline">info-outline</option>
+                        <option value="dark">dark</option>
+                        <option value="dark-outline">dark-outline</option>
+                        <option value="light">light</option>
+                        <option value="light-outline">light-outline</option>
+                        <option value="white">white</option>
+                        <option value="white-outline">white-outline</option>
+                        <option value="link">link</option>
+                        <option value="link-body">link-body</option>
+                        <option value=""></option>
+                    </select>
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="field-container">
+                    <span class="field-container-item">{{fieldCustomClass}}</span>
+                    <input name="customClass" class="field-container-field"/>
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="field-container">
+                    <span class="field-container-item">{{fieldSize}}</span>
+                    <select name="size" class="field-container-field">
+                        <option value="default">{{fieldSizeDefault}}</option>
+                        <option value="sm">{{fieldSizeSmall}}</option>
+                        <option value="lg">{{fieldSizeLarge}}</option>
+                    </select>
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="field-container">
+                    <span class="field-container-item">{{fieldOpenBrick}}</span>
+                    <span class="field-container-field">
+                        <span class="quiqqer-bricks-buttons-settings-entry-openBrickRow">
+                            <input name="openBrickId"
+                               class="quiqqer-bricks-buttons-settings-entry-openBrickId"
+                               readonly
+                               placeholder="ID"
+                            />
+                            <button type="button" name="selectBrick" class="btn btn-light">
+                                {{fieldOpenBrickSelect}} <i class="fa-solid fa-cubes"></i>
+                            </button>
+                            <button type="button" name="clearBrick" class="btn btn-danger" title="{{fieldOpenBrickClear}}">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </span>
+                        <input name="openBrickTitle" type="hidden"/>
+                        <small class="quiqqer-bricks-buttons-settings-entry-openBrickTitle"
+                               data-name="openBrickTitleDisplay"></small>
+                    </span>
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="field-container">
+                    <span class="field-container-item">{{fieldOpenBrickWinWidth}}</span>
+                    <input name="openBrickWinWidth"
+                           class="field-container-field"
+                           type="number"
+                           min="1"
+                           step="1"
+                    />
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="field-container">
+                    <span class="field-container-item">{{fieldOpenBrickWinHeight}}</span>
+                    <input name="openBrickWinHeight"
+                           class="field-container-field"
+                           type="number"
+                           min="1"
+                           step="1"
+                    />
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="field-container">
+                    <span class="field-container-item">{{fieldHref}}</span>
+                    <input name="href" class="field-container-field"
+                           data-qui="controls/projects/project/site/Input"
+                           data-external="1"
+                    />
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="field-container">
+                    <span class="field-container-item">{{fieldTargetBlank}}</span>
+                    <span id="targetBlankWrapper" class="field-container-field"></span>
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="field-container">
+                    <span class="field-container-item">{{fieldTitle}}</span>
+                    <input name="title" class="field-container-field"/>
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="field-container">
+                    <span class="field-container-item">{{fieldAriaLabel}}</span>
+                    <input name="ariaLabel" class="field-container-field"/>
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="field-container">
+                    <span class="field-container-item">{{fieldDisabled}}</span>
+                    <span id="disabledWrapper" class="field-container-field"></span>
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="field-container">
+                    <span class="field-container-item">{{fieldFullWidth}}</span>
+                    <span id="fullWidthWrapper" class="field-container-field"></span>
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="field-container">
+                    <span class="field-container-item">{{fieldOnClick}}</span>
+                    <input name="onClick" class="field-container-field" placeholder="openLoginWindow()"/>
+                </label>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>
