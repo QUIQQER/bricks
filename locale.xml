@@ -2676,6 +2676,14 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
             <de><![CDATA[Text]]></de>
             <en><![CDATA[Text]]></en>
         </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.identifier">
+            <de><![CDATA[Identifier]]></de>
+            <en><![CDATA[Identifier]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.identifierDesc">
+            <de><![CDATA[Wird im Frontend als <code>data-identifier</code> ausgegeben und kann z. B. für Matomo-Tracking verwendet werden. <br>Beispiel: <code>data-identifier="MEIN_WERT"</code>]]></de>
+            <en><![CDATA[Rendered in the frontend as <code>data-identifier</code> and can be used, for example, for Matomo tracking. <br>Example: <code>data-identifier="MY_VALUE"</code>]]></en>
+        </locale>
         <locale name="quiqqer.bricks.buttons.settings.createPopup.iconClass">
             <de><![CDATA[FontAwesome Icon-Klasse]]></de>
             <en><![CDATA[FontAwesome icon class]]></en>
@@ -2715,6 +2723,10 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
         <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick">
             <de><![CDATA[Baustein im Popup öffnen]]></de>
             <en><![CDATA[Open brick in popup]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.desc">
+            <de><![CDATA[Wenn ein Baustein ausgewählt ist, wird er im Frontend in einem Modal-Fenster geöffnet. In diesem Fall wird die Option "Link" ignoriert.]]></de>
+            <en><![CDATA[If a brick is selected, it will open in the frontend in a modal window. In this case, the "Link" option is ignored.]]></en>
         </locale>
         <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.select">
             <de><![CDATA[Baustein auswählen]]></de>

@@ -83,6 +83,7 @@ class Buttons extends QUI\Control
         }
 
         $text = isset($button['text']) ? trim((string)$button['text']) : '';
+        $identifier = $this->normalizeIdentifier((string)($button['identifier'] ?? ''));
         $iconClass = $this->normalizeIconClass((string)($button['iconClass'] ?? ''));
 
         if ($this->isIconOnlyMode($displayMode) && $iconClass === '') {
@@ -122,6 +123,7 @@ class Buttons extends QUI\Control
 
         return [
             'text' => $text,
+            'identifier' => $identifier,
             'iconClass' => $iconClass,
             'iconPosition' => $iconPosition,
             'btnClass' => 'btn' . ($btnType !== '' ? ' btn-' . $btnType : '')
@@ -255,6 +257,17 @@ class Buttons extends QUI\Control
         }
 
         return preg_replace('/[^A-Za-z0-9 _-]/', '', $customClass) ?? '';
+    }
+
+    private function normalizeIdentifier(string $identifier): string
+    {
+        $identifier = trim($identifier);
+
+        if ($identifier === '') {
+            return '';
+        }
+
+        return preg_replace('/[^A-Za-z0-9._:-]/', '', $identifier) ?? '';
     }
 
     private function normalizePopupDimension(mixed $value): int

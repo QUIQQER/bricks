@@ -303,6 +303,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                 const entry = this.$data[i];
                 const insert = {
                     text: entry.text || '',
+                    identifier: entry.identifier || '',
                     iconClass: entry.iconClass || '',
                     btnType: this.$normalizeBtnType(entry.btnType),
                     href: entry.href || '',
@@ -479,6 +480,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
 
                     this.edit(index, {
                         text: Form.elements.text.value,
+                        identifier: Form.elements.identifier.value,
                         iconClass: Form.elements.iconClass.value,
                         iconPosition: Form.elements.iconPosition.value,
                         btnType: Form.elements.btnType.value,
@@ -505,6 +507,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                     const Form = Dialog.getContent().getElement('form');
 
                     Form.elements.text.value = data.text || '';
+                    Form.elements.identifier.value = data.identifier || '';
                     Form.elements.iconClass.value = data.iconClass || '';
                     Form.elements.iconPosition.value = data.iconPosition || 'start';
                     Form.elements.btnType.value = this.$normalizeBtnType(data.btnType);
@@ -562,6 +565,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
 
                     this.add({
                         text: Form.elements.text.value,
+                        identifier: Form.elements.identifier.value,
                         iconClass: Form.elements.iconClass.value,
                         iconPosition: Form.elements.iconPosition.value,
                         btnType: Form.elements.btnType.value,
@@ -611,6 +615,8 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                                 html: Mustache.render(templateEntry, {
                                     fieldIsDisabled: QUILocale.get(lg, prefix + 'disable'),
                                     fieldText: QUILocale.get(lg, prefix + 'text'),
+                                    fieldIdentifier: QUILocale.get(lg, prefix + 'identifier'),
+                                    fieldIdentifierDesc: QUILocale.get(lg, prefix + 'identifierDesc'),
                                     fieldIconClass: QUILocale.get(lg, prefix + 'iconClass'),
                                     fieldIconPosition: QUILocale.get(lg, prefix + 'iconPosition'),
                                     fieldIconPositionStart: QUILocale.get(lg, prefix + 'iconPosition.start'),
@@ -621,6 +627,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                                     fieldSizeSmall: QUILocale.get(lg, prefix + 'size.small'),
                                     fieldSizeLarge: QUILocale.get(lg, prefix + 'size.large'),
                                     fieldOpenBrick: QUILocale.get(lg, prefix + 'openBrick'),
+                                    fieldOpenBrickDesc: QUILocale.get(lg, prefix + 'openBrick.desc'),
                                     fieldOpenBrickSelect: QUILocale.get(lg, prefix + 'openBrick.select'),
                                     fieldOpenBrickClear: QUILocale.get(lg, prefix + 'openBrick.clear'),
                                     fieldOpenBrickWinWidth: QUILocale.get(lg, prefix + 'openBrick.winWidth'),
@@ -718,6 +725,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
         $normalizeEntry: function (entry) {
             return {
                 text: entry.text || '',
+                identifier: entry.identifier || '',
                 iconClass: entry.iconClass || '',
                 iconPosition: entry.iconPosition || 'start',
                 btnType: this.$normalizeBtnType(entry.btnType),
