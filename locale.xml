@@ -999,6 +999,10 @@ This content does not replace the block content. You can still place the brick t
             <de><![CDATA[Nach Titel oder Beschreibung filtern]]></de>
             <en><![CDATA[Filter by title or description]]></en>
         </locale>
+        <locale name="site.area.window.add.brickIsDisabled">
+            <de><![CDATA[Deaktiviert]]></de>
+            <en><![CDATA[Disabled]]></en>
+        </locale>
         <locale name="site.area.window.delete.title">
             <de><![CDATA[Baustein löschen?]]></de>
             <en><![CDATA[Delete the Brick?]]></en>

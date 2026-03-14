@@ -927,12 +927,28 @@ define('package/quiqqer/bricks/bin/Site/Area', [
 
                         List.inject(Content);
 
+                        const renderInactiveBadge = (Brick) => {
+                            if (Brick.active) {
+                                return '';
+                            }
+
+                            return `<div style="margin-top: 0.25rem;">
+                                        <span class="badge badge-warning badge-sm">
+                                            ${QUILocale.get(lg, 'site.area.window.add.brickIsDisabled')}
+                                        </span>
+                                    </div>`;
+                        };
+
                         for (let i = 0, len = self.$availableBricks.length; i < len; i++) {
+                            const Brick = self.$availableBricks[i];
+                            const inactiveBadge = renderInactiveBadge(Brick);
+                            const text = `<div>${Brick.description}</div>${inactiveBadge}`;
+
                             items.push({
-                                brickId: self.$availableBricks[i].id,
+                                brickId: Brick.id,
                                 icon: 'fa fa-th',
-                                title: self.$availableBricks[i].title,
-                                text: self.$availableBricks[i].description
+                                title: Brick.title,
+                                text: text
                             });
                             availableBricksNumber++;
                         }
