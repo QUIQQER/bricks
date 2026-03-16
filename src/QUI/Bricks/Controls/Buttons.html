@@ -17,6 +17,7 @@
             class="{$button.btnClass}{if $button.fullWidth} btn-full{/if}{if $displayMode === 'icon-only'} quiqqer-bricks-buttons__iconOnly{/if}{if $button.disabled} disabled{/if}"
             data-qui="package/quiqqer/bricks/bin/Controls/Buttons/OpenBrick"
             data-open-brick-id="{$button.openBrickId}"
+            {if $button.identifier}data-identifier="{$button.identifier|escape:'html'}"{/if}
             {if $button.openBrickWinHeight > 0}data-win-height="{$button.openBrickWinHeight}"{/if}
             {if $button.openBrickWinWidth > 0}data-win-width="{$button.openBrickWinWidth}"{/if}
             {if $button.title}title="{$button.title|escape:'html'}"{/if}
@@ -36,6 +37,7 @@
     {elseif $button.hasHref}
     <a class="{$button.btnClass}{if $button.fullWidth} btn-full{/if}{if $displayMode === 'icon-only'} quiqqer-bricks-buttons__iconOnly{/if}{if $button.disabled} disabled{/if}"
        href="{$button.href|escape:'html'}"
+       {if $button.identifier}data-identifier="{$button.identifier|escape:'html'}"{/if}
        {if $button.title}title="{$button.title|escape:'html'}"{/if}
        {if $button.ariaLabel}aria-label="{$button.ariaLabel|escape:'html'}"{/if}
        {if $button.target}target="{$button.target}"{/if}
@@ -57,6 +59,7 @@
     {else}
     <button type="button"
             class="{$button.btnClass}{if $button.fullWidth} btn-full{/if}{if $displayMode === 'icon-only'} quiqqer-bricks-buttons__iconOnly{/if}{if $button.disabled} disabled{/if}"
+            {if $button.identifier}data-identifier="{$button.identifier|escape:'html'}"{/if}
             {if $button.title}title="{$button.title|escape:'html'}"{/if}
             {if $button.ariaLabel}aria-label="{$button.ariaLabel|escape:'html'}"{/if}
             {if $button.disabled}disabled aria-disabled="true"{/if}

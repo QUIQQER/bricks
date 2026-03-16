@@ -48,6 +48,8 @@ define('package/quiqqer/bricks/bin/Controls/Buttons/OpenBrick', [
 
             const parm = {
                 brickId: brickId,
+                maxWidth: 1000,
+                maxHeight: 800,
                 events: {
                     onOpen: (Win) => {
                         Win.getElm().classList.add('quiqqer-bricks-controls-buttons-openBrickWindow');
