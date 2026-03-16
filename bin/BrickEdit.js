@@ -341,7 +341,18 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             data.customfields = self.$customfields;
 
-            return Bricks.saveBrick(self.getAttribute('id'), data).then(function () {
+            return Bricks.saveBrick(self.getAttribute('id'), data).then(function (result) {
+                self.setAttribute('data', result);
+
+                const ActiveCategory = self.getActiveCategory();
+
+                if (
+                    ActiveCategory &&
+                    ActiveCategory.getAttribute('name') === 'information'
+                ) {
+                    return self.showInformation(true);
+                }
+            }).then(function () {
                 QUI.getMessageHandler().then(function (MH) {
                     MH.addSuccess(
                         QUILocale.get(lg, 'message.brick.save.success')
@@ -622,19 +633,32 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
         /**
          * Information template
          *
+         * @param {boolean} skipHide
          * @returns {Promise}
          */
-        showInformation: function () {
+        showInformation: function (skipHide) {
             const self = this,
                 data = self.getAttribute('data');
 
-            return this.$hideCategory().then(function () {
+            let hidePromise = Promise.resolve();
+
+            if (skipHide !== true) {
+                hidePromise = this.$hideCategory();
+            }
+
+            return hidePromise.then(function () {
                 return Template.get('ajax/brick/templates/information', false, {
                     'package': 'quiqqer/bricks'
                 });
             }).then(function (html) {
                 self.$Container.set('html', html);
                 self.$load();
+
+                return ControlUtils.parse(
+                    self.$Container.getElement('form')
+                );
+            }).then(function () {
+                const data = self.getAttribute('data');
 
                 if (typeof data.attributes.deprecated !== 'undefined' && data.attributes.deprecated) {
                     self.$Container.getElements('.deprecated-messages').setStyle('display', 'inline-block');

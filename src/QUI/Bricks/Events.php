@@ -312,12 +312,34 @@ class Events
         $tableManager = QUI::getDataBase()->table();
 
         if ($tableManager !== null) {
-            $activeColumn = $tableManager->getColumn($bricksTable, 'active');
+            $columns = array_flip($tableManager->getColumns($bricksTable));
 
-            if (empty($activeColumn)) {
+            if (!isset($columns['active'])) {
                 $tableManager->addColumn($bricksTable, [
                     'active' => 'TINYINT(1) NOT NULL DEFAULT 1'
                 ]);
+            }
+
+            $metaFields = [];
+
+            if (!isset($columns['c_date'])) {
+                $metaFields['c_date'] = 'TIMESTAMP NULL DEFAULT NULL';
+            }
+
+            if (!isset($columns['e_date'])) {
+                $metaFields['e_date'] = 'TIMESTAMP NULL DEFAULT NULL';
+            }
+
+            if (!isset($columns['c_user'])) {
+                $metaFields['c_user'] = 'VARCHAR(50) NULL DEFAULT NULL';
+            }
+
+            if (!isset($columns['e_user'])) {
+                $metaFields['e_user'] = 'VARCHAR(50) NULL DEFAULT NULL';
+            }
+
+            if (!empty($metaFields)) {
+                $tableManager->addColumn($bricksTable, $metaFields);
             }
         }
 
