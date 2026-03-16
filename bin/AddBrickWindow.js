@@ -657,20 +657,10 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             }
 
             const Brick = this.getCurrentBrickInfo();
-
-            // if (Brick && (Brick.title || Brick.control)) {
-            //     desc = desc + '<br>' + (Brick.title ? Brick.title : Brick.control);
-            //
-            //     if (Brick.title && Brick.control) {
-            //         desc = desc + ' <span style="opacity:.65">(' + Brick.control + ')</span>';
-            //     }
-            // }
-
             const descTitle = QUILocale.get(lg, 'addBrickWindow.overlay.create.desc.title');
             const descLabelName = QUILocale.get(lg, 'addBrickWindow.overlay.create.desc.label.name');
             const descLabelType = QUILocale.get(lg, 'addBrickWindow.overlay.create.desc.label.type');
             const descHint = QUILocale.get(lg, 'addBrickWindow.overlay.create.desc');
-
             let description = `
             <p>${descTitle}</p>
             <div class="brick-info">
@@ -679,8 +669,6 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             </div>
             <p>${descHint}</p>   
             `;
-
-
 
             this.createOverlay({
                 title: QUILocale.get(lg, 'addBrickWindow.overlay.create.title'),
@@ -949,7 +937,7 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                 if (hasCreateCallback) {
                     this.Loader.hide();
                 }
-            }).catch(() => {
+            }).catch((e) => {
                 this.$createInProgress = false;
 
                 if (this.$CreateCancelBtn) {
@@ -958,6 +946,14 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
 
                 if (this.$CreateSubmitBtn) {
                     this.$CreateSubmitBtn.removeProperty('disabled');
+                }
+
+                if (e && typeof e.getMessage === 'function') {
+                    QUI.getMessageHandler(function (MH) {
+                        MH.addError(e.getMessage(), this.$CreateTitleInput);
+                    }.bind(this));
+
+                    this.$CreateTitleInput.focus();
                 }
 
                 this.Loader.hide();
@@ -1060,6 +1056,7 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             this.Loader.show();
 
             let controlTypeExist = false;
+            const hasCreateCallback = typeof this.getAttribute('onBrickCreated') === 'function';
 
             Promise.all([
                 Bricks.getAvailableBricks(),
@@ -1086,17 +1083,23 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                     return Promise.reject(new Error('control-not-found'));
                 }
 
+                let createTitle = brickTitle;
+
+                allBricks.each((brick) => {
+                    if (brick && brick.title === brickTitle) {
+                        createTitle = brickTitle + ' (' + Date.now() + ')';
+                    }
+                });
+
                 const data = {
-                    title: brickTitle,
+                    title: createTitle,
                     type: brickType
                 };
 
                 return Bricks.createBrick(project, lang, data).then((brickId) => {
-                    allBricks.each((brick) => {
-                        if (brick && brick.title === brickTitle) {
-                            convertedData.attributes.title = brickTitle + ' (' + brickId + ')';
-                        }
-                    });
+                    if (createTitle !== brickTitle) {
+                        convertedData.attributes.title = brickTitle + ' (' + brickId + ')';
+                    }
 
                     const adjustProjectName = this.$ImportAdjustProject ? this.$ImportAdjustProject.checked : true;
                     const adjustProjectLang = this.$ImportAdjustLang ? this.$ImportAdjustLang.checked : true;
@@ -1116,14 +1119,22 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                     MH.addSuccess(QUILocale.get(lg, 'message.brick.save.success'));
                 });
 
-                this.$createInProgress = false;
-                this.Loader.hide();
+                if (!hasCreateCallback) {
+                    this.Loader.hide();
+                    this.$createInProgress = false;
 
-                if (this.$ActiveOverlayClose) {
-                    this.$ActiveOverlayClose();
+                    if (this.$ActiveOverlayClose) {
+                        this.$ActiveOverlayClose();
+                    }
                 }
 
                 return this.handleCreatedBrick(brickId, convertedData);
+            }).then(() => {
+                this.$createInProgress = false;
+
+                if (hasCreateCallback) {
+                    this.Loader.hide();
+                }
             }).catch((e) => {
                 if (e && e.message === 'control-not-found') {
                     this.$createInProgress = false;

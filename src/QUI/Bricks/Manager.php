@@ -167,6 +167,24 @@ class Manager
             'active' => (int)$Brick->getAttribute('active')
         ];
 
+        $result = QUI::getDataBase()->fetch([
+            'from' => $this->getTable(),
+            'where' => [
+                'title' => $insertData['title'],
+                'project' => $insertData['project'],
+                'lang' => $insertData['lang']
+            ],
+            'limit' => 1
+        ]);
+
+        if (isset($result[0])) {
+            throw new QUI\Exception([
+                'quiqqer/bricks',
+                'exception.brick.title.already.exists',
+                ['brickTitle' => $insertData['title']]
+            ]);
+        }
+
         $SessionUser = QUI::getUserBySession();
         $currentDate = date('Y-m-d H:i:s');
 
