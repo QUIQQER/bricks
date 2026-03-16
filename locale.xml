@@ -953,6 +953,14 @@ This content does not replace the block content. You can still place the brick t
             <de><![CDATA[#[brickId] - [brickTitle] : Baustein]]></de>
             <en><![CDATA[#[brickId] - [brickTitle] : Brick]]></en>
         </locale>
+        <locale name="brick.window.popup.saveAndClose">
+            <de><![CDATA[Speichern & schließen]]></de>
+            <en><![CDATA[Save & close]]></en>
+        </locale>
+        <locale name="brick.window.popup.openInPanel">
+            <de><![CDATA[Baustein im Panel öffnen]]></de>
+            <en><![CDATA[Open brick in panel]]></en>
+        </locale>
         <locale name="brickId">
             <de><![CDATA[Baustein-ID]]></de>
             <en><![CDATA[Brick ID]]></en>

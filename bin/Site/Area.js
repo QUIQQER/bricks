@@ -1172,7 +1172,7 @@ define('package/quiqqer/bricks/bin/Site/Area', [
         },
 
         /**
-         * Opens the brick in a new tab
+         * Opens the brick editor in a popup
          *
          * @param Select
          */

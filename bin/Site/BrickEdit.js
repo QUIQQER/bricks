@@ -23,7 +23,9 @@ define('package/quiqqer/bricks/bin/Site/BrickEdit', [
 
         Binds: [
             '$onInject',
-            '$brickSettingsPromise'
+            '$brickSettingsPromise',
+            'openBrick',
+            'openBrickInPanel'
         ],
 
         options: {
@@ -170,6 +172,42 @@ define('package/quiqqer/bricks/bin/Site/BrickEdit', [
          * Opens the brick panel
          */
         openBrick: function () {
+            return this.openBrickInPopup();
+        },
+
+        /**
+         * Opens the brick popup
+         */
+        openBrickInPopup: function () {
+            let brickId = this.getAttribute('brickId'),
+                projectName = '',
+                projectLang = '';
+
+            if (this.getAttribute('Site')) {
+                projectName = this.getAttribute('Site').getProject().getName();
+                projectLang = this.getAttribute('Site').getProject().getLang();
+            }
+
+            return new Promise(function (resolve) {
+                require([
+                    'package/quiqqer/bricks/bin/Controls/backend/BrickEditWindow'
+                ], function (BrickEditWindow) {
+                    const Window = new BrickEditWindow({
+                        brickId: brickId,
+                        projectName: projectName,
+                        projectLang: projectLang
+                    });
+
+                    Window.open();
+                    resolve(Window);
+                });
+            });
+        },
+
+        /**
+         * Opens the brick in the desktop panel/tasks view
+         */
+        openBrickInPanel: function () {
             let brickId = this.getAttribute('brickId'),
                 projectName = '',
                 projectLang = '';
