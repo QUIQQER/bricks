@@ -991,6 +991,10 @@ This content does not replace the block content. You can still place the brick t
             <de><![CDATA[Baustein hinzufügen]]></de>
             <en><![CDATA[Add a Brick]]></en>
         </locale>
+        <locale name="site.area.button.create">
+            <de><![CDATA[Baustein erstellen]]></de>
+            <en><![CDATA[Create Brick]]></en>
+        </locale>
         <locale name="site.area.button.delete">
             <de><![CDATA[Baustein löschen]]></de>
             <en><![CDATA[Delete the Brick]]></en>

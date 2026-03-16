@@ -31,6 +31,7 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             'openCreateFromDataOverlay',
             'closeCreateOverlay',
             'createBrickFromOverlay',
+            'handleCreatedBrick',
             'importBrickFromOverlay',
             'onOverlayKeyDown'
         ],
@@ -43,7 +44,13 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             backgroundClosable: false,
 
             project: '',
-            lang: ''
+            lang: '',
+
+            // Optional async callback that runs after a brick was created.
+            // This ist NOT a QUI event!
+            // Use this for custom post-create flows that must finish before
+            // the AddBrickWindow closes. This is not a standard QUI event.
+            onBrickCreated: false
         },
 
         /**
@@ -923,13 +930,25 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                 title: title,
                 type: control
             };
+            const hasCreateCallback = typeof this.getAttribute('onBrickCreated') === 'function';
 
             Bricks.createBrick(this.options.project, this.options.lang, data).then((brickId) => {
+                if (!hasCreateCallback) {
+                    this.Loader.hide();
+                    this.$createInProgress = false;
+                    this.closeCreateOverlay();
+                }
+
+                return this.handleCreatedBrick(brickId, {
+                    title: title,
+                    type: control
+                });
+            }).then(() => {
                 this.$createInProgress = false;
-                this.Loader.hide();
-                this.closeCreateOverlay();
-                this.editBrick(brickId);
-                this.close();
+
+                if (hasCreateCallback) {
+                    this.Loader.hide();
+                }
             }).catch(() => {
                 this.$createInProgress = false;
 
@@ -1104,8 +1123,7 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                     this.$ActiveOverlayClose();
                 }
 
-                this.editBrick(brickId);
-                this.close();
+                return this.handleCreatedBrick(brickId, convertedData);
             }).catch((e) => {
                 if (e && e.message === 'control-not-found') {
                     this.$createInProgress = false;
@@ -1704,6 +1722,36 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             }
 
             this.parent();
+        },
+
+        /**
+         * Handles a newly created brick.
+         * Falls back to the historical default behaviour when no callback is configured.
+         *
+         * @param {Number} brickId
+         * @param {Object} [data]
+         * @returns {Promise}
+         */
+        handleCreatedBrick: function (brickId, data) {
+            const callback = this.getAttribute('onBrickCreated');
+            const payload = {
+                brickId: brickId,
+                project: this.options.project,
+                lang: this.options.lang,
+                data: data || {}
+            };
+
+            if (typeof callback === 'function') {
+                return Promise.resolve(callback(payload)).then(() => {
+                    this.close();
+                    return payload;
+                });
+            }
+
+            this.editBrick(brickId);
+            this.close();
+
+            return Promise.resolve(payload);
         },
 
         /**
