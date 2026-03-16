@@ -55,6 +55,7 @@ class UtilsTest extends TestCase
       <description><locale group="g1" var="descVar"/></description>
       <mockups>
         <mockup src="/a.png"/>
+        <mockup src="/thumb.png" type="thumbnail"/>
         <mockup src="/preview.png" type="preview"/>
       </mockups>
     </brick>
@@ -73,7 +74,9 @@ XML
         $this->assertSame(1, $bricks[0]['recommended']);
         $this->assertSame(1, $bricks[0]['deprecated']);
         $this->assertSame('/preview.png', $bricks[0]['mockup']);
-        $this->assertCount(2, $bricks[0]['mockups']);
+        $this->assertSame('/thumb.png', $bricks[0]['thumbnail']);
+        $this->assertCount(3, $bricks[0]['mockups']);
+        $this->assertSame(['/a.png'], $bricks[0]['galleryMockups']);
     }
 
     public function testGetTemplateAreasFromXmlWithFilters(): void

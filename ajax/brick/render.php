@@ -13,8 +13,11 @@ QUI::getAjax()->registerFunction(
         $bm = QUI\Bricks\Manager::init();
         $brick = $bm?->getBrickById($brickId);
 
+        // body has to be loaded before CSS render, some controls changes it during rendering
+        $body = $brick?->create() ?? '';
+
         $html = QUI\Control\Manager::getCSS();
-        $html .= $brick?->create() ?? '';
+        $html .= $body;
 
         return $html;
     },

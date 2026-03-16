@@ -11,6 +11,7 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
     "use strict";
 
     const lg = 'quiqqer/bricks';
+    const SHORTCUT_HINTS_STORAGE_KEY = 'quiqqer.bricks.addBrickWindow.shortcutHintsExpanded';
 
     return new Class ({
         Extends: QUISimpleWindow,
@@ -24,11 +25,13 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             'onItemClick',
             'onItemDblClick',
             'onKeyDown',
+            'toggleShortcutHints',
             'createOverlay',
             'openCreateOverlay',
             'openCreateFromDataOverlay',
             'closeCreateOverlay',
             'createBrickFromOverlay',
+            'handleCreatedBrick',
             'importBrickFromOverlay',
             'onOverlayKeyDown'
         ],
@@ -41,7 +44,13 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             backgroundClosable: false,
 
             project: '',
-            lang: ''
+            lang: '',
+
+            // Optional async callback that runs after a brick was created.
+            // This ist NOT a QUI event!
+            // Use this for custom post-create flows that must finish before
+            // the AddBrickWindow closes. This is not a standard QUI event.
+            onBrickCreated: false
         },
 
         /**
@@ -62,6 +71,8 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             this.$DeprecatedToggle = null;
             this.$SelectedPackage = null;
             this.$BrickCount = null;
+            this.$ShortcutHints = null;
+            this.$ShortcutToggle = null;
             this.$DetailTitle = null;
             this.$DetailPackage = null;
             this.$DetailHero = null;
@@ -87,6 +98,7 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             this.$OverlayPreviousActiveElement = null;
 
             this.$KeyboardBound = false;
+            this.$NativeKeyDownHandler = this.onKeyDown;
 
             this.addEvents({
                 onOpen: this.$onOpen
@@ -106,7 +118,27 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                 return;
             }
 
-            if (event.key !== 'up' && event.key !== 'down' && event.key !== 'enter') {
+            const nativeEvent = event.event || event;
+            const key = String(event.key || nativeEvent.key || '').toLowerCase();
+            const isImportShortcut = (event.metaKey || event.ctrlKey)
+                && event.shiftKey
+                && !event.altKey
+                && (
+                    key === '.'
+                    || key === ':'
+                    || nativeEvent.code === 'Period'
+                    || nativeEvent.which === 190
+                    || nativeEvent.keyCode === 190
+                );
+
+            if (isImportShortcut) {
+                event.preventDefault();
+                event.stopPropagation();
+                this.openCreateFromDataOverlay();
+                return;
+            }
+
+            if (key !== 'up' && key !== 'arrowup' && key !== 'down' && key !== 'arrowdown' && key !== 'enter') {
                 return;
             }
 
@@ -127,12 +159,12 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                 Current = visible[0];
             }
 
-            if (event.key === 'enter') {
+            if (key === 'enter') {
                 this.openCreateOverlay();
                 return;
             }
 
-            const delta = event.key === 'down' ? 1 : -1;
+            const delta = key === 'down' || key === 'arrowdown' ? 1 : -1;
             let index = visible.indexOf(Current);
 
             if (index === -1) {
@@ -347,6 +379,10 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
          * @returns {String}
          */
         getHtml: function (brickList, packageList) {
+            const shortcutModifierLabel = navigator.platform.toUpperCase().indexOf('MAC') >= 0
+                ? 'Cmd'
+                : 'Ctrl';
+
             return Mustache.render(template, {
                 brickList: brickList,
                 packageList: packageList,
@@ -356,7 +392,12 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                 asideInputPlaceholder: QUILocale.get(lg, 'addBrickWindow.aside.toolbar.input.placeholder'),
                 asideSelectTitle: QUILocale.get(lg, 'addBrickWindow.aside.toolbar.select.title'),
                 asideSelectOptionAll: QUILocale.get(lg, 'addBrickWindow.aside.toolbar.select.option.all'),
-                asideKeyboardNavigationText: QUILocale.get(lg, 'addBrickWindow.aside.toolbar.keyboardNavigationText'),
+                asideKeyboardNavigationDescription: QUILocale.get(lg, 'addBrickWindow.aside.toolbar.keyboardNavigationDescription'),
+                asideKeyboardCreateDescription: QUILocale.get(lg, 'addBrickWindow.aside.toolbar.keyboardCreateDescription'),
+                asideKeyboardImportText: QUILocale.get(lg, 'addBrickWindow.aside.toolbar.keyboardImportText'),
+                shortcutToggleLabel: QUILocale.get(lg, 'addBrickWindow.aside.toolbar.shortcuts.label'),
+                shortcutToggleShowTitle: QUILocale.get(lg, 'addBrickWindow.aside.toolbar.shortcuts.show'),
+                shortcutModifierLabel: shortcutModifierLabel,
                 asideFooterToggleDeprecated: QUILocale.get(lg, 'addBrickWindow.aside.footer.toggle.deprecated.show'),
                 deprecatedText: QUILocale.get(lg, 'addBrickWindow.deprecated.badge'),
                 recommendedText: QUILocale.get(lg, 'addBrickWindow.recommendedText.badge'),
@@ -385,6 +426,8 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             this.$DeprecatedToggle = this.$Content.getElement('[data-name="toggle-deprecated"]');
             this.$SelectedPackage = this.$Content.getElement('[data-name="selected-package"]');
             this.$BrickCount = this.$Content.getElement('[data-name="brick-count"]');
+            this.$ShortcutHints = this.$Content.getElement('[data-name="shortcut-hints"]');
+            this.$ShortcutToggle = this.$Content.getElement('[data-name="toggle-shortcuts"]');
             this.$DetailTitle = this.$Content.getElement('[data-name="detail-title"]');
             this.$DetailPackage = this.$Content.getElement('[data-name="detail-package"]');
             this.$DetailHero = this.$Content.getElement('[data-name="detail-hero"]');
@@ -402,6 +445,63 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             this.$ImportSubmitBtn = this.$Content.getElement('[data-name="import-submit"]');
             this.$ImportAdjustProject = this.$Content.getElement('[data-name="import-adjust-project"]');
             this.$ImportAdjustLang = this.$Content.getElement('[data-name="import-adjust-lang"]');
+        },
+
+        isShortcutHintsExpanded: function () {
+            try {
+                const value = window.localStorage.getItem(SHORTCUT_HINTS_STORAGE_KEY);
+
+                if (value === null) {
+                    return false;
+                }
+
+                return value === '1';
+            } catch (error) {
+                return false;
+            }
+        },
+
+        setShortcutHintsExpanded: function (expanded) {
+            try {
+                window.localStorage.setItem(SHORTCUT_HINTS_STORAGE_KEY, expanded ? '1' : '0');
+            } catch (error) {
+                // ignore storage access errors
+            }
+        },
+
+        syncShortcutHintsState: function () {
+            if (!this.$ShortcutHints || !this.$ShortcutToggle) {
+                return;
+            }
+
+            const expanded = this.isShortcutHintsExpanded();
+            const label = expanded
+                ? QUILocale.get(lg, 'addBrickWindow.aside.toolbar.shortcuts.hide')
+                : QUILocale.get(lg, 'addBrickWindow.aside.toolbar.shortcuts.show');
+            const Icon = this.$ShortcutToggle.getElement('.fa');
+
+            this.$ShortcutHints.hidden = !expanded;
+            this.$ShortcutToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+            this.$ShortcutToggle.set('title', label);
+            this.$ShortcutToggle.set('aria-label', label);
+
+            if (Icon) {
+                Icon.removeClass('fa-keyboard-o');
+                Icon.removeClass('fa-angle-down');
+                Icon.removeClass('fa-angle-up');
+                Icon.addClass(expanded ? 'fa-angle-up' : 'fa-angle-down');
+            }
+        },
+
+        toggleShortcutHints: function (event) {
+            if (event) {
+                event.preventDefault();
+            }
+
+            const expanded = !this.isShortcutHintsExpanded();
+
+            this.setShortcutHintsExpanded(expanded);
+            this.syncShortcutHintsState();
         },
 
         /**
@@ -557,20 +657,10 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             }
 
             const Brick = this.getCurrentBrickInfo();
-
-            // if (Brick && (Brick.title || Brick.control)) {
-            //     desc = desc + '<br>' + (Brick.title ? Brick.title : Brick.control);
-            //
-            //     if (Brick.title && Brick.control) {
-            //         desc = desc + ' <span style="opacity:.65">(' + Brick.control + ')</span>';
-            //     }
-            // }
-
             const descTitle = QUILocale.get(lg, 'addBrickWindow.overlay.create.desc.title');
             const descLabelName = QUILocale.get(lg, 'addBrickWindow.overlay.create.desc.label.name');
             const descLabelType = QUILocale.get(lg, 'addBrickWindow.overlay.create.desc.label.type');
             const descHint = QUILocale.get(lg, 'addBrickWindow.overlay.create.desc');
-
             let description = `
             <p>${descTitle}</p>
             <div class="brick-info">
@@ -579,8 +669,6 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             </div>
             <p>${descHint}</p>   
             `;
-
-
 
             this.createOverlay({
                 title: QUILocale.get(lg, 'addBrickWindow.overlay.create.title'),
@@ -830,14 +918,26 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                 title: title,
                 type: control
             };
+            const hasCreateCallback = typeof this.getAttribute('onBrickCreated') === 'function';
 
             Bricks.createBrick(this.options.project, this.options.lang, data).then((brickId) => {
+                if (!hasCreateCallback) {
+                    this.Loader.hide();
+                    this.$createInProgress = false;
+                    this.closeCreateOverlay();
+                }
+
+                return this.handleCreatedBrick(brickId, {
+                    title: title,
+                    type: control
+                });
+            }).then(() => {
                 this.$createInProgress = false;
-                this.Loader.hide();
-                this.closeCreateOverlay();
-                this.editBrick(brickId);
-                this.close();
-            }).catch(() => {
+
+                if (hasCreateCallback) {
+                    this.Loader.hide();
+                }
+            }).catch((e) => {
                 this.$createInProgress = false;
 
                 if (this.$CreateCancelBtn) {
@@ -846,6 +946,14 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
 
                 if (this.$CreateSubmitBtn) {
                     this.$CreateSubmitBtn.removeProperty('disabled');
+                }
+
+                if (e && typeof e.getMessage === 'function') {
+                    QUI.getMessageHandler(function (MH) {
+                        MH.addError(e.getMessage(), this.$CreateTitleInput);
+                    }.bind(this));
+
+                    this.$CreateTitleInput.focus();
                 }
 
                 this.Loader.hide();
@@ -948,6 +1056,7 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             this.Loader.show();
 
             let controlTypeExist = false;
+            const hasCreateCallback = typeof this.getAttribute('onBrickCreated') === 'function';
 
             Promise.all([
                 Bricks.getAvailableBricks(),
@@ -974,17 +1083,23 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                     return Promise.reject(new Error('control-not-found'));
                 }
 
+                let createTitle = brickTitle;
+
+                allBricks.each((brick) => {
+                    if (brick && brick.title === brickTitle) {
+                        createTitle = brickTitle + ' (' + Date.now() + ')';
+                    }
+                });
+
                 const data = {
-                    title: brickTitle,
+                    title: createTitle,
                     type: brickType
                 };
 
                 return Bricks.createBrick(project, lang, data).then((brickId) => {
-                    allBricks.each((brick) => {
-                        if (brick && brick.title === brickTitle) {
-                            convertedData.attributes.title = brickTitle + ' (' + brickId + ')';
-                        }
-                    });
+                    if (createTitle !== brickTitle) {
+                        convertedData.attributes.title = brickTitle + ' (' + brickId + ')';
+                    }
 
                     const adjustProjectName = this.$ImportAdjustProject ? this.$ImportAdjustProject.checked : true;
                     const adjustProjectLang = this.$ImportAdjustLang ? this.$ImportAdjustLang.checked : true;
@@ -1004,15 +1119,22 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                     MH.addSuccess(QUILocale.get(lg, 'message.brick.save.success'));
                 });
 
-                this.$createInProgress = false;
-                this.Loader.hide();
+                if (!hasCreateCallback) {
+                    this.Loader.hide();
+                    this.$createInProgress = false;
 
-                if (this.$ActiveOverlayClose) {
-                    this.$ActiveOverlayClose();
+                    if (this.$ActiveOverlayClose) {
+                        this.$ActiveOverlayClose();
+                    }
                 }
 
-                this.editBrick(brickId);
-                this.close();
+                return this.handleCreatedBrick(brickId, convertedData);
+            }).then(() => {
+                this.$createInProgress = false;
+
+                if (hasCreateCallback) {
+                    this.Loader.hide();
+                }
             }).catch((e) => {
                 if (e && e.message === 'control-not-found') {
                     this.$createInProgress = false;
@@ -1082,6 +1204,21 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             return new Element('div', {
                 html: text
             }).get('text') || '';
+        },
+
+        toPreviewText: function (value, maxLength) {
+            const plain = this.toPlainText(value);
+            const normalized = plain
+                .replace(/\s+/g, ' ')
+                .trim();
+
+            const limit = (typeof maxLength === 'number' && maxLength > 0) ? maxLength : 140;
+
+            if (normalized.length <= limit) {
+                return normalized;
+            }
+
+            return normalized.slice(0, Math.max(0, limit - 1)).trimEnd() + '…';
         },
 
         /**
@@ -1163,8 +1300,8 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             if (this.$DetailGallery) {
                 this.$DetailGallery.set('html', '');
 
-                if (data.mockups && data.mockups.length) {
-                    data.mockups.each((mockup) => {
+                if (data.galleryMockups && data.galleryMockups.length) {
+                    data.galleryMockups.each((mockup) => {
                         let src = mockup;
 
                         if (typeof mockup === 'object' && mockup && 'src' in mockup) {
@@ -1383,9 +1520,12 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                     if (brick.control === 'content') {
                         const displayTitle = QUILocale.get(lg, 'addBrickWindow.details.brickTypeContent.title');
                         const displayDescription = QUILocale.get(lg, 'addBrickWindow.details.brickTypeContent.desc');
+                        const displayDescriptionPreview = this.toPreviewText(displayDescription);
                         const displayPackage = 'quiqqer/bricks';
                         const mockup = '/packages/quiqqer/bricks/bin/images/mockup-placeholder.svg';
+                        const thumbnail = mockup;
                         const mockups = [];
+                        const galleryMockups = [];
 
                         const searchText = [
                             this.toPlainText(displayTitle),
@@ -1398,9 +1538,12 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                             control: brick.control,
                             displayTitle: displayTitle,
                             displayDescription: displayDescription,
+                            displayDescriptionPreview: displayDescriptionPreview,
                             displayPackage: displayPackage,
                             mockup: mockup,
+                            thumbnail: thumbnail,
                             mockups: mockups,
+                            galleryMockups: galleryMockups,
                             search: searchText,
                             deprecated: 0,
                             recommended: 0
@@ -1441,6 +1584,7 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
 
                     const title = getLocaleString(brick.title);
                     const description = getLocaleString(brick.description);
+                    const displayDescriptionPreview = this.toPreviewText(description);
 
                     let pkg = getLocaleGroup(brick.title);
 
@@ -1456,7 +1600,9 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                     ].join(' ').toLowerCase();
 
                     const mockup = brick.mockup ? brick.mockup : '/packages/quiqqer/bricks/bin/images/mockup-placeholder.svg';
+                    const thumbnail = brick.thumbnail ? brick.thumbnail : mockup;
                     const mockups = Array.isArray(brick.mockups) ? brick.mockups : [];
+                    const galleryMockups = Array.isArray(brick.galleryMockups) ? brick.galleryMockups : mockups;
                     const deprecated = brick.deprecated ? 1 : 0;
                     let recommended = brick.recommended ? 1 : 0;
 
@@ -1464,9 +1610,12 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                         control: brick.control,
                         displayTitle: title,
                         displayDescription: description,
+                        displayDescriptionPreview: displayDescriptionPreview,
                         displayPackage: pkg,
                         mockup: mockup,
+                        thumbnail: thumbnail,
                         mockups: mockups,
+                        galleryMockups: galleryMockups,
                         search: searchText,
                         deprecated: deprecated,
                         recommended: recommended
@@ -1515,6 +1664,12 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                     this.onDeprecatedToggleChange();
                 }
 
+                if (this.$ShortcutToggle) {
+                    this.$ShortcutToggle.removeEvent('click', this.toggleShortcutHints);
+                    this.$ShortcutToggle.addEvent('click', this.toggleShortcutHints);
+                    this.syncShortcutHintsState();
+                }
+
                 if (this.$BrickList) {
                     const Items = this.$BrickList.getElements('[data-name="item"]');
 
@@ -1528,8 +1683,8 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                     });
                 }
 
-                document.removeEvent('keydown', this.onKeyDown);
-                document.addEvent('keydown', this.onKeyDown);
+                document.removeEventListener('keydown', this.$NativeKeyDownHandler, true);
+                document.addEventListener('keydown', this.$NativeKeyDownHandler, true);
                 this.$KeyboardBound = true;
 
                 this.applyFilters();
@@ -1573,11 +1728,41 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
 
         close: function () {
             if (this.$KeyboardBound) {
-                document.removeEvent('keydown', this.onKeyDown);
+                document.removeEventListener('keydown', this.$NativeKeyDownHandler, true);
                 this.$KeyboardBound = false;
             }
 
             this.parent();
+        },
+
+        /**
+         * Handles a newly created brick.
+         * Falls back to the historical default behaviour when no callback is configured.
+         *
+         * @param {Number} brickId
+         * @param {Object} [data]
+         * @returns {Promise}
+         */
+        handleCreatedBrick: function (brickId, data) {
+            const callback = this.getAttribute('onBrickCreated');
+            const payload = {
+                brickId: brickId,
+                project: this.options.project,
+                lang: this.options.lang,
+                data: data || {}
+            };
+
+            if (typeof callback === 'function') {
+                return Promise.resolve(callback(payload)).then(() => {
+                    this.close();
+                    return payload;
+                });
+            }
+
+            this.editBrick(brickId);
+            this.close();
+
+            return Promise.resolve(payload);
         },
 
         /**

@@ -157,14 +157,14 @@
         {$CaptchaDisplay->create()}
         {/if}
 
-        <button class="quiqqer-simple-contact-button quiqqer-simple-contact-button__hideOnNoScript" type="submit" disabled="disabled">
+        <button class="btn btn-primary quiqqer-simple-contact-button quiqqer-simple-contact-button__hideOnNoScript" type="submit" disabled="disabled">
             {locale group='quiqqer/bricks' value='control.simpleContact.sendButton'}
         </button>
 
     </div>
 
     <noscript>
-        <input class="quiqqer-simple-contact-button" type="submit"
+        <input class="btn btn-primary quiqqer-simple-contact-button" type="submit"
                value="{locale group='quiqqer/bricks' value='control.simpleContact.sendButton'}" />
     </noscript>
 

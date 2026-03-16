@@ -83,6 +83,17 @@ define('package/quiqqer/bricks/bin/Manager', [
             this.Loader.show();
 
             Bricks.getBricksFromProject(project, lang).then(function (result) {
+                result = result.map(function (entry) {
+                    entry.activeDisplay = new Element('span', {
+                        'class': parseInt(entry.active) ? 'fa fa-check' : 'fa fa-ban',
+                        title: parseInt(entry.active)
+                            ? QUILocale.get(lg, 'manager.grid.status.active')
+                            : QUILocale.get(lg, 'manager.grid.status.inactive')
+                    });
+
+                    return entry;
+                });
+
                 if (typeof callback === 'function') {
                     callback();
                 }
@@ -260,10 +271,16 @@ define('package/quiqqer/bricks/bin/Manager', [
                         width: 60
                     },
                     {
+                        header: QUILocale.get(lg, 'manager.grid.status'),
+                        dataIndex: 'activeDisplay',
+                        dataType: 'node',
+                        width: 60
+                    },
+                    {
                         header: QUILocale.get('quiqqer/core', 'title'),
                         dataIndex: 'title',
                         dataType: 'string',
-                        width: 300
+                        width: 350
                     },
                     {
                         header: QUILocale.get('quiqqer/core', 'description'),
@@ -275,7 +292,7 @@ define('package/quiqqer/bricks/bin/Manager', [
                         header: QUILocale.get(lg, 'brick.type'),
                         dataIndex: 'type',
                         dataType: 'string',
-                        width: 300
+                        width: 350
                     }
                 ],
                 multipleSelection: true,

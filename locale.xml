@@ -296,6 +296,14 @@
             <de><![CDATA[Bausteinbeschreibung]]></de>
             <en><![CDATA[Brick description]]></en>
         </locale>
+        <locale name="brick.edit.status">
+            <de><![CDATA[Aktiv]]></de>
+            <en><![CDATA[Active]]></en>
+        </locale>
+        <locale name="brick.edit.status.inactive.message">
+            <de><![CDATA[Dieser Baustein ist deaktiviert und wird im Frontend (für Besucher) nicht angezeigt.]]></de>
+            <en><![CDATA[This brick is disabled and will not be shown on the website (frontend).]]></en>
+        </locale>
         <locale name="brick.edit.type">
             <de><![CDATA[Bausteintyp]]></de>
             <en><![CDATA[Brick type]]></en>
@@ -945,6 +953,14 @@ This content does not replace the block content. You can still place the brick t
             <de><![CDATA[#[brickId] - [brickTitle] : Baustein]]></de>
             <en><![CDATA[#[brickId] - [brickTitle] : Brick]]></en>
         </locale>
+        <locale name="brick.window.popup.saveAndClose">
+            <de><![CDATA[Speichern & schließen]]></de>
+            <en><![CDATA[Save & close]]></en>
+        </locale>
+        <locale name="brick.window.popup.openInPanel">
+            <de><![CDATA[Baustein im Panel öffnen]]></de>
+            <en><![CDATA[Open brick in panel]]></en>
+        </locale>
         <locale name="brickId">
             <de><![CDATA[Baustein-ID]]></de>
             <en><![CDATA[Brick ID]]></en>
@@ -975,6 +991,10 @@ This content does not replace the block content. You can still place the brick t
             <de><![CDATA[Baustein hinzufügen]]></de>
             <en><![CDATA[Add a Brick]]></en>
         </locale>
+        <locale name="site.area.button.create">
+            <de><![CDATA[Baustein erstellen]]></de>
+            <en><![CDATA[Create Brick]]></en>
+        </locale>
         <locale name="site.area.button.delete">
             <de><![CDATA[Baustein löschen]]></de>
             <en><![CDATA[Delete the Brick]]></en>
@@ -990,6 +1010,10 @@ This content does not replace the block content. You can still place the brick t
         <locale name="site.area.window.input.placeholder">
             <de><![CDATA[Nach Titel oder Beschreibung filtern]]></de>
             <en><![CDATA[Filter by title or description]]></en>
+        </locale>
+        <locale name="site.area.window.add.brickIsDisabled">
+            <de><![CDATA[Deaktiviert]]></de>
+            <en><![CDATA[Disabled]]></en>
         </locale>
         <locale name="site.area.window.delete.title">
             <de><![CDATA[Baustein löschen?]]></de>
@@ -1046,6 +1070,10 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
             Bricks can be under <b> Settings -> Blocks </ b> managed and assigned.
             ]]></en>
         </locale>
+        <locale name="site.area.badge.disabled">
+            <de><![CDATA[Deaktiviert]]></de>
+            <en><![CDATA[Disabled]]></en>
+        </locale>
 
         <locale name="manager.button.add">
             <de><![CDATA[Baustein hinzufügen]]></de>
@@ -1070,6 +1098,18 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
         <locale name="manager.button.delete">
             <de><![CDATA[Markierte Bausteine löschen]]></de>
             <en><![CDATA[Delete marked Bricks]]></en>
+        </locale>
+        <locale name="manager.grid.status">
+            <de><![CDATA[Aktiv]]></de>
+            <en><![CDATA[Active]]></en>
+        </locale>
+        <locale name="manager.grid.status.active">
+            <de><![CDATA[Baustein ist aktiv]]></de>
+            <en><![CDATA[Brick is active]]></en>
+        </locale>
+        <locale name="manager.grid.status.inactive">
+            <de><![CDATA[Baustein ist deaktiviert]]></de>
+            <en><![CDATA[Brick is disabled]]></en>
         </locale>
 
         <locale name="manager.window.delete.title">
@@ -1577,17 +1617,29 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
             <de><![CDATA[Alle]]></de>
             <en><![CDATA[All]]></en>
         </locale>
-        <locale name="addBrickWindow.aside.toolbar.keyboardNavigationText">
-            <de><![CDATA[<span class="label">Navigieren mit </span>
-                    <kbd class="key" title="Pfeil hoch">↑</kbd>
-                    <kbd class="key" title="Pfeil runter">↓</kbd> |
-                    <kbd class="key" title="Enter">Enter</kbd>
-                    <span class="label">erstellt den ausgewählten Baustein</span>]]></de>
-            <en><![CDATA[<span class="label">Navigate with </span>
-                    <kbd class="key" title="Arrow up">↑</kbd>
-                    <kbd class="key" title="Arrow down">↓</kbd> |
-                    <kbd class="key" title="Enter">Enter</kbd>
-                    <span class="label">creates the selected brick</span>]]></en>
+        <locale name="addBrickWindow.aside.toolbar.keyboardNavigationDescription">
+            <de><![CDATA[Auswahl navigieren]]></de>
+            <en><![CDATA[Navigate selection]]></en>
+        </locale>
+        <locale name="addBrickWindow.aside.toolbar.keyboardCreateDescription">
+            <de><![CDATA[Erstellt den ausgewählten Baustein]]></de>
+            <en><![CDATA[Creates the selected brick]]></en>
+        </locale>
+        <locale name="addBrickWindow.aside.toolbar.keyboardImportText">
+            <de><![CDATA[JSON-Baustein importieren]]></de>
+            <en><![CDATA[Import JSON brick]]></en>
+        </locale>
+        <locale name="addBrickWindow.aside.toolbar.shortcuts.show">
+            <de><![CDATA[Tastaturhinweise anzeigen]]></de>
+            <en><![CDATA[Show keyboard hints]]></en>
+        </locale>
+        <locale name="addBrickWindow.aside.toolbar.shortcuts.hide">
+            <de><![CDATA[Tastaturhinweise ausblenden]]></de>
+            <en><![CDATA[Hide keyboard hints]]></en>
+        </locale>
+        <locale name="addBrickWindow.aside.toolbar.shortcuts.label">
+            <de><![CDATA[Shortcuts]]></de>
+            <en><![CDATA[Shortcuts]]></en>
         </locale>
         <locale name="addBrickWindow.deprecated.badge">
             <de><![CDATA[Deprecated]]></de>
@@ -2521,6 +2573,226 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
             <en><![CDATA[Text]]></en>
         </locale>
 
+        <!-- Buttons -->
+        <locale name="brick.buttons.title">
+            <de><![CDATA[Buttons]]></de>
+            <en><![CDATA[Buttons]]></en>
+        </locale>
+        <locale name="brick.buttons.description">
+            <de><![CDATA[<p>Mit diesem Brick erstellst du eine Liste aus Buttons – z.B. für Downloads, Kontakt oder wichtige Aktionen. Du kannst jeden Button einzeln gestalten und verlinken.</p>
+
+<p><strong>Darstellung</strong></p>
+<ul>
+    <li><strong>Button</strong>: Text (optional mit Icon).</li>
+    <li><strong>Nur Icon</strong>: Es werden nur Icon-Buttons angezeigt (Einträge ohne Icon werden automatisch nicht angezeigt).</li>
+</ul>
+
+<p><strong>Pro Button konfigurierbar</strong></p>
+<ul>
+    <li><strong>Text</strong>: die Beschriftung.</li>
+    <li><strong>Icon</strong>: optionales Symbol (wenn du ein Icon-Set nutzt, z.B. Font Awesome).</li>
+    <li><strong>Icon-Position</strong>: Icon vor oder nach dem Text.</li>
+    <li><strong>Button-Design</strong>: z.B. primär/sekundär, Erfolg/Warnung (je nach Theme).</li>
+    <li><strong>Größe</strong>: Standard, klein oder groß.</li>
+    <li><strong>Link</strong>: interne Seite oder externe Adresse.</li>
+    <li><strong>In neuem Tab öffnen</strong>: öffnet den Link in einem neuen Tab/Fenster.</li>
+    <li><strong>Tooltip (Title)</strong>: kurzer Hinweis beim Darüberfahren mit der Maus.</li>
+    <li><strong>Barrierefreiheit (ARIA-Label)</strong>: hilfreich bei Icon-Buttons, damit Screenreader den Zweck vorlesen können.</li>
+    <li><strong>Deaktiviert</strong>: wird angezeigt, ist aber nicht klickbar.</li>
+    <li><strong>Volle Breite</strong>: Button nutzt die komplette verfügbare Breite.</li>
+    <li><strong>Aktion beim Klicken</strong>: optional (für Fortgeschrittene), um eine Funktion auszulösen.</li>
+    <li><strong>Zusätzliche CSS-Klasse</strong>: optional (für Fortgeschrittene), für individuelles Styling.</li>
+    <li><strong>Eintrag ausblenden</strong>: der Button wird gar nicht ausgegeben.</li>
+</ul>]]></de>
+            <en><![CDATA[<p>Use this brick to create a list of buttons – e.g. for downloads, contact links or important actions. You can style and link each button individually.</p>
+
+<p><strong>Display mode</strong></p>
+<ul>
+    <li><strong>Button</strong>: text (optionally with an icon).</li>
+    <li><strong>Icon only</strong>: only icon buttons are shown (entries without an icon are hidden automatically).</li>
+</ul>
+
+<p><strong>Configurable per button</strong></p>
+<ul>
+    <li><strong>Text</strong>: the label.</li>
+    <li><strong>Icon</strong>: optional symbol (if your site uses an icon set, e.g. Font Awesome).</li>
+    <li><strong>Icon position</strong>: icon before or after the text.</li>
+    <li><strong>Button style</strong>: e.g. primary/secondary, success/warning (depends on your theme).</li>
+    <li><strong>Size</strong>: default, small or large.</li>
+    <li><strong>Link</strong>: internal page or external address.</li>
+    <li><strong>Open in new tab</strong>: opens the link in a new tab/window.</li>
+    <li><strong>Tooltip (Title)</strong>: short hint shown on hover.</li>
+    <li><strong>Accessibility (ARIA label)</strong>: useful for icon-only buttons so screen readers can announce the purpose.</li>
+    <li><strong>Disabled</strong>: shown but not clickable.</li>
+    <li><strong>Full width</strong>: button uses the full available width.</li>
+    <li><strong>Action on click</strong>: optional (advanced) to trigger a function.</li>
+    <li><strong>Additional CSS class</strong>: optional (advanced) for custom styling.</li>
+    <li><strong>Hide entry</strong>: the button is not rendered at all.</li>
+</ul>]]></en>
+        </locale>
+        <locale name="brick.buttons.settings.displayMode">
+            <de><![CDATA[Darstellung]]></de>
+            <en><![CDATA[Display mode]]></en>
+        </locale>
+        <locale name="brick.buttons.settings.displayMode.button">
+            <de><![CDATA[Button]]></de>
+            <en><![CDATA[Button]]></en>
+        </locale>
+        <locale name="brick.buttons.settings.displayMode.iconOnly">
+            <de><![CDATA[Nur Icon]]></de>
+            <en><![CDATA[Icon only]]></en>
+        </locale>
+        <locale name="brick.buttons.settings.displayMode.iconOnlyRounded">
+            <de><![CDATA[Nur Icon - rund]]></de>
+            <en><![CDATA[Icon only - rounded]]></en>
+        </locale>
+        <locale name="brick.buttons.settings.entries">
+            <de><![CDATA[Buttons]]></de>
+            <en><![CDATA[Buttons]]></en>
+        </locale>
+
+        <locale name="quiqqer.bricks.buttons.create.isDisabled.short">
+            <de><![CDATA[Deaktiviert]]></de>
+            <en><![CDATA[Disabled]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.create.preview">
+            <de><![CDATA[Vorschau]]></de>
+            <en><![CDATA[Preview]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.create.text">
+            <de><![CDATA[Text]]></de>
+            <en><![CDATA[Text]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.create.iconClass">
+            <de><![CDATA[Icon-Klasse]]></de>
+            <en><![CDATA[Icon class]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.create.btnType">
+            <de><![CDATA[Button-Typ]]></de>
+            <en><![CDATA[Button type]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.create.href">
+            <de><![CDATA[Link]]></de>
+            <en><![CDATA[Link]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.create.targetBlank.short">
+            <de><![CDATA[_blank]]></de>
+            <en><![CDATA[_blank]]></en>
+        </locale>
+
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.disable">
+            <de><![CDATA[Eintrag deaktivieren]]></de>
+            <en><![CDATA[Disable entry]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.text">
+            <de><![CDATA[Text]]></de>
+            <en><![CDATA[Text]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.identifier">
+            <de><![CDATA[Identifier]]></de>
+            <en><![CDATA[Identifier]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.identifierDesc">
+            <de><![CDATA[Wird im Frontend als <code>data-identifier</code> ausgegeben und kann z. B. für Matomo-Tracking verwendet werden. <br>Beispiel: <code>data-identifier="MEIN_WERT"</code>]]></de>
+            <en><![CDATA[Rendered in the frontend as <code>data-identifier</code> and can be used, for example, for Matomo tracking. <br>Example: <code>data-identifier="MY_VALUE"</code>]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.iconClass">
+            <de><![CDATA[FontAwesome Icon-Klasse]]></de>
+            <en><![CDATA[FontAwesome icon class]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.iconPosition">
+            <de><![CDATA[Icon-Position]]></de>
+            <en><![CDATA[Icon position]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.iconPosition.start">
+            <de><![CDATA[Am Anfang]]></de>
+            <en><![CDATA[At start]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.iconPosition.end">
+            <de><![CDATA[Am Ende]]></de>
+            <en><![CDATA[At end]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.btnType">
+            <de><![CDATA[Button-Typ]]></de>
+            <en><![CDATA[Button type]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.size">
+            <de><![CDATA[Größe]]></de>
+            <en><![CDATA[Size]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.size.default">
+            <de><![CDATA[Standard]]></de>
+            <en><![CDATA[Default]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.size.small">
+            <de><![CDATA[Klein]]></de>
+            <en><![CDATA[Small]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.size.large">
+            <de><![CDATA[Groß]]></de>
+            <en><![CDATA[Large]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick">
+            <de><![CDATA[Baustein im Popup öffnen]]></de>
+            <en><![CDATA[Open brick in popup]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.desc">
+            <de><![CDATA[Wenn ein Baustein ausgewählt ist, wird er im Frontend in einem Modal-Fenster geöffnet. In diesem Fall wird die Option "Link" ignoriert.]]></de>
+            <en><![CDATA[If a brick is selected, it will open in the frontend in a modal window. In this case, the "Link" option is ignored.]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.select">
+            <de><![CDATA[Baustein auswählen]]></de>
+            <en><![CDATA[Select brick]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.clear">
+            <de><![CDATA[Leeren]]></de>
+            <en><![CDATA[Clear]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.titleLabel">
+            <de><![CDATA[Baustein Titel]]></de>
+            <en><![CDATA[Brick title]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.winWidth">
+            <de><![CDATA[Popup Breite (px)]]></de>
+            <en><![CDATA[Popup width (px)]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.winHeight">
+            <de><![CDATA[Popup Höhe (px)]]></de>
+            <en><![CDATA[Popup height (px)]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.href">
+            <de><![CDATA[Link]]></de>
+            <en><![CDATA[Link]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.targetBlank">
+            <de><![CDATA[In neuem Tab öffnen (_blank)]]></de>
+            <en><![CDATA[Open in new tab (_blank)]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.title">
+            <de><![CDATA[Title-Attribut]]></de>
+            <en><![CDATA[Title attribute]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.ariaLabel">
+            <de><![CDATA[Aria-Label]]></de>
+            <en><![CDATA[Aria label]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.disabled">
+            <de><![CDATA[Button deaktiviert]]></de>
+            <en><![CDATA[Button disabled]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.fullWidth">
+            <de><![CDATA[Volle Breite (btn-full)]]></de>
+            <en><![CDATA[Full width (btn-full)]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.onClick">
+            <de><![CDATA[JS-Funktion (onclick)]]></de>
+            <en><![CDATA[JS function (onclick)]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.customClass">
+            <de><![CDATA[Eigene CSS-Klasse]]></de>
+            <en><![CDATA[Custom CSS class]]></en>
+        </locale>
+
         <locale name="brick.textAndImage.textRatio">
             <de><![CDATA[Text und Bild Platzverhältnis]]></de>
             <en><![CDATA[Text ratio]]></en>
@@ -2638,6 +2910,14 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
             <a href="https://developers.google.com/search/docs/advanced/structured-data/faqpage" target="_blank">Häufig gestellte Fragen mit strukturierten Daten auszeichnen</a>.]]></de>
             <en><![CDATA[If enabled a JSON-LD code snippet will be generated. This allows Google to display the FAQ entries directly in the search results. More on this topic at
             <a href="https://developers.google.com/search/docs/advanced/structured-data/faqpage" target="_blank">Mark up your FAQs with structured data</a>.]]></en>
+        </locale>
+        <locale name="search.provider.bricks.filter.label">
+            <de><![CDATA[Bausteine]]></de>
+            <en><![CDATA[Bricks]]></en>
+        </locale>
+        <locale name="search.provider.bricks.group.label">
+            <de><![CDATA[Bausteine]]></de>
+            <en><![CDATA[Bricks]]></en>
         </locale>
 
     </groups>

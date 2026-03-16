@@ -1,0 +1,80 @@
+{if $this->getAttribute('showTitle') && $this->getAttribute('frontendTitle')}
+<header class="control-header">
+    <h2>{$this->getAttribute('frontendTitle')}</h2>
+</header>
+{/if}
+
+{if $this->getAttribute('content') != ""}
+<div class="control-content default-content">
+    {$this->getAttribute('content')}
+</div>
+{/if}
+
+<div class="quiqqer-bricks-buttons btn-container">
+    {foreach from=$buttons item=button}
+    {if $button.hasOpenBrick}
+    <button type="button"
+            class="{$button.btnClass}{if $button.fullWidth} btn-full{/if}{if $displayMode === 'icon-only'} quiqqer-bricks-buttons__iconOnly{/if}{if $button.disabled} disabled{/if}"
+            data-qui="package/quiqqer/bricks/bin/Controls/Buttons/OpenBrick"
+            data-open-brick-id="{$button.openBrickId}"
+            {if $button.identifier}data-identifier="{$button.identifier|escape:'html'}"{/if}
+            {if $button.openBrickWinHeight > 0}data-win-height="{$button.openBrickWinHeight}"{/if}
+            {if $button.openBrickWinWidth > 0}data-win-width="{$button.openBrickWinWidth}"{/if}
+            {if $button.title}title="{$button.title|escape:'html'}"{/if}
+            {if $button.ariaLabel}aria-label="{$button.ariaLabel|escape:'html'}"{/if}
+            {if $button.disabled}disabled aria-disabled="true"{/if}>
+        {if $button.showIcon && $button.iconPosition === 'start'}
+        <span class="{$button.iconClass|escape:'html'}" aria-hidden="true"></span>
+        {/if}
+        {if $button.showText}
+        <span class="quiqqer-bricks-buttons__text">{$button.text|escape:'html'}</span>
+        {/if}
+
+        {if $button.showIcon && $button.iconPosition === 'end'}
+        <span class="{$button.iconClass|escape:'html'}" aria-hidden="true"></span>
+        {/if}
+    </button>
+    {elseif $button.hasHref}
+    <a class="{$button.btnClass}{if $button.fullWidth} btn-full{/if}{if $displayMode === 'icon-only'} quiqqer-bricks-buttons__iconOnly{/if}{if $button.disabled} disabled{/if}"
+       href="{$button.href|escape:'html'}"
+       {if $button.identifier}data-identifier="{$button.identifier|escape:'html'}"{/if}
+       {if $button.title}title="{$button.title|escape:'html'}"{/if}
+       {if $button.ariaLabel}aria-label="{$button.ariaLabel|escape:'html'}"{/if}
+       {if $button.target}target="{$button.target}"{/if}
+       {if $button.rel}rel="{$button.rel}"{/if}
+       {if $button.disabled}aria-disabled="true" tabindex="-1"{/if}
+       {if $button.onClick}onclick="{$button.onClick|escape:'html'}"{/if}>
+        {if $button.showIcon && $button.iconPosition === 'start'}
+        <span class="{$button.iconClass|escape:'html'}" aria-hidden="true"></span>
+        {/if}
+
+        {if $button.showText}
+        <span class="quiqqer-bricks-buttons__text">{$button.text|escape:'html'}</span>
+        {/if}
+
+        {if $button.showIcon && $button.iconPosition === 'end'}
+        <span class="{$button.iconClass|escape:'html'}" aria-hidden="true"></span>
+        {/if}
+    </a>
+    {else}
+    <button type="button"
+            class="{$button.btnClass}{if $button.fullWidth} btn-full{/if}{if $displayMode === 'icon-only'} quiqqer-bricks-buttons__iconOnly{/if}{if $button.disabled} disabled{/if}"
+            {if $button.identifier}data-identifier="{$button.identifier|escape:'html'}"{/if}
+            {if $button.title}title="{$button.title|escape:'html'}"{/if}
+            {if $button.ariaLabel}aria-label="{$button.ariaLabel|escape:'html'}"{/if}
+            {if $button.disabled}disabled aria-disabled="true"{/if}
+            {if $button.onClick}onclick="{$button.onClick|escape:'html'}"{/if}>
+        {if $button.showIcon && $button.iconPosition === 'start'}
+        <span class="{$button.iconClass|escape:'html'}" aria-hidden="true"></span>
+        {/if}
+        {if $button.showText}
+        <span class="quiqqer-bricks-buttons__text">{$button.text|escape:'html'}</span>
+        {/if}
+
+        {if $button.showIcon && $button.iconPosition === 'end'}
+        <span class="{$button.iconClass|escape:'html'}" aria-hidden="true"></span>
+        {/if}
+    </button>
+    {/if}
+    {/foreach}
+</div>

@@ -25,6 +25,8 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickList', [
             '$onCreate',
             '$onInject',
             '$onDblClick',
+            '$onProjectSelectLoad',
+            '$ensureProjectSelection',
             'refresh'
         ],
 
@@ -61,12 +63,14 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickList', [
             }
 
             this.$ProjectSelect = new ProjectSelect({
+                emptyselect: false,
                 styles: {
                     marginBottom: 10,
                     width: '100%'
                 },
                 events: {
-                    onChange: this.refresh
+                    onChange: this.refresh,
+                    onLoad: this.$onProjectSelectLoad
                 }
             });
 
@@ -95,10 +99,16 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickList', [
                         width: 40
                     },
                     {
+                        header: QUILocale.get(lg, 'manager.grid.status'),
+                        dataIndex: 'activeDisplay',
+                        dataType: 'node',
+                        width: 60
+                    },
+                    {
                         header: QUILocale.get('quiqqer/core', 'title'),
                         dataIndex: 'title',
                         dataType: 'string',
-                        width: 140
+                        width: 350
                     },
                     {
                         header: QUILocale.get('quiqqer/core', 'description'),
@@ -110,7 +120,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickList', [
                         header: QUILocale.get(lg, 'brick.type'),
                         dataIndex: 'type',
                         dataType: 'string',
-                        width: 200
+                        width: 350
                     }
                 ],
                 multipleSelection: this.getAttribute('multiple'),
@@ -129,6 +139,12 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickList', [
 
         $onInject: function () {
             this.$Grid.setHeight(this.$Container.getSize().y);
+            this.$ensureProjectSelection();
+            this.refresh();
+        },
+
+        $onProjectSelectLoad: function () {
+            this.$ensureProjectSelection();
             this.refresh();
         },
 
@@ -148,7 +164,12 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickList', [
             let value = this.$ProjectSelect.getValue();
 
             if (value === null || value === '') {
-                return;
+                this.$ensureProjectSelection();
+                value = this.$ProjectSelect.getValue();
+            }
+
+            if (value === null || value === '') {
+                return Promise.resolve();
             }
 
             value = value.split(',');
@@ -157,6 +178,17 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickList', [
             this.$Grid.showLoader();
 
             return Bricks.getBricksFromProject(value[0], value[1]).then(function (result) {
+                result = result.map(function (entry) {
+                    entry.activeDisplay = new Element('span', {
+                        'class': parseInt(entry.active) ? 'fa fa-check' : 'fa fa-ban',
+                        title: parseInt(entry.active)
+                            ? QUILocale.get(lg, 'manager.grid.status.active')
+                            : QUILocale.get(lg, 'manager.grid.status.inactive')
+                    });
+
+                    return entry;
+                });
+
                 let options = self.$Grid.options,
                     page = parseInt(options.page),
                     perPage = parseInt(options.perPage),
@@ -171,6 +203,36 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickList', [
                 self.$ProjectSelect.enable();
                 self.$Grid.hideLoader();
             });
+        },
+
+        $ensureProjectSelection: function () {
+            if (!this.$ProjectSelect) {
+                return;
+            }
+
+            const value = this.$ProjectSelect.getValue();
+
+            if (value !== null && value !== '') {
+                return;
+            }
+
+            if (!this.$ProjectSelect.$Select || !this.$ProjectSelect.$Select.firstChild) {
+                return;
+            }
+
+            const firstOption = this.$ProjectSelect.$Select.firstChild();
+
+            if (!firstOption) {
+                return;
+            }
+
+            const firstValue = firstOption.getAttribute('value');
+
+            if (firstValue === null || firstValue === '') {
+                return;
+            }
+
+            this.$ProjectSelect.$Select.setValue(firstValue);
         },
 
         /**

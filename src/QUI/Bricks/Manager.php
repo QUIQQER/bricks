@@ -78,6 +78,11 @@ class Manager
     protected array $brickUIDs = [];
 
     /**
+     * @var null|array<string, int>
+     */
+    protected ?array $tableColumns = null;
+
+    /**
      * Initialized brick manager
      *
      * @var null|Manager
@@ -153,16 +158,53 @@ class Manager
     {
         QUI\Permissions\Permission::checkPermission('quiqqer.bricks.create');
 
-        QUI::getDataBase()->insert(
-            $this->getTable(),
-            [
-                'project' => $Project->getName(),
-                'lang' => $Project->getLang(),
-                'title' => $Brick->getAttribute('title'),
-                'description' => $Brick->getAttribute('description'),
-                'type' => $Brick->getAttribute('type')
-            ]
-        );
+        $insertData = [
+            'project' => $Project->getName(),
+            'lang' => $Project->getLang(),
+            'title' => $Brick->getAttribute('title'),
+            'description' => $Brick->getAttribute('description'),
+            'type' => $Brick->getAttribute('type'),
+            'active' => (int)$Brick->getAttribute('active')
+        ];
+
+        $result = QUI::getDataBase()->fetch([
+            'from' => $this->getTable(),
+            'where' => [
+                'title' => $insertData['title'],
+                'project' => $insertData['project'],
+                'lang' => $insertData['lang']
+            ],
+            'limit' => 1
+        ]);
+
+        if (isset($result[0])) {
+            throw new QUI\Exception([
+                'quiqqer/bricks',
+                'exception.brick.title.already.exists',
+                ['brickTitle' => $insertData['title']]
+            ]);
+        }
+
+        $SessionUser = QUI::getUserBySession();
+        $currentDate = date('Y-m-d H:i:s');
+
+        if ($this->hasBrickTableColumn('c_date')) {
+            $insertData['c_date'] = $currentDate;
+        }
+
+        if ($this->hasBrickTableColumn('e_date')) {
+            $insertData['e_date'] = $currentDate;
+        }
+
+        if ($this->hasBrickTableColumn('c_user')) {
+            $insertData['c_user'] = $SessionUser->getUUID();
+        }
+
+        if ($this->hasBrickTableColumn('e_user')) {
+            $insertData['e_user'] = $SessionUser->getUUID();
+        }
+
+        QUI::getDataBase()->insert($this->getTable(), $insertData);
 
         $brickId = QUI::getPDO()->lastInsertId();
 
@@ -823,6 +865,11 @@ class Manager
             try {
                 if (!empty($brickData['uid'])) {
                     $Brick = $this->getBrickByUID($brickData['uid'], $Site);
+
+                    if (!(int)$Brick->getAttribute('active')) {
+                        continue;
+                    }
+
                     $result[] = $Brick->check();
                     continue;
                 }
@@ -836,6 +883,11 @@ class Manager
 
                 // fallback
                 $Brick = $this->getBrickById($brickId);
+
+                if (!(int)$Brick->getAttribute('active')) {
+                    continue;
+                }
+
                 $Clone = clone $Brick;
 
                 if (!empty($brickData['customfields'])) {
@@ -1088,8 +1140,9 @@ class Manager
 
 
         // update
-        QUI::getDataBase()->update($this->getTable(), [
+        $updateData = [
             'title' => $Brick->getAttribute('title'),
+            'active' => (int)$Brick->getAttribute('active'),
             'frontendTitle' => $Brick->getAttribute('frontendTitle'),
             'description' => $Brick->getAttribute('description'),
             'content' => $Brick->getAttribute('content'),
@@ -1100,7 +1153,19 @@ class Manager
             'height' => $Brick->getAttribute('height'),
             'width' => $Brick->getAttribute('width'),
             'classes' => json_encode($Brick->getCSSClasses())
-        ], [
+        ];
+
+        $SessionUser = QUI::getUserBySession();
+
+        if ($this->hasBrickTableColumn('e_date')) {
+            $updateData['e_date'] = date('Y-m-d H:i:s');
+        }
+
+        if ($this->hasBrickTableColumn('e_user')) {
+            $updateData['e_user'] = $SessionUser->getUUID();
+        }
+
+        QUI::getDataBase()->update($this->getTable(), $updateData, [
             'id' => (int)$brickId
         ]);
 
@@ -1155,6 +1220,36 @@ class Manager
         if (isset($this->brickUIDs[$brickId])) {
             unset($this->brickUIDs[$brickId]);
         }
+    }
+
+    /**
+     * @return array<string, int>
+     */
+    protected function getBrickTableColumns(): array
+    {
+        if ($this->tableColumns !== null) {
+            return $this->tableColumns;
+        }
+
+        $tableManager = QUI::getDataBase()->table();
+
+        if ($tableManager === null) {
+            $this->tableColumns = [];
+            return $this->tableColumns;
+        }
+
+        $this->tableColumns = array_flip(
+            $tableManager->getColumns($this->getTable())
+        );
+
+        return $this->tableColumns;
+    }
+
+    protected function hasBrickTableColumn(string $column): bool
+    {
+        $columns = $this->getBrickTableColumns();
+
+        return isset($columns[$column]);
     }
 
     /**

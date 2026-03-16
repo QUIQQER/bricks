@@ -308,6 +308,44 @@ class Events
             return;
         }
 
+        $bricksTable = Manager::getTable();
+        $tableManager = QUI::getDataBase()->table();
+
+        if ($tableManager !== null) {
+            $columns = array_flip($tableManager->getColumns($bricksTable));
+
+            if (!isset($columns['active'])) {
+                $tableManager->addColumn($bricksTable, [
+                    'active' => 'TINYINT(1) NOT NULL DEFAULT 1'
+                ]);
+            }
+
+            $metaFields = [];
+
+            if (!isset($columns['c_date'])) {
+                $metaFields['c_date'] = 'TIMESTAMP NULL DEFAULT NULL';
+            }
+
+            if (!isset($columns['e_date'])) {
+                $metaFields['e_date'] = 'TIMESTAMP NULL DEFAULT NULL';
+            }
+
+            if (!isset($columns['c_user'])) {
+                $metaFields['c_user'] = 'VARCHAR(50) NULL DEFAULT NULL';
+            }
+
+            if (!isset($columns['e_user'])) {
+                $metaFields['e_user'] = 'VARCHAR(50) NULL DEFAULT NULL';
+            }
+
+            if (!empty($metaFields)) {
+                $tableManager->addColumn($bricksTable, $metaFields);
+            }
+        }
+
+        QUI\Cache\Manager::clear('quiqqer/backendsearch/providers');
+        QUI\Cache\Manager::clear('quiqqer/desktopsearch/filtergroups');
+
         // unique bricks cache patch
         $projects = QUI::getProjectManager()->getProjectList();
 
