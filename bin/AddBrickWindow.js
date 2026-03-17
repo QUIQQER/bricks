@@ -1058,12 +1058,9 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             let controlTypeExist = false;
             const hasCreateCallback = typeof this.getAttribute('onBrickCreated') === 'function';
 
-            Promise.all([
-                Bricks.getAvailableBricks(),
-                Bricks.getBricksFromProject(project, lang)
-            ]).then((result) => {
-                const availableBricks = result[0] || [];
-                const allBricks = result[1] || [];
+            Bricks.getBricksFromProject(project, lang).then((result) => {
+                const availableBricks = this.brickList;
+                const allBricks = result[0] || [];
 
                 availableBricks.each((brick) => {
                     if (brick && brick.control === brickType) {
