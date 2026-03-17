@@ -117,6 +117,28 @@ define('package/quiqqer/bricks/bin/classes/Bricks', [
         },
 
         /**
+         * Check whether a title already exists in a project
+         *
+         * @param {String} title
+         * @param {String} project
+         * @param {String} lang
+         * @return Promise
+         */
+        titleExists: function (title, project, lang) {
+            return new Promise(function (resolve, reject) {
+                QUIAjax.get('package_quiqqer_bricks_ajax_project_titleExists', resolve, {
+                    'package': 'quiqqer/bricks',
+                    title: title,
+                    project: JSON.encode({
+                        name: project,
+                        lang: lang
+                    }),
+                    onError: reject
+                });
+            });
+        },
+
+        /**
          * Return all available bricks
          *
          * @return Promise

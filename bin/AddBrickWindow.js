@@ -845,7 +845,6 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
 
             const title = (this.$CreateTitleInput.value || '').trim();
 
-
             if (title === '') {
                 QUI.getMessageHandler(function (MH) {
                     MH.addError(
@@ -1057,44 +1056,49 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
 
             let controlTypeExist = false;
             const hasCreateCallback = typeof this.getAttribute('onBrickCreated') === 'function';
+            this.brickList.each((brick) => {
+                if (brick && brick.control === brickType) {
+                    controlTypeExist = true;
+                }
+            });
 
-            Bricks.getBricksFromProject(project, lang).then((result) => {
-                const availableBricks = this.brickList;
-                const allBricks = result[0] || [];
-
-                availableBricks.each((brick) => {
-                    if (brick && brick.control === brickType) {
-                        controlTypeExist = true;
-                    }
+            if (!controlTypeExist) {
+                QUI.getMessageHandler(function (MH) {
+                    MH.addError(
+                        QUILocale.get(lg, 'exception.brick.createFromData.brick.type.not.found.in.quiqqer', {
+                            brickType: brickType
+                        })
+                    );
                 });
 
-                if (!controlTypeExist) {
-                    QUI.getMessageHandler(function (MH) {
-                        MH.addError(
-                            QUILocale.get(lg, 'exception.brick.createFromData.brick.type.not.found.in.quiqqer', {
-                                brickType: brickType
-                            })
-                        );
-                    });
+                this.$createInProgress = false;
+                this.Loader.hide();
 
-                    return Promise.reject(new Error('control-not-found'));
+                if (this.$ImportCancelBtn) {
+                    this.$ImportCancelBtn.removeProperty('disabled');
                 }
 
-                let createTitle = brickTitle;
+                if (this.$ImportSubmitBtn) {
+                    this.$ImportSubmitBtn.removeProperty('disabled');
+                }
 
-                allBricks.each((brick) => {
-                    if (brick && brick.title === brickTitle) {
-                        createTitle = brickTitle + ' (' + Date.now() + ')';
-                    }
-                });
+                if (this.$ImportTextarea) {
+                    this.$ImportTextarea.focus();
+                }
 
+                return;
+            }
+
+            Bricks.titleExists(brickTitle, project, lang).then((titleExists) => {
+                const hasDuplicateTitle = String(titleExists) === '1';
+                const createTitle = hasDuplicateTitle ? brickTitle + ' (' + Date.now() + ')' : brickTitle;
                 const data = {
                     title: createTitle,
                     type: brickType
                 };
 
                 return Bricks.createBrick(project, lang, data).then((brickId) => {
-                    if (createTitle !== brickTitle) {
+                    if (hasDuplicateTitle) {
                         convertedData.attributes.title = brickTitle + ' (' + brickId + ')';
                     }
 
@@ -1133,25 +1137,6 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                     this.Loader.hide();
                 }
             }).catch((e) => {
-                if (e && e.message === 'control-not-found') {
-                    this.$createInProgress = false;
-
-                    if (this.$ImportCancelBtn) {
-                        this.$ImportCancelBtn.removeProperty('disabled');
-                    }
-
-                    if (this.$ImportSubmitBtn) {
-                        this.$ImportSubmitBtn.removeProperty('disabled');
-                    }
-
-                    this.Loader.hide();
-
-                    if (this.$ImportTextarea) {
-                        this.$ImportTextarea.focus();
-                    }
-                    return;
-                }
-
                 QUI.getMessageHandler().then(function (MH) {
                     if (e && typeof e.getMessage === 'function') {
                         MH.addError(e.getMessage());

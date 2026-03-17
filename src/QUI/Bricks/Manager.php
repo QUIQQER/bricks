@@ -940,6 +940,35 @@ class Manager
         return $result;
     }
 
+    /**
+     * Check whether a title already exists in a project
+     *
+     * @param Project $Project
+     * @param string $title
+     * @return bool
+     */
+    public function titleExists(Project $Project, string $title): bool
+    {
+        $title = trim($title);
+
+        if ($title === '') {
+            return false;
+        }
+
+        $result = QUI::getDataBase()->fetch([
+            'select' => ['id'],
+            'from' => $this->getTable(),
+            'where' => [
+                'title' => $title,
+                'project' => $Project->getName(),
+                'lang' => $Project->getLang()
+            ],
+            'limit' => 1
+        ]);
+
+        return isset($result[0]);
+    }
+
 
     /**
      * Return a list with \QUI\Bricks\Brick which are assigned to a project
