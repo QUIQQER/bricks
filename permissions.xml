@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <permissions>
-
     <permission name="quiqqer.bricks.create" type="bool">
         <defaultvalue>1</defaultvalue>
+        <rootPermission>1</rootPermission>
+        <everyonePermission>0</everyonePermission>
     </permission>
     <permission name="quiqqer.bricks.edit" type="bool">
         <defaultvalue>1</defaultvalue>
+        <rootPermission>1</rootPermission>
+        <everyonePermission>0</everyonePermission>
     </permission>
     <permission name="quiqqer.bricks.delete" type="bool">
         <defaultvalue>1</defaultvalue>
+        <rootPermission>1</rootPermission>
+        <everyonePermission>0</everyonePermission>
     </permission>
     <permission name="quiqqer.bricks.assign" type="bool">
         <defaultvalue>1</defaultvalue>
+        <rootPermission>1</rootPermission>
+        <everyonePermission>0</everyonePermission>
     </permission>
-
 </permissions>
