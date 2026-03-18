@@ -10,11 +10,12 @@ define('package/quiqqer/bricks/bin/Site/Category', [
     'qui/controls/loader/Loader',
     'Ajax',
     'Locale',
+    'Permissions',
     'package/quiqqer/bricks/bin/Site/Area',
 
     'css!package/quiqqer/bricks/bin/Site/Category.css'
 
-], function (QUI, QUIControl, QUILoader, QUIAjax, QUILocale, Area) {
+], function (QUI, QUIControl, QUILoader, QUIAjax, QUILocale, Permissions, Area) {
     "use strict";
 
     return new Class({
@@ -32,6 +33,8 @@ define('package/quiqqer/bricks/bin/Site/Category', [
 
             this.Loader = new QUILoader();
             this.areas = [];
+            this.$canCreateBricks = false;
+            this.$canAssignBricks = false;
 
             this.$Areas = null;
 
@@ -72,7 +75,16 @@ define('package/quiqqer/bricks/bin/Site/Category', [
 
             let layout = Site.getAttribute('layout');
 
-            Project.getLayouts().then(function (layouts) {
+            Promise.all([
+                Permissions.hasPermission('quiqqer.bricks.create'),
+                Permissions.hasPermission('quiqqer.bricks.assign'),
+                Project.getLayouts()
+            ]).then(function (result) {
+                self.$canCreateBricks = !!result[0];
+                self.$canAssignBricks = !!result[1];
+
+                const layouts = result[2];
+
                 layout = layouts.find(function (entry) {
                     return entry.type === layout;
                 });
@@ -220,6 +232,8 @@ define('package/quiqqer/bricks/bin/Site/Category', [
 
             Control.setAttribute('Project', Project);
             Control.setAttribute('Site', Site);
+            Control.setAttribute('canCreateBricks', this.$canCreateBricks);
+            Control.setAttribute('canAssignBricks', this.$canAssignBricks);
             Control.setAttributes(area);
 
             Control.inject(this.$Areas);
