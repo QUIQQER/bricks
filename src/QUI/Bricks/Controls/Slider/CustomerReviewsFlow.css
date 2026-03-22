@@ -1,0 +1,122 @@
+.quiqqer-bricks-customerReviewsFlow {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    overflow: hidden;
+    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+    padding-block: 2rem;
+}
+
+/* reset overflow and mask-image in scrollingStrip control */
+.quiqqer-bricks-customerReviewsFlow .quiqqer-slider-controls-scrollingStrip__track {
+    overflow: initial;
+    mask-image: none;
+    -webkit-mask-image: none;
+}
+
+.quiqqer-bricks-customerReviewsFlow__card {
+    width: min(30rem, 85vw);
+    min-height: 100%;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid color-mix(in srgb, var(--qui-colors-text) 10%, transparent);
+    border-radius: var(--qui-radius-card);
+    background: var(--qui-colors-surface-card);
+    transition: var(--qui-transition);
+}
+
+.quiqqer-bricks-customerReviewsFlow__card:hover {
+    box-shadow: var(--qui-shadow-card);
+    transform: translateY(-2px);
+}
+
+.quiqqer-bricks-customerReviewsFlow__layout {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+}
+
+.quiqqer-bricks-customerReviewsFlow__review {
+    margin: 0;
+    color: var(--qui-colors-text);
+    font-size: var(--qui-fs-sm, 0.875rem);
+    line-height: var(--qui-line-height);
+}
+
+.quiqqer-bricks-customerReviewsFlow__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    min-width: 0;
+}
+
+.quiqqer-bricks-customerReviewsFlow__image {
+    flex-shrink: 0;
+    padding-top: 0.15rem;
+}
+
+.quiqqer-bricks-customerReviewsFlow__image img {
+    display: block;
+    width: 3.5rem;
+    height: 3.5rem;
+    object-fit: cover;
+    border-radius: var(--qui-radius-circle);
+    box-shadow: var(--qui-shadow-image);
+}
+
+.quiqqer-bricks-customerReviewsFlow__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
+}
+
+.quiqqer-bricks-customerReviewsFlow__name,
+.quiqqer-bricks-customerReviewsFlow__addition,
+.quiqqer-bricks-customerReviewsFlow__url {
+    display: block;
+}
+
+.quiqqer-bricks-customerReviewsFlow__name {
+    color: var(--qui-colors-heading);
+    font-size: var(--qui-fs-sm, 0.875rem);
+    font-weight: var(--qui-heading-fontWeight);
+    line-height: var(--qui-line-height-xs);
+}
+
+.quiqqer-bricks-customerReviewsFlow__addition {
+    color: var(--qui-colors-text-muted);
+    font-size: var(--qui-fs-xs, 0.75rem);
+    line-height: var(--qui-line-height-sm);
+}
+
+.quiqqer-bricks-customerReviewsFlow__url {
+    color: var(--qui-colors-primary);
+    font-size: var(--qui-fs-sm, 0.875rem);
+    font-weight: 600;
+    line-height: var(--qui-line-height-sm);
+    overflow-wrap: anywhere;
+    text-decoration: none;
+}
+
+@media screen and (max-width: 767px) {
+    .quiqqer-bricks-customerReviewsFlow {
+        gap: 1rem;
+    }
+
+    .quiqqer-bricks-customerReviewsFlow__card {
+        width: min(24rem, 88vw);
+        padding: 1.25rem;
+    }
+
+    .quiqqer-bricks-customerReviewsFlow__layout {
+        gap: 0.875rem;
+    }
+
+    .quiqqer-bricks-customerReviewsFlow__image img {
+        width: 3rem;
+        height: 3rem;
+    }
+}

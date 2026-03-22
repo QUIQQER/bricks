@@ -931,6 +931,112 @@
             </settings>
         </brick>
 
+        <brick control="\QUI\Bricks\Controls\Slider\CustomerReviewsFlow">
+            <title>
+                <locale group="quiqqer/bricks" var="bricks.customerReviewsFlow.title"/>
+            </title>
+            <description>
+                <locale group="quiqqer/bricks" var="bricks.customerReviewsFlow.description"/>
+            </description>
+
+            <mockups>
+                <mockup src="/packages/quiqqer/bricks/bin/images/mockups/customerReviewsFlow-mockup-900x600.png" type="preview"/>
+                <mockup src="/packages/quiqqer/bricks/bin/images/mockups/customerReviewsFlow-thumbnail-100x80.png" type="thumbnail"/>
+            </mockups>
+
+            <settings>
+                <setting name="rows" type="number" min="1" max="6">
+                    <locale group="quiqqer/bricks" var="bricks.customerReviewsFlow.rows"/>
+                    <description>
+                        <locale group="quiqqer/bricks" var="bricks.customerReviewsFlow.rows.desc"/>
+                    </description>
+                </setting>
+
+                <setting name="animationDuration" type="number" min="1">
+                    <locale group="quiqqer/slider"
+                            var="bricks.scrollingStrip.settings.animationDuration"
+                    />
+                    <description>
+                        <locale group="quiqqer/slider"
+                                var="bricks.scrollingStrip.settings.animationDuration.desc"
+                        />
+                    </description>
+                </setting>
+
+                <setting name="animationDirection" type="select">
+                    <locale group="quiqqer/bricks" var="bricks.customerReviewsFlow.animationDirection"/>
+                    <option value="alternate">
+                        <locale group="quiqqer/bricks" var="bricks.customerReviewsFlow.animationDirection.alternate"/>
+                    </option>
+                    <option value="toLeft">
+                        <locale group="quiqqer/slider" var="bricks.scrollingStrip.settings.animationDirection.toLeft"/>
+                    </option>
+                    <option value="toRight">
+                        <locale group="quiqqer/slider" var="bricks.scrollingStrip.settings.animationDirection.toRight"/>
+                    </option>
+                </setting>
+
+                <setting name="gapDesktop" type="select">
+                    <locale group="quiqqer/slider" var="bricks.scrollingStrip.settings.gapDesktop"/>
+                    <option></option>
+                    <option value="none">
+                        <locale group="quiqqer/slider" var="bricks.scrollingStrip.settings.gapDesktop.none"/>
+                    </option>
+                    <option value="extraSmall">
+                        <locale group="quiqqer/slider" var="bricks.scrollingStrip.settings.gapDesktop.extraSmall"/>
+                    </option>
+                    <option value="small">
+                        <locale group="quiqqer/slider" var="bricks.scrollingStrip.settings.gapDesktop.small"/>
+                    </option>
+                    <option value="normal">
+                        <locale group="quiqqer/slider" var="bricks.scrollingStrip.settings.gapDesktop.normal"/>
+                    </option>
+                    <option value="large">
+                        <locale group="quiqqer/slider" var="bricks.scrollingStrip.settings.gapDesktop.large"/>
+                    </option>
+                    <option value="extraLarge">
+                        <locale group="quiqqer/slider" var="bricks.scrollingStrip.settings.gapDesktop.extraLarge"/>
+                    </option>
+                </setting>
+
+                <setting name="gapMobile" type="select">
+                    <locale group="quiqqer/slider" var="bricks.scrollingStrip.settings.gapMobile"/>
+                    <option></option>
+                    <option value="none">
+                        <locale group="quiqqer/slider" var="bricks.scrollingStrip.settings.gapMobile.none"/>
+                    </option>
+                    <option value="extraSmall">
+                        <locale group="quiqqer/slider" var="bricks.scrollingStrip.settings.gapMobile.extraSmall"/>
+                    </option>
+                    <option value="small">
+                        <locale group="quiqqer/slider" var="bricks.scrollingStrip.settings.gapMobile.small"/>
+                    </option>
+                    <option value="normal">
+                        <locale group="quiqqer/slider" var="bricks.scrollingStrip.settings.gapMobile.normal"/>
+                    </option>
+                    <option value="large">
+                        <locale group="quiqqer/slider" var="bricks.scrollingStrip.settings.gapMobile.large"/>
+                    </option>
+                    <option value="extraLarge">
+                        <locale group="quiqqer/slider" var="bricks.scrollingStrip.settings.gapMobile.extraLarge"/>
+                    </option>
+                </setting>
+
+                <setting name="pauseOnHover" type="checkbox">
+                    <locale group="quiqqer/slider" var="bricks.scrollingStrip.settings.pauseOnHover"/>
+                    <description>
+                        <locale group="quiqqer/slider" var="bricks.scrollingStrip.settings.pauseOnHover.desc"/>
+                    </description>
+                </setting>
+
+                <setting name="entries" type="hidden"
+                         data-qui="package/quiqqer/bricks/bin/Controls/Slider/CustomerReviewsFlowSettings"
+                >
+                    <locale group="quiqqer/bricks" var="bricks.customerReviewsFlow.settings.entries"/>
+                </setting>
+            </settings>
+        </brick>
+
         <!-- Image Brick -->
         <brick control="\QUI\Bricks\Controls\Image">
             <title>

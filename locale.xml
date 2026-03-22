@@ -2046,6 +2046,118 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
             <en><![CDATA[Review]]></en>
         </locale>
 
+        <!-- Customer Reviews Flow -->
+        <locale name="bricks.customerReviewsFlow.title">
+            <de><![CDATA[Kundenrezensionen im Flow]]></de>
+            <en><![CDATA[Customer reviews flow]]></en>
+        </locale>
+        <locale name="bricks.customerReviewsFlow.description">
+            <de><![CDATA[
+                <p>Mit diesem Baustein zeigst du <strong>Kundenrezensionen in automatisch laufenden Reihen</strong> an. Die Einträge bewegen sich kontinuierlich wie ein moderner Review-Flow und eignen sich besonders für Startseiten, Landingpages oder Trust-Bereiche.</p>
+
+                <ul>
+                    <li><strong>Mehrere Reihen:</strong> Definiere 1 bis mehrere Reihen, die automatisch mit Rezensionen befüllt werden.</li>
+                    <li><strong>Automatische Bewegung:</strong> Die Rezensionen laufen ohne Klick-Interaktion dauerhaft durch.</li>
+                    <li><strong>Flexible Richtung:</strong> Alle Reihen können in dieselbe Richtung laufen oder sich pro Reihe abwechseln.</li>
+                    <li><strong>Eigene Rezensionen:</strong> Pflege Bild, Name, Zusatz, Linktitel, Link und Rezensionstext direkt im Baustein.</li>
+                    <li><strong>Fein steuerbar:</strong> Passe Geschwindigkeit, Abstände für Desktop/Mobil und das Verhalten bei Hover an.</li>
+                    <li><strong>Ideal für Social Proof:</strong> Perfekt, um Feedback, Stimmen oder Testimonials platzsparend und lebendig darzustellen.</li>
+                </ul>
+
+                <p>Der Baustein basiert auf automatisch laufenden Reihen und nicht auf einem klassischen Slider mit Pfeilen oder Dots.</p>
+            ]]></de>
+            <en><![CDATA[
+                <p>This brick displays <strong>customer reviews in automatically scrolling rows</strong>. The entries move continuously like a modern review flow and are especially useful for homepages, landing pages, or trust sections.</p>
+
+                <ul>
+                    <li><strong>Multiple rows:</strong> Configure one or more rows that are filled with reviews automatically.</li>
+                    <li><strong>Automatic movement:</strong> Reviews keep moving continuously without click interaction.</li>
+                    <li><strong>Flexible direction:</strong> All rows can move in the same direction or alternate row by row.</li>
+                    <li><strong>Custom reviews:</strong> Maintain image, name, addition, link title, link, and review text directly in the brick.</li>
+                    <li><strong>Fine-grained control:</strong> Adjust speed, spacing for desktop/mobile, and hover behavior.</li>
+                    <li><strong>Ideal for social proof:</strong> Perfect for showing feedback, testimonials, or community voices in a compact and dynamic way.</li>
+                </ul>
+
+                <p>This brick is based on automatically scrolling rows and not on a classic slider with arrows or dots.</p>
+            ]]></en>
+        </locale>
+        <locale name="bricks.customerReviewsFlow.rows">
+            <de><![CDATA[Anzahl der Reihen]]></de>
+            <en><![CDATA[Number of rows]]></en>
+        </locale>
+        <locale name="bricks.customerReviewsFlow.rows.desc">
+            <de><![CDATA[Die Rezensionen werden automatisch auf die konfigurierten Reihen verteilt.]]></de>
+            <en><![CDATA[The reviews are distributed automatically across the configured rows.]]></en>
+        </locale>
+        <locale name="bricks.customerReviewsFlow.animationDirection">
+            <de><![CDATA[Animationsrichtung]]></de>
+            <en><![CDATA[Animation direction]]></en>
+        </locale>
+        <locale name="bricks.customerReviewsFlow.animationDirection.alternate">
+            <de><![CDATA[Pro Reihe abwechseln]]></de>
+            <en><![CDATA[Alternate per row]]></en>
+        </locale>
+        <locale name="bricks.customerReviewsFlow.settings.entries">
+            <de><![CDATA[Rezensionen]]></de>
+            <en><![CDATA[Reviews]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.settings.createPopup.disable">
+            <de><![CDATA[Eintrag deaktivieren]]></de>
+            <en><![CDATA[Disable entry]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.settings.createPopup.avatar">
+            <de><![CDATA[Benutzerbild]]></de>
+            <en><![CDATA[Avatar]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.settings.createPopup.customerName">
+            <de><![CDATA[Kundenname]]></de>
+            <en><![CDATA[Customer name]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.settings.createPopup.addition">
+            <de><![CDATA[Zusatz (z. B. Berufsbezeichnung)]]></de>
+            <en><![CDATA[Addition (e.g. job title)]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.settings.createPopup.url">
+            <de><![CDATA[Internetadresse]]></de>
+            <en><![CDATA[Internet address]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.settings.createPopup.urlTitle">
+            <de><![CDATA[Abweichender Titel für Internetadresse (optional)]]></de>
+            <en><![CDATA[Different title for internet address (optional)]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.settings.createPopup.review">
+            <de><![CDATA[Rezension]]></de>
+            <en><![CDATA[Review]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.create.isDisabled.short">
+            <de><![CDATA[Deaktiviert]]></de>
+            <en><![CDATA[Disabled]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.create.avatar.short">
+            <de><![CDATA[Benutzerbild]]></de>
+            <en><![CDATA[Avatar]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.create.customerName.short">
+            <de><![CDATA[Kundenname]]></de>
+            <en><![CDATA[Customer name]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.create.addition.short">
+            <de><![CDATA[Zusatz]]></de>
+            <en><![CDATA[Addition]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.create.url.short">
+            <de><![CDATA[Internetadresse]]></de>
+            <en><![CDATA[Internet address]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.create.urlTitle.short">
+            <de><![CDATA[Internetadresse - Titel]]></de>
+            <en><![CDATA[Internet address - title]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.create.review.short">
+            <de><![CDATA[Rezension]]></de>
+            <en><![CDATA[Review]]></en>
+        </locale>
+
         <!-- Simple Google Maps -->
         <locale name="brick.control.simplegooglemaps.title">
             <de><![CDATA[Einfache Google Maps Karte]]></de>
