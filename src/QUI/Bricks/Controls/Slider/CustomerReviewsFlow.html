@@ -1,0 +1,19 @@
+{if $this->getAttribute('showTitle') && $this->getAttribute('frontendTitle')}
+<header class="control-header">
+    <h2>{$this->getAttribute('frontendTitle')}</h2>
+</header>
+{/if}
+
+{if $this->getAttribute('content') != ""}
+<div class="control-content default-content">
+    {$this->getAttribute('content')}
+</div>
+{/if}
+
+<div class="control-template quiqqer-bricks-customerReviewsFlow">
+    {foreach from=$rows item=row}
+    <div class="quiqqer-bricks-customerReviewsFlow__row quiqqer-bricks-customerReviewsFlow__row--{$row.direction}">
+        {$row.html}
+    </div>
+    {/foreach}
+</div>

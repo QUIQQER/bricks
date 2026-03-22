@@ -1,0 +1,41 @@
+<article class="quiqqer-bricks-customerReviewsFlow__card">
+    <div class="quiqqer-bricks-customerReviewsFlow__layout">
+        {if $entry['image']}
+        <div class="quiqqer-bricks-customerReviewsFlow__image">
+            {image src=$entry['image'] loading="lazy" width="160" height="160"}
+        </div>
+        {/if}
+
+        <div class="quiqqer-bricks-customerReviewsFlow__content">
+            {if $entry['review']}
+            <div class="quiqqer-bricks-customerReviewsFlow__review default-content">
+                {$entry['review']}
+            </div>
+            {/if}
+
+            <div class="quiqqer-bricks-customerReviewsFlow__meta">
+            {if $entry['customerName']}
+            <span class="quiqqer-bricks-customerReviewsFlow__name">{$entry['customerName']}</span>
+            {/if}
+
+            {if $entry['addition']}
+            <span class="quiqqer-bricks-customerReviewsFlow__addition">{$entry['addition']}</span>
+            {/if}
+
+            {if $entry['url']}
+            <a href="{$entry['url']}"
+               class="quiqqer-bricks-customerReviewsFlow__url"
+               target="_blank"
+               rel="noopener noreferrer"
+            >
+                {if $entry['urlTitle']}
+                {$entry['urlTitle']}
+                {else}
+                {$entry['url']}
+                {/if}
+            </a>
+            {/if}
+            </div>
+        </div>
+    </div>
+</article>

@@ -50,7 +50,9 @@ define('package/quiqqer/bricks/bin/Site/Area', [
             description: '',
             title: {},
             Site: false,
-            deactivate: false
+            deactivate: false,
+            canCreateBricks: false,
+            canAssignBricks: false
         },
 
         initialize: function (options) {
@@ -145,6 +147,7 @@ define('package/quiqqer/bricks/bin/Site/Area', [
                     onClick: this.openCreateBrickDialog
                 }
             }).inject(Buttons);
+            this.$CreateButton.hide();
 
             this.$AddButton = new QUIButton({
                 text: QUILocale.get(lg, 'site.area.button.add'),
@@ -157,6 +160,7 @@ define('package/quiqqer/bricks/bin/Site/Area', [
                     marginLeft: 5
                 }
             }).inject(Buttons);
+            this.$AddButton.hide();
 
             this.$ExtraBtns.inject(Buttons);
 
@@ -260,8 +264,20 @@ define('package/quiqqer/bricks/bin/Site/Area', [
             });
 
             this.$refreshAvailableBricks().then(function () {
-                self.$CreateButton.enable();
-                self.$AddButton.enable();
+                if (self.getAttribute('canCreateBricks')) {
+                    self.$CreateButton.show();
+                    self.$CreateButton.enable();
+                } else {
+                    self.$CreateButton.hide();
+                }
+
+                if (self.getAttribute('canAssignBricks')) {
+                    self.$AddButton.show();
+                    self.$AddButton.enable();
+                } else {
+                    self.$AddButton.hide();
+                }
+
                 self.$loaded = true;
 
                 self.$brickIds.each(function (brickId) {
@@ -794,8 +810,13 @@ define('package/quiqqer/bricks/bin/Site/Area', [
         openButtons: function (callback) {
             const self = this;
 
-            this.$AddButton.hide();
-            this.$CreateButton.hide();
+            if (this.getAttribute('canAssignBricks')) {
+                this.$AddButton.hide();
+            }
+
+            if (this.getAttribute('canCreateBricks')) {
+                this.$CreateButton.hide();
+            }
 
             self.$FXExtraBtns.style({
                 borderLeft: '2px solid #cccfd5',
@@ -856,8 +877,14 @@ define('package/quiqqer/bricks/bin/Site/Area', [
             }, {
                 callback: function () {
                     self.$MoreButton.setAttribute('icon', 'fa fa-caret-left');
-                    self.$AddButton.show();
-                    self.$CreateButton.show();
+
+                    if (self.getAttribute('canAssignBricks')) {
+                        self.$AddButton.show();
+                    }
+
+                    if (self.getAttribute('canCreateBricks')) {
+                        self.$CreateButton.show();
+                    }
 
                     if (typeof callback === 'function') {
                         callback();
