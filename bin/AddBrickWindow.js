@@ -1136,6 +1136,10 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                         convertedData.attributes.lang = lang;
                     }
 
+                    if (hasCreateCallback) {
+                        return brickId;
+                    }
+
                     return Bricks.saveBrick(brickId, convertedData).then(() => brickId);
                 });
             }).then((brickId) => {

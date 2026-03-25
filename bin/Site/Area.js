@@ -392,9 +392,17 @@ define('package/quiqqer/bricks/bin/Site/Area', [
                 project: Project.getName(),
                 lang: Project.getLang(),
                 onBrickCreated: function (payload) {
-                    return Bricks.saveBrick(payload.brickId, {
-                        areas: this.getAttribute('name')
-                    }).then(() => {
+                    const areaName = this.getAttribute('name');
+                    const brickData = payload && payload.data ? Object.clone(payload.data) : {};
+
+                    if (brickData.attributes && typeOf(brickData.attributes) === 'object') {
+                        brickData.attributes.areas = areaName;
+                        brickData.areas = areaName;
+                    } else {
+                        brickData.areas = areaName;
+                    }
+
+                    return Bricks.saveBrick(payload.brickId, brickData).then(() => {
                         return this.$assignCreatedBrickToArea(payload.brickId);
                     }).then(() => {
                         this.$openCreatedBrickEditor(payload.brickId);
