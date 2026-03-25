@@ -225,6 +225,11 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                 return;
             }
 
+            const shortcutModifierLabel = navigator.platform.toUpperCase().indexOf('MAC') >= 0
+                ? 'Cmd'
+                : 'Ctrl';
+            const importShortcutLabel = shortcutModifierLabel + '+Enter';
+
             this.createOverlay({
                 title: QUILocale.get(lg, 'addBrickWindow.overlay.createFromData.title'),
                 description: QUILocale.get(lg, 'addBrickWindow.overlay.createFromData.desc'),
@@ -286,6 +291,20 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                         rows: 10
                     }).inject(Dialog);
 
+                    Textarea.addEvent('keydown', (event) => {
+                        const nativeEvent = event.event || event;
+                        const key = String(event.key || nativeEvent.key || '').toLowerCase();
+                        const isSubmitShortcut = (event.metaKey || nativeEvent.metaKey || event.ctrlKey || nativeEvent.ctrlKey)
+                            && (key === 'enter' || nativeEvent.code === 'Enter' || nativeEvent.keyCode === 13);
+
+                        if (!isSubmitShortcut) {
+                            return;
+                        }
+
+                        event.preventDefault();
+                        this.importBrickFromOverlay();
+                    });
+
                     const Options = new Element('div', {
                         'class': 'qui-addBrick-import__options'
                     }).inject(Dialog);
@@ -343,8 +362,12 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                         type: 'button',
                         'data-name': 'import-submit',
                         'class': 'btn btn-success',
+                        title: importShortcutLabel,
+                        'aria-label': QUILocale.get(lg, 'addBrickWindow.overlay.createFromData.btn.import')
+                            + ' (' + importShortcutLabel + ')',
                         html: '<span class="fa fa-code"></span> ' +
                             QUILocale.get(lg, 'addBrickWindow.overlay.createFromData.btn.import')
+                            + ' <div><kbd style="font-size: 0.8em; opacity: 0.7;">(' + importShortcutLabel + ')</kbd></div>'
                     }).inject(Actions);
 
                     CancelBtn.addEvent('click', (event) => {
@@ -845,7 +868,6 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
 
             const title = (this.$CreateTitleInput.value || '').trim();
 
-
             if (title === '') {
                 QUI.getMessageHandler(function (MH) {
                     MH.addError(
@@ -1057,47 +1079,49 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
 
             let controlTypeExist = false;
             const hasCreateCallback = typeof this.getAttribute('onBrickCreated') === 'function';
+            this.brickList.each((brick) => {
+                if (brick && brick.control === brickType) {
+                    controlTypeExist = true;
+                }
+            });
 
-            Promise.all([
-                Bricks.getAvailableBricks(),
-                Bricks.getBricksFromProject(project, lang)
-            ]).then((result) => {
-                const availableBricks = result[0] || [];
-                const allBricks = result[1] || [];
-
-                availableBricks.each((brick) => {
-                    if (brick && brick.control === brickType) {
-                        controlTypeExist = true;
-                    }
+            if (!controlTypeExist) {
+                QUI.getMessageHandler(function (MH) {
+                    MH.addError(
+                        QUILocale.get(lg, 'exception.brick.createFromData.brick.type.not.found.in.quiqqer', {
+                            brickType: brickType
+                        })
+                    );
                 });
 
-                if (!controlTypeExist) {
-                    QUI.getMessageHandler(function (MH) {
-                        MH.addError(
-                            QUILocale.get(lg, 'exception.brick.createFromData.brick.type.not.found.in.quiqqer', {
-                                brickType: brickType
-                            })
-                        );
-                    });
+                this.$createInProgress = false;
+                this.Loader.hide();
 
-                    return Promise.reject(new Error('control-not-found'));
+                if (this.$ImportCancelBtn) {
+                    this.$ImportCancelBtn.removeProperty('disabled');
                 }
 
-                let createTitle = brickTitle;
+                if (this.$ImportSubmitBtn) {
+                    this.$ImportSubmitBtn.removeProperty('disabled');
+                }
 
-                allBricks.each((brick) => {
-                    if (brick && brick.title === brickTitle) {
-                        createTitle = brickTitle + ' (' + Date.now() + ')';
-                    }
-                });
+                if (this.$ImportTextarea) {
+                    this.$ImportTextarea.focus();
+                }
 
+                return;
+            }
+
+            Bricks.titleExists(brickTitle, project, lang).then((titleExists) => {
+                const hasDuplicateTitle = String(titleExists) === '1';
+                const createTitle = hasDuplicateTitle ? brickTitle + ' (' + Date.now() + ')' : brickTitle;
                 const data = {
                     title: createTitle,
                     type: brickType
                 };
 
                 return Bricks.createBrick(project, lang, data).then((brickId) => {
-                    if (createTitle !== brickTitle) {
+                    if (hasDuplicateTitle) {
                         convertedData.attributes.title = brickTitle + ' (' + brickId + ')';
                     }
 
@@ -1110,6 +1134,10 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
 
                     if (adjustProjectLang && convertedData.attributes.lang !== lang) {
                         convertedData.attributes.lang = lang;
+                    }
+
+                    if (hasCreateCallback) {
+                        return brickId;
                     }
 
                     return Bricks.saveBrick(brickId, convertedData).then(() => brickId);
@@ -1136,25 +1164,6 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                     this.Loader.hide();
                 }
             }).catch((e) => {
-                if (e && e.message === 'control-not-found') {
-                    this.$createInProgress = false;
-
-                    if (this.$ImportCancelBtn) {
-                        this.$ImportCancelBtn.removeProperty('disabled');
-                    }
-
-                    if (this.$ImportSubmitBtn) {
-                        this.$ImportSubmitBtn.removeProperty('disabled');
-                    }
-
-                    this.Loader.hide();
-
-                    if (this.$ImportTextarea) {
-                        this.$ImportTextarea.focus();
-                    }
-                    return;
-                }
-
                 QUI.getMessageHandler().then(function (MH) {
                     if (e && typeof e.getMessage === 'function') {
                         MH.addError(e.getMessage());
@@ -1522,8 +1531,8 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                         const displayDescription = QUILocale.get(lg, 'addBrickWindow.details.brickTypeContent.desc');
                         const displayDescriptionPreview = this.toPreviewText(displayDescription);
                         const displayPackage = 'quiqqer/bricks';
-                        const mockup = '/packages/quiqqer/bricks/bin/images/mockup-placeholder.svg';
-                        const thumbnail = mockup;
+                        const mockup = '/packages/quiqqer/bricks/bin/images/mockups/content-mockup-900x600.png';
+                        const thumbnail = '/packages/quiqqer/bricks/bin/images/mockups/content-thumbnail-100x80.png';
                         const mockups = [];
                         const galleryMockups = [];
 

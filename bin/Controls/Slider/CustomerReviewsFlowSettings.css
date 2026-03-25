@@ -1,0 +1,13 @@
+.quiqqer-bricks-customerReviewsFlow-settings-entry-form table {
+    border: none;
+}
+
+.quiqqer-bricks-customerReviewsFlow-settings-entry-form td {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.quiqqer-bricks-customerReviewsFlow-settings img {
+    max-width: 50px;
+    max-height: 50px;
+}
