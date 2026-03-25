@@ -1531,8 +1531,8 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                         const displayDescription = QUILocale.get(lg, 'addBrickWindow.details.brickTypeContent.desc');
                         const displayDescriptionPreview = this.toPreviewText(displayDescription);
                         const displayPackage = 'quiqqer/bricks';
-                        const mockup = '/packages/quiqqer/bricks/bin/images/mockup-placeholder.svg';
-                        const thumbnail = mockup;
+                        const mockup = '/packages/quiqqer/bricks/bin/images/mockups/content-mockup-900x600.png';
+                        const thumbnail = '/packages/quiqqer/bricks/bin/images/mockups/content-thumbnail-100x80.png';
                         const mockups = [];
                         const galleryMockups = [];
 
