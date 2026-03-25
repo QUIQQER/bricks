@@ -931,7 +931,7 @@
             </settings>
         </brick>
 
-        <brick control="\QUI\Bricks\Controls\Slider\CustomerReviewsFlow">
+        <brick control="\QUI\Bricks\Controls\Slider\CustomerReviewsFlow" recommended="1">
             <title>
                 <locale group="quiqqer/bricks" var="bricks.customerReviewsFlow.title"/>
             </title>
@@ -1925,7 +1925,7 @@
         </brick>
 
         <!-- Accordion -->
-        <brick control="\QUI\Bricks\Controls\Accordion">
+        <brick control="\QUI\Bricks\Controls\Accordion" recommended="1">
             <title>
                 <locale group="quiqqer/bricks" var="brick.accordion.title"/>
             </title>
