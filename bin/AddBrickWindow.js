@@ -225,6 +225,11 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                 return;
             }
 
+            const shortcutModifierLabel = navigator.platform.toUpperCase().indexOf('MAC') >= 0
+                ? 'Cmd'
+                : 'Ctrl';
+            const importShortcutLabel = shortcutModifierLabel + '+Enter';
+
             this.createOverlay({
                 title: QUILocale.get(lg, 'addBrickWindow.overlay.createFromData.title'),
                 description: QUILocale.get(lg, 'addBrickWindow.overlay.createFromData.desc'),
@@ -286,6 +291,20 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                         rows: 10
                     }).inject(Dialog);
 
+                    Textarea.addEvent('keydown', (event) => {
+                        const nativeEvent = event.event || event;
+                        const key = String(event.key || nativeEvent.key || '').toLowerCase();
+                        const isSubmitShortcut = (event.metaKey || nativeEvent.metaKey || event.ctrlKey || nativeEvent.ctrlKey)
+                            && (key === 'enter' || nativeEvent.code === 'Enter' || nativeEvent.keyCode === 13);
+
+                        if (!isSubmitShortcut) {
+                            return;
+                        }
+
+                        event.preventDefault();
+                        this.importBrickFromOverlay();
+                    });
+
                     const Options = new Element('div', {
                         'class': 'qui-addBrick-import__options'
                     }).inject(Dialog);
@@ -343,8 +362,12 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                         type: 'button',
                         'data-name': 'import-submit',
                         'class': 'btn btn-success',
+                        title: importShortcutLabel,
+                        'aria-label': QUILocale.get(lg, 'addBrickWindow.overlay.createFromData.btn.import')
+                            + ' (' + importShortcutLabel + ')',
                         html: '<span class="fa fa-code"></span> ' +
                             QUILocale.get(lg, 'addBrickWindow.overlay.createFromData.btn.import')
+                            + ' <div><kbd style="font-size: 0.8em; opacity: 0.7;">(' + importShortcutLabel + ')</kbd></div>'
                     }).inject(Actions);
 
                     CancelBtn.addEvent('click', (event) => {
