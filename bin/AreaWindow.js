@@ -21,7 +21,9 @@ define('package/quiqqer/bricks/bin/AreaWindow', [
         Type: 'package/quiqqer/bricks/bin/AreaWindow',
 
         Binds: [
-            '$onOpen'
+            '$onOpen',
+            '$filterAreas',
+            '$onFilterInput'
         ],
 
         options: {
@@ -29,8 +31,8 @@ define('package/quiqqer/bricks/bin/AreaWindow', [
             title: QUILocale.get('quiqqer/bricks', 'area.window.title'),
             projectName: false,
             projectLang: false,
-            maxHeight: 600,
-            maxWidth: 400,
+            maxHeight: 750,
+            maxWidth: 500,
             texticon: false,
 
             cancel_button: {
@@ -46,6 +48,13 @@ define('package/quiqqer/bricks/bin/AreaWindow', [
         initialize: function (options) {
             this.parent(options);
 
+            this.$AreaElements = [];
+            this.$AreaList = null;
+            this.$AreaListWrapper = null;
+            this.$Filter = null;
+            this.$FilterWrapper = null;
+            this.$FilterTimer = null;
+
             this.addEvents({
                 onOpen: this.$onOpen
             });
@@ -60,22 +69,146 @@ define('package/quiqqer/bricks/bin/AreaWindow', [
             this.Loader.show();
 
             this.getList(function (result) {
-                let i, len, desc, title;
                 const Content = self.getContent();
+                let i, len, desc, title, description, AreaControl;
+
+                Content.empty();
+                Content.setStyles({
+                    boxSizing: 'border-box',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: '100%',
+                    overflow: 'hidden'
+                });
+
+                self.$AreaElements = [];
+                self.$FilterWrapper = null;
+                self.$AreaListWrapper = new Element('div', {
+                    styles: {
+                        boxSizing: 'border-box',
+                        flex: 1,
+                        minHeight: 0,
+                        overflowX: 'hidden',
+                        overflowY: 'auto',
+                        width: '100%'
+                    }
+                }).inject(Content);
+
+                self.$AreaList = new Element('div', {
+                    styles: {
+                        float: 'left',
+                        width: '100%'
+                    }
+                }).inject(self.$AreaListWrapper);
+
+                if (result.length >= 10) {
+                    self.$FilterWrapper = new Element('div', {
+                        styles: {
+                            background: '#fff',
+                            boxSizing: 'border-box',
+                            flexShrink: 0,
+                            marginBottom: 10,
+                            width: '100%'
+                        }
+                    }).inject(Content, 'top');
+
+                    self.$Filter = new Element('input', {
+                        type: 'search',
+                        placeholder: 'Nach Titel oder Beschreibung filtern',
+                        styles: {
+                            boxSizing: 'border-box',
+                            width: '100%'
+                        },
+                        events: {
+                            input: self.$onFilterInput
+                        }
+                    }).inject(self.$FilterWrapper);
+                } else {
+                    self.$Filter = null;
+                    self.$FilterWrapper = null;
+                }
 
                 for (i = 0, len = result.length; i < len; i++) {
                     title = result[i].title;
                     desc = result[i].description;
+                    title = QUILocale.get(title.group, title['var']);
+                    description = QUILocale.get(desc.group, desc['var']);
 
-                    new Area({
-                        title: QUILocale.get(title.group, title['var']),
-                        description: QUILocale.get(desc.group, desc['var']),
+                    AreaControl = new Area({
+                        title: title,
+                        description: description,
                         area: result[i].name
-                    }).inject(Content);
+                    }).inject(self.$AreaList);
+
+                    self.$AreaElements.push({
+                        Control: AreaControl,
+                        Elm: AreaControl.getElm(),
+                        TitleElm: AreaControl.getElm().getElement('.quiqqer-bricks-area-content-title'),
+                        DescriptionElm: AreaControl.getElm().getElement('.quiqqer-bricks-area-content-description'),
+                        originalTitle: String(title),
+                        originalDescription: String(description),
+                        title: String(title).toLowerCase(),
+                        description: String(description).toLowerCase()
+                    });
                 }
 
                 self.Loader.hide();
+
+                if (self.$Filter) {
+                    self.$Filter.focus();
+                }
             });
+        },
+
+        $onFilterInput: function () {
+            clearTimeout(this.$FilterTimer);
+
+            this.$FilterTimer = this.$filterAreas.delay(180, this);
+        },
+
+        $filterAreas: function () {
+            if (!this.$Filter) {
+                return;
+            }
+
+            const rawSearch = this.$Filter.get('value').trim();
+            const search = rawSearch.toLowerCase();
+
+            this.$AreaElements.forEach(function (Entry) {
+                if (!search || Entry.title.contains(search) || Entry.description.contains(search)) {
+                    Entry.Elm.setStyle('display', '');
+                    Entry.TitleElm.set('html', this.$highlightText(Entry.originalTitle, rawSearch));
+                    Entry.DescriptionElm.set('html', this.$highlightText(Entry.originalDescription, rawSearch));
+                    return;
+                }
+
+                Entry.Elm.setStyle('display', 'none');
+            }, this);
+        },
+
+        $highlightText: function (text, search) {
+            const escapedText = this.$escapeHtml(String(text));
+
+            if (!search) {
+                return escapedText;
+            }
+
+            const regex = new RegExp('(' + this.$escapeRegExp(search) + ')', 'ig');
+
+            return escapedText.replace(regex, '<mark>$1</mark>');
+        },
+
+        $escapeHtml: function (text) {
+            return String(text)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        },
+
+        $escapeRegExp: function (text) {
+            return String(text).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         },
 
         /**
