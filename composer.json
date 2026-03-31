@@ -25,7 +25,8 @@
         "ramsey/uuid": "^3|^4",
         "quiqqer-asset/glidejs-glide": "^3",
         "quiqqer/slider": "^2.2.1",
-        "quiqqer/sitetypes": "^2.1.0"
+        "quiqqer/sitetypes": "^2.1.0",
+        "quiqqer/components": "^1"
     },
     "suggest": {
         "quiqqer/gallery": "Present your photos, products and pictures in elaborate and beautiful galleries."

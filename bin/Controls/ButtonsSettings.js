@@ -39,6 +39,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
             '$openEditDialog',
             '$toggleEntryStatus',
             '$onDisplayModeChange',
+            '$onSizeChange',
             '$openBrickSelectWindow',
             '$setOpenBrickTitleDisplay',
             'update'
@@ -50,6 +51,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
             this.$Input = null;
             this.$Grid = null;
             this.$DisplayModeInput = null;
+            this.$SizeInput = null;
             this.$data = [];
 
             this.addEvents({
@@ -261,6 +263,18 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                 this.$DisplayModeInput.addEvent('change', this.$onDisplayModeChange);
             }
 
+            this.$SizeInput = this.$Input.getParent('form')
+                ? this.$Input.getParent('form').getElement('[name="size"]')
+                : null;
+
+            if (!this.$SizeInput) {
+                this.$SizeInput = document.body.getElement('[name="size"]');
+            }
+
+            if (this.$SizeInput) {
+                this.$SizeInput.addEvent('change', this.$onSizeChange);
+            }
+
             try {
                 this.$data = JSON.decode(this.$Input.value);
 
@@ -274,6 +288,10 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
         },
 
         $onDisplayModeChange: function () {
+            this.refresh();
+        },
+
+        $onSizeChange: function () {
             this.refresh();
         },
 
@@ -308,7 +326,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                     btnType: this.$normalizeBtnType(entry.btnType),
                     href: entry.href || '',
                     iconPosition: entry.iconPosition || 'start',
-                    size: entry.size || 'default',
+                    size: entry.size || '',
                     title: entry.title || '',
                     ariaLabel: entry.ariaLabel || '',
                     onClick: entry.onClick || '',
@@ -511,7 +529,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                     Form.elements.iconClass.value = data.iconClass || '';
                     Form.elements.iconPosition.value = data.iconPosition || 'start';
                     Form.elements.btnType.value = this.$normalizeBtnType(data.btnType);
-                    Form.elements.size.value = data.size || 'default';
+                    Form.elements.size.value = data.size || '';
                     Form.elements.openBrickId.value = this.$normalizeBrickId(data.openBrickId);
                     Form.elements.openBrickTitle.value = this.$normalizeBrickTitle(data.openBrickTitle);
                     Form.elements.openBrickWinWidth.value = this.$normalizePopupDimension(data.openBrickWinWidth);
@@ -623,6 +641,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                                     fieldIconPositionEnd: QUILocale.get(lg, prefix + 'iconPosition.end'),
                                     fieldButtonType: QUILocale.get(lg, prefix + 'btnType'),
                                     fieldSize: QUILocale.get(lg, prefix + 'size'),
+                                    fieldSizeInherit: QUILocale.get(lg, prefix + 'size.inherit'),
                                     fieldSizeDefault: QUILocale.get(lg, prefix + 'size.default'),
                                     fieldSizeSmall: QUILocale.get(lg, prefix + 'size.small'),
                                     fieldSizeLarge: QUILocale.get(lg, prefix + 'size.large'),
@@ -729,7 +748,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                 iconClass: entry.iconClass || '',
                 iconPosition: entry.iconPosition || 'start',
                 btnType: this.$normalizeBtnType(entry.btnType),
-                size: entry.size || 'default',
+                size: entry.size || '',
                 openBrickId: this.$normalizeBrickId(entry.openBrickId),
                 openBrickTitle: this.$normalizeBrickTitle(entry.openBrickTitle),
                 openBrickWinWidth: this.$normalizePopupDimension(entry.openBrickWinWidth),
@@ -748,7 +767,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
 
         $createPreviewNode: function (entry) {
             const btnType = this.$normalizeBtnType(entry.btnType);
-            const size = entry.size || 'default';
+            const size = entry.size || this.$getSize();
             const iconClass = entry.iconClass || '';
             const text = entry.text || '';
             const iconPosition = entry.iconPosition || 'start';
@@ -818,6 +837,22 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
             }
 
             return 'button';
+        },
+
+        $getSize: function () {
+            if (!this.$SizeInput) {
+                return 'default';
+            }
+
+            if (this.$SizeInput.value === 'sm') {
+                return 'sm';
+            }
+
+            if (this.$SizeInput.value === 'lg') {
+                return 'lg';
+            }
+
+            return 'default';
         },
 
         $normalizeBtnType: function (value) {
