@@ -920,7 +920,6 @@ define('package/quiqqer/bricks/bin/Site/Area', [
             }
 
             const self = this;
-            let inputEsc = false;
             let specialKeyPressed = false;
             let searchTerm = '';
             let Timer = null;
@@ -961,30 +960,37 @@ define('package/quiqqer/bricks/bin/Site/Area', [
             const markFoundedTerm = function (Item, term) {
                 let titleHtml = '',
                     descHtml = '';
+                const titleTermIndex = Item.getAttribute('data-qui-title').indexOf(term);
+                const descTermIndex = Item.getAttribute('data-qui-desc').indexOf(term);
 
                 // search result in title?
-                if (Item.getAttribute('data-qui-title').indexOf(term) >= 0) {
+                if (titleTermIndex >= 0) {
                     let TitleNode = Item.querySelector('header'),
                         titleText = TitleNode.innerText;
-                    titleHtml = titleText.substr(0, titleText.toLowerCase().indexOf(term));
-                    titleHtml += "<mark>" + titleText.substr(titleText.toLowerCase().indexOf(term),
+                    titleHtml = titleText.substr(0, titleTermIndex);
+                    titleHtml += "<mark>" + titleText.substr(titleTermIndex,
                         term.length) + "</mark>";
-                    titleHtml += titleText.substr(titleText.toLowerCase().indexOf(term) + term.length);
+                    titleHtml += titleText.substr(titleTermIndex + term.length);
 
                     TitleNode.innerHTML = titleHtml;
                 }
 
                 // search result in description?
-                if (Item.getAttribute('data-qui-desc').indexOf(term) >= 0) {
+                if (descTermIndex >= 0) {
                     let DescNode = Item.querySelector('.qui-elements-list-item-description'),
-                        descText = DescNode.innerText;
+                        DescTextNode = DescNode.querySelector('[data-name="brick-description"]'),
+                        descText = Item.getAttribute('data-qui-desc-text-original');
 
-                    descHtml = descText.substr(0, descText.toLowerCase().indexOf(term));
-                    descHtml += "<mark>" + descText.substr(descText.toLowerCase().indexOf(term),
+                    if (!DescTextNode || !descText) {
+                        return;
+                    }
+
+                    descHtml = descText.substr(0, descTermIndex);
+                    descHtml += "<mark>" + descText.substr(descTermIndex,
                         term.length) + "</mark>";
-                    descHtml += descText.substr(descText.toLowerCase().indexOf(term) + term.length);
+                    descHtml += descText.substr(descTermIndex + term.length);
 
-                    DescNode.innerHTML = descHtml;
+                    DescTextNode.innerHTML = descHtml;
                 }
             };
 
@@ -1016,7 +1022,8 @@ define('package/quiqqer/bricks/bin/Site/Area', [
 
                     itemNodes.each(function (Item) {
                         if (Item.getAttribute('data-qui-title').indexOf(term) >= 0 ||
-                            Item.getAttribute('data-qui-desc').indexOf(term) >= 0) {
+                            Item.getAttribute('data-qui-desc').indexOf(term) >= 0 ||
+                            Item.getAttribute('data-qui-badge').indexOf(term) >= 0) {
 
                             markFoundedTerm(Item, term);
 
@@ -1077,7 +1084,7 @@ define('package/quiqqer/bricks/bin/Site/Area', [
                         for (let i = 0, len = self.$availableBricks.length; i < len; i++) {
                             const Brick = self.$availableBricks[i];
                             const inactiveBadge = renderInactiveBadge(Brick);
-                            const text = `<div>${Brick.description}</div>${inactiveBadge}`;
+                            const text = `<div data-name="brick-description">${Brick.description}</div>${inactiveBadge}`;
 
                             items.push({
                                 brickId: Brick.id,
@@ -1110,12 +1117,23 @@ define('package/quiqqer/bricks/bin/Site/Area', [
 
                             Item.setAttribute(
                                 'data-qui-desc',
-                                Item.getElement('.qui-elements-list-item-description').innerText.toLowerCase()
+                                Item.getElement('[data-name="brick-description"]').innerText.toLowerCase()
                             );
 
                             Item.setAttribute(
                                 'data-qui-desc-original',
-                                Item.getElement('.qui-elements-list-item-description').innerText.toLowerCase()
+                                Item.getElement('.qui-elements-list-item-description').innerHTML
+                            );
+
+                            Item.setAttribute(
+                                'data-qui-desc-text-original',
+                                Item.getElement('[data-name="brick-description"]')
+                                    .innerText
+                            );
+
+                            Item.setAttribute(
+                                'data-qui-badge',
+                                Item.getElement('.badge') ? Item.getElement('.badge').innerText.toLowerCase() : ''
                             );
                         });
 
@@ -1136,33 +1154,15 @@ define('package/quiqqer/bricks/bin/Site/Area', [
                             placeholder: QUILocale.get(lg, 'site.area.window.input.placeholder'),
                             events: {
                                 keydown: function (event) {
-                                    if (event.key === 'esc') {
-                                        event.stop();
-                                        inputEsc = true;
-                                        updateCounter(availableBricksNumber);
-
-                                        return;
-                                    }
-
                                     if (event.key === 'down' ||
                                         event.key === 'up' ||
                                         event.key === 'enter') {
                                         specialKeyPressed = true;
                                     }
-
-                                    inputEsc = false;
                                 },
 
                                 keyup: function (event) {
                                     event.stop();
-
-                                    // Esc clears the input field
-                                    if (inputEsc) {
-                                        Input.value = '';
-                                        showAll();
-
-                                        return;
-                                    }
 
                                     if (!specialKeyPressed) {
                                         search();
