@@ -928,6 +928,7 @@ define('package/quiqqer/bricks/bin/Site/Area', [
             let Input = null;
             let CounterNode = null;
             let availableBricksNumber = 0;
+            let popupKeyDownHandler = null;
 
             // restore original title and description of list items
             const restoreOriginalHtml = function (Item) {
@@ -1036,6 +1037,18 @@ define('package/quiqqer/bricks/bin/Site/Area', [
                 autoclose: false,
                 events: {
                     onOpen: function (Win) {
+                        popupKeyDownHandler = function (event) {
+                            if (event.key !== 'esc' && event.key !== 'escape') {
+                                return;
+                            }
+
+                            event.preventDefault();
+                            event.stopPropagation();
+                            Win.close();
+                        };
+
+                        document.addEvent('keydown', popupKeyDownHandler);
+
                         const items = [],
                             Content = Win.getContent(),
                             List = new QUIList({
@@ -1164,6 +1177,14 @@ define('package/quiqqer/bricks/bin/Site/Area', [
                         FilterContainer.inject(Content, 'top');
 
                         Input.focus();
+                    },
+                    onClose: function () {
+                        if (!popupKeyDownHandler) {
+                            return;
+                        }
+
+                        document.removeEvent('keydown', popupKeyDownHandler);
+                        popupKeyDownHandler = null;
                     }
                 }
             }).open();
