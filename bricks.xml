@@ -1916,6 +1916,20 @@
                     </option>
                 </setting>
 
+                <setting name="size" type="select">
+                    <locale group="quiqqer/bricks" var="brick.buttons.settings.size"/>
+
+                    <option value="default" default="1">
+                        <locale group="quiqqer/bricks" var="brick.buttons.settings.size.default"/>
+                    </option>
+                    <option value="sm">
+                        <locale group="quiqqer/bricks" var="brick.buttons.settings.size.small"/>
+                    </option>
+                    <option value="lg">
+                        <locale group="quiqqer/bricks" var="brick.buttons.settings.size.large"/>
+                    </option>
+                </setting>
+
                 <setting name="buttons" type="hidden"
                          data-qui="package/quiqqer/bricks/bin/Controls/ButtonsSettings"
                 >

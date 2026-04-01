@@ -138,6 +138,13 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                 return;
             }
 
+            if (key === 'esc' || key === 'escape') {
+                event.preventDefault();
+                event.stopPropagation();
+                this.close();
+                return;
+            }
+
             if (key !== 'up' && key !== 'arrowup' && key !== 'down' && key !== 'arrowdown' && key !== 'enter') {
                 return;
             }

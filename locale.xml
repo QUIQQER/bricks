@@ -2758,6 +2758,22 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
             <de><![CDATA[Nur Icon - rund]]></de>
             <en><![CDATA[Icon only - rounded]]></en>
         </locale>
+        <locale name="brick.buttons.settings.size">
+            <de><![CDATA[Button-Größe]]></de>
+            <en><![CDATA[Button size]]></en>
+        </locale>
+        <locale name="brick.buttons.settings.size.default">
+            <de><![CDATA[Standard]]></de>
+            <en><![CDATA[Default]]></en>
+        </locale>
+        <locale name="brick.buttons.settings.size.small">
+            <de><![CDATA[Klein]]></de>
+            <en><![CDATA[Small]]></en>
+        </locale>
+        <locale name="brick.buttons.settings.size.large">
+            <de><![CDATA[Groß]]></de>
+            <en><![CDATA[Large]]></en>
+        </locale>
         <locale name="brick.buttons.settings.entries">
             <de><![CDATA[Buttons]]></de>
             <en><![CDATA[Buttons]]></en>
@@ -2835,6 +2851,10 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
         <locale name="quiqqer.bricks.buttons.settings.createPopup.size.default">
             <de><![CDATA[Standard]]></de>
             <en><![CDATA[Default]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.size.inherit">
+            <de><![CDATA[Allgemeine Einstellung verwenden]]></de>
+            <en><![CDATA[Use general setting]]></en>
         </locale>
         <locale name="quiqqer.bricks.buttons.settings.createPopup.size.small">
             <de><![CDATA[Klein]]></de>
