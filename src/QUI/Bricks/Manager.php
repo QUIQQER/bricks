@@ -19,6 +19,7 @@ use QUI\Utils\Text\XML;
 
 use function array_filter;
 use function array_flip;
+use function array_intersect;
 use function array_map;
 use function array_merge;
 use function array_reverse;
@@ -33,6 +34,7 @@ use function implode;
 use function in_array;
 use function is_array;
 use function is_callable;
+use function is_string;
 use function json_decode;
 use function json_encode;
 use function md5;
@@ -814,6 +816,93 @@ class Manager
     }
 
     /**
+     * @param array<string, mixed>|string $customFields
+     * @return string
+     */
+    protected function getBrickVisibilityMode(array | string $customFields): string
+    {
+        if (is_string($customFields)) {
+            $customFields = json_decode($customFields, true);
+        }
+
+        if (!is_array($customFields)) {
+            return 'always';
+        }
+
+        if (!isset($customFields['visibility'])) {
+            return 'always';
+        }
+
+        return match ($customFields['visibility']) {
+            'guest', 'authenticated', 'groups' => $customFields['visibility'],
+            default => 'always'
+        };
+    }
+
+    /**
+     * @param array<string, mixed>|string $customFields
+     * @return array<int, string>
+     */
+    protected function getBrickVisibilityGroupIds(array | string $customFields): array
+    {
+        if (is_string($customFields)) {
+            $customFields = json_decode($customFields, true);
+        }
+
+        if (!is_array($customFields) || empty($customFields['visibilityGroups'])) {
+            return [];
+        }
+
+        if (is_array($customFields['visibilityGroups'])) {
+            return array_values(array_filter($customFields['visibilityGroups']));
+        }
+
+        if (!is_string($customFields['visibilityGroups'])) {
+            return [];
+        }
+
+        return array_values(array_filter(explode(',', $customFields['visibilityGroups'])));
+    }
+
+    /**
+     * @param array<string, mixed>|string $customFields
+     * @param bool $isAuthenticated
+     * @return bool
+     */
+    protected function isBrickVisibleForUserStatus(
+        array | string $customFields,
+        bool $isAuthenticated
+    ): bool {
+        return match ($this->getBrickVisibilityMode($customFields)) {
+            'guest' => !$isAuthenticated,
+            'authenticated' => $isAuthenticated,
+            'groups' => $isAuthenticated && $this->isBrickVisibleForGroups(
+                $customFields,
+                QUI::getUserBySession()->getGroups(false)
+            ),
+            default => true
+        };
+    }
+
+    /**
+     * @param array<string, mixed>|string $customFields
+     * @param array<int, string|int> $userGroupIds
+     * @return bool
+     */
+    protected function isBrickVisibleForGroups(
+        array | string $customFields,
+        array $userGroupIds
+    ): bool {
+        $visibilityGroupIds = $this->getBrickVisibilityGroupIds($customFields);
+
+        if (empty($visibilityGroupIds)) {
+            return false;
+        }
+
+        return !empty(array_intersect($visibilityGroupIds, $userGroupIds));
+    }
+
+    /**
      * Return the bricks from the area
      *
      * @param string $brickArea - Name of the area
@@ -861,6 +950,20 @@ class Manager
 
         foreach ($bricks as $brickData) {
             $brickId = (int)$brickData['brickId'];
+            $visibilityMode = 'always';
+
+            if (isset($brickData['customfields'])) {
+                $visibilityMode = $this->getBrickVisibilityMode($brickData['customfields']);
+
+                if (
+                    !$this->isBrickVisibleForUserStatus(
+                        $brickData['customfields'],
+                        QUI::getUsers()->isAuth(QUI::getUserBySession())
+                    )
+                ) {
+                    continue;
+                }
+            }
 
             try {
                 if (!empty($brickData['uid'])) {
@@ -868,6 +971,10 @@ class Manager
 
                     if (!(int)$Brick->getAttribute('active')) {
                         continue;
+                    }
+
+                    if ($visibilityMode !== 'always') {
+                        $Brick->setAttribute('cacheable', 0);
                     }
 
                     $result[] = $Brick->check();
@@ -896,6 +1003,10 @@ class Manager
                     if ($custom) {
                         $Clone->setSettings($custom);
                     }
+                }
+
+                if ($visibilityMode !== 'always') {
+                    $Clone->setAttribute('cacheable', 0);
                 }
 
                 $result[] = $Clone->check();

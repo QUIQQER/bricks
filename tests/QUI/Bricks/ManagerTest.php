@@ -76,4 +76,115 @@ XML
         $this->assertCount(2, $result['options']);
         $this->assertSame('small', $result['options'][0]['value']);
     }
+
+    public function testBrickVisibilityModeDefaultsToAlways(): void
+    {
+        $Manager = new class (true) extends Manager {
+            public function exposeGetBrickVisibilityMode(array|string $customFields): string
+            {
+                return $this->getBrickVisibilityMode($customFields);
+            }
+        };
+
+        $this->assertSame('always', $Manager->exposeGetBrickVisibilityMode([]));
+        $this->assertSame('always', $Manager->exposeGetBrickVisibilityMode(''));
+        $this->assertSame(
+            'always',
+            $Manager->exposeGetBrickVisibilityMode(['visibility' => 'invalid'])
+        );
+    }
+
+    public function testBrickVisibilityModeAcceptsPhaseOneValues(): void
+    {
+        $Manager = new class (true) extends Manager {
+            public function exposeGetBrickVisibilityMode(array|string $customFields): string
+            {
+                return $this->getBrickVisibilityMode($customFields);
+            }
+
+            public function exposeIsBrickVisibleForUserStatus(
+                array|string $customFields,
+                bool $isAuthenticated
+            ): bool {
+                return $this->isBrickVisibleForUserStatus($customFields, $isAuthenticated);
+            }
+        };
+
+        $this->assertSame(
+            'guest',
+            $Manager->exposeGetBrickVisibilityMode(['visibility' => 'guest'])
+        );
+        $this->assertSame(
+            'authenticated',
+            $Manager->exposeGetBrickVisibilityMode('{"visibility":"authenticated"}')
+        );
+        $this->assertSame(
+            'groups',
+            $Manager->exposeGetBrickVisibilityMode(['visibility' => 'groups'])
+        );
+
+        $this->assertTrue(
+            $Manager->exposeIsBrickVisibleForUserStatus(['visibility' => 'guest'], false)
+        );
+        $this->assertFalse(
+            $Manager->exposeIsBrickVisibleForUserStatus(['visibility' => 'guest'], true)
+        );
+        $this->assertTrue(
+            $Manager->exposeIsBrickVisibleForUserStatus(
+                ['visibility' => 'authenticated'],
+                true
+            )
+        );
+        $this->assertFalse(
+            $Manager->exposeIsBrickVisibleForUserStatus(
+                ['visibility' => 'authenticated'],
+                false
+            )
+        );
+    }
+
+    public function testBrickVisibilityGroupsAreParsedAndMatched(): void
+    {
+        $Manager = new class (true) extends Manager {
+            public function exposeGetBrickVisibilityGroupIds(array|string $customFields): array
+            {
+                return $this->getBrickVisibilityGroupIds($customFields);
+            }
+
+            public function exposeIsBrickVisibleForGroups(
+                array|string $customFields,
+                array $userGroupIds
+            ): bool {
+                return $this->isBrickVisibleForGroups($customFields, $userGroupIds);
+            }
+        };
+
+        $this->assertSame(
+            ['1', '2'],
+            $Manager->exposeGetBrickVisibilityGroupIds(['visibilityGroups' => '1,2'])
+        );
+        $this->assertSame(
+            ['3', '4'],
+            $Manager->exposeGetBrickVisibilityGroupIds(['visibilityGroups' => ['3', '4']])
+        );
+
+        $this->assertTrue(
+            $Manager->exposeIsBrickVisibleForGroups(
+                ['visibilityGroups' => '1,2'],
+                ['2', '8']
+            )
+        );
+        $this->assertFalse(
+            $Manager->exposeIsBrickVisibleForGroups(
+                ['visibilityGroups' => '1,2'],
+                ['8', '9']
+            )
+        );
+        $this->assertFalse(
+            $Manager->exposeIsBrickVisibleForGroups(
+                ['visibilityGroups' => ''],
+                ['1']
+            )
+        );
+    }
 }
