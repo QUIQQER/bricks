@@ -131,7 +131,9 @@ define('package/quiqqer/bricks/bin/BrickAreas', [
                     return Entry.title;
                 });
 
-                if ("group" in title[0]) {
+                if (!title.length || typeof title[0] === 'undefined') {
+                    title = name;
+                } else if ("group" in title[0]) {
                     title = QUILocale.get(
                         title[0].group,
                         title[0].var

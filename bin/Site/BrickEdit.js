@@ -24,6 +24,7 @@ define('package/quiqqer/bricks/bin/Site/BrickEdit', [
         Binds: [
             '$onInject',
             '$brickSettingsPromise',
+            '$onVisibilityChange',
             'openBrick',
             'openBrickInPanel'
         ],
@@ -129,11 +130,11 @@ define('package/quiqqer/bricks/bin/Site/BrickEdit', [
             }).then(function () {
                 return ControlUtils.parse(self.getElm());
             }).then(function () {
-
                 let i, len, Control;
 
                 const Project = self.getAttribute('Site').getProject(),
-                    controls = self.getElm().getElements('[data-quiid]');
+                    controls = self.getElm().getElements('[data-quiid]'),
+                    Visibility = self.getElm().getElement('[name="visibility"]');
 
                 for (i = 0, len = controls.length; i < len; i++) {
                     Control = QUI.Controls.getById(controls[i].get('data-quiid'));
@@ -141,6 +142,11 @@ define('package/quiqqer/bricks/bin/Site/BrickEdit', [
                     if (Control && "setProject" in Control) {
                         Control.setProject(Project);
                     }
+                }
+
+                if (Visibility) {
+                    Visibility.addEvent('change', self.$onVisibilityChange);
+                    self.$onVisibilityChange();
                 }
 
                 self.Loader.hide();
@@ -166,6 +172,29 @@ define('package/quiqqer/bricks/bin/Site/BrickEdit', [
                 });
 
             }.bind(this));
+        },
+
+        /**
+         * Toggle the group selection row depending on visibility mode.
+         */
+        $onVisibilityChange: function () {
+            const Form = this.getElm().getElement('form');
+
+            if (!Form) {
+                return;
+            }
+
+            const Visibility = Form.elements.visibility;
+            const GroupsRow = this.getElm().getElement('[data-name="visibility-groups-row"]');
+
+            if (!Visibility || !GroupsRow) {
+                return;
+            }
+
+            GroupsRow.setStyle(
+                'display',
+                Visibility.value === 'groups' ? '' : 'none'
+            );
         },
 
         /**
