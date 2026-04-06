@@ -75,6 +75,7 @@ define('package/quiqqer/bricks/bin/Site/Area', [
             this.$AddButton = false;
             this.$SettingsButton = false;
             this.$SortableButton = false;
+            this.$Sortables = false;
             this.$MoreButton = false;
 
             this.$Title = false;
@@ -105,6 +106,11 @@ define('package/quiqqer/bricks/bin/Site/Area', [
                 onBrickCopy: this.$onBrickRefresh,
                 onBrickCreate: this.$onBrickRefresh
             });
+
+            if (this.$Sortables) {
+                this.$Sortables.detach();
+                this.$Sortables = false;
+            }
         },
 
         /**
@@ -961,7 +967,7 @@ define('package/quiqqer/bricks/bin/Site/Area', [
             Elm.getElements('select').set('disabled', true);
 
 
-            new Sortables(this.$List, {
+            this.$Sortables = new Sortables(this.$List, {
                 revert: {
                     duration: 500,
                     transition: 'elastic:out'
@@ -978,8 +984,12 @@ define('package/quiqqer/bricks/bin/Site/Area', [
 
                     return new Element('div', {
                         styles: {
-                            background: 'rgba(0,0,0,0.5)',
+                            background: 'rgba(0,0,0,0.0)',
                             height: size.y,
+                            left: 0,
+                            margin: 0,
+                            position: 'absolute',
+                            pointerEvents: 'none',
                             top: pos.y,
                             width: size.x,
                             zIndex: 1000
@@ -1021,6 +1031,11 @@ define('package/quiqqer/bricks/bin/Site/Area', [
                 elements = Elm.getElements(
                     '.quiqqer-bricks-site-category-area-brick'
                 );
+
+            if (this.$Sortables) {
+                this.$Sortables.detach();
+                this.$Sortables = false;
+            }
 
             //Elm.getElements('select').set('disabled', false);
             Elm.getElements('.quiqqer-bricks-site-category-area-placeholder').destroy();
