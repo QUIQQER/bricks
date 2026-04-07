@@ -143,6 +143,98 @@ XML
         );
     }
 
+    public function testGuestVisibilityIncludesNobodyUsersEvenWhenAuthenticated(): void
+    {
+        $Manager = new class (new \QUI\Users\Nobody()) extends Manager {
+            private \QUI\Interfaces\Users\User $SessionUser;
+
+            public function __construct(\QUI\Interfaces\Users\User $SessionUser)
+            {
+                $this->SessionUser = $SessionUser;
+                parent::__construct(true);
+            }
+
+            protected function getSessionUser(): \QUI\Interfaces\Users\User
+            {
+                return $this->SessionUser;
+            }
+
+            public function exposeIsBrickVisibleForUserStatus(
+                array|string $customFields,
+                bool $isAuthenticated
+            ): bool {
+                return $this->isBrickVisibleForUserStatus($customFields, $isAuthenticated);
+            }
+        };
+
+        $this->assertTrue(
+            $Manager->exposeIsBrickVisibleForUserStatus(['visibility' => 'guest'], true)
+        );
+    }
+
+    public function testGuestVisibilityDoesNotTreatSystemUserAsGuest(): void
+    {
+        $Manager = new class (new \QUI\Users\SystemUser()) extends Manager {
+            private \QUI\Interfaces\Users\User $SessionUser;
+
+            public function __construct(\QUI\Interfaces\Users\User $SessionUser)
+            {
+                $this->SessionUser = $SessionUser;
+                parent::__construct(true);
+            }
+
+            protected function getSessionUser(): \QUI\Interfaces\Users\User
+            {
+                return $this->SessionUser;
+            }
+
+            public function exposeIsBrickVisibleForUserStatus(
+                array|string $customFields,
+                bool $isAuthenticated
+            ): bool {
+                return $this->isBrickVisibleForUserStatus($customFields, $isAuthenticated);
+            }
+        };
+
+        $this->assertFalse(
+            $Manager->exposeIsBrickVisibleForUserStatus(['visibility' => 'guest'], true)
+        );
+    }
+
+    public function testGroupVisibilityIncludesNobodyUsersForGuestGroup(): void
+    {
+        $GuestGroup = new \QUI\Groups\Guest();
+
+        $Manager = new class (new \QUI\Users\Nobody()) extends Manager {
+            private \QUI\Interfaces\Users\User $SessionUser;
+
+            public function __construct(\QUI\Interfaces\Users\User $SessionUser)
+            {
+                $this->SessionUser = $SessionUser;
+                parent::__construct(true);
+            }
+
+            protected function getSessionUser(): \QUI\Interfaces\Users\User
+            {
+                return $this->SessionUser;
+            }
+
+            public function exposeIsBrickVisibleForUserStatus(
+                array|string $customFields,
+                bool $isAuthenticated
+            ): bool {
+                return $this->isBrickVisibleForUserStatus($customFields, $isAuthenticated);
+            }
+        };
+
+        $this->assertTrue(
+            $Manager->exposeIsBrickVisibleForUserStatus(
+                ['visibility' => 'groups', 'visibilityGroups' => $GuestGroup->getUUID()],
+                false
+            )
+        );
+    }
+
     public function testBrickVisibilityGroupsAreParsedAndMatched(): void
     {
         $Manager = new class (true) extends Manager {
