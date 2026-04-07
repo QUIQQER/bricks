@@ -1,0 +1,110 @@
+.quiqqer-bricks-controls-multiLayout {
+    min-height: 1px;
+}
+
+.quiqqer-bricks-controls-multiLayout-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.quiqqer-bricks-controls-multiLayout-area {
+    --quiqqer-bricks-multiLayout-bg-image: none;
+    --quiqqer-bricks-multiLayout-bg-size: cover;
+    --quiqqer-bricks-multiLayout-bg-position: center center;
+    --quiqqer-bricks-multiLayout-background-color: #000000;
+    --quiqqer-bricks-multiLayout-background-color-opacity: 0;
+    align-items: stretch;
+    background: #f6f7f9;
+    border-radius: 1rem;
+    display: flex;
+    min-height: 280px;
+    overflow: hidden;
+    position: relative;
+}
+
+.quiqqer-bricks-controls-multiLayout-area::before,
+.quiqqer-bricks-controls-multiLayout-area::after {
+    content: '';
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+}
+
+.quiqqer-bricks-controls-multiLayout-area::before {
+    background-image: var(--quiqqer-bricks-multiLayout-bg-image);
+    background-position: var(--quiqqer-bricks-multiLayout-bg-position);
+    background-repeat: no-repeat;
+    background-size: var(--quiqqer-bricks-multiLayout-bg-size);
+    opacity: 0;
+}
+
+.quiqqer-bricks-controls-multiLayout-area.is-background-enabled::before {
+    opacity: 1;
+}
+
+.quiqqer-bricks-controls-multiLayout-area::after {
+    background: var(--quiqqer-bricks-multiLayout-background-color);
+    opacity: 0;
+}
+
+.quiqqer-bricks-controls-multiLayout-area.is-background-color-enabled::after {
+    opacity: var(--quiqqer-bricks-multiLayout-background-color-opacity);
+}
+
+.quiqqer-bricks-controls-multiLayout-areaContent {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1.5rem;
+    position: relative;
+    width: 100%;
+    z-index: 1;
+}
+
+.quiqqer-bricks-controls-multiLayout-area--align-top .quiqqer-bricks-controls-multiLayout-areaContent {
+    justify-content: flex-start;
+}
+
+.quiqqer-bricks-controls-multiLayout-area--align-center .quiqqer-bricks-controls-multiLayout-areaContent {
+    justify-content: center;
+}
+
+.quiqqer-bricks-controls-multiLayout-area--align-bottom .quiqqer-bricks-controls-multiLayout-areaContent {
+    justify-content: flex-end;
+}
+
+.quiqqer-bricks-controls-multiLayout-areaImage {
+    display: block;
+    height: auto;
+    max-width: 100%;
+}
+
+.quiqqer-bricks-controls-multiLayout-area--image .quiqqer-bricks-controls-multiLayout-areaContent {
+    align-items: center;
+}
+
+.quiqqer-bricks-controls-multiLayout-areaImage--cover,
+.quiqqer-bricks-controls-multiLayout-areaImage--contain {
+    height: 100%;
+    width: 100%;
+}
+
+.quiqqer-bricks-controls-multiLayout-areaImage--cover {
+    object-fit: cover;
+}
+
+.quiqqer-bricks-controls-multiLayout-areaImage--contain {
+    object-fit: contain;
+}
+
+.quiqqer-bricks-controls-multiLayout-areaImage--auto {
+    width: auto;
+}
+
+@media (max-width: 767px) {
+    .quiqqer-bricks-controls-multiLayout-grid {
+        grid-template-columns: 1fr;
+    }
+}

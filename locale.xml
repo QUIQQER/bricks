@@ -2704,6 +2704,242 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
             <de><![CDATA[Entries]]></de>
             <en><![CDATA[Entries]]></en>
         </locale>
+        <locale name="brick.multiLayout.title">
+            <de><![CDATA[MultiLayout]]></de>
+            <en><![CDATA[MultiLayout]]></en>
+        </locale>
+        <locale name="brick.multiLayout.description">
+            <de><![CDATA[Mehrspaltiger Baustein mit frei konfigurierbaren Bereichen.]]></de>
+            <en><![CDATA[Multi-column brick with individually configurable areas.]]></en>
+        </locale>
+        <locale name="brick.multiLayout.layout">
+            <de><![CDATA[Vorlage]]></de>
+            <en><![CDATA[Layout]]></en>
+        </locale>
+        <locale name="brick.multiLayout.layout.2chamber">
+            <de><![CDATA[2 Kammer]]></de>
+            <en><![CDATA[2 chambers]]></en>
+        </locale>
+        <locale name="brick.multiLayout.layout.4chamber">
+            <de><![CDATA[4 Kammer]]></de>
+            <en><![CDATA[4 chambers]]></en>
+        </locale>
+        <locale name="brick.multiLayout.areas">
+            <de><![CDATA[Bereiche]]></de>
+            <en><![CDATA[Areas]]></en>
+        </locale>
+        <locale name="brick.multiLayout.area.label">
+            <de><![CDATA[Bereich [number]]]></de>
+            <en><![CDATA[Area [number]]]></en>
+        </locale>
+        <locale name="brick.multiLayout.mode">
+            <de><![CDATA[Modus]]></de>
+            <en><![CDATA[Mode]]></en>
+        </locale>
+        <locale name="brick.multiLayout.mode.editor">
+            <de><![CDATA[Editor]]></de>
+            <en><![CDATA[Editor]]></en>
+        </locale>
+        <locale name="brick.multiLayout.mode.brick">
+            <de><![CDATA[Baustein]]></de>
+            <en><![CDATA[Brick]]></en>
+        </locale>
+        <locale name="brick.multiLayout.mode.image">
+            <de><![CDATA[Bild]]></de>
+            <en><![CDATA[Image]]></en>
+        </locale>
+        <locale name="brick.multiLayout.mobileOrder">
+            <de><![CDATA[Mobile-Reihenfolge]]></de>
+            <en><![CDATA[Mobile order]]></en>
+        </locale>
+        <locale name="brick.multiLayout.mobileOrder.info">
+            <de><![CDATA[Mobile-Reihenfolge: [number]]]></de>
+            <en><![CDATA[Mobile order: [number]]]></en>
+        </locale>
+        <locale name="brick.multiLayout.verticalAlign">
+            <de><![CDATA[Vertikale Ausrichtung]]></de>
+            <en><![CDATA[Vertical alignment]]></en>
+        </locale>
+        <locale name="brick.multiLayout.verticalAlign.top">
+            <de><![CDATA[Oben]]></de>
+            <en><![CDATA[Top]]></en>
+        </locale>
+        <locale name="brick.multiLayout.verticalAlign.center">
+            <de><![CDATA[Mittig]]></de>
+            <en><![CDATA[Center]]></en>
+        </locale>
+        <locale name="brick.multiLayout.verticalAlign.bottom">
+            <de><![CDATA[Unten]]></de>
+            <en><![CDATA[Bottom]]></en>
+        </locale>
+        <locale name="brick.multiLayout.editorContent">
+            <de><![CDATA[Inhalt]]></de>
+            <en><![CDATA[Content]]></en>
+        </locale>
+        <locale name="brick.multiLayout.editor.empty">
+            <de><![CDATA[Noch kein Inhalt hinterlegt]]></de>
+            <en><![CDATA[No content yet]]></en>
+        </locale>
+        <locale name="brick.multiLayout.brick.empty">
+            <de><![CDATA[Kein Baustein ausgewählt]]></de>
+            <en><![CDATA[No brick selected]]></en>
+        </locale>
+        <locale name="brick.multiLayout.brick.untitled">
+            <de><![CDATA[Baustein ohne Titel]]></de>
+            <en><![CDATA[Untitled brick]]></en>
+        </locale>
+        <locale name="brick.multiLayout.brick.select">
+            <de><![CDATA[Baustein auswählen]]></de>
+            <en><![CDATA[Select brick]]></en>
+        </locale>
+        <locale name="brick.multiLayout.image.empty">
+            <de><![CDATA[Noch kein Bild ausgewählt]]></de>
+            <en><![CDATA[No image selected]]></en>
+        </locale>
+        <locale name="brick.multiLayout.image.fit">
+            <de><![CDATA[Darstellungsart]]></de>
+            <en><![CDATA[Display mode]]></en>
+        </locale>
+        <locale name="brick.multiLayout.image.fit.auto">
+            <de><![CDATA[Automatisch]]></de>
+            <en><![CDATA[Automatic]]></en>
+        </locale>
+        <locale name="brick.multiLayout.image.fit.cover">
+            <de><![CDATA[Fläche füllen]]></de>
+            <en><![CDATA[Cover area]]></en>
+        </locale>
+        <locale name="brick.multiLayout.image.fit.contain">
+            <de><![CDATA[Komplett anzeigen]]></de>
+            <en><![CDATA[Show complete]]></en>
+        </locale>
+        <locale name="brick.multiLayout.image.section">
+            <de><![CDATA[Bild]]></de>
+            <en><![CDATA[Image]]></en>
+        </locale>
+        <locale name="brick.multiLayout.image.maxWidth">
+            <de><![CDATA[Maximale Breite]]></de>
+            <en><![CDATA[Maximum width]]></en>
+        </locale>
+        <locale name="brick.multiLayout.image.maxWidth.help">
+            <de><![CDATA[z. B. 320px, 50%, 30rem; leer = keine Begrenzung]]></de>
+            <en><![CDATA[e.g. 320px, 50%, 30rem; empty = no limit]]></en>
+        </locale>
+        <locale name="brick.multiLayout.background.section">
+            <de><![CDATA[Hintergrundbild]]></de>
+            <en><![CDATA[Background image]]></en>
+        </locale>
+        <locale name="brick.multiLayout.background.enabled">
+            <de><![CDATA[Hintergrundbild verwenden]]></de>
+            <en><![CDATA[Use background image]]></en>
+        </locale>
+        <locale name="brick.multiLayout.background.image">
+            <de><![CDATA[Hintergrundbild]]></de>
+            <en><![CDATA[Background image]]></en>
+        </locale>
+        <locale name="brick.multiLayout.background.fit">
+            <de><![CDATA[Darstellung]]></de>
+            <en><![CDATA[Display mode]]></en>
+        </locale>
+        <locale name="brick.multiLayout.background.fit.auto">
+            <de><![CDATA[Original]]></de>
+            <en><![CDATA[Original]]></en>
+        </locale>
+        <locale name="brick.multiLayout.background.fit.cover">
+            <de><![CDATA[Fläche füllen]]></de>
+            <en><![CDATA[Cover area]]></en>
+        </locale>
+        <locale name="brick.multiLayout.background.fit.contain">
+            <de><![CDATA[Komplett anzeigen]]></de>
+            <en><![CDATA[Show complete]]></en>
+        </locale>
+        <locale name="brick.multiLayout.background.position">
+            <de><![CDATA[Position]]></de>
+            <en><![CDATA[Position]]></en>
+        </locale>
+        <locale name="brick.multiLayout.background.position.center">
+            <de><![CDATA[Mitte]]></de>
+            <en><![CDATA[Center]]></en>
+        </locale>
+        <locale name="brick.multiLayout.background.position.top">
+            <de><![CDATA[Oben]]></de>
+            <en><![CDATA[Top]]></en>
+        </locale>
+        <locale name="brick.multiLayout.background.position.bottom">
+            <de><![CDATA[Unten]]></de>
+            <en><![CDATA[Bottom]]></en>
+        </locale>
+        <locale name="brick.multiLayout.background.position.left">
+            <de><![CDATA[Links]]></de>
+            <en><![CDATA[Left]]></en>
+        </locale>
+        <locale name="brick.multiLayout.background.position.right">
+            <de><![CDATA[Rechts]]></de>
+            <en><![CDATA[Right]]></en>
+        </locale>
+        <locale name="brick.multiLayout.backgroundColor.section">
+            <de><![CDATA[Hintergrundfarbe / Overlay]]></de>
+            <en><![CDATA[Background color / overlay]]></en>
+        </locale>
+        <locale name="brick.multiLayout.backgroundColor.enabled">
+            <de><![CDATA[Farbfläche verwenden]]></de>
+            <en><![CDATA[Use color layer]]></en>
+        </locale>
+        <locale name="brick.multiLayout.backgroundColor.color">
+            <de><![CDATA[Farbe]]></de>
+            <en><![CDATA[Color]]></en>
+        </locale>
+        <locale name="brick.multiLayout.backgroundColor.opacity">
+            <de><![CDATA[Deckkraft]]></de>
+            <en><![CDATA[Opacity]]></en>
+        </locale>
+        <locale name="brick.multiLayout.backgroundColor.badge">
+            <de><![CDATA[Farbfläche]]></de>
+            <en><![CDATA[Color layer]]></en>
+        </locale>
+        <locale name="brick.multiLayout.quickEdit.title">
+            <de><![CDATA[[mode] schnell bearbeiten]]></de>
+            <en><![CDATA[Quick edit [mode]]]></en>
+        </locale>
+        <locale name="brick.multiLayout.quickEdit.editor">
+            <de><![CDATA[Zum Bearbeiten klicken]]></de>
+            <en><![CDATA[Click to edit]]></en>
+        </locale>
+        <locale name="brick.multiLayout.quickEdit.brick">
+            <de><![CDATA[Zum Auswählen klicken]]></de>
+            <en><![CDATA[Click to select]]></en>
+        </locale>
+        <locale name="brick.multiLayout.quickEdit.image">
+            <de><![CDATA[Zum Bildauswählen klicken]]></de>
+            <en><![CDATA[Click to choose image]]></en>
+        </locale>
+        <locale name="brick.multiLayout.settings.button">
+            <de><![CDATA[Einstellungen]]></de>
+            <en><![CDATA[Settings]]></en>
+        </locale>
+        <locale name="brick.multiLayout.settings.popup.title">
+            <de><![CDATA[Einstellungen für [title]]]></de>
+            <en><![CDATA[Settings for [title]]]></en>
+        </locale>
+        <locale name="brick.multiLayout.remove.button">
+            <de><![CDATA[Entfernen]]></de>
+            <en><![CDATA[Remove]]></en>
+        </locale>
+        <locale name="brick.multiLayout.remove.popup.title">
+            <de><![CDATA[Inhalt von [title] entfernen?]]></de>
+            <en><![CDATA[Remove content from [title]?]]></en>
+        </locale>
+        <locale name="brick.multiLayout.remove.popup.text">
+            <de><![CDATA[Soll der Inhalt vom Typ "[mode]" wirklich entfernt werden?]]></de>
+            <en><![CDATA[Do you really want to remove the content of type "[mode]"?]]></en>
+        </locale>
+        <locale name="brick.multiLayout.remove.popup.information">
+            <de><![CDATA[Der Inhalt dieses Bereichs wird geleert. Einstellungen des Bereichs bleiben erhalten.]]></de>
+            <en><![CDATA[This area content will be cleared. The area settings will remain unchanged.]]></en>
+        </locale>
+        <locale name="brick.multiLayout.settings.description">
+            <de><![CDATA[Bearbeiten Sie jeden Bereich direkt in der Kartenübersicht. Einstellungen und Mobile-Reihenfolge bleiben pro Bereich verfügbar.]]></de>
+            <en><![CDATA[Edit each area directly in the card overview. Settings and mobile order remain available per area.]]></en>
+        </locale>
         <locale name="quiqqer.bricks.textAndImageMultiple.create.isDisabled">
             <de><![CDATA[Einträge deaktivieren]]></de>
             <en><![CDATA[Deactivate entries]]></en>

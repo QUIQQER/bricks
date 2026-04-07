@@ -1889,6 +1889,34 @@
             </settings>
         </brick>
 
+        <brick control="\QUI\Bricks\Controls\MultiLayout">
+            <title>
+                <locale group="quiqqer/bricks" var="brick.multiLayout.title"/>
+            </title>
+            <description>
+                <locale group="quiqqer/bricks" var="brick.multiLayout.description"/>
+            </description>
+
+            <settings>
+                <setting name="layout" type="select">
+                    <locale group="quiqqer/bricks" var="brick.multiLayout.layout"/>
+
+                    <option value="2-chamber" default="1">
+                        <locale group="quiqqer/bricks" var="brick.multiLayout.layout.2chamber"/>
+                    </option>
+                    <option value="4-chamber">
+                        <locale group="quiqqer/bricks" var="brick.multiLayout.layout.4chamber"/>
+                    </option>
+                </setting>
+
+                <setting name="layoutAreas" type="hidden"
+                         data-qui="package/quiqqer/bricks/bin/Controls/MultiLayoutSettings"
+                >
+                    <locale group="quiqqer/bricks" var="brick.multiLayout.areas"/>
+                </setting>
+            </settings>
+        </brick>
+
         <brick control="\QUI\Bricks\Controls\Buttons">
             <title>
                 <locale group="quiqqer/bricks" var="brick.buttons.title"/>
