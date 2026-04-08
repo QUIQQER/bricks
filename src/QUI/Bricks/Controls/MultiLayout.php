@@ -28,6 +28,11 @@ use function trim;
  */
 class MultiLayout extends QUI\Control
 {
+    protected const LAYOUT_TWO = 'grid-2-equal';
+    protected const LAYOUT_FOUR = 'grid-2x2';
+    protected const LEGACY_LAYOUT_TWO = '2-chamber';
+    protected const LEGACY_LAYOUT_FOUR = '4-chamber';
+
     /**
      * @param array<string, mixed> $attributes
      */
@@ -35,7 +40,9 @@ class MultiLayout extends QUI\Control
     {
         $this->setAttributes([
             'class' => 'quiqqer-bricks-controls-multiLayout',
-            'layout' => '2-chamber',
+            'layout' => self::LAYOUT_TWO,
+            'areaBackgroundEnabled' => false,
+            'gridGapEnabled' => true,
             'layoutAreas' => '[]'
         ]);
 
@@ -65,7 +72,9 @@ class MultiLayout extends QUI\Control
             'this' => $this,
             'layout' => $layout,
             'areas' => $areas,
-            'areaCount' => count($areas)
+            'areaCount' => count($areas),
+            'areaBackgroundEnabled' => !empty($this->getAttribute('areaBackgroundEnabled')),
+            'gridGapEnabled' => !empty($this->getAttribute('gridGapEnabled'))
         ]);
 
         return $Engine->fetch(dirname(__FILE__) . '/MultiLayout.html');
@@ -73,11 +82,16 @@ class MultiLayout extends QUI\Control
 
     protected function normalizeLayout(mixed $layout): string
     {
-        if (!is_string($layout) || !in_array($layout, ['2-chamber', '4-chamber'], true)) {
-            return '2-chamber';
+        if (!is_string($layout)) {
+            return self::LAYOUT_TWO;
         }
 
-        return $layout;
+        return match ($layout) {
+            self::LEGACY_LAYOUT_FOUR => self::LAYOUT_FOUR,
+            self::LEGACY_LAYOUT_TWO => self::LAYOUT_TWO,
+            self::LAYOUT_FOUR => self::LAYOUT_FOUR,
+            default => self::LAYOUT_TWO
+        };
     }
 
     /**
@@ -114,6 +128,7 @@ class MultiLayout extends QUI\Control
                 'mode' => isset($area['mode']) && in_array($area['mode'], ['editor', 'brick', 'image'], true)
                     ? $area['mode']
                     : 'editor',
+                'contentPadding' => !isset($area['contentPadding']) || !empty($area['contentPadding']),
                 'content' => isset($area['content']) && is_string($area['content']) ? $area['content'] : '',
                 'brickId' => isset($area['brickId']) ? (int)$area['brickId'] : 0,
                 'brickTitle' => isset($area['brickTitle']) && is_string($area['brickTitle'])
@@ -147,6 +162,9 @@ class MultiLayout extends QUI\Control
                 'backgroundColorOpacity' => isset($area['backgroundColorOpacity']) && is_numeric($area['backgroundColorOpacity'])
                     ? max(0, min(100, (int)$area['backgroundColorOpacity']))
                     : 100,
+                'textColor' => isset($area['textColor']) && is_string($area['textColor'])
+                    ? trim($area['textColor'])
+                    : '',
                 'verticalAlign' => isset($area['verticalAlign']) && in_array($area['verticalAlign'], ['top', 'center', 'bottom'], true)
                     ? $area['verticalAlign']
                     : 'center',
@@ -159,6 +177,7 @@ class MultiLayout extends QUI\Control
             $normalized[] = [
                 'title' => 'Bereich ' . ($index + 1),
                 'mode' => 'editor',
+                'contentPadding' => true,
                 'content' => '',
                 'brickId' => 0,
                 'brickTitle' => '',
@@ -173,6 +192,7 @@ class MultiLayout extends QUI\Control
                 'backgroundColorEnabled' => false,
                 'backgroundColor' => '#000000',
                 'backgroundColorOpacity' => 100,
+                'textColor' => '',
                 'verticalAlign' => 'center',
                 'mobileOrder' => $index + 1
             ];
@@ -183,7 +203,7 @@ class MultiLayout extends QUI\Control
 
     protected function getAreaCountByLayout(string $layout): int
     {
-        return $layout === '4-chamber' ? 4 : 2;
+        return $layout === self::LAYOUT_FOUR ? 4 : 2;
     }
 
     /**
@@ -233,6 +253,11 @@ class MultiLayout extends QUI\Control
                 . $this->escapeStyleValue((string)$area['backgroundColor']);
             $style[] = '--quiqqer-bricks-multiLayout-background-color-opacity: '
                 . ((int)$area['backgroundColorOpacity'] / 100);
+        }
+
+        if (!empty($area['textColor'])) {
+            $style[] = '--quiqqer-bricks-multiLayout-text-color: '
+                . $this->escapeStyleValue((string)$area['textColor']);
         }
 
         return implode('; ', $style);

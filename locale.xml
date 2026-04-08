@@ -2728,6 +2728,14 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
             <de><![CDATA[Bereiche]]></de>
             <en><![CDATA[Areas]]></en>
         </locale>
+        <locale name="brick.multiLayout.areaBackgroundEnabled">
+            <de><![CDATA[Hintergrundfarbe für Bereiche verwenden]]></de>
+            <en><![CDATA[Use background color for areas]]></en>
+        </locale>
+        <locale name="brick.multiLayout.gridGapEnabled">
+            <de><![CDATA[Abstand zwischen Bereichen]]></de>
+            <en><![CDATA[Spacing between areas]]></en>
+        </locale>
         <locale name="brick.multiLayout.area.label">
             <de><![CDATA[Bereich [number]]]></de>
             <en><![CDATA[Area [number]]]></en>
@@ -2877,12 +2885,16 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
             <en><![CDATA[Right]]></en>
         </locale>
         <locale name="brick.multiLayout.backgroundColor.section">
-            <de><![CDATA[Hintergrundfarbe / Overlay]]></de>
-            <en><![CDATA[Background color / overlay]]></en>
+            <de><![CDATA[Hintergrundfarbe (Overlay)]]></de>
+            <en><![CDATA[Background color (overlay)]]></en>
         </locale>
         <locale name="brick.multiLayout.backgroundColor.enabled">
-            <de><![CDATA[Farbfläche verwenden]]></de>
-            <en><![CDATA[Use color layer]]></en>
+            <de><![CDATA[Overlay verwenden]]></de>
+            <en><![CDATA[Use overlay]]></en>
+        </locale>
+        <locale name="brick.multiLayout.backgroundColor.description">
+            <de><![CDATA[Definiert die Hintergrundfarbe über dem Hintergrundbild für diesen Bereich.]]></de>
+            <en><![CDATA[Defines the background color above the background image for this area.]]></en>
         </locale>
         <locale name="brick.multiLayout.backgroundColor.color">
             <de><![CDATA[Farbe]]></de>
@@ -2891,6 +2903,22 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
         <locale name="brick.multiLayout.backgroundColor.opacity">
             <de><![CDATA[Deckkraft]]></de>
             <en><![CDATA[Opacity]]></en>
+        </locale>
+        <locale name="brick.multiLayout.textColor.section">
+            <de><![CDATA[Textfarbe]]></de>
+            <en><![CDATA[Text color]]></en>
+        </locale>
+        <locale name="brick.multiLayout.textColor.enabled">
+            <de><![CDATA[Textfarbe verwenden]]></de>
+            <en><![CDATA[Use text color]]></en>
+        </locale>
+        <locale name="brick.multiLayout.textColor">
+            <de><![CDATA[Textfarbe]]></de>
+            <en><![CDATA[Text color]]></en>
+        </locale>
+        <locale name="brick.multiLayout.contentPadding">
+            <de><![CDATA[Standard-Innenabstand verwenden]]></de>
+            <en><![CDATA[Use default inner spacing]]></en>
         </locale>
         <locale name="brick.multiLayout.backgroundColor.badge">
             <de><![CDATA[Farbfläche]]></de>

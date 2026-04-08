@@ -12,8 +12,8 @@
     gap: 1rem;
 }
 
-.quiqqer-bricks-multiLayout-settings-container[data-layout="2-chamber"],
-.quiqqer-bricks-multiLayout-settings-container[data-layout="4-chamber"] {
+.quiqqer-bricks-multiLayout-settings-container[data-layout="grid-2-equal"],
+.quiqqer-bricks-multiLayout-settings-container[data-layout="grid-2x2"] {
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
@@ -65,16 +65,6 @@
     padding: 0.35rem 0.65rem;
 }
 
-.quiqqer-bricks-multiLayout-settings-cardBadge {
-    background: #111827;
-    border-radius: 999px;
-    color: #ffffff;
-    flex-shrink: 0;
-    font-size: 0.75rem;
-    font-weight: 700;
-    padding: 0.3rem 0.6rem;
-}
-
 .quiqqer-bricks-multiLayout-settings-preview {
     align-items: stretch;
     background: #f8fafc;
@@ -88,6 +78,7 @@
     min-height: 220px;
     overflow: hidden;
     padding: 1rem;
+    padding-bottom: 3.5rem;
     position: relative;
     text-align: left;
     transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
@@ -107,7 +98,7 @@
 }
 
 .quiqqer-bricks-multiLayout-settings-previewHtml {
-    color: #334155;
+    color: inherit;
     flex: 1;
     font-size: 0.98rem;
     line-height: 1.6;
@@ -159,7 +150,7 @@
 .quiqqer-bricks-multiLayout-settings-previewPlaceholder,
 .quiqqer-bricks-multiLayout-settings-previewBrick {
     align-items: center;
-    color: #52606d;
+    color: inherit;
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -168,29 +159,44 @@
     text-align: center;
 }
 
+.quiqqer-bricks-multiLayout-settings-previewBrickCard {
+    background: rgba(15, 23, 42, 0.54);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 0.9rem;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.16);
+    color: #ffffff;
+    max-width: min(100%, 18rem);
+    padding: 1rem 1.25rem;
+    width: 100%;
+}
+
 .quiqqer-bricks-multiLayout-settings-previewIcon,
 .quiqqer-bricks-multiLayout-settings-previewPlaceholderIcon {
-    color: #7b8794;
+    color: inherit;
     font-size: 2.2rem;
+    opacity: 0.82;
 }
 
 .quiqqer-bricks-multiLayout-settings-previewPlaceholderText {
-    color: #7b8794;
+    color: inherit;
     font-size: 0.92rem;
     line-height: 1.45;
+    opacity: 0.82;
 }
 
 .quiqqer-bricks-multiLayout-settings-previewBrickTitle {
-    color: #243b53;
+    color: inherit;
     font-size: 1.05rem;
     font-weight: 600;
     line-height: 1.4;
 }
 
 .quiqqer-bricks-multiLayout-settings-previewBrickType {
-    color: #6b7280;
+    color: inherit;
     font-size: 0.88rem;
+    font-weight: 600;
     line-height: 1.4;
+    opacity: 0.9;
 }
 
 .quiqqer-bricks-multiLayout-settings-previewImageWrap {
@@ -227,29 +233,49 @@
     width: auto;
 }
 
-.quiqqer-bricks-multiLayout-settings-previewHint {
-    color: #52606d;
-    font-size: 0.82rem;
-    font-weight: 600;
-    margin-top: 0.85rem;
-}
-
-.quiqqer-bricks-multiLayout-settings-cardFooter {
-    align-items: center;
+.quiqqer-bricks-multiLayout-settings-previewMeta {
+    align-items: baseline;
+    background-image: linear-gradient(to bottom, transparent, #000000aa 100%);
+    bottom: 0;
+    color: #ffffff;
     display: flex;
     gap: 0.75rem;
     justify-content: space-between;
+    left: 0;
+    padding: 20px 10px 10px;
+    position: absolute;
+    right: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+.quiqqer-bricks-multiLayout-settings-previewHint {
+    color: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    opacity: 0.82;
+}
+
+.quiqqer-bricks-multiLayout-settings-cardFooter {
+    align-items: flex-start;
+    display: flex;
+    width: 100%;
 }
 
 .quiqqer-bricks-multiLayout-settings-cardInfo {
-    color: #7b8794;
+    color: inherit;
     font-size: 0.83rem;
     line-height: 1.45;
+    margin-left: auto;
+    text-align: right;
 }
 
 .quiqqer-bricks-multiLayout-settings-cardActions {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .quiqqer-bricks-multiLayout-settings-cardAction {
@@ -392,14 +418,25 @@
 }
 
 @media (max-width: 767px) {
-    .quiqqer-bricks-multiLayout-settings-container[data-layout="2-chamber"],
-    .quiqqer-bricks-multiLayout-settings-container[data-layout="4-chamber"] {
+    .quiqqer-bricks-multiLayout-settings-container[data-layout="grid-2-equal"],
+    .quiqqer-bricks-multiLayout-settings-container[data-layout="grid-2x2"] {
         grid-template-columns: 1fr;
     }
 
     .quiqqer-bricks-multiLayout-settings-cardFooter {
         align-items: flex-start;
         flex-direction: column;
+    }
+
+    .quiqqer-bricks-multiLayout-settings-previewMeta {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.2rem;
+    }
+
+    .quiqqer-bricks-multiLayout-settings-cardInfo {
+        margin-left: 0;
+        text-align: left;
     }
 
     .quiqqer-bricks-multiLayout-settings-cardActions {

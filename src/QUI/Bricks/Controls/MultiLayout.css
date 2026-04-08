@@ -8,19 +8,32 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.quiqqer-bricks-controls-multiLayout-grid--noGap {
+    gap: 0;
+}
+
 .quiqqer-bricks-controls-multiLayout-area {
     --quiqqer-bricks-multiLayout-bg-image: none;
     --quiqqer-bricks-multiLayout-bg-size: cover;
     --quiqqer-bricks-multiLayout-bg-position: center center;
     --quiqqer-bricks-multiLayout-background-color: #000000;
     --quiqqer-bricks-multiLayout-background-color-opacity: 0;
+    --quiqqer-bricks-multiLayout-text-color: inherit;
     align-items: stretch;
-    background: #f6f7f9;
-    border-radius: 1rem;
+    background: transparent;
     display: flex;
     min-height: 280px;
     overflow: hidden;
     position: relative;
+    min-width: 0;
+}
+
+.quiqqer-bricks-controls-multiLayout-grid:not(.quiqqer-bricks-controls-multiLayout-grid--noGap) .quiqqer-bricks-controls-multiLayout-area {
+    border-radius: var(--qui-radius-card);
+}
+
+.quiqqer-bricks-controls-multiLayout-area.is-surface-subtle-enabled {
+    background: var(--qui-colors-surface-subtle);
 }
 
 .quiqqer-bricks-controls-multiLayout-area::before,
@@ -53,6 +66,7 @@
 }
 
 .quiqqer-bricks-controls-multiLayout-areaContent {
+    color: var(--quiqqer-bricks-multiLayout-text-color);
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -61,6 +75,10 @@
     position: relative;
     width: 100%;
     z-index: 1;
+}
+
+.quiqqer-bricks-controls-multiLayout-areaContent--noPadding {
+    padding: 0;
 }
 
 .quiqqer-bricks-controls-multiLayout-area--align-top .quiqqer-bricks-controls-multiLayout-areaContent {

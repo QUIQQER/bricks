@@ -1,4 +1,4 @@
-define('package/quiqqer/bricks/bin/Controls/MultiLayoutSettings', [
+define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
 
     'qui/QUI',
     'qui/controls/Control',
@@ -8,7 +8,7 @@ define('package/quiqqer/bricks/bin/Controls/MultiLayoutSettings', [
     'Projects',
     'package/quiqqer/bricks/bin/Controls/backend/BrickSelectWindow',
 
-    'css!package/quiqqer/bricks/bin/Controls/MultiLayoutSettings.css'
+    'css!package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings.css'
 
 ], function (QUI, QUIControl, QUIColorPicker, QUIConfirm, QUILocale, Projects, BrickSelectWindow) {
     "use strict";
@@ -17,8 +17,10 @@ define('package/quiqqer/bricks/bin/Controls/MultiLayoutSettings', [
     const MODE_EDITOR = 'editor';
     const MODE_BRICK = 'brick';
     const MODE_IMAGE = 'image';
-    const LAYOUT_TWO = '2-chamber';
-    const LAYOUT_FOUR = '4-chamber';
+    const LAYOUT_TWO = 'grid-2-equal';
+    const LAYOUT_FOUR = 'grid-2x2';
+    const LEGACY_LAYOUT_TWO = '2-chamber';
+    const LEGACY_LAYOUT_FOUR = '4-chamber';
     const IMAGE_FIT_AUTO = 'auto';
     const IMAGE_FIT_COVER = 'cover';
     const IMAGE_FIT_CONTAIN = 'contain';
@@ -97,6 +99,7 @@ define('package/quiqqer/bricks/bin/Controls/MultiLayoutSettings', [
             }
 
             this.$LayoutInput = document.id(Form.elements.layout);
+            this.$LayoutInput.value = this.$normalizeLayoutValue(this.$LayoutInput.value);
             this.$LayoutInput.removeEvent('change', this.$onLayoutChange);
             this.$LayoutInput.addEvent('change', this.$onLayoutChange);
         },
@@ -111,9 +114,21 @@ define('package/quiqqer/bricks/bin/Controls/MultiLayoutSettings', [
                 return LAYOUT_TWO;
             }
 
-            const value = this.$LayoutInput.value;
+            const value = this.$normalizeLayoutValue(this.$LayoutInput.value);
 
             return value === LAYOUT_FOUR ? LAYOUT_FOUR : LAYOUT_TWO;
+        },
+
+        $normalizeLayoutValue: function (layout) {
+            if (layout === LEGACY_LAYOUT_FOUR) {
+                return LAYOUT_FOUR;
+            }
+
+            if (layout === LEGACY_LAYOUT_TWO) {
+                return LAYOUT_TWO;
+            }
+
+            return layout === LAYOUT_FOUR ? LAYOUT_FOUR : LAYOUT_TWO;
         },
 
         $getAreaCount: function () {
@@ -200,6 +215,7 @@ define('package/quiqqer/bricks/bin/Controls/MultiLayoutSettings', [
                     number: index + 1
                 }),
                 mode: mode,
+                contentPadding: area.contentPadding !== false,
                 content: area.content || '',
                 brickId: area.brickId ? parseInt(area.brickId, 10) || 0 : 0,
                 brickTitle: area.brickTitle || '',
@@ -214,6 +230,7 @@ define('package/quiqqer/bricks/bin/Controls/MultiLayoutSettings', [
                 backgroundColorEnabled: !!area.backgroundColorEnabled,
                 backgroundColor: area.backgroundColor || '#000000',
                 backgroundColorOpacity: backgroundColorOpacity,
+                textColor: area.textColor ? area.textColor.toString().trim() : '',
                 verticalAlign: verticalAlign,
                 mobileOrder: mobileOrder
             };
@@ -267,13 +284,6 @@ define('package/quiqqer/bricks/bin/Controls/MultiLayoutSettings', [
                 text: this.$getModeLabel(area.mode)
             }).inject(Header);
 
-            if (area.backgroundColorEnabled) {
-                new Element('span', {
-                    'class': 'quiqqer-bricks-multiLayout-settings-cardBadge',
-                    text: QUILocale.get(lg, 'brick.multiLayout.backgroundColor.badge')
-                }).inject(Header);
-            }
-
             const Preview = new Element('button', {
                 type: 'button',
                 'class': 'quiqqer-bricks-multiLayout-settings-preview',
@@ -287,13 +297,6 @@ define('package/quiqqer/bricks/bin/Controls/MultiLayoutSettings', [
             const Footer = new Element('div', {
                 'class': 'quiqqer-bricks-multiLayout-settings-cardFooter'
             }).inject(Card);
-
-            new Element('div', {
-                'class': 'quiqqer-bricks-multiLayout-settings-cardInfo',
-                text: QUILocale.get(lg, 'brick.multiLayout.mobileOrder.info', {
-                    number: area.mobileOrder
-                })
-            }).inject(Footer);
 
             const Actions = new Element('div', {
                 'class': 'quiqqer-bricks-multiLayout-settings-cardActions'
@@ -332,6 +335,7 @@ define('package/quiqqer/bricks/bin/Controls/MultiLayoutSettings', [
             Preview.set('title', QUILocale.get(lg, 'brick.multiLayout.quickEdit.title', {
                 mode: this.$getModeLabel(area.mode)
             }));
+            this.$applyPreviewStyles(Preview, area);
 
             switch (area.mode) {
                 case MODE_BRICK:
@@ -347,10 +351,104 @@ define('package/quiqqer/bricks/bin/Controls/MultiLayoutSettings', [
                     this.$fillEditorPreview(Preview, area);
             }
 
+            const PreviewMeta = new Element('div', {
+                'class': 'quiqqer-bricks-multiLayout-settings-previewMeta'
+            }).inject(Preview);
+
             new Element('div', {
                 'class': 'quiqqer-bricks-multiLayout-settings-previewHint',
                 text: this.$getQuickEditLabel(area.mode)
-            }).inject(Preview);
+            }).inject(PreviewMeta);
+
+            new Element('div', {
+                'class': 'quiqqer-bricks-multiLayout-settings-cardInfo',
+                text: QUILocale.get(lg, 'brick.multiLayout.mobileOrder.info', {
+                    number: area.mobileOrder
+                })
+            }).inject(PreviewMeta);
+        },
+
+        $applyPreviewStyles: function (Preview, area) {
+            const backgroundImage = area.backgroundEnabled && area.backgroundImage
+                ? 'url("' + area.backgroundImage.replace(/"/g, '\\"') + '")'
+                : '';
+            const backgroundOverlay = this.$getPreviewBackgroundOverlay(area);
+            const styles = {
+                backgroundColor: '',
+                backgroundImage: '',
+                backgroundPosition: '',
+                backgroundRepeat: '',
+                backgroundSize: '',
+                color: area.textColor || ''
+            };
+
+            if (backgroundImage) {
+                styles.backgroundImage = backgroundOverlay
+                    ? backgroundOverlay + ', ' + backgroundImage
+                    : backgroundImage;
+                styles.backgroundPosition = area.backgroundImagePosition || BACKGROUND_POSITION_CENTER;
+                styles.backgroundRepeat = 'no-repeat';
+                styles.backgroundSize = area.backgroundImageFit || IMAGE_FIT_COVER;
+            }
+
+            if (area.backgroundColorEnabled && area.backgroundColor && !backgroundImage) {
+                styles.backgroundColor = this.$getPreviewBackgroundColor(area);
+            }
+
+            Preview.setStyles(styles);
+        },
+
+        $getPreviewBackgroundOverlay: function (area) {
+            const color = this.$getPreviewBackgroundColor(area);
+
+            if (!color) {
+                return '';
+            }
+
+            return 'linear-gradient(' + color + ', ' + color + ')';
+        },
+
+        $getPreviewBackgroundColor: function (area) {
+            const color = area.backgroundColor || '';
+
+            if (!color) {
+                return '';
+            }
+
+            if (!area.backgroundColorEnabled) {
+                return '';
+            }
+
+            const opacity = Math.max(0, Math.min(100, parseInt(area.backgroundColorOpacity, 10) || 0));
+
+            if (opacity >= 100) {
+                return color;
+            }
+
+            const rgba = this.$hexToRgba(color, opacity / 100);
+
+            return rgba || color;
+        },
+
+        $hexToRgba: function (color, alpha) {
+            const match = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(color || '');
+
+            if (!match) {
+                return null;
+            }
+
+            let hex = match[1];
+
+            if (hex.length === 3) {
+                hex = hex.split('').map(function (part) {
+                    return part + part;
+                }).join('');
+            }
+
+            return 'rgba(' + parseInt(hex.slice(0, 2), 16) + ', '
+                + parseInt(hex.slice(2, 4), 16) + ', '
+                + parseInt(hex.slice(4, 6), 16) + ', '
+                + alpha + ')';
         },
 
         $fillEditorPreview: function (Preview, area) {
@@ -383,20 +481,24 @@ define('package/quiqqer/bricks/bin/Controls/MultiLayoutSettings', [
                 'class': 'quiqqer-bricks-multiLayout-settings-previewBrick'
             }).inject(Preview);
 
+            const Content = new Element('div', {
+                'class': 'quiqqer-bricks-multiLayout-settings-previewBrickCard'
+            }).inject(Wrap);
+
             new Element('span', {
                 'class': 'fa fa-cubes quiqqer-bricks-multiLayout-settings-previewIcon'
-            }).inject(Wrap);
+            }).inject(Content);
 
             new Element('div', {
                 'class': 'quiqqer-bricks-multiLayout-settings-previewBrickTitle',
                 text: area.brickTitle || QUILocale.get(lg, 'brick.multiLayout.brick.untitled')
-            }).inject(Wrap);
+            }).inject(Content);
 
             if (area.brickType) {
                 new Element('div', {
                     'class': 'quiqqer-bricks-multiLayout-settings-previewBrickType',
                     text: area.brickType
-                }).inject(Wrap);
+                }).inject(Content);
             }
         },
 
@@ -603,6 +705,13 @@ define('package/quiqqer/bricks/bin/Controls/MultiLayoutSettings', [
                             area.mode
                         );
 
+                        this.$createPopupCheckboxField(
+                            Form,
+                            QUILocale.get(lg, 'brick.multiLayout.contentPadding'),
+                            area.contentPadding,
+                            'contentPadding'
+                        );
+
                         const OrderField = this.$createPopupInputField(Form, {
                             label: QUILocale.get(lg, 'brick.multiLayout.mobileOrder'),
                             type: 'number',
@@ -719,6 +828,11 @@ define('package/quiqqer/bricks/bin/Controls/MultiLayoutSettings', [
                             'backgroundColorEnabled'
                         );
 
+                        new Element('div', {
+                            'class': 'quiqqer-bricks-multiLayout-settings-popupHint',
+                            text: QUILocale.get(lg, 'brick.multiLayout.backgroundColor.description')
+                        }).inject(OverlaySettings);
+
                         const OverlayOptions = new Element('div', {
                             'class': 'quiqqer-bricks-multiLayout-settings-popupSectionBody'
                         }).inject(OverlaySettings);
@@ -736,6 +850,28 @@ define('package/quiqqer/bricks/bin/Controls/MultiLayoutSettings', [
                             min: 0,
                             max: 100,
                             step: 1
+                        });
+
+                        const TextColorSettings = this.$createPopupSection(
+                            Form,
+                            QUILocale.get(lg, 'brick.multiLayout.textColor.section')
+                        );
+
+                        const TextColorEnabledField = this.$createPopupCheckboxField(
+                            TextColorSettings,
+                            QUILocale.get(lg, 'brick.multiLayout.textColor.enabled'),
+                            !!area.textColor,
+                            'textColorEnabled'
+                        );
+
+                        const TextColorOptions = new Element('div', {
+                            'class': 'quiqqer-bricks-multiLayout-settings-popupSectionBody'
+                        }).inject(TextColorSettings);
+
+                        this.$createPopupColorField(TextColorOptions, {
+                            label: QUILocale.get(lg, 'brick.multiLayout.backgroundColor.color'),
+                            value: area.textColor,
+                            name: 'textColor'
                         });
 
                         const ImageSettings = this.$createPopupSection(
@@ -798,12 +934,21 @@ define('package/quiqqer/bricks/bin/Controls/MultiLayoutSettings', [
                             );
                         };
 
+                        const toggleTextColorSettings = function () {
+                            TextColorOptions.setStyle(
+                                'display',
+                                TextColorEnabledField.checked ? '' : 'none'
+                            );
+                        };
+
                         ModeField.addEvent('change', toggleImageSettings);
                         BackgroundEnabledField.addEvent('change', toggleBackgroundSettings);
                         BackgroundColorEnabledField.addEvent('change', toggleOverlaySettings);
+                        TextColorEnabledField.addEvent('change', toggleTextColorSettings);
                         toggleImageSettings();
                         toggleBackgroundSettings();
                         toggleOverlaySettings();
+                        toggleTextColorSettings();
 
                         QUI.parse(Content).then(function () {
                             this.$applyProjectToControls(Content);
@@ -814,6 +959,7 @@ define('package/quiqqer/bricks/bin/Controls/MultiLayoutSettings', [
                         const Content = Win.getContent();
                         const area = this.$getAreaData(index);
                         const modeField = Content.getElement('select[data-name="mode"]');
+                        const contentPaddingField = Content.getElement('input[data-name="contentPadding"]');
                         const orderField = Content.getElement('input[data-name="mobileOrder"]');
                         const verticalAlignField = Content.getElement('select[data-name="verticalAlign"]');
                         const imageFitField = Content.getElement('select[data-name="imageFit"]');
@@ -825,12 +971,15 @@ define('package/quiqqer/bricks/bin/Controls/MultiLayoutSettings', [
                         const backgroundColorEnabledField = Content.getElement('input[data-name="backgroundColorEnabled"]');
                         const backgroundColorField = Content.getElement('input[data-name="backgroundColor"]');
                         const backgroundColorOpacityField = Content.getElement('input[data-name="backgroundColorOpacity"]');
+                        const textColorEnabledField = Content.getElement('input[data-name="textColorEnabled"]');
+                        const textColorField = Content.getElement('input[data-name="textColor"]');
                         const mobileOrder = parseInt(orderField.value, 10);
                         const backgroundColorOpacity = backgroundColorOpacityField
                             ? parseInt(backgroundColorOpacityField.value, 10)
                             : 100;
 
                         area.mode = modeField ? modeField.value : MODE_EDITOR;
+                        area.contentPadding = !!(contentPaddingField && contentPaddingField.checked);
                         area.mobileOrder = isNaN(mobileOrder) || mobileOrder < 1 ? 1 : mobileOrder;
                         area.verticalAlign = verticalAlignField ? verticalAlignField.value : VERTICAL_ALIGN_CENTER;
                         area.imageFit = imageFitField ? imageFitField.value : IMAGE_FIT_AUTO;
@@ -846,6 +995,9 @@ define('package/quiqqer/bricks/bin/Controls/MultiLayoutSettings', [
                         area.backgroundColorOpacity = isNaN(backgroundColorOpacity)
                             ? 100
                             : Math.max(0, Math.min(100, backgroundColorOpacity));
+                        area.textColor = textColorEnabledField && textColorEnabledField.checked && textColorField
+                            ? textColorField.value.trim()
+                            : '';
 
                         this.$render();
                         this.$update();
