@@ -1,0 +1,406 @@
+.quiqqer-bricks-blockSlot-card {
+    background: linear-gradient(180deg, #ffffff 0%, #fbfcfd 100%);
+    border: 1px solid #d9dfe7;
+    border-radius: 1rem;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    min-width: 0;
+    padding: 1rem;
+}
+
+.quiqqer-bricks-blockSlot-cardHeader {
+    align-items: center;
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.quiqqer-bricks-blockSlot-cardTitle {
+    color: #1f2933;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.35;
+    min-width: 0;
+}
+
+.quiqqer-bricks-blockSlot-cardMode {
+    background: #eef4ff;
+    border-radius: 999px;
+    color: #32557a;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-left: auto;
+    padding: 0.35rem 0.65rem;
+}
+
+.quiqqer-bricks-blockSlot-preview {
+    align-items: stretch;
+    background: #f8fafc;
+    border: 1px solid #d9dfe7;
+    border-radius: 0.9rem;
+    color: inherit;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 220px;
+    overflow: hidden;
+    padding: 1rem;
+    padding-bottom: 3.5rem;
+    position: relative;
+    text-align: left;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+    width: 100%;
+}
+
+.quiqqer-bricks-blockSlot-preview:hover,
+.quiqqer-bricks-blockSlot-preview:focus {
+    border-color: #8eb3d8;
+    box-shadow: 0 0 0 4px rgba(43, 108, 176, 0.12);
+    outline: none;
+    transform: translateY(-1px);
+}
+
+.quiqqer-bricks-blockSlot-preview[data-mode="image"] {
+    background: linear-gradient(180deg, #f9fafb 0%, #f3f6f9 100%);
+}
+
+.quiqqer-bricks-blockSlot-previewHtml {
+    color: inherit;
+    flex: 1;
+    font-size: 0.98rem;
+    line-height: 1.6;
+    overflow: hidden;
+    pointer-events: none;
+    position: relative;
+}
+
+.quiqqer-bricks-blockSlot-previewHtml > *:first-child {
+    margin-top: 0;
+}
+
+.quiqqer-bricks-blockSlot-previewHtml > *:last-child {
+    margin-bottom: 0;
+}
+
+.quiqqer-bricks-blockSlot-previewHtml h1,
+.quiqqer-bricks-blockSlot-previewHtml h2,
+.quiqqer-bricks-blockSlot-previewHtml h3,
+.quiqqer-bricks-blockSlot-previewHtml h4,
+.quiqqer-bricks-blockSlot-previewHtml h5,
+.quiqqer-bricks-blockSlot-previewHtml h6,
+.quiqqer-bricks-blockSlot-previewHtml p,
+.quiqqer-bricks-blockSlot-previewHtml ul,
+.quiqqer-bricks-blockSlot-previewHtml ol,
+.quiqqer-bricks-blockSlot-previewHtml blockquote {
+    margin-bottom: 0.75rem;
+    margin-top: 0;
+    max-width: 100%;
+}
+
+.quiqqer-bricks-blockSlot-previewHtml img {
+    height: auto;
+    max-width: 100%;
+}
+
+.quiqqer-bricks-blockSlot-previewHtml iframe,
+.quiqqer-bricks-blockSlot-previewHtml video,
+.quiqqer-bricks-blockSlot-previewHtml audio,
+.quiqqer-bricks-blockSlot-previewHtml script,
+.quiqqer-bricks-blockSlot-previewHtml style {
+    display: none !important;
+}
+
+.quiqqer-bricks-blockSlot-previewHtml table {
+    max-width: 100%;
+}
+
+.quiqqer-bricks-blockSlot-previewPlaceholder,
+.quiqqer-bricks-blockSlot-previewBrick {
+    align-items: center;
+    color: inherit;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.45rem;
+    justify-content: center;
+    text-align: center;
+}
+
+.quiqqer-bricks-blockSlot-previewBrickCard {
+    background: rgba(15, 23, 42, 0.54);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 0.9rem;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.16);
+    color: #ffffff;
+    max-width: min(100%, 18rem);
+    padding: 1rem 1.25rem;
+    width: 100%;
+}
+
+.quiqqer-bricks-blockSlot-previewIcon,
+.quiqqer-bricks-blockSlot-previewPlaceholderIcon {
+    color: inherit;
+    font-size: 2.2rem;
+    opacity: 0.82;
+}
+
+.quiqqer-bricks-blockSlot-previewPlaceholderText {
+    color: inherit;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    opacity: 0.82;
+}
+
+.quiqqer-bricks-blockSlot-previewBrickTitle {
+    color: inherit;
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.quiqqer-bricks-blockSlot-previewBrickType {
+    color: inherit;
+    font-size: 0.88rem;
+    font-weight: 600;
+    line-height: 1.4;
+    opacity: 0.9;
+}
+
+.quiqqer-bricks-blockSlot-previewImageWrap {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    margin: 0 auto;
+    max-width: 100%;
+    overflow: hidden;
+    width: 100%;
+}
+
+.quiqqer-bricks-blockSlot-previewImage {
+    border-radius: 0.7rem;
+    display: block;
+    height: 100%;
+    max-height: 170px;
+    max-width: 100%;
+    width: 100%;
+}
+
+.quiqqer-bricks-blockSlot-previewImage--cover {
+    object-fit: cover;
+}
+
+.quiqqer-bricks-blockSlot-previewImage--contain {
+    object-fit: contain;
+}
+
+.quiqqer-bricks-blockSlot-previewImage--auto {
+    height: auto;
+    object-fit: scale-down;
+    width: auto;
+}
+
+.quiqqer-bricks-blockSlot-previewMeta {
+    align-items: baseline;
+    background-image: linear-gradient(to bottom, transparent, #000000aa 100%);
+    bottom: 0;
+    color: #ffffff;
+    display: flex;
+    gap: 0.75rem;
+    justify-content: space-between;
+    left: 0;
+    padding: 20px 10px 10px;
+    position: absolute;
+    right: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+.quiqqer-bricks-blockSlot-previewHint {
+    color: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    opacity: 0.82;
+}
+
+.quiqqer-bricks-blockSlot-cardFooter {
+    align-items: flex-start;
+    display: flex;
+    width: 100%;
+}
+
+.quiqqer-bricks-blockSlot-cardInfo {
+    color: inherit;
+    font-size: 0.83rem;
+    line-height: 1.45;
+    margin-left: auto;
+    text-align: right;
+}
+
+.quiqqer-bricks-blockSlot-cardActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.quiqqer-bricks-blockSlot-cardAction {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    border-radius: 0.55rem;
+    color: #52606d;
+    cursor: pointer;
+    display: inline-flex;
+    font-size: 0.85rem;
+    font-weight: 600;
+    gap: 0.45rem;
+    padding: 0.45rem 0.55rem;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.quiqqer-bricks-blockSlot-cardAction:hover,
+.quiqqer-bricks-blockSlot-cardAction:focus {
+    background: rgba(50, 85, 122, 0.08);
+    color: #274968;
+    outline: none;
+}
+
+.quiqqer-bricks-blockSlot-cardAction--danger:hover,
+.quiqqer-bricks-blockSlot-cardAction--danger:focus {
+    background: rgba(201, 58, 73, 0.08);
+    color: #a61b2d;
+}
+
+.quiqqer-bricks-blockSlot-popup {
+    padding: 0.25rem;
+}
+
+.quiqqer-bricks-blockSlot-popupForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.quiqqer-bricks-blockSlot-popupField {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.quiqqer-bricks-blockSlot-popupFieldHeader {
+    align-items: center;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: space-between;
+}
+
+.quiqqer-bricks-blockSlot-popupLabel {
+    color: #253443;
+    font-size: 0.92rem;
+    font-weight: 600;
+}
+
+.quiqqer-bricks-blockSlot-popupRangeValue {
+    color: #52606d;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.quiqqer-bricks-blockSlot-popupField .qui-controls-colorpicker {
+    align-items: stretch;
+    display: flex;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.quiqqer-bricks-blockSlot-popupField .qui-controls-colorpicker-colorContainer {
+    border-radius: 0.5rem;
+    min-width: 2.5rem;
+    overflow: hidden;
+}
+
+.quiqqer-bricks-blockSlot-popupSelect,
+.quiqqer-bricks-blockSlot-popupInput {
+    border-radius: 0.5rem;
+    min-height: 2.5rem;
+    width: 100%;
+}
+
+.quiqqer-bricks-blockSlot-popupImageOptions {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+}
+
+.quiqqer-bricks-blockSlot-popupSection {
+    background: #f8fafc;
+    border: 1px solid #d9dfe7;
+    border-radius: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.85rem 0.95rem;
+}
+
+.quiqqer-bricks-blockSlot-popupSectionTitle {
+    color: #1f2933;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.quiqqer-bricks-blockSlot-popupSectionBody {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.quiqqer-bricks-blockSlot-popupCheckbox {
+    align-items: center;
+    color: #334e68;
+    display: inline-flex;
+    gap: 0.55rem;
+    line-height: 1.45;
+}
+
+.quiqqer-bricks-blockSlot-popupCheckbox input {
+    margin: 0;
+}
+
+.quiqqer-bricks-blockSlot-popupInput[type="range"] {
+    min-height: auto;
+    padding: 0;
+}
+
+.quiqqer-bricks-blockSlot-popupHint {
+    color: #52606d;
+    font-size: 0.82rem;
+    line-height: 1.45;
+}
+
+@media (max-width: 767px) {
+    .quiqqer-bricks-blockSlot-cardFooter {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .quiqqer-bricks-blockSlot-previewMeta {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.35rem;
+    }
+
+    .quiqqer-bricks-blockSlot-cardInfo {
+        margin-left: 0;
+        text-align: left;
+    }
+
+    .quiqqer-bricks-blockSlot-cardActions {
+        justify-content: flex-start;
+    }
+}

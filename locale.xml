@@ -2736,6 +2736,214 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
             <de><![CDATA[Abstand zwischen Bereichen]]></de>
             <en><![CDATA[Spacing between areas]]></en>
         </locale>
+        <locale name="blockSlot.mode">
+            <de><![CDATA[Modus]]></de>
+            <en><![CDATA[Mode]]></en>
+        </locale>
+        <locale name="blockSlot.mode.editor">
+            <de><![CDATA[Editor]]></de>
+            <en><![CDATA[Editor]]></en>
+        </locale>
+        <locale name="blockSlot.mode.brick">
+            <de><![CDATA[Baustein]]></de>
+            <en><![CDATA[Brick]]></en>
+        </locale>
+        <locale name="blockSlot.mode.image">
+            <de><![CDATA[Bild]]></de>
+            <en><![CDATA[Image]]></en>
+        </locale>
+        <locale name="blockSlot.mobileOrder">
+            <de><![CDATA[Mobile-Reihenfolge]]></de>
+            <en><![CDATA[Mobile order]]></en>
+        </locale>
+        <locale name="blockSlot.mobileOrder.info">
+            <de><![CDATA[Mobile-Reihenfolge: [number]]]></de>
+            <en><![CDATA[Mobile order: [number]]]></en>
+        </locale>
+        <locale name="blockSlot.verticalAlign">
+            <de><![CDATA[Vertikale Ausrichtung]]></de>
+            <en><![CDATA[Vertical alignment]]></en>
+        </locale>
+        <locale name="blockSlot.verticalAlign.top">
+            <de><![CDATA[Oben]]></de>
+            <en><![CDATA[Top]]></en>
+        </locale>
+        <locale name="blockSlot.verticalAlign.center">
+            <de><![CDATA[Mittig]]></de>
+            <en><![CDATA[Center]]></en>
+        </locale>
+        <locale name="blockSlot.verticalAlign.bottom">
+            <de><![CDATA[Unten]]></de>
+            <en><![CDATA[Bottom]]></en>
+        </locale>
+        <locale name="blockSlot.editor.empty">
+            <de><![CDATA[Noch kein Inhalt hinterlegt]]></de>
+            <en><![CDATA[No content yet]]></en>
+        </locale>
+        <locale name="blockSlot.brick.empty">
+            <de><![CDATA[Kein Baustein ausgewählt]]></de>
+            <en><![CDATA[No brick selected]]></en>
+        </locale>
+        <locale name="blockSlot.brick.untitled">
+            <de><![CDATA[Baustein ohne Titel]]></de>
+            <en><![CDATA[Untitled brick]]></en>
+        </locale>
+        <locale name="blockSlot.image.empty">
+            <de><![CDATA[Noch kein Bild ausgewählt]]></de>
+            <en><![CDATA[No image selected]]></en>
+        </locale>
+        <locale name="blockSlot.image.fit">
+            <de><![CDATA[Darstellungsart]]></de>
+            <en><![CDATA[Display mode]]></en>
+        </locale>
+        <locale name="blockSlot.image.fit.auto">
+            <de><![CDATA[Automatisch]]></de>
+            <en><![CDATA[Automatic]]></en>
+        </locale>
+        <locale name="blockSlot.image.fit.cover">
+            <de><![CDATA[Fläche füllen]]></de>
+            <en><![CDATA[Cover area]]></en>
+        </locale>
+        <locale name="blockSlot.image.fit.contain">
+            <de><![CDATA[Komplett anzeigen]]></de>
+            <en><![CDATA[Show complete]]></en>
+        </locale>
+        <locale name="blockSlot.image.section">
+            <de><![CDATA[Bild]]></de>
+            <en><![CDATA[Image]]></en>
+        </locale>
+        <locale name="blockSlot.image.maxWidth">
+            <de><![CDATA[Maximale Breite]]></de>
+            <en><![CDATA[Maximum width]]></en>
+        </locale>
+        <locale name="blockSlot.image.maxWidth.help">
+            <de><![CDATA[z. B. 320px, 50%, 30rem; leer = keine Begrenzung]]></de>
+            <en><![CDATA[e.g. 320px, 50%, 30rem; empty = no limit]]></en>
+        </locale>
+        <locale name="blockSlot.background.section">
+            <de><![CDATA[Hintergrundbild]]></de>
+            <en><![CDATA[Background image]]></en>
+        </locale>
+        <locale name="blockSlot.background.enabled">
+            <de><![CDATA[Hintergrundbild verwenden]]></de>
+            <en><![CDATA[Use background image]]></en>
+        </locale>
+        <locale name="blockSlot.background.image">
+            <de><![CDATA[Hintergrundbild]]></de>
+            <en><![CDATA[Background image]]></en>
+        </locale>
+        <locale name="blockSlot.background.fit">
+            <de><![CDATA[Darstellung]]></de>
+            <en><![CDATA[Display mode]]></en>
+        </locale>
+        <locale name="blockSlot.background.fit.auto">
+            <de><![CDATA[Original]]></de>
+            <en><![CDATA[Original]]></en>
+        </locale>
+        <locale name="blockSlot.background.fit.cover">
+            <de><![CDATA[Fläche füllen]]></de>
+            <en><![CDATA[Cover area]]></en>
+        </locale>
+        <locale name="blockSlot.background.fit.contain">
+            <de><![CDATA[Komplett anzeigen]]></de>
+            <en><![CDATA[Show complete]]></en>
+        </locale>
+        <locale name="blockSlot.background.position">
+            <de><![CDATA[Position]]></de>
+            <en><![CDATA[Position]]></en>
+        </locale>
+        <locale name="blockSlot.background.position.center">
+            <de><![CDATA[Mitte]]></de>
+            <en><![CDATA[Center]]></en>
+        </locale>
+        <locale name="blockSlot.background.position.top">
+            <de><![CDATA[Oben]]></de>
+            <en><![CDATA[Top]]></en>
+        </locale>
+        <locale name="blockSlot.background.position.bottom">
+            <de><![CDATA[Unten]]></de>
+            <en><![CDATA[Bottom]]></en>
+        </locale>
+        <locale name="blockSlot.background.position.left">
+            <de><![CDATA[Links]]></de>
+            <en><![CDATA[Left]]></en>
+        </locale>
+        <locale name="blockSlot.background.position.right">
+            <de><![CDATA[Rechts]]></de>
+            <en><![CDATA[Right]]></en>
+        </locale>
+        <locale name="blockSlot.backgroundColor.section">
+            <de><![CDATA[Hintergrundfarbe (Overlay)]]></de>
+            <en><![CDATA[Background color (overlay)]]></en>
+        </locale>
+        <locale name="blockSlot.backgroundColor.enabled">
+            <de><![CDATA[Overlay verwenden]]></de>
+            <en><![CDATA[Use overlay]]></en>
+        </locale>
+        <locale name="blockSlot.backgroundColor.description">
+            <de><![CDATA[Definiert die Hintergrundfarbe über dem Hintergrundbild für diesen Bereich.]]></de>
+            <en><![CDATA[Defines the background color above the background image for this area.]]></en>
+        </locale>
+        <locale name="blockSlot.backgroundColor.color">
+            <de><![CDATA[Farbe]]></de>
+            <en><![CDATA[Color]]></en>
+        </locale>
+        <locale name="blockSlot.backgroundColor.opacity">
+            <de><![CDATA[Deckkraft]]></de>
+            <en><![CDATA[Opacity]]></en>
+        </locale>
+        <locale name="blockSlot.textColor.section">
+            <de><![CDATA[Textfarbe]]></de>
+            <en><![CDATA[Text color]]></en>
+        </locale>
+        <locale name="blockSlot.textColor.enabled">
+            <de><![CDATA[Textfarbe verwenden]]></de>
+            <en><![CDATA[Use text color]]></en>
+        </locale>
+        <locale name="blockSlot.contentPadding">
+            <de><![CDATA[Standard-Innenabstand verwenden]]></de>
+            <en><![CDATA[Use default inner spacing]]></en>
+        </locale>
+        <locale name="blockSlot.quickEdit.title">
+            <de><![CDATA[[mode] schnell bearbeiten]]></de>
+            <en><![CDATA[Quick edit [mode]]]></en>
+        </locale>
+        <locale name="blockSlot.quickEdit.editor">
+            <de><![CDATA[Zum Bearbeiten klicken]]></de>
+            <en><![CDATA[Click to edit]]></en>
+        </locale>
+        <locale name="blockSlot.quickEdit.brick">
+            <de><![CDATA[Zum Auswählen klicken]]></de>
+            <en><![CDATA[Click to select]]></en>
+        </locale>
+        <locale name="blockSlot.quickEdit.image">
+            <de><![CDATA[Zum Bildauswählen klicken]]></de>
+            <en><![CDATA[Click to choose image]]></en>
+        </locale>
+        <locale name="blockSlot.settings.button">
+            <de><![CDATA[Einstellungen]]></de>
+            <en><![CDATA[Settings]]></en>
+        </locale>
+        <locale name="blockSlot.settings.popup.title">
+            <de><![CDATA[Einstellungen für [title]]]></de>
+            <en><![CDATA[Settings for [title]]]></en>
+        </locale>
+        <locale name="blockSlot.remove.button">
+            <de><![CDATA[Entfernen]]></de>
+            <en><![CDATA[Remove]]></en>
+        </locale>
+        <locale name="blockSlot.remove.popup.title">
+            <de><![CDATA[Inhalt von [title] entfernen?]]></de>
+            <en><![CDATA[Remove content from [title]?]]></en>
+        </locale>
+        <locale name="blockSlot.remove.popup.text">
+            <de><![CDATA[Soll der Inhalt vom Typ "[mode]" wirklich entfernt werden?]]></de>
+            <en><![CDATA[Do you really want to remove the content of type "[mode]"?]]></en>
+        </locale>
+        <locale name="blockSlot.remove.popup.information">
+            <de><![CDATA[Der Inhalt dieses Bereichs wird geleert. Einstellungen des Bereichs bleiben erhalten.]]></de>
+            <en><![CDATA[This area content will be cleared. The area settings will remain unchanged.]]></en>
+        </locale>
         <locale name="brick.multiLayout.area.label">
             <de><![CDATA[Bereich [number]]]></de>
             <en><![CDATA[Area [number]]]></en>
