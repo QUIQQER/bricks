@@ -96,7 +96,20 @@ XML
 
     public function testBrickVisibilityModeAcceptsPhaseOneValues(): void
     {
-        $Manager = new class (true) extends Manager {
+        $Manager = new class (new \QUI\Users\SystemUser()) extends Manager {
+            private \QUI\Interfaces\Users\User $SessionUser;
+
+            public function __construct(\QUI\Interfaces\Users\User $SessionUser)
+            {
+                $this->SessionUser = $SessionUser;
+                parent::__construct(true);
+            }
+
+            protected function getSessionUser(): \QUI\Interfaces\Users\User
+            {
+                return $this->SessionUser;
+            }
+
             public function exposeGetBrickVisibilityMode(array|string $customFields): string
             {
                 return $this->getBrickVisibilityMode($customFields);
