@@ -214,10 +214,8 @@ XML
         );
     }
 
-    public function testGroupVisibilityIncludesNobodyUsersForGuestGroup(): void
+    public function testAuthenticatedVisibilityExcludesNobodyUsersEvenWhenAuthenticated(): void
     {
-        $GuestGroup = new \QUI\Groups\Guest();
-
         $Manager = new class (new \QUI\Users\Nobody()) extends Manager {
             private \QUI\Interfaces\Users\User $SessionUser;
 
@@ -240,10 +238,10 @@ XML
             }
         };
 
-        $this->assertTrue(
+        $this->assertFalse(
             $Manager->exposeIsBrickVisibleForUserStatus(
-                ['visibility' => 'groups', 'visibilityGroups' => $GuestGroup->getUUID()],
-                false
+                ['visibility' => 'authenticated'],
+                true
             )
         );
     }
