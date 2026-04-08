@@ -893,7 +893,7 @@ class Manager
         }
 
         if ($visibilityMode === 'authenticated') {
-            return $isAuthenticated;
+            return $isAuthenticated && !$isGuestLikeUser;
         }
 
         if ($visibilityMode === 'groups') {
