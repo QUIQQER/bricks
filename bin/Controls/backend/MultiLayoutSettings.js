@@ -233,7 +233,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
                 backgroundImageFit: backgroundImageFit,
                 backgroundImagePosition: backgroundImagePosition,
                 backgroundColorEnabled: !!area.backgroundColorEnabled,
-                backgroundColor: area.backgroundColor || '#000000',
+                backgroundColor: area.backgroundColor || '',
                 backgroundColorOpacity: backgroundColorOpacity,
                 textColor: area.textColor ? area.textColor.toString().trim() : '',
                 verticalAlign: verticalAlign,

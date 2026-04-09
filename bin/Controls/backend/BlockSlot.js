@@ -117,7 +117,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                 text: this.$getModeLabel(activeMode)
             }).inject(Header);
 
-            const Preview = new Element('button', {
+            const PreviewButton = new Element('button', {
                 type: 'button',
                 'class': 'quiqqer-bricks-blockSlot-preview',
                 events: {
@@ -125,7 +125,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                 }
             }).inject(this.$Elm);
 
-            this.$fillPreview(Preview, area, activeMode);
+            this.$fillPreview(PreviewButton, area, activeMode);
 
             const Footer = new Element('div', {
                 'class': 'quiqqer-bricks-blockSlot-cardFooter'
@@ -167,31 +167,31 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
             this.fireEvent('change', [this, this.$area, this.$index]);
         },
 
-        $fillPreview: function (Preview, area, mode) {
-            Preview.empty();
-            Preview.set('data-mode', mode);
-            Preview.set('title', this.$getLocale('quickEdit.title', {
+        $fillPreview: function (PreviewButton, area, mode) {
+            PreviewButton.empty();
+            PreviewButton.set('data-mode', mode);
+            PreviewButton.set('title', this.$getLocale('quickEdit.title', {
                 mode: this.$getModeLabel(mode)
             }));
-            this.$applyPreviewStyles(Preview, area);
+            this.$applyPreviewStyles(PreviewButton, area);
 
             switch (mode) {
                 case MODE_BRICK:
-                    this.$fillBrickPreview(Preview, area);
+                    this.$fillBrickPreview(PreviewButton, area);
                     break;
 
                 case MODE_IMAGE:
-                    this.$fillImagePreview(Preview, area);
+                    this.$fillImagePreview(PreviewButton, area);
                     break;
 
                 case MODE_EDITOR:
                 default:
-                    this.$fillEditorPreview(Preview, area);
+                    this.$fillEditorPreview(PreviewButton, area);
             }
 
             const PreviewMeta = new Element('div', {
                 'class': 'quiqqer-bricks-blockSlot-previewMeta'
-            }).inject(Preview);
+            }).inject(PreviewButton);
 
             new Element('div', {
                 'class': 'quiqqer-bricks-blockSlot-previewHint',
@@ -206,7 +206,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
             }).inject(PreviewMeta);
         },
 
-        $applyPreviewStyles: function (Preview, area) {
+        $applyPreviewStyles: function (PreviewButton, area) {
             const backgroundImage = area.backgroundEnabled && area.backgroundImage
                 ? 'url("' + area.backgroundImage.replace(/"/g, '\\"') + '")'
                 : '';
@@ -233,7 +233,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                 styles.backgroundColor = this.$getPreviewBackgroundColor(area);
             }
 
-            Preview.setStyles(styles);
+            PreviewButton.setStyles(styles);
         },
 
         $getPreviewBackgroundOverlay: function (area) {
@@ -285,10 +285,10 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                 + alpha + ')';
         },
 
-        $fillEditorPreview: function (Preview, area) {
+        $fillEditorPreview: function (PreviewButton, area) {
             if (!area.content || !area.content.trim()) {
                 this.$createPlaceholder(
-                    Preview,
+                    PreviewButton,
                     'fa fa-align-left',
                     this.$getLocale('editor.empty')
                 );
@@ -298,13 +298,13 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
             new Element('div', {
                 'class': 'quiqqer-bricks-blockSlot-previewHtml',
                 html: area.content
-            }).inject(Preview);
+            }).inject(PreviewButton);
         },
 
-        $fillBrickPreview: function (Preview, area) {
+        $fillBrickPreview: function (PreviewButton, area) {
             if (!area.brickId && !area.brickTitle) {
                 this.$createPlaceholder(
-                    Preview,
+                    PreviewButton,
                     'fa fa-cubes',
                     this.$getLocale('brick.empty')
                 );
@@ -313,7 +313,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
 
             const Wrap = new Element('div', {
                 'class': 'quiqqer-bricks-blockSlot-previewBrick'
-            }).inject(Preview);
+            }).inject(PreviewButton);
 
             const Content = new Element('div', {
                 'class': 'quiqqer-bricks-blockSlot-previewBrickCard'
@@ -336,10 +336,10 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
             }
         },
 
-        $fillImagePreview: function (Preview, area) {
+        $fillImagePreview: function (PreviewButton, area) {
             if (!area.image) {
                 this.$createPlaceholder(
-                    Preview,
+                    PreviewButton,
                     'fa fa-picture-o',
                     this.$getLocale('image.empty')
                 );
@@ -351,7 +351,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                 styles: area.imageMaxWidth ? {
                     maxWidth: area.imageMaxWidth
                 } : {}
-            }).inject(Preview);
+            }).inject(PreviewButton);
 
             const Image = new Element('img', {
                 'class': 'quiqqer-bricks-blockSlot-previewImage',
@@ -512,18 +512,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                             'class': 'quiqqer-bricks-blockSlot-popupForm'
                         }).inject(Content);
 
-                        let ModeField = null;
-
-                        if (this.$shouldShowModeField()) {
-                            ModeField = this.$createPopupSelectField(
-                                Form,
-                                this.$getLocale('mode'),
-                                this.$getModeOptions(),
-                                activeMode,
-                                'data-name',
-                                'mode'
-                            );
-                        }
+                        const ModeField = this.$createPopupModeField(Form, activeMode);
 
                         if (this.$isSettingVisible('contentPadding')) {
                             this.$createPopupCheckboxField(
@@ -573,190 +562,33 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                         let BackgroundEnabledField = null;
 
                         if (this.$isSettingVisible('background')) {
-                            const BackgroundSettings = this.$createPopupSection(
-                                Form,
-                                this.$getLocale('background.section')
-                            );
-
-                            BackgroundEnabledField = this.$createPopupCheckboxField(
-                                BackgroundSettings,
-                                this.$getLocale('background.enabled'),
-                                area.backgroundEnabled,
-                                'backgroundEnabled'
-                            );
-
-                            BackgroundOptions = new Element('div', {
-                                'class': 'quiqqer-bricks-blockSlot-popupSectionBody'
-                            }).inject(BackgroundSettings);
-
-                            this.$createPopupMediaField(BackgroundOptions, {
-                                label: this.$getLocale('background.image'),
-                                value: area.backgroundImage,
-                                name: 'backgroundImage'
-                            });
-
-                            this.$createPopupSelectField(
-                                BackgroundOptions,
-                                this.$getLocale('background.fit'),
-                                [
-                                    {
-                                        value: IMAGE_FIT_COVER,
-                                        text: this.$getLocale('background.fit.cover')
-                                    },
-                                    {
-                                        value: IMAGE_FIT_CONTAIN,
-                                        text: this.$getLocale('background.fit.contain')
-                                    },
-                                    {
-                                        value: IMAGE_FIT_AUTO,
-                                        text: this.$getLocale('background.fit.auto')
-                                    }
-                                ],
-                                area.backgroundImageFit,
-                                'data-name',
-                                'backgroundImageFit'
-                            );
-
-                            this.$createPopupSelectField(
-                                BackgroundOptions,
-                                this.$getLocale('background.position'),
-                                [
-                                    {
-                                        value: BACKGROUND_POSITION_CENTER,
-                                        text: this.$getLocale('background.position.center')
-                                    },
-                                    {
-                                        value: BACKGROUND_POSITION_TOP,
-                                        text: this.$getLocale('background.position.top')
-                                    },
-                                    {
-                                        value: BACKGROUND_POSITION_BOTTOM,
-                                        text: this.$getLocale('background.position.bottom')
-                                    },
-                                    {
-                                        value: BACKGROUND_POSITION_LEFT,
-                                        text: this.$getLocale('background.position.left')
-                                    },
-                                    {
-                                        value: BACKGROUND_POSITION_RIGHT,
-                                        text: this.$getLocale('background.position.right')
-                                    }
-                                ],
-                                area.backgroundImagePosition,
-                                'data-name',
-                                'backgroundImagePosition'
-                            );
+                            const Background = this.$createPopupBackgroundSettings(Form, area);
+                            BackgroundOptions = Background.options;
+                            BackgroundEnabledField = Background.enabledField;
                         }
 
                         let OverlayOptions = null;
                         let BackgroundColorEnabledField = null;
 
                         if (this.$isSettingVisible('backgroundColor')) {
-                            const OverlaySettings = this.$createPopupSection(
-                                Form,
-                                this.$getLocale('backgroundColor.section')
-                            );
-
-                            BackgroundColorEnabledField = this.$createPopupCheckboxField(
-                                OverlaySettings,
-                                this.$getLocale('backgroundColor.enabled'),
-                                area.backgroundColorEnabled,
-                                'backgroundColorEnabled'
-                            );
-
-                            new Element('div', {
-                                'class': 'quiqqer-bricks-blockSlot-popupHint',
-                                text: this.$getLocale('backgroundColor.description')
-                            }).inject(OverlaySettings);
-
-                            OverlayOptions = new Element('div', {
-                                'class': 'quiqqer-bricks-blockSlot-popupSectionBody'
-                            }).inject(OverlaySettings);
-
-                            this.$createPopupColorField(OverlayOptions, {
-                                label: this.$getLocale('backgroundColor.color'),
-                                value: area.backgroundColor,
-                                name: 'backgroundColor'
-                            });
-
-                            this.$createPopupRangeField(OverlayOptions, {
-                                label: this.$getLocale('backgroundColor.opacity'),
-                                value: area.backgroundColorOpacity,
-                                name: 'backgroundColorOpacity',
-                                min: 0,
-                                max: 100,
-                                step: 1
-                            });
+                            const Overlay = this.$createPopupBackgroundColorSettings(Form, area);
+                            OverlayOptions = Overlay.options;
+                            BackgroundColorEnabledField = Overlay.enabledField;
                         }
 
                         let TextColorOptions = null;
                         let TextColorEnabledField = null;
 
                         if (this.$isSettingVisible('textColor')) {
-                            const TextColorSettings = this.$createPopupSection(
-                                Form,
-                                this.$getLocale('textColor.section')
-                            );
-
-                            TextColorEnabledField = this.$createPopupCheckboxField(
-                                TextColorSettings,
-                                this.$getLocale('textColor.enabled'),
-                                !!area.textColor,
-                                'textColorEnabled'
-                            );
-
-                            TextColorOptions = new Element('div', {
-                                'class': 'quiqqer-bricks-blockSlot-popupSectionBody'
-                            }).inject(TextColorSettings);
-
-                            this.$createPopupColorField(TextColorOptions, {
-                                label: this.$getLocale('backgroundColor.color'),
-                                value: area.textColor,
-                                name: 'textColor'
-                            });
+                            const TextColor = this.$createPopupTextColorSettings(Form, area);
+                            TextColorOptions = TextColor.options;
+                            TextColorEnabledField = TextColor.enabledField;
                         }
 
                         let ImageSettings = null;
 
                         if (this.$isSettingVisible('image')) {
-                            ImageSettings = this.$createPopupSection(
-                                Form,
-                                this.$getLocale('image.section')
-                            );
-
-                            this.$createPopupSelectField(
-                                ImageSettings,
-                                this.$getLocale('image.fit'),
-                                [
-                                    {
-                                        value: IMAGE_FIT_AUTO,
-                                        text: this.$getLocale('image.fit.auto')
-                                    },
-                                    {
-                                        value: IMAGE_FIT_COVER,
-                                        text: this.$getLocale('image.fit.cover')
-                                    },
-                                    {
-                                        value: IMAGE_FIT_CONTAIN,
-                                        text: this.$getLocale('image.fit.contain')
-                                    }
-                                ],
-                                area.imageFit,
-                                'data-name',
-                                'imageFit'
-                            );
-
-                            const MaxWidthField = this.$createPopupInputField(ImageSettings, {
-                                label: this.$getLocale('image.maxWidth'),
-                                type: 'text',
-                                value: area.imageMaxWidth,
-                                name: 'imageMaxWidth'
-                            });
-
-                            new Element('div', {
-                                'class': 'quiqqer-bricks-blockSlot-popupHint',
-                                text: this.$getLocale('image.maxWidth.help')
-                            }).inject(MaxWidthField);
+                            ImageSettings = this.$createPopupImageSettings(Form, area);
                         }
 
                         const toggleImageSettings = function () {
@@ -937,6 +769,217 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
             });
 
             return Select;
+        },
+
+        $createPopupModeField: function (Parent, activeMode) {
+            if (!this.$shouldShowModeField()) {
+                return null;
+            }
+
+            return this.$createPopupSelectField(
+                Parent,
+                this.$getLocale('mode'),
+                this.$getModeOptions(),
+                activeMode,
+                'data-name',
+                'mode'
+            );
+        },
+
+        $createPopupBackgroundSettings: function (Parent, area) {
+            const Section = this.$createPopupSection(
+                Parent,
+                this.$getLocale('background.section')
+            );
+
+            const EnabledField = this.$createPopupCheckboxField(
+                Section,
+                this.$getLocale('background.enabled'),
+                area.backgroundEnabled,
+                'backgroundEnabled'
+            );
+
+            const Options = new Element('div', {
+                'class': 'quiqqer-bricks-blockSlot-popupSectionBody'
+            }).inject(Section);
+
+            this.$createPopupMediaField(Options, {
+                label: this.$getLocale('background.image'),
+                value: area.backgroundImage,
+                name: 'backgroundImage'
+            });
+
+            this.$createPopupSelectField(
+                Options,
+                this.$getLocale('background.fit'),
+                [
+                    {
+                        value: IMAGE_FIT_COVER,
+                        text: this.$getLocale('background.fit.cover')
+                    },
+                    {
+                        value: IMAGE_FIT_CONTAIN,
+                        text: this.$getLocale('background.fit.contain')
+                    },
+                    {
+                        value: IMAGE_FIT_AUTO,
+                        text: this.$getLocale('background.fit.auto')
+                    }
+                ],
+                area.backgroundImageFit,
+                'data-name',
+                'backgroundImageFit'
+            );
+
+            this.$createPopupSelectField(
+                Options,
+                this.$getLocale('background.position'),
+                [
+                    {
+                        value: BACKGROUND_POSITION_CENTER,
+                        text: this.$getLocale('background.position.center')
+                    },
+                    {
+                        value: BACKGROUND_POSITION_TOP,
+                        text: this.$getLocale('background.position.top')
+                    },
+                    {
+                        value: BACKGROUND_POSITION_BOTTOM,
+                        text: this.$getLocale('background.position.bottom')
+                    },
+                    {
+                        value: BACKGROUND_POSITION_LEFT,
+                        text: this.$getLocale('background.position.left')
+                    },
+                    {
+                        value: BACKGROUND_POSITION_RIGHT,
+                        text: this.$getLocale('background.position.right')
+                    }
+                ],
+                area.backgroundImagePosition,
+                'data-name',
+                'backgroundImagePosition'
+            );
+
+            return {
+                enabledField: EnabledField,
+                options: Options
+            };
+        },
+
+        $createPopupBackgroundColorSettings: function (Parent, area) {
+            const Section = this.$createPopupSection(
+                Parent,
+                this.$getLocale('backgroundColor.section')
+            );
+
+            const EnabledField = this.$createPopupCheckboxField(
+                Section,
+                this.$getLocale('backgroundColor.enabled'),
+                area.backgroundColorEnabled,
+                'backgroundColorEnabled'
+            );
+
+            new Element('div', {
+                'class': 'quiqqer-bricks-blockSlot-popupHint',
+                text: this.$getLocale('backgroundColor.description')
+            }).inject(Section);
+
+            const Options = new Element('div', {
+                'class': 'quiqqer-bricks-blockSlot-popupSectionBody'
+            }).inject(Section);
+
+            this.$createPopupColorField(Options, {
+                label: this.$getLocale('backgroundColor.color'),
+                value: area.backgroundColor,
+                name: 'backgroundColor'
+            });
+
+            this.$createPopupRangeField(Options, {
+                label: this.$getLocale('backgroundColor.opacity'),
+                value: area.backgroundColorOpacity,
+                name: 'backgroundColorOpacity',
+                min: 0,
+                max: 100,
+                step: 1
+            });
+
+            return {
+                enabledField: EnabledField,
+                options: Options
+            };
+        },
+
+        $createPopupTextColorSettings: function (Parent, area) {
+            const Section = this.$createPopupSection(
+                Parent,
+                this.$getLocale('textColor.section')
+            );
+
+            const EnabledField = this.$createPopupCheckboxField(
+                Section,
+                this.$getLocale('textColor.enabled'),
+                !!area.textColor,
+                'textColorEnabled'
+            );
+
+            const Options = new Element('div', {
+                'class': 'quiqqer-bricks-blockSlot-popupSectionBody'
+            }).inject(Section);
+
+            this.$createPopupColorField(Options, {
+                label: this.$getLocale('backgroundColor.color'),
+                value: area.textColor,
+                name: 'textColor'
+            });
+
+            return {
+                enabledField: EnabledField,
+                options: Options
+            };
+        },
+
+        $createPopupImageSettings: function (Parent, area) {
+            const Section = this.$createPopupSection(
+                Parent,
+                this.$getLocale('image.section')
+            );
+
+            this.$createPopupSelectField(
+                Section,
+                this.$getLocale('image.fit'),
+                [
+                    {
+                        value: IMAGE_FIT_AUTO,
+                        text: this.$getLocale('image.fit.auto')
+                    },
+                    {
+                        value: IMAGE_FIT_COVER,
+                        text: this.$getLocale('image.fit.cover')
+                    },
+                    {
+                        value: IMAGE_FIT_CONTAIN,
+                        text: this.$getLocale('image.fit.contain')
+                    }
+                ],
+                area.imageFit,
+                'data-name',
+                'imageFit'
+            );
+
+            const MaxWidthField = this.$createPopupInputField(Section, {
+                label: this.$getLocale('image.maxWidth'),
+                type: 'text',
+                value: area.imageMaxWidth,
+                name: 'imageMaxWidth'
+            });
+
+            new Element('div', {
+                'class': 'quiqqer-bricks-blockSlot-popupHint',
+                text: this.$getLocale('image.maxWidth.help')
+            }).inject(MaxWidthField);
+
+            return Section;
         },
 
         $createPopupSection: function (Parent, title) {
