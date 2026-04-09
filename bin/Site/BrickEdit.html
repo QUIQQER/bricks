@@ -14,6 +14,45 @@
             </td>
         </tr>
 
+        <tr class="even">
+            <td>
+                <label for="visibility">
+                    {locale group="quiqqer/bricks" var="site.area.window.settings.setting.visibility"}
+                </label>
+            </td>
+            <td>
+                <select name="visibility" id="visibility" style="width: 100%;">
+                    <option value="always">
+                        {locale group="quiqqer/bricks" var="site.area.window.settings.setting.visibility.always"}
+                    </option>
+                    <option value="guest">
+                        {locale group="quiqqer/bricks" var="site.area.window.settings.setting.visibility.guest"}
+                    </option>
+                    <option value="authenticated">
+                        {locale group="quiqqer/bricks" var="site.area.window.settings.setting.visibility.authenticated"}
+                    </option>
+                    <option value="groups">
+                        {locale group="quiqqer/bricks" var="site.area.window.settings.setting.visibility.groups"}
+                    </option>
+                </select>
+            </td>
+        </tr>
+
+        <tr class="odd" data-name="visibility-groups-row">
+            <td>
+                <label for="visibilityGroups">
+                    {locale group="quiqqer/bricks" var="site.area.window.settings.setting.visibility.groups.label"}
+                </label>
+            </td>
+            <td>
+                <input type="hidden"
+                       name="visibilityGroups"
+                       id="visibilityGroups"
+                       class="groups"
+                />
+            </td>
+        </tr>
+
         {if isset($params.customfields)}
         {foreach $params.customfields as $key => $field}
 

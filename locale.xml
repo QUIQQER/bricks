@@ -911,6 +911,30 @@ This content does not replace the block content. You can still place the brick t
             <de><![CDATA[Baustein wird vererbt]]></de>
             <en><![CDATA[Brick is inherited]]></en>
         </locale>
+        <locale name="site.area.window.settings.setting.visibility">
+            <de><![CDATA[Anzeigen]]></de>
+            <en><![CDATA[Visibility]]></en>
+        </locale>
+        <locale name="site.area.window.settings.setting.visibility.always">
+            <de><![CDATA[Immer]]></de>
+            <en><![CDATA[Always]]></en>
+        </locale>
+        <locale name="site.area.window.settings.setting.visibility.guest">
+            <de><![CDATA[Nur Gäste]]></de>
+            <en><![CDATA[Guests only]]></en>
+        </locale>
+        <locale name="site.area.window.settings.setting.visibility.authenticated">
+            <de><![CDATA[Nur eingeloggte Benutzer]]></de>
+            <en><![CDATA[Authenticated users only]]></en>
+        </locale>
+        <locale name="site.area.window.settings.setting.visibility.groups">
+            <de><![CDATA[Nur bestimmte Gruppen]]></de>
+            <en><![CDATA[Specific groups only]]></en>
+        </locale>
+        <locale name="site.area.window.settings.setting.visibility.groups.label">
+            <de><![CDATA[Gruppen]]></de>
+            <en><![CDATA[Groups]]></en>
+        </locale>
 
 
         <!-- Tour Data -->
@@ -1073,6 +1097,26 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
         <locale name="site.area.badge.disabled">
             <de><![CDATA[Deaktiviert]]></de>
             <en><![CDATA[Disabled]]></en>
+        </locale>
+        <locale name="site.area.badge.inheritance">
+            <de><![CDATA[Vererbt]]></de>
+            <en><![CDATA[Inherited]]></en>
+        </locale>
+        <locale name="site.area.badge.visibility.guest">
+            <de><![CDATA[Sichtbar für: Gäste]]></de>
+            <en><![CDATA[Visibility for: guests]]></en>
+        </locale>
+        <locale name="site.area.badge.visibility.authenticated">
+            <de><![CDATA[Sichtbar für: angemeldete Benutzer]]></de>
+            <en><![CDATA[Visibility for: authenticated users]]></en>
+        </locale>
+        <locale name="site.area.badge.visibility.group.text">
+            <de><![CDATA[Sichtbar für: [groupName]]]></de>
+            <en><![CDATA[Visibility for: [groupName]]]></en>
+        </locale>
+        <locale name="site.area.badge.visibility.groups.loading">
+            <de><![CDATA[Gruppen werden geladen ...]]></de>
+            <en><![CDATA[Loading groups ...]]></en>
         </locale>
 
         <locale name="manager.button.add">
