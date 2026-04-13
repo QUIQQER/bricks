@@ -82,7 +82,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
         },
 
         setProject: function (Project) {
-            this.$Project = Project;
+            this.$Project = this.$normalizeProject(Project);
             this.$applyProjectToControls(this.$Elm);
         },
 
@@ -1234,7 +1234,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
         },
 
         $getProjectName: function () {
-            if (!this.$Project || !('getName' in this.$Project)) {
+            if (!this.$hasProjectMethod('getName')) {
                 return '';
             }
 
@@ -1242,11 +1242,19 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
         },
 
         $getProjectLang: function () {
-            if (!this.$Project || !('getLang' in this.$Project)) {
+            if (!this.$hasProjectMethod('getLang')) {
                 return '';
             }
 
             return this.$Project.getLang();
+        },
+
+        $hasProjectMethod: function (method) {
+            return !!(
+                this.$Project
+                && (typeOf(this.$Project) === 'object' || typeOf(this.$Project) === 'function')
+                && typeof this.$Project[method] === 'function'
+            );
         },
 
         $getLocale: function (name, data) {
@@ -1318,6 +1326,14 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                     text: this.$getModeLabel(mode)
                 };
             }.bind(this));
+        },
+
+        $normalizeProject: function (Project) {
+            if (typeOf(Project) === 'object' || typeOf(Project) === 'function') {
+                return Project;
+            }
+
+            return null;
         }
     });
 });

@@ -86,7 +86,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
                 Project = Projects.get(Project);
             }
 
-            this.$Project = Project;
+            this.$Project = typeOf(Project) === 'object' ? Project : null;
             this.$applyProjectToChildControls();
         },
 
