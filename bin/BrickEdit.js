@@ -41,6 +41,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
             '$onInject',
             '$onCreate',
             '$onDestroy',
+            '$resizeEditor',
 
             'showInformation',
             'showSettings',
@@ -77,6 +78,8 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             this.$Container = null;
             this.$Editor = false;
+            this.$EditorCell = null;
+            this.$EditorContainer = null;
             this.$Areas = false;
 
             this.addEvents({
@@ -91,6 +94,8 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                             Control.resize();
                         }
                     });
+
+                    this.$resizeEditor();
                 }.bind(this),
                 onCategoryEnter: this.$onCategoryEnter,
                 onCategoryLeave: this.$onCategoryLeave
@@ -321,6 +326,9 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
             if (this.$Editor) {
                 this.$Editor.destroy();
             }
+
+            this.$EditorCell = null;
+            this.$EditorContainer = null;
 
             if (this.$Areas) {
                 this.$Areas.destroy();
@@ -1045,17 +1053,9 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
             const self = this;
 
             return new Promise(function (resolve) {
-                const TableBody = self.$Container.getElement('table.brick-edit-content tbody'),
-                    TD = new Element('td'),
-                    TR = new Element('tr', {
-                        'class': 'odd'
-                    });
+                const EditorBody = self.$Container.getElement('.brick-edit-content__body');
 
-                TD.inject(TR);
-                TR.inject(TableBody);
-
-                const Wrapper = self.getContent().querySelector('form') || self.getContent();
-                Wrapper.querySelector('table').style.height = '100%';
+                self.$EditorCell = EditorBody;
 
                 // load ckeditor
                 require(['classes/editor/Manager'], function (EditorManager) {
@@ -1070,30 +1070,60 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
                         self.$Editor.setProject(Project);
 
-                        let height = 300;
-
-                        if ((TD.getSize().y - 180) > height) {
-                            height = TD.getSize().y - 180;
-                        }
-
-                        const EditorContainer = new Element('div', {
+                        self.$EditorContainer = new Element('div', {
                             styles: {
                                 clear: 'both',
                                 'float': 'left',
                                 height: '100%',
+                                'min-height': 300,
+                                'box-sizing': 'border-box',
                                 width: '100%'
                             }
-                        }).inject(TD);
+                        }).inject(EditorBody);
 
                         self.$Editor.addEvent('onLoaded', resolve);
-                        self.$Editor.inject(EditorContainer);
-                        self.$Editor.setHeight(height - 180);
-                        self.$Editor.setWidth(EditorContainer.getSize().x);
+                        self.$Editor.inject(self.$EditorContainer);
+                        self.$resizeEditor();
 
                         self.$Editor.setContent(initialContent);
                     });
                 });
             });
+        },
+
+        /**
+         * Resize the content editor to the available container space.
+         */
+        $resizeEditor: function () {
+            if (!this.$Editor || !this.$EditorContainer || !this.$EditorCell) {
+                return;
+            }
+
+            const Table = this.$Container
+                ? this.$Container.getElement('.brick-edit-content')
+                : null;
+            const containerHeight = this.$Container ? this.$Container.getSize().y : 0;
+            const tableTop = Table ? Table.getPosition(this.$Container).y : 0;
+
+            let availableHeight = containerHeight - tableTop;
+
+            const width = this.$EditorContainer.getSize().x;
+
+            if (!width) {
+                return;
+            }
+
+            availableHeight = Math.max(availableHeight, 300);
+
+            this.$EditorCell.setStyle('height', availableHeight);
+            this.$EditorContainer.setStyle('height', availableHeight);
+
+            this.$Editor.setWidth(width);
+            this.$Editor.setHeight(availableHeight);
+
+            if ("resize" in this.$Editor) {
+                this.$Editor.resize();
+            }
         },
 
         /**
