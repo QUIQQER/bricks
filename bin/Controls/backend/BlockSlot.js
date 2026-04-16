@@ -17,6 +17,8 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
     const MODE_EDITOR = 'editor';
     const MODE_BRICK = 'brick';
     const MODE_IMAGE = 'image';
+    const INTERACTION_CONTENT = 'content';
+    const INTERACTION_LAYOUT = 'layout';
     const DEFAULT_ALLOWED_MODES = [MODE_EDITOR, MODE_BRICK, MODE_IMAGE];
     const DEFAULT_SETTINGS_VISIBILITY = {
         contentPadding: true,
@@ -49,10 +51,14 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
         options: {
             area: null,
             helperContainer: null,
+            slotId: '',
             index: 0,
+            interactionMode: INTERACTION_CONTENT,
             allowedModes: DEFAULT_ALLOWED_MODES,
             allowModeSwitch: true,
-            settingsVisibility: null
+            settingsVisibility: null,
+            selected: false,
+            allowRemoveSlot: false
         },
 
         initialize: function (options) {
@@ -60,6 +66,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
 
             this.$area = this.getAttribute('area') || {};
             this.$helperContainer = this.getAttribute('helperContainer') || null;
+            this.$slotId = this.getAttribute('slotId') || '';
             this.$index = this.getAttribute('index') || 0;
             this.$Project = null;
             this.$allowedModes = this.$normalizeAllowedModes(this.getAttribute('allowedModes'));
@@ -67,6 +74,11 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
             this.$settingsVisibility = this.$normalizeSettingsVisibility(
                 this.getAttribute('settingsVisibility')
             );
+            this.$interactionMode = this.$normalizeInteractionMode(
+                this.getAttribute('interactionMode')
+            );
+            this.$selected = this.getAttribute('selected') === true;
+            this.$allowRemoveSlot = this.getAttribute('allowRemoveSlot') === true;
 
             this.$ensureAreaMode();
         },
@@ -86,11 +98,31 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
             this.$applyProjectToControls(this.$Elm);
         },
 
-        setArea: function (area, index) {
+        setArea: function (area, slotId, index) {
             this.$area = area || {};
+            this.$slotId = slotId || this.$slotId;
             this.$index = typeof index === 'number' ? index : this.$index;
             this.$ensureAreaMode();
             this.$render();
+        },
+
+        setInteractionMode: function (mode) {
+            this.$interactionMode = this.$normalizeInteractionMode(mode);
+            this.$render();
+        },
+
+        setSelected: function (selected) {
+            this.$selected = selected === true;
+
+            if (!this.$Elm) {
+                return;
+            }
+
+            this.$Elm.toggleClass('is-selected', this.$selected);
+        },
+
+        getSlotId: function () {
+            return this.$slotId;
         },
 
         $render: function () {
@@ -100,8 +132,21 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
 
             const area = this.$area;
             const activeMode = this.$getActiveMode(area);
+            const interactionMode = this.$interactionMode;
 
             this.$Elm.empty();
+            this.$Elm.removeClass('is-layoutMode');
+            this.$Elm.removeClass('is-contentMode');
+            this.$Elm.removeClass('is-selected');
+            this.$Elm.addClass(
+                interactionMode === INTERACTION_LAYOUT
+                    ? 'is-layoutMode'
+                    : 'is-contentMode'
+            );
+
+            if (this.$selected) {
+                this.$Elm.addClass('is-selected');
+            }
 
             const Header = new Element('header', {
                 'class': 'quiqqer-bricks-blockSlot-cardHeader'
@@ -112,11 +157,31 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                 text: area.title || ''
             }).inject(Header);
 
+            if (interactionMode === INTERACTION_LAYOUT) {
+                new Element('span', {
+                    'class': 'quiqqer-bricks-blockSlot-cardSlotId',
+                    text: this.$getLocale('slot.label', {
+                        id: this.$slotId || ('slot-' + (this.$index + 1))
+                    })
+                }).inject(Header);
+            }
+
             new Element('span', {
                 'class': 'quiqqer-bricks-blockSlot-cardMode',
-                text: this.$getModeLabel(activeMode)
+                text: interactionMode === INTERACTION_LAYOUT
+                    ? this.$getLocale('interaction.layout')
+                    : this.$getModeLabel(activeMode)
             }).inject(Header);
 
+            if (interactionMode === INTERACTION_LAYOUT) {
+                this.$renderLayoutMode(area, activeMode);
+                return;
+            }
+
+            this.$renderContentMode(area, activeMode);
+        },
+
+        $renderContentMode: function (area, activeMode) {
             const PreviewButton = new Element('button', {
                 type: 'button',
                 'class': 'quiqqer-bricks-blockSlot-preview',
@@ -161,10 +226,73 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
             }
         },
 
+        $renderLayoutMode: function (area, activeMode) {
+            const Preview = new Element('button', {
+                type: 'button',
+                'class': 'quiqqer-bricks-blockSlot-layoutPreview',
+                events: {
+                    click: function () {
+                        this.fireEvent('select', [this, this.$slotId]);
+                    }.bind(this)
+                }
+            }).inject(this.$Elm);
+
+            new Element('div', {
+                'class': 'quiqqer-bricks-blockSlot-layoutPreviewLabel',
+                text: area.title || ''
+            }).inject(Preview);
+
+            new Element('div', {
+                'class': 'quiqqer-bricks-blockSlot-layoutPreviewType',
+                text: this.$getModeLabel(activeMode)
+            }).inject(Preview);
+
+            new Element('div', {
+                'class': 'quiqqer-bricks-blockSlot-layoutPreviewHint',
+                text: this.$getLocale('layout.hint')
+            }).inject(Preview);
+
+            new Element('div', {
+                'class': 'quiqqer-bricks-blockSlot-layoutPreviewMeta',
+                text: this.$getLocale('mobileOrder.info', {
+                    number: area.mobileOrder
+                })
+            }).inject(Preview);
+
+            const Footer = new Element('div', {
+                'class': 'quiqqer-bricks-blockSlot-cardFooter'
+            }).inject(this.$Elm);
+
+            const Actions = new Element('div', {
+                'class': 'quiqqer-bricks-blockSlot-cardActions'
+            }).inject(Footer);
+
+            new Element('div', {
+                'class': 'quiqqer-bricks-blockSlot-cardInfo',
+                text: this.$selected
+                    ? this.$getLocale('layout.selected')
+                    : this.$getLocale('layout.idle')
+            }).inject(Actions);
+
+            if (this.$allowRemoveSlot) {
+                new Element('button', {
+                    type: 'button',
+                    'class': 'quiqqer-bricks-blockSlot-cardAction '
+                        + 'quiqqer-bricks-blockSlot-cardAction--danger',
+                    html: '<span class="fa fa-trash"></span><span>' +
+                        this.$getLocale('removeSlot.button') + '</span>',
+                    title: this.$getLocale('removeSlot.button'),
+                    events: {
+                        click: this.$confirmRemoveSlot.bind(this)
+                    }
+                }).inject(Actions);
+            }
+        },
+
         $onChange: function () {
             this.$ensureAreaMode();
             this.$render();
-            this.fireEvent('change', [this, this.$area, this.$index]);
+            this.fireEvent('change', [this, this.$area, this.$slotId]);
         },
 
         $fillPreview: function (PreviewButton, area, mode) {
@@ -384,6 +512,10 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
         },
 
         $openQuickEdit: function () {
+            if (this.$interactionMode === INTERACTION_LAYOUT) {
+                return;
+            }
+
             switch (this.$getActiveMode(this.$area)) {
                 case MODE_BRICK:
                     this.$openBrickSelect();
@@ -400,6 +532,10 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
         },
 
         $openEditor: function () {
+            if (!this.$helperContainer) {
+                return;
+            }
+
             const Holder = new Element('div').inject(this.$helperContainer);
             const Input = new Element('input', {
                 type: 'hidden',
@@ -453,6 +589,10 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
         },
 
         $openImageSelect: function () {
+            if (!this.$helperContainer) {
+                return;
+            }
+
             const Holder = new Element('div').inject(this.$helperContainer);
             const Input = new Element('input', {
                 type: 'text',
@@ -491,6 +631,10 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
         },
 
         $openSettingsPopup: function () {
+            if (this.$interactionMode === INTERACTION_LAYOUT) {
+                return;
+            }
+
             const area = this.$area;
             const activeMode = this.$getActiveMode(area);
 
@@ -1187,6 +1331,22 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
             }).open();
         },
 
+        $confirmRemoveSlot: function () {
+            new QUIConfirm({
+                icon: 'fa fa-trash',
+                title: this.$getLocale('removeSlot.popup.title', {
+                    title: this.$area.title || this.$slotId
+                }),
+                information: this.$getLocale('removeSlot.popup.information'),
+                text: this.$getLocale('removeSlot.popup.text'),
+                events: {
+                    onSubmit: function () {
+                        this.fireEvent('removeSlot', [this, this.$slotId]);
+                    }.bind(this)
+                }
+            }).open();
+        },
+
         $getModeLabel: function (mode) {
             switch (mode) {
                 case MODE_BRICK:
@@ -1295,14 +1455,20 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
             return visibility;
         },
 
-        $isSettingVisible: function (name) {
-            return this.$settingsVisibility[name] !== false;
-        },
-
         $normalizeMode: function (mode) {
             return this.$allowedModes.indexOf(mode) !== -1
                 ? mode
                 : this.$allowedModes[0];
+        },
+
+        $normalizeInteractionMode: function (mode) {
+            return mode === INTERACTION_LAYOUT
+                ? INTERACTION_LAYOUT
+                : INTERACTION_CONTENT;
+        },
+
+        $isSettingVisible: function (name) {
+            return this.$settingsVisibility[name] !== false;
         },
 
         $getActiveMode: function (area) {

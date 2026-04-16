@@ -1,23 +1,25 @@
 define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
 
     'qui/controls/Control',
+    'qui/controls/windows/Confirm',
     'Locale',
     'Projects',
     'package/quiqqer/bricks/bin/Controls/backend/BlockSlot',
+    'package/quiqqer/bricks/bin/vendor/gridstack/GridStack',
 
     'css!package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings.css'
 
-], function (QUIControl, QUILocale, Projects, BlockSlot) {
+], function (QUIControl, QUIConfirm, QUILocale, Projects, BlockSlot, GridStack) {
     "use strict";
 
     const lg = 'quiqqer/bricks';
     const MODE_EDITOR = 'editor';
     const MODE_BRICK = 'brick';
     const MODE_IMAGE = 'image';
+    const EDIT_MODE_CONTENT = 'content';
+    const EDIT_MODE_LAYOUT = 'layout';
     const LAYOUT_TWO = 'grid-2-equal';
     const LAYOUT_FOUR = 'grid-2x2';
-    const LEGACY_LAYOUT_TWO = '2-chamber';
-    const LEGACY_LAYOUT_FOUR = '4-chamber';
     const IMAGE_FIT_AUTO = 'auto';
     const IMAGE_FIT_COVER = 'cover';
     const IMAGE_FIT_CONTAIN = 'contain';
@@ -29,6 +31,29 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
     const VERTICAL_ALIGN_TOP = 'top';
     const VERTICAL_ALIGN_CENTER = 'center';
     const VERTICAL_ALIGN_BOTTOM = 'bottom';
+    const DEFAULT_COLUMNS = 12;
+    const PRESETS = [
+        {
+            id: LAYOUT_TWO,
+            labelKey: 'brick.multiLayout.layout.2chamber',
+            columns: DEFAULT_COLUMNS,
+            slots: [
+                {id: 'slot-1', x: 0, y: 0, w: 6, h: 1},
+                {id: 'slot-2', x: 6, y: 0, w: 6, h: 1}
+            ]
+        },
+        {
+            id: LAYOUT_FOUR,
+            labelKey: 'brick.multiLayout.layout.4chamber',
+            columns: DEFAULT_COLUMNS,
+            slots: [
+                {id: 'slot-1', x: 0, y: 0, w: 6, h: 1},
+                {id: 'slot-2', x: 6, y: 0, w: 6, h: 1},
+                {id: 'slot-3', x: 0, y: 1, w: 6, h: 1},
+                {id: 'slot-4', x: 6, y: 1, w: 6, h: 1}
+            ]
+        }
+    ];
 
     return new Class({
 
@@ -37,8 +62,9 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
 
         Binds: [
             '$onImport',
-            '$onLayoutChange',
-            '$onAreaChange'
+            '$onAreaChange',
+            '$onSlotRemove',
+            '$onSlotSelect'
         ],
 
         initialize: function (options) {
@@ -48,10 +74,15 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
             this.$Input = null;
             this.$Elm = null;
             this.$Container = null;
-            this.$LayoutInput = null;
             this.$Project = null;
-            this.$data = [];
+            this.$document = null;
             this.$HelperContainer = null;
+            this.$Toolbar = null;
+            this.$Canvas = null;
+            this.$Grid = null;
+            this.$GridContainer = null;
+            this.$editMode = EDIT_MODE_CONTENT;
+            this.$selectedSlotId = '';
 
             this.addEvents({
                 onImport: this.$onImport
@@ -67,6 +98,10 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
                 'class': 'quiqqer-bricks-multiLayout-settings'
             }).wraps(this.$Input);
 
+            this.$Toolbar = new Element('div', {
+                'class': 'quiqqer-bricks-multiLayout-settings-toolbar'
+            }).inject(this.$Elm);
+
             this.$Container = new Element('div', {
                 'class': 'quiqqer-bricks-multiLayout-settings-container'
             }).inject(this.$Elm);
@@ -75,8 +110,11 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
                 'class': 'quiqqer-bricks-multiLayout-settings-helper'
             }).inject(this.$Elm);
 
-            this.$data = this.$parseValue(this.$Input.value);
-            this.$attachLayoutInput();
+            this.$document = this.$normalizeDocument(this.$parseValue(this.$Input.value));
+            this.$selectedSlotId = this.$getDesktopSlots().length
+                ? this.$getDesktopSlots()[0].id
+                : '';
+
             this.$render();
             this.$update();
         },
@@ -90,74 +128,556 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
             this.$applyProjectToChildControls();
         },
 
-        $attachLayoutInput: function () {
-            const Form = this.$Elm.getParent('form');
+        $onAreaChange: function (Control, area, slotId) {
+            this.$document.areas[slotId] = this.$normalizeArea(area, this.$getSlotIndex(slotId), slotId);
+            this.$selectedSlotId = slotId;
+            this.$updateMobileOrder();
+            this.$update();
+        },
 
-            if (!Form || !Form.elements.layout) {
+        $onSlotRemove: function (Control, slotId) {
+            this.$removeSlot(slotId);
+        },
+
+        $onSlotSelect: function (Control, slotId) {
+            this.$selectedSlotId = slotId;
+            this.$refreshSelection();
+        },
+
+        $render: function () {
+            if (!this.$Container) {
                 return;
             }
 
-            this.$LayoutInput = document.id(Form.elements.layout);
-            this.$LayoutInput.value = this.$normalizeLayoutValue(this.$LayoutInput.value);
-            this.$LayoutInput.removeEvent('change', this.$onLayoutChange);
-            this.$LayoutInput.addEvent('change', this.$onLayoutChange);
+            this.$destroyGrid();
+            this.$destroyAreaControls();
+
+            this.$Toolbar.empty();
+            this.$Container.empty();
+            this.$Container.set('data-mode', this.$editMode);
+
+            this.$renderToolbar();
+
+            new Element('div', {
+                'class': 'quiqqer-bricks-multiLayout-settings-description',
+                text: QUILocale.get(lg, 'brick.multiLayout.settings.description')
+            }).inject(this.$Container);
+
+            new Element('div', {
+                'class': 'quiqqer-bricks-multiLayout-settings-breakpointHint',
+                text: QUILocale.get(lg, 'brick.multiLayout.settings.breakpointHint')
+            }).inject(this.$Container);
+
+            this.$Canvas = new Element('div', {
+                'class': 'quiqqer-bricks-multiLayout-settings-canvas'
+            }).inject(this.$Container);
+
+            if (this.$editMode === EDIT_MODE_LAYOUT) {
+                this.$renderLayoutCanvas();
+            } else {
+                this.$renderContentCanvas();
+            }
         },
 
-        $onLayoutChange: function () {
+        $renderToolbar: function () {
+            const PresetGroup = new Element('label', {
+                'class': 'quiqqer-bricks-multiLayout-settings-toolbarGroup'
+            }).inject(this.$Toolbar);
+
+            new Element('span', {
+                'class': 'quiqqer-bricks-multiLayout-settings-toolbarLabel',
+                text: QUILocale.get(lg, 'brick.multiLayout.toolbar.preset')
+            }).inject(PresetGroup);
+
+            const PresetSelect = new Element('select', {
+                'class': 'quiqqer-bricks-multiLayout-settings-select'
+            }).inject(PresetGroup);
+
+            PRESETS.forEach(function (preset) {
+                new Element('option', {
+                    value: preset.id,
+                    text: QUILocale.get(lg, preset.labelKey),
+                    selected: this.$document.preset === preset.id
+                }).inject(PresetSelect);
+            }.bind(this));
+
+            PresetSelect.addEvent('change', function () {
+                this.$changePreset(PresetSelect.value);
+            }.bind(this));
+
+            const ModeGroup = new Element('div', {
+                'class': 'quiqqer-bricks-multiLayout-settings-toolbarGroup '
+                    + 'quiqqer-bricks-multiLayout-settings-toolbarGroup--modes'
+            }).inject(this.$Toolbar);
+
+            new Element('span', {
+                'class': 'quiqqer-bricks-multiLayout-settings-toolbarLabel',
+                text: QUILocale.get(lg, 'brick.multiLayout.toolbar.mode')
+            }).inject(ModeGroup);
+
+            this.$createModeButton(
+                ModeGroup,
+                EDIT_MODE_CONTENT,
+                QUILocale.get(lg, 'brick.multiLayout.toolbar.mode.content')
+            );
+            this.$createModeButton(
+                ModeGroup,
+                EDIT_MODE_LAYOUT,
+                QUILocale.get(lg, 'brick.multiLayout.toolbar.mode.layout')
+            );
+
+            const ActionGroup = new Element('div', {
+                'class': 'quiqqer-bricks-multiLayout-settings-toolbarGroup '
+                    + 'quiqqer-bricks-multiLayout-settings-toolbarGroup--actions'
+            }).inject(this.$Toolbar);
+
+            new Element('button', {
+                type: 'button',
+                'class': 'quiqqer-bricks-multiLayout-settings-button',
+                html: '<span class="fa fa-plus"></span><span>'
+                    + QUILocale.get(lg, 'brick.multiLayout.toolbar.addSlot') + '</span>',
+                events: {
+                    click: this.$addSlot.bind(this)
+                }
+            }).inject(ActionGroup);
+        },
+
+        $createModeButton: function (Parent, mode, label) {
+            new Element('button', {
+                type: 'button',
+                'class': 'quiqqer-bricks-multiLayout-settings-modeButton'
+                    + (this.$editMode === mode ? ' is-active' : ''),
+                text: label,
+                events: {
+                    click: function () {
+                        if (this.$editMode === mode) {
+                            return;
+                        }
+
+                        this.$editMode = mode;
+                        this.$render();
+                    }.bind(this)
+                }
+            }).inject(Parent);
+        },
+
+        $renderContentCanvas: function () {
+            const Grid = new Element('div', {
+                'class': 'quiqqer-bricks-multiLayout-settings-contentGrid',
+                styles: {
+                    gridTemplateColumns: 'repeat(' + this.$document.columns + ', minmax(0, 1fr))'
+                }
+            }).inject(this.$Canvas);
+
+            this.$getOrderedDesktopSlots().forEach(function (slot, index) {
+                const AreaControl = new BlockSlot({
+                    area: this.$document.areas[slot.id],
+                    helperContainer: this.$HelperContainer,
+                    slotId: slot.id,
+                    index: index,
+                    interactionMode: EDIT_MODE_CONTENT,
+                    allowedModes: [MODE_EDITOR, MODE_BRICK, MODE_IMAGE],
+                    allowModeSwitch: true,
+                    settingsVisibility: {
+                        contentPadding: true,
+                        mobileOrder: true,
+                        verticalAlign: true,
+                        background: true,
+                        backgroundColor: true,
+                        textColor: true,
+                        image: true
+                    },
+                    events: {
+                        change: this.$onAreaChange
+                    }
+                });
+
+                const Wrap = new Element('div', {
+                    'class': 'quiqqer-bricks-multiLayout-settings-slotWrap',
+                    styles: this.$getSlotGridStyles(slot)
+                }).inject(Grid);
+
+                AreaControl.inject(Wrap);
+
+                if (this.$Project) {
+                    AreaControl.setProject(this.$Project);
+                }
+
+                this.$AreaControls.push(AreaControl);
+            }.bind(this));
+        },
+
+        $renderLayoutCanvas: function () {
+            this.$GridContainer = new Element('div', {
+                'class': 'quiqqer-bricks-multiLayout-settings-layoutGrid grid-stack'
+            }).inject(this.$Canvas);
+
+            this.$getOrderedDesktopSlots().forEach(function (slot, index) {
+                const Item = new Element('div', {
+                    'class': 'grid-stack-item',
+                    'gs-id': slot.id,
+                    'gs-x': slot.x,
+                    'gs-y': slot.y,
+                    'gs-w': slot.w,
+                    'gs-h': slot.h
+                }).inject(this.$GridContainer);
+
+                const Content = new Element('div', {
+                    'class': 'grid-stack-item-content'
+                }).inject(Item);
+
+                const AreaControl = new BlockSlot({
+                    area: this.$document.areas[slot.id],
+                    helperContainer: this.$HelperContainer,
+                    slotId: slot.id,
+                    index: index,
+                    interactionMode: EDIT_MODE_LAYOUT,
+                    selected: this.$selectedSlotId === slot.id,
+                    allowRemoveSlot: this.$getDesktopSlots().length > 1,
+                    allowModeSwitch: false,
+                    settingsVisibility: {
+                        contentPadding: false,
+                        mobileOrder: false,
+                        verticalAlign: false,
+                        background: false,
+                        backgroundColor: false,
+                        textColor: false,
+                        image: false
+                    },
+                    events: {
+                        select: this.$onSlotSelect,
+                        removeSlot: this.$onSlotRemove
+                    }
+                });
+
+                AreaControl.inject(Content);
+                this.$AreaControls.push(AreaControl);
+            }.bind(this));
+
+            this.$initGrid();
+        },
+
+        $initGrid: function () {
+            if (!this.$GridContainer || !GridStack) {
+                return;
+            }
+
+            this.$Grid = GridStack.init({
+                column: this.$document.columns,
+                cellHeight: 110,
+                disableOneColumnMode: true,
+                float: true,
+                margin: 12,
+                resizable: {
+                    handles: 'e, se, s, sw, w'
+                }
+            }, this.$GridContainer);
+
+            this.$Grid.on('change', function () {
+                this.$syncSlotsFromGrid();
+            }.bind(this));
+        },
+
+        $syncSlotsFromGrid: function () {
+            if (!this.$GridContainer) {
+                return;
+            }
+
+            const slots = [];
+
+            this.$GridContainer.getElements('.grid-stack-item').forEach(function (Item) {
+                if (!Item.gridstackNode) {
+                    return;
+                }
+
+                slots.push(this.$normalizeSlot({
+                    id: Item.gridstackNode.id || Item.get('gs-id') || Item.getAttribute('gs-id'),
+                    x: Item.gridstackNode.x,
+                    y: Item.gridstackNode.y,
+                    w: Item.gridstackNode.w,
+                    h: Item.gridstackNode.h
+                }, slots.length));
+            }.bind(this));
+
+            this.$document.breakpoints.desktop.slots = slots.sort(this.$compareSlots);
+            this.$updateMobileOrder();
+            this.$update();
+        },
+
+        $changePreset: function (presetId) {
+            presetId = this.$normalizeLayoutValue(presetId);
+
+            if (presetId === this.$document.preset) {
+                this.$syncLayoutInput();
+                return;
+            }
+
+            const applyPreset = function () {
+                this.$document = this.$createDocumentFromPreset(presetId, this.$document);
+                this.$selectedSlotId = this.$getDesktopSlots().length
+                    ? this.$getDesktopSlots()[0].id
+                    : '';
+                this.$render();
+                this.$update();
+            }.bind(this);
+
+            if (!this.$hasAreaContent()) {
+                applyPreset();
+                return;
+            }
+
+            new QUIConfirm({
+                icon: 'fa fa-columns',
+                title: QUILocale.get(lg, 'brick.multiLayout.presetChange.title'),
+                information: QUILocale.get(lg, 'brick.multiLayout.presetChange.information'),
+                text: QUILocale.get(lg, 'brick.multiLayout.presetChange.text'),
+                events: {
+                    onSubmit: applyPreset
+                }
+            }).open();
+        },
+
+        $addSlot: function () {
+            const nextId = this.$createNextSlotId();
+            const nextY = this.$getNextSlotY();
+            const index = this.$getDesktopSlots().length;
+
+            this.$document.breakpoints.desktop.slots.push(this.$normalizeSlot({
+                id: nextId,
+                x: 0,
+                y: nextY,
+                w: this.$document.columns,
+                h: 1
+            }, index));
+
+            this.$document.areas[nextId] = this.$normalizeArea({}, index, nextId);
+            this.$selectedSlotId = nextId;
+            this.$updateMobileOrder();
             this.$render();
             this.$update();
         },
 
-        $onAreaChange: function (Control, area, index) {
-            this.$data[index] = this.$normalizeArea(area, index);
-            this.$update();
+        $removeSlot: function (slotId) {
+            const slots = this.$getDesktopSlots().filter(function (slot) {
+                return slot.id !== slotId;
+            });
+
+            if (!slots.length) {
+                return;
+            }
+
+            this.$document.breakpoints.desktop.slots = slots;
+            delete this.$document.areas[slotId];
+            this.$selectedSlotId = slots[0].id;
+            this.$updateMobileOrder();
             this.$render();
+            this.$update();
         },
 
-        $getLayout: function () {
-            if (!this.$LayoutInput) {
-                return LAYOUT_TWO;
+        $destroyGrid: function () {
+            if (this.$Grid && typeof this.$Grid.destroy === 'function') {
+                this.$Grid.destroy(false);
             }
 
-            const value = this.$normalizeLayoutValue(this.$LayoutInput.value);
-
-            return value === LAYOUT_FOUR ? LAYOUT_FOUR : LAYOUT_TWO;
+            this.$Grid = null;
+            this.$GridContainer = null;
         },
 
-        $normalizeLayoutValue: function (layout) {
-            if (layout === LEGACY_LAYOUT_FOUR) {
-                return LAYOUT_FOUR;
-            }
+        $destroyAreaControls: function () {
+            this.$AreaControls.forEach(function (Control) {
+                if (Control && 'destroy' in Control) {
+                    Control.destroy();
+                }
+            });
 
-            if (layout === LEGACY_LAYOUT_TWO) {
-                return LAYOUT_TWO;
-            }
-
-            return layout === LAYOUT_FOUR ? LAYOUT_FOUR : LAYOUT_TWO;
+            this.$AreaControls = [];
         },
 
-        $getAreaCount: function () {
-            return this.$getLayout() === LAYOUT_FOUR ? 4 : 2;
+        $applyProjectToChildControls: function () {
+            this.$AreaControls.forEach(function (Control) {
+                if (Control && 'setProject' in Control) {
+                    Control.setProject(this.$Project);
+                }
+            }.bind(this));
+        },
+
+        $refreshSelection: function () {
+            this.$AreaControls.forEach(function (Control) {
+                if (Control && 'setSelected' in Control) {
+                    Control.setSelected(
+                        'getSlotId' in Control && Control.getSlotId() === this.$selectedSlotId
+                    );
+                }
+            }.bind(this));
+        },
+
+        $update: function () {
+            this.$Input.value = JSON.encode(this.$document);
         },
 
         $parseValue: function (value) {
             if (!value) {
-                return [];
+                return null;
             }
 
             try {
-                value = JSON.decode(value);
+                return JSON.decode(value);
             } catch (e) {
-                return [];
+                return null;
             }
+        },
 
-            if (typeOf(value) !== 'array') {
-                return [];
-            }
+        $normalizeDocument: function (value) {
+            const preset = this.$getPreset(this.$normalizeLayoutValue(
+                value && value.preset ? value.preset : null
+            ));
+            const sourceColumns = value && !isNaN(parseInt(value.columns, 10))
+                ? parseInt(value.columns, 10)
+                : preset.columns;
+            const slotsSource = value
+                && value.breakpoints
+                && value.breakpoints.desktop
+                && typeOf(value.breakpoints.desktop.slots) === 'array'
+                ? value.breakpoints.desktop.slots
+                : preset.slots;
+            const areasSource = value && typeOf(value.areas) === 'object' ? value.areas : {};
+            const slots = this.$normalizeSlots(slotsSource, sourceColumns, preset.columns);
+            const areas = {};
 
-            return value.map(function (area, index) {
-                return this.$normalizeArea(area, index);
+            slots.forEach(function (slot, index) {
+                let sourceArea = null;
+
+                if (areasSource[slot.id] && typeOf(areasSource[slot.id]) === 'object') {
+                    sourceArea = areasSource[slot.id];
+                }
+
+                areas[slot.id] = this.$normalizeArea(sourceArea || {}, index, slot.id);
             }.bind(this));
+
+            const documentData = {
+                preset: preset.id,
+                columns: preset.columns,
+                breakpoints: {
+                    desktop: {
+                        slots: slots.sort(this.$compareSlots)
+                    },
+                    tablet: {
+                        mode: 'inherit'
+                    },
+                    mobile: {
+                        mode: 'stack',
+                        order: []
+                    }
+                },
+                areas: areas
+            };
+
+            documentData.breakpoints.mobile.order = this.$buildMobileOrder(documentData);
+
+            return documentData;
+        },
+
+        $createDocumentFromPreset: function (presetId, previousDocument) {
+            const preset = this.$getPreset(presetId);
+            const nextDocument = this.$normalizeDocument({
+                preset: preset.id,
+                columns: preset.columns,
+                breakpoints: {
+                    desktop: {
+                        slots: preset.slots
+                    }
+                },
+                areas: {}
+            });
+            const previousSlots = this.$getOrderedSlotsFromDocument(previousDocument);
+
+            this.$getOrderedSlotsFromDocument(nextDocument).forEach(function (slot, index) {
+                const sameSlotArea = previousDocument.areas[slot.id];
+                const mappedSlot = previousSlots[index];
+                const mappedArea = mappedSlot && previousDocument.areas[mappedSlot.id]
+                    ? previousDocument.areas[mappedSlot.id]
+                    : null;
+
+                nextDocument.areas[slot.id] = this.$normalizeArea(
+                    sameSlotArea || mappedArea || {},
+                    index,
+                    slot.id
+                );
+            }.bind(this));
+
+            nextDocument.breakpoints.mobile.order = this.$buildMobileOrder(nextDocument);
+
+            return nextDocument;
+        },
+
+        $normalizeLayoutValue: function (layout) {
+            return layout === LAYOUT_FOUR ? LAYOUT_FOUR : LAYOUT_TWO;
+        },
+
+        $normalizeSlots: function (slots, sourceColumns, targetColumns) {
+            const normalized = [];
+            const used = {};
+            sourceColumns = parseInt(sourceColumns, 10) || DEFAULT_COLUMNS;
+            targetColumns = parseInt(targetColumns, 10) || sourceColumns;
+
+            if (typeOf(slots) !== 'array') {
+                slots = this.$getPreset(LAYOUT_TWO).slots;
+            }
+
+            slots.forEach(function (slot, index) {
+                slot = this.$normalizeSlot(slot, index, sourceColumns, targetColumns);
+
+                if (used[slot.id]) {
+                    slot.id = this.$createUniqueSlotId(used);
+                }
+
+                used[slot.id] = true;
+                normalized.push(slot);
+            }.bind(this));
+
+            return normalized.length
+                ? normalized
+                : this.$getPreset(LAYOUT_TWO).slots.map(function (slot, index) {
+                    return this.$normalizeSlot(slot, index, targetColumns, targetColumns);
+                }.bind(this));
+        },
+
+        $normalizeSlot: function (slot, index, sourceColumns, targetColumns) {
+            slot = typeOf(slot) === 'object' ? slot : {};
+            sourceColumns = parseInt(sourceColumns, 10) || DEFAULT_COLUMNS;
+            targetColumns = parseInt(targetColumns, 10) || sourceColumns;
+
+            let width = parseInt(slot.w, 10);
+            let height = parseInt(slot.h, 10);
+            let x = parseInt(slot.x, 10);
+            let y = parseInt(slot.y, 10);
+
+            if (isNaN(width) || width < 1) {
+                width = 1;
+            }
+
+            if (isNaN(height) || height < 1) {
+                height = 1;
+            }
+
+            if (sourceColumns !== targetColumns) {
+                const ratio = targetColumns / sourceColumns;
+
+                width = Math.max(1, Math.round(width * ratio));
+                x = isNaN(x) ? 0 : Math.round(x * ratio);
+            }
+
+            width = Math.min(targetColumns, width);
+            x = isNaN(x) || x < 0 ? 0 : Math.min(targetColumns - width, x);
+            y = isNaN(y) || y < 0 ? index : y;
+
+            return {
+                id: slot.id ? slot.id.toString() : 'slot-' + (index + 1),
+                x: x,
+                y: y,
+                w: width,
+                h: height
+            };
         },
 
         $normalizeArea: function (area, index) {
@@ -233,7 +753,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
                 backgroundImageFit: backgroundImageFit,
                 backgroundImagePosition: backgroundImagePosition,
                 backgroundColorEnabled: !!area.backgroundColorEnabled,
-                backgroundColor: area.backgroundColor || '',
+                backgroundColor: area.backgroundColor || '#000000',
                 backgroundColorOpacity: backgroundColorOpacity,
                 textColor: area.textColor ? area.textColor.toString().trim() : '',
                 verticalAlign: verticalAlign,
@@ -241,84 +761,149 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
             };
         },
 
-        $getAreaData: function (index) {
-            if (!this.$data[index]) {
-                this.$data[index] = this.$normalizeArea({}, index);
-            }
+        $buildMobileOrder: function (documentData) {
+            return this.$getOrderedSlotsFromDocument(documentData).sort(function (slotA, slotB) {
+                const areaA = documentData.areas[slotA.id] || {};
+                const areaB = documentData.areas[slotB.id] || {};
 
-            return this.$data[index];
-        },
-
-        $render: function () {
-            if (!this.$Container) {
-                return;
-            }
-
-            this.$destroyAreaControls();
-            this.$Container.empty();
-            this.$Container.set('data-layout', this.$getLayout());
-
-            new Element('div', {
-                'class': 'quiqqer-bricks-multiLayout-settings-description',
-                text: QUILocale.get(lg, 'brick.multiLayout.settings.description')
-            }).inject(this.$Container);
-
-            for (let i = 0, len = this.$getAreaCount(); i < len; i++) {
-                const AreaControl = new BlockSlot({
-                    area: this.$getAreaData(i),
-                    helperContainer: this.$HelperContainer,
-                    index: i,
-                    allowedModes: [MODE_EDITOR, MODE_BRICK, MODE_IMAGE],
-                    allowModeSwitch: true,
-                    settingsVisibility: {
-                        contentPadding: true,
-                        mobileOrder: true,
-                        verticalAlign: true,
-                        background: true,
-                        backgroundColor: true,
-                        textColor: true,
-                        image: true
-                    },
-                    events: {
-                        change: this.$onAreaChange
-                    }
-                }).inject(this.$Container);
-
-                if (this.$Project) {
-                    AreaControl.setProject(this.$Project);
+                if (areaA.mobileOrder === areaB.mobileOrder) {
+                    return this.$compareSlots(slotA, slotB);
                 }
 
-                this.$AreaControls.push(AreaControl);
-            }
-        },
-
-        $destroyAreaControls: function () {
-            this.$AreaControls.forEach(function (Control) {
-                if (Control && 'destroy' in Control) {
-                    Control.destroy();
-                }
+                return (areaA.mobileOrder || 0) - (areaB.mobileOrder || 0);
+            }.bind(this)).map(function (slot) {
+                return slot.id;
             });
-
-            this.$AreaControls = [];
         },
 
-        $applyProjectToChildControls: function () {
-            this.$AreaControls.forEach(function (Control) {
-                if (Control && 'setProject' in Control) {
-                    Control.setProject(this.$Project);
+        $updateMobileOrder: function () {
+            this.$document.breakpoints.mobile.order = this.$buildMobileOrder(this.$document);
+        },
+
+        $getSlotGridStyles: function (slot) {
+            return {
+                gridColumn: (slot.x + 1) + ' / span ' + slot.w,
+                gridRow: (slot.y + 1) + ' / span ' + slot.h
+            };
+        },
+
+        $hasAreaContent: function () {
+            return this.$getDesktopSlots().some(function (slot) {
+                const area = this.$document.areas[slot.id];
+
+                if (!area) {
+                    return false;
                 }
+
+                return !!(
+                    (area.content && area.content.trim())
+                    || area.brickId
+                    || area.image
+                );
             }.bind(this));
         },
 
-        $update: function () {
-            const maxAreas = this.$getAreaCount();
-            const data = [];
+        $getPreset: function (presetId) {
+            let found = PRESETS.filter(function (preset) {
+                return preset.id === presetId;
+            })[0];
 
-            for (let i = 0; i < maxAreas; i++) {
-                data.push(this.$normalizeArea(this.$getAreaData(i), i));
+            if (!found) {
+                found = PRESETS[0];
             }
 
-            this.$Input.value = JSON.encode(data);
+            return {
+                id: found.id,
+                labelKey: found.labelKey,
+                columns: found.columns,
+                slots: found.slots.map(function (slot, index) {
+                    return this.$normalizeSlot(slot, index, found.columns);
+                }.bind(this))
+            };
+        },
+
+        $getDesktopSlots: function () {
+            if (!this.$document
+                || !this.$document.breakpoints
+                || !this.$document.breakpoints.desktop
+                || typeOf(this.$document.breakpoints.desktop.slots) !== 'array'
+            ) {
+                return [];
+            }
+
+            return this.$document.breakpoints.desktop.slots;
+        },
+
+        $getOrderedDesktopSlots: function () {
+            return this.$getDesktopSlots().slice().sort(this.$compareSlots);
+        },
+
+        $getOrderedSlotsFromDocument: function (documentData) {
+            if (!documentData
+                || !documentData.breakpoints
+                || !documentData.breakpoints.desktop
+                || typeOf(documentData.breakpoints.desktop.slots) !== 'array'
+            ) {
+                return [];
+            }
+
+            return documentData.breakpoints.desktop.slots.slice().sort(this.$compareSlots);
+        },
+
+        $compareSlots: function (slotA, slotB) {
+            if (slotA.y === slotB.y) {
+                if (slotA.x === slotB.x) {
+                    return slotA.id.localeCompare(slotB.id);
+                }
+
+                return slotA.x - slotB.x;
+            }
+
+            return slotA.y - slotB.y;
+        },
+
+        $createUniqueSlotId: function (used) {
+            let counter = 1;
+            let slotId = 'slot-' + counter;
+
+            while (used[slotId]) {
+                counter++;
+                slotId = 'slot-' + counter;
+            }
+
+            return slotId;
+        },
+
+        $createNextSlotId: function () {
+            const used = {};
+
+            this.$getDesktopSlots().forEach(function (slot) {
+                used[slot.id] = true;
+            });
+
+            return this.$createUniqueSlotId(used);
+        },
+
+        $getNextSlotY: function () {
+            let maxY = 0;
+
+            this.$getDesktopSlots().forEach(function (slot) {
+                maxY = Math.max(maxY, slot.y + slot.h);
+            });
+
+            return maxY;
+        },
+
+        $getSlotIndex: function (slotId) {
+            const slots = this.$getOrderedDesktopSlots();
+
+            for (let i = 0, len = slots.length; i < len; i++) {
+                if (slots[i].id === slotId) {
+                    return i;
+                }
+            }
+
+            return -1;
         }
     });
 });

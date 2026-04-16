@@ -1,11 +1,14 @@
 <div class="{$this->getAttribute('class')}"
-     data-layout="{$layout}"
+     data-preset="{$layoutDocument.preset}"
      data-area-count="{$areaCount}"
 >
-    <div class="quiqqer-bricks-controls-multiLayout-grid{if empty($gridGapEnabled)} quiqqer-bricks-controls-multiLayout-grid--noGap{/if}">
+    <div class="quiqqer-bricks-controls-multiLayout-grid{if empty($gridGapEnabled)} quiqqer-bricks-controls-multiLayout-grid--noGap{/if}"
+         style="grid-template-columns: repeat({$columns}, minmax(0, 1fr));"
+    >
         {foreach from=$areas item=area}
             <section class="quiqqer-bricks-controls-multiLayout-area quiqqer-bricks-controls-multiLayout-area--{$area.mode} quiqqer-bricks-controls-multiLayout-area--align-{$area.verticalAlign}{if $areaBackgroundEnabled} is-surface-subtle-enabled{/if}{if $area.backgroundEnabled && $area.backgroundImage} is-background-enabled{/if}{if $area.backgroundColorEnabled} is-background-color-enabled{/if}"
-                    {if $area.areaStyle}style="{$area.areaStyle}"{/if}>
+                    data-slot-id="{$area.slotId}"
+                    {if $area.slotStyle}style="{$area.slotStyle}"{/if}>
                 <div class="quiqqer-bricks-controls-multiLayout-areaContent{if empty($area.contentPadding)} quiqqer-bricks-controls-multiLayout-areaContent--noPadding{/if}">
                     {$area.contentHtml}
                 </div>

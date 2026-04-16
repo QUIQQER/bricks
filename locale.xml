@@ -2712,10 +2712,6 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
             <de><![CDATA[Mehrspaltiger Baustein mit frei konfigurierbaren Bereichen.]]></de>
             <en><![CDATA[Multi-column brick with individually configurable areas.]]></en>
         </locale>
-        <locale name="brick.multiLayout.layout">
-            <de><![CDATA[Vorlage]]></de>
-            <en><![CDATA[Layout]]></en>
-        </locale>
         <locale name="brick.multiLayout.layout.2chamber">
             <de><![CDATA[2 Kammer]]></de>
             <en><![CDATA[2 chambers]]></en>
@@ -3175,6 +3171,82 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
         <locale name="brick.multiLayout.settings.description">
             <de><![CDATA[Bearbeiten Sie jeden Bereich direkt in der Kartenübersicht. Einstellungen und Mobile-Reihenfolge bleiben pro Bereich verfügbar.]]></de>
             <en><![CDATA[Edit each area directly in the card overview. Settings and mobile order remain available per area.]]></en>
+        </locale>
+        <locale name="brick.multiLayout.settings.breakpointHint">
+            <de><![CDATA[Desktop ist editierbar, Tablet übernimmt das Desktop-Layout automatisch und Mobile bleibt gestapelt nach Mobile-Reihenfolge.]]></de>
+            <en><![CDATA[Desktop is editable, tablet inherits the desktop layout automatically and mobile stays stacked by mobile order.]]></en>
+        </locale>
+        <locale name="brick.multiLayout.toolbar.preset">
+            <de><![CDATA[Preset]]></de>
+            <en><![CDATA[Preset]]></en>
+        </locale>
+        <locale name="brick.multiLayout.toolbar.mode">
+            <de><![CDATA[Bearbeitungsmodus]]></de>
+            <en><![CDATA[Edit mode]]></en>
+        </locale>
+        <locale name="brick.multiLayout.toolbar.mode.content">
+            <de><![CDATA[Inhalte bearbeiten]]></de>
+            <en><![CDATA[Edit content]]></en>
+        </locale>
+        <locale name="brick.multiLayout.toolbar.mode.layout">
+            <de><![CDATA[Layout bearbeiten]]></de>
+            <en><![CDATA[Edit layout]]></en>
+        </locale>
+        <locale name="brick.multiLayout.toolbar.addSlot">
+            <de><![CDATA[Slot hinzufügen]]></de>
+            <en><![CDATA[Add slot]]></en>
+        </locale>
+        <locale name="brick.multiLayout.presetChange.title">
+            <de><![CDATA[Preset wechseln?]]></de>
+            <en><![CDATA[Change preset?]]></en>
+        </locale>
+        <locale name="brick.multiLayout.presetChange.text">
+            <de><![CDATA[Beim Wechsel wird die Desktop-Geometrie ersetzt. Bestehende Inhalte werden bestmöglich auf die neuen Slots übernommen.]]></de>
+            <en><![CDATA[Changing the preset replaces the desktop geometry. Existing content will be mapped to the new slots as best as possible.]]></en>
+        </locale>
+        <locale name="brick.multiLayout.presetChange.information">
+            <de><![CDATA[Nicht mehr zuordenbare Inhalte werden nur nach dieser Bestätigung verworfen.]]></de>
+            <en><![CDATA[Content that can no longer be mapped will only be discarded after this confirmation.]]></en>
+        </locale>
+        <locale name="blockSlot.interaction.content">
+            <de><![CDATA[Inhalt]]></de>
+            <en><![CDATA[Content]]></en>
+        </locale>
+        <locale name="blockSlot.interaction.layout">
+            <de><![CDATA[Layout]]></de>
+            <en><![CDATA[Layout]]></en>
+        </locale>
+        <locale name="blockSlot.layout.hint">
+            <de><![CDATA[Ziehen und Größe ändern im Layoutmodus.]]></de>
+            <en><![CDATA[Drag and resize in layout mode.]]></en>
+        </locale>
+        <locale name="blockSlot.layout.selected">
+            <de><![CDATA[Slot ausgewählt]]></de>
+            <en><![CDATA[Slot selected]]></en>
+        </locale>
+        <locale name="blockSlot.layout.idle">
+            <de><![CDATA[Für Layout-Aktionen klicken]]></de>
+            <en><![CDATA[Click for layout actions]]></en>
+        </locale>
+        <locale name="blockSlot.slot.label">
+            <de><![CDATA[ID: [id]]]></de>
+            <en><![CDATA[ID: [id]]]></en>
+        </locale>
+        <locale name="blockSlot.removeSlot.button">
+            <de><![CDATA[Slot entfernen]]></de>
+            <en><![CDATA[Remove slot]]></en>
+        </locale>
+        <locale name="blockSlot.removeSlot.popup.title">
+            <de><![CDATA[Slot [title] entfernen?]]></de>
+            <en><![CDATA[Remove slot [title]?]]></en>
+        </locale>
+        <locale name="blockSlot.removeSlot.popup.text">
+            <de><![CDATA[Der Slot und sein zugeordneter Inhalt werden entfernt.]]></de>
+            <en><![CDATA[The slot and its assigned content will be removed.]]></en>
+        </locale>
+        <locale name="blockSlot.removeSlot.popup.information">
+            <de><![CDATA[Diese Aktion betrifft die Layout-Geometrie und den Inhalt dieses Slots.]]></de>
+            <en><![CDATA[This action affects the layout geometry and the content of this slot.]]></en>
         </locale>
         <locale name="quiqqer.bricks.textAndImageMultiple.create.isDisabled">
             <de><![CDATA[Einträge deaktivieren]]></de>

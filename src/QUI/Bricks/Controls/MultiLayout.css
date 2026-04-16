@@ -5,7 +5,8 @@
 .quiqqer-bricks-controls-multiLayout-grid {
     display: grid;
     gap: 1.5rem;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-flow: row dense;
+    grid-auto-rows: minmax(180px, auto);
 }
 
 .quiqqer-bricks-controls-multiLayout-grid--noGap {
@@ -23,9 +24,9 @@
     background: transparent;
     display: flex;
     min-height: 280px;
+    min-width: 0;
     overflow: hidden;
     position: relative;
-    min-width: 0;
 }
 
 .quiqqer-bricks-controls-multiLayout-grid:not(.quiqqer-bricks-controls-multiLayout-grid--noGap) .quiqqer-bricks-controls-multiLayout-area {
@@ -123,6 +124,12 @@
 
 @media (max-width: 767px) {
     .quiqqer-bricks-controls-multiLayout-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
+    }
+
+    .quiqqer-bricks-controls-multiLayout-area {
+        grid-column: 1 / -1 !important;
+        grid-row: auto !important;
+        min-height: 0;
     }
 }

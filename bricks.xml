@@ -1898,17 +1898,6 @@
             </description>
 
             <settings>
-                <setting name="layout" type="select">
-                    <locale group="quiqqer/bricks" var="brick.multiLayout.layout"/>
-
-                    <option value="grid-2-equal" default="1">
-                        <locale group="quiqqer/bricks" var="brick.multiLayout.layout.2chamber"/>
-                    </option>
-                    <option value="grid-2x2">
-                        <locale group="quiqqer/bricks" var="brick.multiLayout.layout.4chamber"/>
-                    </option>
-                </setting>
-
                 <setting name="areaBackgroundEnabled" type="checkbox">
                     <locale group="quiqqer/bricks" var="brick.multiLayout.areaBackgroundEnabled"/>
                 </setting>
