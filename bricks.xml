@@ -1905,13 +1905,31 @@
                 <setting name="gridGapEnabled" type="checkbox">
                     <locale group="quiqqer/bricks" var="brick.multiLayout.gridGapEnabled"/>
                 </setting>
-
-                <setting name="layoutAreas" type="hidden"
-                         data-qui="package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings"
-                >
-                    <locale group="quiqqer/bricks" var="brick.multiLayout.areas"/>
-                </setting>
             </settings>
+
+            <window>
+                <categories>
+                    <category name="areas" index="35">
+                        <text>
+                            <locale group="quiqqer/bricks" var="brick.multiLayout.areas"/>
+                        </text>
+                        <image>fa fa-th-large</image>
+
+                        <settings name="areas">
+                            <title>
+                                <locale group="quiqqer/bricks" var="brick.multiLayout.areas"/>
+                            </title>
+
+                            <input conf="layoutAreas" type="hidden" label="false"
+                                   data-qui="package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings">
+                                <text>
+                                    <locale group="quiqqer/bricks" var="brick.multiLayout.areas"/>
+                                </text>
+                            </input>
+                        </settings>
+                    </category>
+                </categories>
+            </window>
         </brick>
 
         <brick control="\QUI\Bricks\Controls\Buttons">

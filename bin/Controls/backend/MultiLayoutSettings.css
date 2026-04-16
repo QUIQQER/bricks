@@ -71,20 +71,6 @@
     gap: 1rem;
 }
 
-.quiqqer-bricks-multiLayout-settings-description,
-.quiqqer-bricks-multiLayout-settings-breakpointHint {
-    background: #f6f7f9;
-    border: 1px solid #d9dfe7;
-    border-radius: 0.75rem;
-    color: #4f5b67;
-    line-height: 1.5;
-    padding: 0.9rem 1rem;
-}
-
-.quiqqer-bricks-multiLayout-settings-breakpointHint {
-    background: #fbfcfd;
-}
-
 .quiqqer-bricks-multiLayout-settings-canvas {
     min-width: 0;
 }

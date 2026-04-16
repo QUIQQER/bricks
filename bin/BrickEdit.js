@@ -56,7 +56,8 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
             'save',
             'del',
             '$onCategoryEnter',
-            '$onCategoryLeave'
+            '$onCategoryLeave',
+            '$sortCategoriesByIndex'
         ],
 
         options: {
@@ -169,6 +170,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             this.addCategory({
                 name: 'information',
+                // index: 10,
                 icon: 'fa fa-file-o',
                 text: QUILocale.get('quiqqer/system', 'information'),
                 events: {
@@ -178,6 +180,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             this.addCategory({
                 name: 'settings',
+                // index: 20,
                 icon: 'fa fa-magic',
                 text: QUILocale.get('quiqqer/system', 'properties'),
                 events: {
@@ -187,6 +190,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             this.addCategory({
                 name: 'extra',
+                // index: 30,
                 icon: 'fa fa-gears',
                 text: QUILocale.get(lg, 'brick.panel.category.settings'),
                 events: {
@@ -196,6 +200,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             this.addCategory({
                 name: 'content',
+                // index: 40,
                 icon: 'fa fa-file-text-o',
                 text: QUILocale.get('quiqqer/system', 'content'),
                 events: {
@@ -205,6 +210,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             this.addCategory({
                 name: 'footer',
+                // index: 50,
                 icon: 'fa fa-file-text',
                 text: QUILocale.get(lg, 'brick.panel.category.footer'),
                 events: {
@@ -214,6 +220,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             this.addCategory({
                 name: 'usage',
+                // index: 60,
                 icon: 'fa fa-map-signs',
                 text: QUILocale.get(lg, 'brick.panel.category.usage'),
                 events: {
@@ -223,6 +230,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             this.addCategory({
                 name  : 'customCSS',
+                // index : 70,
                 text  : QUILocale.get(lg, 'brick.panel.category.customCSS'),
                 icon  : 'fa fa-css3',
                 events: {
@@ -232,6 +240,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             this.addCategory({
                 name  : 'customJS',
+                // index : 80,
                 text  : QUILocale.get(lg, 'brick.panel.category.customJS'),
                 icon  : 'fa fa-code',
                 events: {
@@ -303,6 +312,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                         this.addCategory(categories[i]);
                     }
 
+                    // this.$sortCategoriesByIndex();
                     this.refresh();
 
                     resolve();
@@ -311,6 +321,26 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                     brickId: this.getAttribute('id'),
                     onError: reject
                 });
+            });
+        },
+
+        $sortCategoriesByIndex: function () {
+            const Bar = this.getCategoryBar(),
+                categories = Bar.getChildren().slice().sort(function (a, b) {
+                    const aIndex = parseInt(a.getAttribute('index'), 10),
+                        bIndex = parseInt(b.getAttribute('index'), 10),
+                        normalizedA = isNaN(aIndex) ? Number.POSITIVE_INFINITY : aIndex,
+                        normalizedB = isNaN(bIndex) ? Number.POSITIVE_INFINITY : bIndex;
+
+                    if (normalizedA === normalizedB) {
+                        return 0;
+                    }
+
+                    return normalizedA - normalizedB;
+                });
+
+            categories.forEach(function (Category, index) {
+                Bar.moveChildToPos(Category, index + 1);
             });
         },
 

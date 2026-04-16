@@ -2,6 +2,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
 
     'qui/controls/Control',
     'qui/controls/windows/Confirm',
+    'Ajax',
     'Locale',
     'Projects',
     'package/quiqqer/bricks/bin/Controls/backend/BlockSlot',
@@ -9,7 +10,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
 
     'css!package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings.css'
 
-], function (QUIControl, QUIConfirm, QUILocale, Projects, BlockSlot, GridStack) {
+], function (QUIControl, QUIConfirm, QUIAjax, QUILocale, Projects, BlockSlot, GridStack) {
     "use strict";
 
     const lg = 'quiqqer/bricks';
@@ -18,8 +19,6 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
     const MODE_IMAGE = 'image';
     const EDIT_MODE_CONTENT = 'content';
     const EDIT_MODE_LAYOUT = 'layout';
-    const LAYOUT_TWO = 'grid-2-equal';
-    const LAYOUT_FOUR = 'grid-2x2';
     const IMAGE_FIT_AUTO = 'auto';
     const IMAGE_FIT_COVER = 'cover';
     const IMAGE_FIT_CONTAIN = 'contain';
@@ -32,28 +31,8 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
     const VERTICAL_ALIGN_CENTER = 'center';
     const VERTICAL_ALIGN_BOTTOM = 'bottom';
     const DEFAULT_COLUMNS = 12;
-    const PRESETS = [
-        {
-            id: LAYOUT_TWO,
-            labelKey: 'brick.multiLayout.layout.2chamber',
-            columns: DEFAULT_COLUMNS,
-            slots: [
-                {id: 'slot-1', x: 0, y: 0, w: 6, h: 1},
-                {id: 'slot-2', x: 6, y: 0, w: 6, h: 1}
-            ]
-        },
-        {
-            id: LAYOUT_FOUR,
-            labelKey: 'brick.multiLayout.layout.4chamber',
-            columns: DEFAULT_COLUMNS,
-            slots: [
-                {id: 'slot-1', x: 0, y: 0, w: 6, h: 1},
-                {id: 'slot-2', x: 6, y: 0, w: 6, h: 1},
-                {id: 'slot-3', x: 0, y: 1, w: 6, h: 1},
-                {id: 'slot-4', x: 6, y: 1, w: 6, h: 1}
-            ]
-        }
-    ];
+    const MIN_SLOT_WIDTH = 2;
+    const AJAX_GET_PRESETS = 'package_quiqqer_bricks_ajax_getMultiLayoutPresets';
 
     return new Class({
 
@@ -83,6 +62,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
             this.$GridContainer = null;
             this.$editMode = EDIT_MODE_CONTENT;
             this.$selectedSlotId = '';
+            this.$presets = [];
 
             this.addEvents({
                 onImport: this.$onImport
@@ -110,13 +90,44 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
                 'class': 'quiqqer-bricks-multiLayout-settings-helper'
             }).inject(this.$Elm);
 
-            this.$document = this.$normalizeDocument(this.$parseValue(this.$Input.value));
-            this.$selectedSlotId = this.$getDesktopSlots().length
-                ? this.$getDesktopSlots()[0].id
-                : '';
+            this.$loadPresets().then(function () {
+                this.$document = this.$normalizeDocument(this.$parseValue(this.$Input.value));
+                this.$selectedSlotId = this.$getDesktopSlots().length
+                    ? this.$getDesktopSlots()[0].id
+                    : '';
 
-            this.$render();
-            this.$update();
+                this.$render();
+                this.$update();
+            }.bind(this)).catch(function () {
+                this.$presets = [];
+            }.bind(this));
+        },
+
+        $loadPresets: function () {
+            return new Promise(function (resolve, reject) {
+                QUIAjax.get(AJAX_GET_PRESETS, function (presets) {
+                    this.$presets = typeOf(presets) === 'array'
+                        ? presets.sort(function (presetA, presetB) {
+                            return (presetA.sort || 0) - (presetB.sort || 0);
+                        })
+                        : [];
+
+                    resolve(this.$presets);
+                }.bind(this), {
+                    'package': 'quiqqer/bricks',
+                    onError: reject
+                });
+            }.bind(this));
+        },
+
+        $getPresets: function () {
+            return this.$presets;
+        },
+
+        $getDefaultPresetId: function () {
+            const presets = this.$getPresets();
+
+            return presets.length ? presets[0].id : null;
         },
 
         setProject: function (Project) {
@@ -158,16 +169,6 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
 
             this.$renderToolbar();
 
-            new Element('div', {
-                'class': 'quiqqer-bricks-multiLayout-settings-description',
-                text: QUILocale.get(lg, 'brick.multiLayout.settings.description')
-            }).inject(this.$Container);
-
-            new Element('div', {
-                'class': 'quiqqer-bricks-multiLayout-settings-breakpointHint',
-                text: QUILocale.get(lg, 'brick.multiLayout.settings.breakpointHint')
-            }).inject(this.$Container);
-
             this.$Canvas = new Element('div', {
                 'class': 'quiqqer-bricks-multiLayout-settings-canvas'
             }).inject(this.$Container);
@@ -193,7 +194,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
                 'class': 'quiqqer-bricks-multiLayout-settings-select'
             }).inject(PresetGroup);
 
-            PRESETS.forEach(function (preset) {
+            this.$getPresets().forEach(function (preset) {
                 new Element('option', {
                     value: preset.id,
                     text: QUILocale.get(lg, preset.labelKey),
@@ -230,6 +231,10 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
                 'class': 'quiqqer-bricks-multiLayout-settings-toolbarGroup '
                     + 'quiqqer-bricks-multiLayout-settings-toolbarGroup--actions'
             }).inject(this.$Toolbar);
+
+            if (this.$editMode !== EDIT_MODE_LAYOUT) {
+                return;
+            }
 
             new Element('button', {
                 type: 'button',
@@ -319,7 +324,8 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
                     'gs-x': slot.x,
                     'gs-y': slot.y,
                     'gs-w': slot.w,
-                    'gs-h': slot.h
+                    'gs-h': slot.h,
+                    'gs-min-w': MIN_SLOT_WIDTH
                 }).inject(this.$GridContainer);
 
                 const Content = new Element('div', {
@@ -364,7 +370,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
 
             this.$Grid = GridStack.init({
                 column: this.$document.columns,
-                cellHeight: 110,
+                cellHeight: 200,
                 disableOneColumnMode: true,
                 float: true,
                 margin: 12,
@@ -439,14 +445,15 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
 
         $addSlot: function () {
             const nextId = this.$createNextSlotId();
-            const nextY = this.$getNextSlotY();
             const index = this.$getDesktopSlots().length;
+            const defaultSlotWidth = this.$getDefaultSlotWidth();
+            const nextPosition = this.$findNextSlotPosition(defaultSlotWidth, 1);
 
             this.$document.breakpoints.desktop.slots.push(this.$normalizeSlot({
                 id: nextId,
-                x: 0,
-                y: nextY,
-                w: this.$document.columns,
+                x: nextPosition.x,
+                y: nextPosition.y,
+                w: defaultSlotWidth,
                 h: 1
             }, index));
 
@@ -611,7 +618,11 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
         },
 
         $normalizeLayoutValue: function (layout) {
-            return layout === LAYOUT_FOUR ? LAYOUT_FOUR : LAYOUT_TWO;
+            const found = this.$getPresets().some(function (preset) {
+                return preset.id === layout;
+            });
+
+            return found ? layout : this.$getDefaultPresetId();
         },
 
         $normalizeSlots: function (slots, sourceColumns, targetColumns) {
@@ -621,7 +632,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
             targetColumns = parseInt(targetColumns, 10) || sourceColumns;
 
             if (typeOf(slots) !== 'array') {
-                slots = this.$getPreset(LAYOUT_TWO).slots;
+                slots = this.$getPreset(this.$getDefaultPresetId()).slots;
             }
 
             slots.forEach(function (slot, index) {
@@ -637,7 +648,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
 
             return normalized.length
                 ? normalized
-                : this.$getPreset(LAYOUT_TWO).slots.map(function (slot, index) {
+                : this.$getPreset(this.$getDefaultPresetId()).slots.map(function (slot, index) {
                     return this.$normalizeSlot(slot, index, targetColumns, targetColumns);
                 }.bind(this));
         },
@@ -804,22 +815,35 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
         },
 
         $getPreset: function (presetId) {
-            let found = PRESETS.filter(function (preset) {
+            let found = this.$getPresets().filter(function (preset) {
                 return preset.id === presetId;
             })[0];
 
             if (!found) {
-                found = PRESETS[0];
+                found = this.$getPresets()[0];
             }
 
             return {
                 id: found.id,
                 labelKey: found.labelKey,
                 columns: found.columns,
+                defaultSlotWidth: found.defaultSlotWidth,
                 slots: found.slots.map(function (slot, index) {
                     return this.$normalizeSlot(slot, index, found.columns);
                 }.bind(this))
             };
+        },
+
+        $getDefaultSlotWidth: function () {
+            const preset = this.$getPreset(this.$document && this.$document.preset);
+            let width = parseInt(preset.defaultSlotWidth, 10);
+            const columns = parseInt(this.$document && this.$document.columns, 10) || DEFAULT_COLUMNS;
+
+            if (isNaN(width) || width < 1) {
+                width = columns;
+            }
+
+            return Math.max(1, Math.min(columns, width));
         },
 
         $getDesktopSlots: function () {
@@ -892,6 +916,45 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
             });
 
             return maxY;
+        },
+
+        $findNextSlotPosition: function (width, height) {
+            const columns = parseInt(this.$document && this.$document.columns, 10) || DEFAULT_COLUMNS;
+            const slots = this.$getDesktopSlots();
+            let pointer = 0;
+
+            width = Math.max(1, Math.min(columns, parseInt(width, 10) || 1));
+            height = Math.max(1, parseInt(height, 10) || 1);
+
+            while (true) {
+                const x = pointer % columns;
+                const y = Math.floor(pointer / columns);
+
+                if (x + width > columns) {
+                    pointer = (y + 1) * columns;
+                    continue;
+                }
+
+                if (this.$isSlotAreaFree(x, y, width, height, slots)) {
+                    return {
+                        x: x,
+                        y: y
+                    };
+                }
+
+                pointer++;
+            }
+        },
+
+        $isSlotAreaFree: function (x, y, width, height, slots) {
+            return !slots.some(function (slot) {
+                return !(
+                    y >= slot.y + slot.h
+                    || y + height <= slot.y
+                    || x + width <= slot.x
+                    || x >= slot.x + slot.w
+                );
+            });
         },
 
         $getSlotIndex: function (slotId) {

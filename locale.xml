@@ -2712,13 +2712,53 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
             <de><![CDATA[Mehrspaltiger Baustein mit frei konfigurierbaren Bereichen.]]></de>
             <en><![CDATA[Multi-column brick with individually configurable areas.]]></en>
         </locale>
-        <locale name="brick.multiLayout.layout.2chamber">
-            <de><![CDATA[2 Kammer]]></de>
-            <en><![CDATA[2 chambers]]></en>
+        <locale name="brick.multiLayout.layout.1">
+            <de><![CDATA[Layout 1]]></de>
+            <en><![CDATA[Layout 1]]></en>
         </locale>
-        <locale name="brick.multiLayout.layout.4chamber">
-            <de><![CDATA[4 Kammer]]></de>
-            <en><![CDATA[4 chambers]]></en>
+        <locale name="brick.multiLayout.layout.2">
+            <de><![CDATA[Layout 2]]></de>
+            <en><![CDATA[Layout 2]]></en>
+        </locale>
+        <locale name="brick.multiLayout.layout.3">
+            <de><![CDATA[Layout 3]]></de>
+            <en><![CDATA[Layout 3]]></en>
+        </locale>
+        <locale name="brick.multiLayout.layout.4">
+            <de><![CDATA[Layout 4]]></de>
+            <en><![CDATA[Layout 4]]></en>
+        </locale>
+        <locale name="brick.multiLayout.layout.5">
+            <de><![CDATA[Layout 5]]></de>
+            <en><![CDATA[Layout 5]]></en>
+        </locale>
+        <locale name="brick.multiLayout.layout.6">
+            <de><![CDATA[Layout 6]]></de>
+            <en><![CDATA[Layout 6]]></en>
+        </locale>
+        <locale name="brick.multiLayout.layout.7">
+            <de><![CDATA[Layout 7]]></de>
+            <en><![CDATA[Layout 7]]></en>
+        </locale>
+        <locale name="brick.multiLayout.layout.8">
+            <de><![CDATA[Layout 8]]></de>
+            <en><![CDATA[Layout 8]]></en>
+        </locale>
+        <locale name="brick.multiLayout.layout.9">
+            <de><![CDATA[Layout 9]]></de>
+            <en><![CDATA[Layout 9]]></en>
+        </locale>
+        <locale name="brick.multiLayout.layout.10">
+            <de><![CDATA[Layout 10]]></de>
+            <en><![CDATA[Layout 10]]></en>
+        </locale>
+        <locale name="brick.multiLayout.layout.11">
+            <de><![CDATA[Layout 11]]></de>
+            <en><![CDATA[Layout 11]]></en>
+        </locale>
+        <locale name="brick.multiLayout.layout.12">
+            <de><![CDATA[Layout 12]]></de>
+            <en><![CDATA[Layout 12]]></en>
         </locale>
         <locale name="brick.multiLayout.areas">
             <de><![CDATA[Bereiche]]></de>
@@ -3167,14 +3207,6 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
         <locale name="brick.multiLayout.remove.popup.information">
             <de><![CDATA[Der Inhalt dieses Bereichs wird geleert. Einstellungen des Bereichs bleiben erhalten.]]></de>
             <en><![CDATA[This area content will be cleared. The area settings will remain unchanged.]]></en>
-        </locale>
-        <locale name="brick.multiLayout.settings.description">
-            <de><![CDATA[Bearbeiten Sie jeden Bereich direkt in der Kartenübersicht. Einstellungen und Mobile-Reihenfolge bleiben pro Bereich verfügbar.]]></de>
-            <en><![CDATA[Edit each area directly in the card overview. Settings and mobile order remain available per area.]]></en>
-        </locale>
-        <locale name="brick.multiLayout.settings.breakpointHint">
-            <de><![CDATA[Desktop ist editierbar, Tablet übernimmt das Desktop-Layout automatisch und Mobile bleibt gestapelt nach Mobile-Reihenfolge.]]></de>
-            <en><![CDATA[Desktop is editable, tablet inherits the desktop layout automatically and mobile stays stacked by mobile order.]]></en>
         </locale>
         <locale name="brick.multiLayout.toolbar.preset">
             <de><![CDATA[Preset]]></de>

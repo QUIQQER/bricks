@@ -34,8 +34,166 @@ use function usort;
 class MultiLayout extends QUI\Control
 {
     protected const DEFAULT_COLUMNS = 12;
-    protected const LAYOUT_TWO = 'grid-2-equal';
-    protected const LAYOUT_FOUR = 'grid-2x2';
+    protected const PRESETS = [
+        'preset-2-equal' => [
+            'id' => 'preset-2-equal',
+            'sort' => 10,
+            'labelKey' => 'brick.multiLayout.layout.1',
+            'columns' => self::DEFAULT_COLUMNS,
+            'defaultSlotWidth' => 6,
+            'slots' => [
+                ['id' => 'slot-1', 'x' => 0, 'y' => 0, 'w' => 6, 'h' => 1],
+                ['id' => 'slot-2', 'x' => 6, 'y' => 0, 'w' => 6, 'h' => 1]
+            ]
+        ],
+        'preset-2-left-narrow' => [
+            'id' => 'preset-2-left-narrow',
+            'sort' => 20,
+            'labelKey' => 'brick.multiLayout.layout.2',
+            'columns' => self::DEFAULT_COLUMNS,
+            'defaultSlotWidth' => 6,
+            'slots' => [
+                ['id' => 'slot-1', 'x' => 0, 'y' => 0, 'w' => 4, 'h' => 1],
+                ['id' => 'slot-2', 'x' => 4, 'y' => 0, 'w' => 8, 'h' => 1]
+            ]
+        ],
+        'preset-2-right-narrow' => [
+            'id' => 'preset-2-right-narrow',
+            'sort' => 30,
+            'labelKey' => 'brick.multiLayout.layout.3',
+            'columns' => self::DEFAULT_COLUMNS,
+            'defaultSlotWidth' => 6,
+            'slots' => [
+                ['id' => 'slot-1', 'x' => 0, 'y' => 0, 'w' => 8, 'h' => 1],
+                ['id' => 'slot-2', 'x' => 8, 'y' => 0, 'w' => 4, 'h' => 1]
+            ]
+        ],
+        'preset-4-equal' => [
+            'id' => 'preset-4-equal',
+            'sort' => 40,
+            'labelKey' => 'brick.multiLayout.layout.4',
+            'columns' => self::DEFAULT_COLUMNS,
+            'defaultSlotWidth' => 6,
+            'slots' => [
+                ['id' => 'slot-1', 'x' => 0, 'y' => 0, 'w' => 6, 'h' => 1],
+                ['id' => 'slot-2', 'x' => 6, 'y' => 0, 'w' => 6, 'h' => 1],
+                ['id' => 'slot-3', 'x' => 0, 'y' => 1, 'w' => 6, 'h' => 1],
+                ['id' => 'slot-4', 'x' => 6, 'y' => 1, 'w' => 6, 'h' => 1]
+            ]
+        ],
+        'preset-4-offset-a' => [
+            'id' => 'preset-4-offset-a',
+            'sort' => 50,
+            'labelKey' => 'brick.multiLayout.layout.5',
+            'columns' => self::DEFAULT_COLUMNS,
+            'defaultSlotWidth' => 6,
+            'slots' => [
+                ['id' => 'slot-1', 'x' => 0, 'y' => 0, 'w' => 4, 'h' => 1],
+                ['id' => 'slot-2', 'x' => 4, 'y' => 0, 'w' => 8, 'h' => 1],
+                ['id' => 'slot-3', 'x' => 0, 'y' => 1, 'w' => 8, 'h' => 1],
+                ['id' => 'slot-4', 'x' => 8, 'y' => 1, 'w' => 4, 'h' => 1]
+            ]
+        ],
+        'preset-4-offset-b' => [
+            'id' => 'preset-4-offset-b',
+            'sort' => 60,
+            'labelKey' => 'brick.multiLayout.layout.6',
+            'columns' => self::DEFAULT_COLUMNS,
+            'defaultSlotWidth' => 6,
+            'slots' => [
+                ['id' => 'slot-1', 'x' => 0, 'y' => 0, 'w' => 8, 'h' => 1],
+                ['id' => 'slot-2', 'x' => 8, 'y' => 0, 'w' => 4, 'h' => 1],
+                ['id' => 'slot-3', 'x' => 0, 'y' => 1, 'w' => 4, 'h' => 1],
+                ['id' => 'slot-4', 'x' => 4, 'y' => 1, 'w' => 8, 'h' => 1]
+            ]
+        ],
+        'preset-3x2-equal' => [
+            'id' => 'preset-3x2-equal',
+            'sort' => 70,
+            'labelKey' => 'brick.multiLayout.layout.7',
+            'columns' => self::DEFAULT_COLUMNS,
+            'defaultSlotWidth' => 4,
+            'slots' => [
+                ['id' => 'slot-1', 'x' => 0, 'y' => 0, 'w' => 4, 'h' => 1],
+                ['id' => 'slot-2', 'x' => 4, 'y' => 0, 'w' => 4, 'h' => 1],
+                ['id' => 'slot-3', 'x' => 8, 'y' => 0, 'w' => 4, 'h' => 1],
+                ['id' => 'slot-4', 'x' => 0, 'y' => 1, 'w' => 4, 'h' => 1],
+                ['id' => 'slot-5', 'x' => 4, 'y' => 1, 'w' => 4, 'h' => 1],
+                ['id' => 'slot-6', 'x' => 8, 'y' => 1, 'w' => 4, 'h' => 1]
+            ]
+        ],
+        'preset-3x2-alternating' => [
+            'id' => 'preset-3x2-alternating',
+            'sort' => 80,
+            'labelKey' => 'brick.multiLayout.layout.8',
+            'columns' => self::DEFAULT_COLUMNS,
+            'defaultSlotWidth' => 4,
+            'slots' => [
+                ['id' => 'slot-1', 'x' => 0, 'y' => 0, 'w' => 3, 'h' => 1],
+                ['id' => 'slot-2', 'x' => 3, 'y' => 0, 'w' => 6, 'h' => 1],
+                ['id' => 'slot-3', 'x' => 9, 'y' => 0, 'w' => 3, 'h' => 1],
+                ['id' => 'slot-4', 'x' => 0, 'y' => 1, 'w' => 6, 'h' => 1],
+                ['id' => 'slot-5', 'x' => 6, 'y' => 1, 'w' => 3, 'h' => 1],
+                ['id' => 'slot-6', 'x' => 9, 'y' => 1, 'w' => 3, 'h' => 1]
+            ]
+        ],
+        'preset-3rows-middle-full' => [
+            'id' => 'preset-3rows-middle-full',
+            'sort' => 90,
+            'labelKey' => 'brick.multiLayout.layout.9',
+            'columns' => self::DEFAULT_COLUMNS,
+            'defaultSlotWidth' => 4,
+            'slots' => [
+                ['id' => 'slot-1', 'x' => 0, 'y' => 0, 'w' => 4, 'h' => 1],
+                ['id' => 'slot-2', 'x' => 4, 'y' => 0, 'w' => 4, 'h' => 1],
+                ['id' => 'slot-3', 'x' => 8, 'y' => 0, 'w' => 4, 'h' => 1],
+                ['id' => 'slot-4', 'x' => 0, 'y' => 1, 'w' => 12, 'h' => 1],
+                ['id' => 'slot-5', 'x' => 0, 'y' => 2, 'w' => 4, 'h' => 1],
+                ['id' => 'slot-6', 'x' => 4, 'y' => 2, 'w' => 4, 'h' => 1],
+                ['id' => 'slot-7', 'x' => 8, 'y' => 2, 'w' => 4, 'h' => 1]
+            ]
+        ],
+        'preset-top-full-bottom-2' => [
+            'id' => 'preset-top-full-bottom-2',
+            'sort' => 100,
+            'labelKey' => 'brick.multiLayout.layout.10',
+            'columns' => self::DEFAULT_COLUMNS,
+            'defaultSlotWidth' => 6,
+            'slots' => [
+                ['id' => 'slot-1', 'x' => 0, 'y' => 0, 'w' => 12, 'h' => 1],
+                ['id' => 'slot-2', 'x' => 0, 'y' => 1, 'w' => 6, 'h' => 1],
+                ['id' => 'slot-3', 'x' => 6, 'y' => 1, 'w' => 6, 'h' => 1]
+            ]
+        ],
+        'preset-left-tall-right-stack' => [
+            'id' => 'preset-left-tall-right-stack',
+            'sort' => 110,
+            'labelKey' => 'brick.multiLayout.layout.11',
+            'columns' => self::DEFAULT_COLUMNS,
+            'defaultSlotWidth' => 6,
+            'slots' => [
+                ['id' => 'slot-1', 'x' => 0, 'y' => 0, 'w' => 6, 'h' => 2],
+                ['id' => 'slot-2', 'x' => 6, 'y' => 0, 'w' => 6, 'h' => 1],
+                ['id' => 'slot-3', 'x' => 6, 'y' => 1, 'w' => 6, 'h' => 1]
+            ]
+        ],
+        'preset-center-tall-side-stacks' => [
+            'id' => 'preset-center-tall-side-stacks',
+            'sort' => 120,
+            'labelKey' => 'brick.multiLayout.layout.12',
+            'columns' => self::DEFAULT_COLUMNS,
+            'defaultSlotWidth' => 3,
+            'slots' => [
+                ['id' => 'slot-1', 'x' => 0, 'y' => 0, 'w' => 3, 'h' => 1],
+                ['id' => 'slot-2', 'x' => 0, 'y' => 1, 'w' => 3, 'h' => 1],
+                ['id' => 'slot-3', 'x' => 0, 'y' => 2, 'w' => 3, 'h' => 1],
+                ['id' => 'slot-4', 'x' => 3, 'y' => 0, 'w' => 6, 'h' => 3],
+                ['id' => 'slot-5', 'x' => 9, 'y' => 0, 'w' => 3, 'h' => 1],
+                ['id' => 'slot-6', 'x' => 9, 'y' => 1, 'w' => 3, 'h' => 1],
+                ['id' => 'slot-7', 'x' => 9, 'y' => 2, 'w' => 3, 'h' => 1]
+            ]
+        ]
+    ];
 
     /**
      * @param array<string, mixed> $attributes
@@ -44,7 +202,7 @@ class MultiLayout extends QUI\Control
     {
         $this->setAttributes([
             'class' => 'quiqqer-bricks-controls-multiLayout',
-            'layout' => self::LAYOUT_TWO,
+            'layout' => self::getDefaultPresetId(),
             'areaBackgroundEnabled' => false,
             'gridGapEnabled' => true,
             'layoutAreas' => '[]'
@@ -80,9 +238,11 @@ class MultiLayout extends QUI\Control
 
     protected function normalizeLayout(mixed $layout): string
     {
-        return $layout === self::LAYOUT_FOUR
-            ? self::LAYOUT_FOUR
-            : self::LAYOUT_TWO;
+        if (is_string($layout) && array_key_exists($layout, self::PRESETS)) {
+            return $layout;
+        }
+
+        return self::getDefaultPresetId();
     }
 
     /**
@@ -161,26 +321,20 @@ class MultiLayout extends QUI\Control
      */
     protected function getPresetDefinition(string $preset): array
     {
-        return match ($preset) {
-            self::LAYOUT_FOUR => [
-                'id' => self::LAYOUT_FOUR,
-                'columns' => self::DEFAULT_COLUMNS,
-                'slots' => [
-                    ['id' => 'slot-1', 'x' => 0, 'y' => 0, 'w' => 6, 'h' => 1],
-                    ['id' => 'slot-2', 'x' => 6, 'y' => 0, 'w' => 6, 'h' => 1],
-                    ['id' => 'slot-3', 'x' => 0, 'y' => 1, 'w' => 6, 'h' => 1],
-                    ['id' => 'slot-4', 'x' => 6, 'y' => 1, 'w' => 6, 'h' => 1]
-                ]
-            ],
-            default => [
-                'id' => self::LAYOUT_TWO,
-                'columns' => self::DEFAULT_COLUMNS,
-                'slots' => [
-                    ['id' => 'slot-1', 'x' => 0, 'y' => 0, 'w' => 6, 'h' => 1],
-                    ['id' => 'slot-2', 'x' => 6, 'y' => 0, 'w' => 6, 'h' => 1]
-                ]
-            ]
-        };
+        return self::PRESETS[$preset] ?? self::PRESETS[self::getDefaultPresetId()];
+    }
+
+    protected static function getDefaultPresetId(): string
+    {
+        return 'preset-2-equal';
+    }
+
+    /**
+     * @return array<string, array<string, mixed>>
+     */
+    public static function getPresets(): array
+    {
+        return self::PRESETS;
     }
 
     /**
@@ -190,7 +344,7 @@ class MultiLayout extends QUI\Control
     protected function normalizeDesktopSlots(mixed $slots, int $sourceColumns, int $targetColumns): array
     {
         if (!is_array($slots)) {
-            $slots = $this->getPresetDefinition(self::LAYOUT_TWO)['slots'];
+            $slots = $this->getPresetDefinition(self::getDefaultPresetId())['slots'];
         }
 
         $normalized = [];

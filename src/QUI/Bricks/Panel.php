@@ -104,20 +104,26 @@ class Panel extends QUI\Utils\Singleton
 
         // locale
         foreach ($categories as $key => $category) {
-            if (isset($category['title']) && is_array($category['title'])) {
+            if (isset($category['text']) && is_array($category['text'])) {
                 $categories[$key]['text'] = QUI::getLocale()->get(
-                    $category['title'][0],
-                    $category['title'][1]
+                    $category['text'][0],
+                    $category['text'][1]
                 );
+            }
 
+            if (isset($category['title']) && is_array($category['title'])) {
                 $categories[$key]['title'] = QUI::getLocale()->get(
                     $category['title'][0],
                     $category['title'][1]
                 );
             }
 
-            if (empty($category['text']) && !empty($category['title'])) {
-                $categories[$key]['text'] = $category['title'];
+            if (empty($categories[$key]['text']) && !empty($categories[$key]['title'])) {
+                $categories[$key]['text'] = $categories[$key]['title'];
+            }
+
+            if (empty($categories[$key]['title']) && !empty($categories[$key]['text'])) {
+                $categories[$key]['title'] = $categories[$key]['text'];
             }
         }
 
