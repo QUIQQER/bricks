@@ -865,6 +865,14 @@ class Manager
     }
 
     /**
+     * @return \QUI\Interfaces\Users\User
+     */
+    protected function getSessionUser(): \QUI\Interfaces\Users\User
+    {
+        return QUI::getUserBySession();
+    }
+
+    /**
      * @param array<string, mixed>|string $customFields
      * @param bool $isAuthenticated
      * @return bool
@@ -873,15 +881,29 @@ class Manager
         array | string $customFields,
         bool $isAuthenticated
     ): bool {
-        return match ($this->getBrickVisibilityMode($customFields)) {
-            'guest' => !$isAuthenticated,
-            'authenticated' => $isAuthenticated,
-            'groups' => $isAuthenticated && $this->isBrickVisibleForGroups(
+        $visibilityMode = $this->getBrickVisibilityMode($customFields);
+        $SessionUser = $this->getSessionUser();
+
+        // Check if user is guest. quiqqer/order-guestorder provides a guest-like user
+        $isGuestLikeUser = $SessionUser instanceof \QUI\Users\Nobody
+            && !($SessionUser instanceof \QUI\Users\SystemUser);
+
+        if ($visibilityMode === 'guest') {
+            return !$isAuthenticated || $isGuestLikeUser;
+        }
+
+        if ($visibilityMode === 'authenticated') {
+            return $isAuthenticated && !$isGuestLikeUser;
+        }
+
+        if ($visibilityMode === 'groups') {
+            return $this->isBrickVisibleForGroups(
                 $customFields,
-                QUI::getUserBySession()->getGroups(false)
-            ),
-            default => true
-        };
+                $SessionUser->getGroups(false)
+            );
+        }
+
+        return true;
     }
 
     /**
