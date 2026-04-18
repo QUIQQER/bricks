@@ -459,6 +459,11 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
                         if (unload === 'customCSS') {
                             data.settings.customCSS = value;
+                            const customCSSScoping = Form.getElement('[name="customCSSScoping"]');
+
+                            if (customCSSScoping) {
+                                data.settings.customCSSScoping = customCSSScoping.checked;
+                            }
                         }
 
                         if (unload === 'customJS') {
@@ -543,19 +548,38 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
             }).then(function () {
                 return new Promise(function (resolve) {
                     const hint = QUILocale.get(lg, 'brick.panel.category.customCSS.hint');
+                    const scopingLabel = QUILocale.get(lg, 'brick.panel.category.customCSS.scoping');
 
                     self.$Container.set('html', `
-                    <div class="quiqqer-bricks-brickedit-wrapper"><form></form><div class="hint">${hint}</div></div>
+                    <div class="quiqqer-bricks-brickedit-wrapper">
+                        <form></form>
+                        <label class="custom-css-scope-toggle" style="display:block;margin-top:10px;">
+                            <input type="checkbox" name="customCSSScoping" value="1"> ${scopingLabel}
+                        </label>
+                        <div class="hint">${hint}</div>
+                    </div>
                     `);
 
                     require(['package/quiqqer/bricks/bin/Controls/backend/CustomCSS'], function (CustomCSS) {
                         const Form = self.getContent().getElement('form');
+                        const ScopingCheckbox = self.getContent().getElement('[name="customCSSScoping"]');
                         const data = self.getAttribute('data');
 
                         let css = '';
+                        let customCSSScoping = true;
 
                         if (data && data.settings && typeof data.settings.customCSS !== 'undefined') {
                             css = data.settings.customCSS;
+                        }
+
+                        if (data && data.settings && typeof data.settings.customCSSScoping !== 'undefined') {
+                            customCSSScoping = data.settings.customCSSScoping !== false &&
+                                data.settings.customCSSScoping !== '0' &&
+                                data.settings.customCSSScoping !== 0;
+                        }
+
+                        if (ScopingCheckbox) {
+                            ScopingCheckbox.checked = customCSSScoping;
                         }
 
                         self.$Control = new CustomCSS({

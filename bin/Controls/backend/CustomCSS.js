@@ -27,6 +27,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/CustomCSS', [
             this.parent(options);
 
             this.$Editor = null;
+            this.$EditorContainer = null;
             this.$Textarea = null;
 
             this.addEvents({
@@ -44,15 +45,20 @@ define('package/quiqqer/bricks/bin/Controls/backend/CustomCSS', [
 
             this.$Elm.set({
                 'class': 'control-brick-setting-custom-css',
-                html   : '<textarea></textarea>',
+                html   : '' +
+                    '<div class="custom-css-editor" style="flex:1 1 auto;min-height:0;"></div>' +
+                    '<textarea></textarea>',
                 styles : {
                     border : '1px solid rgb(213 213 213)',
+                    display: 'flex',
+                    'flex-direction': 'column',
                     'float': 'left',
                     height : '100%',
                     width  : '100%'
                 }
             });
 
+            this.$EditorContainer = this.$Elm.getElement('.custom-css-editor');
             this.$Textarea = this.$Elm.getElement('textarea');
 
             this.$Textarea.set({
@@ -72,7 +78,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/CustomCSS', [
             require(['controls/editors/CodeEditor'], (CodeEditor) => {
                 this.$Editor = new CodeEditor({
                     type: 'css'
-                }).inject(this.getElm());
+                }).inject(this.$EditorContainer);
 
                 if (this.getAttribute('css')) {
                     this.$Editor.setValue(this.getAttribute('css'));
