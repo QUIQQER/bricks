@@ -1043,6 +1043,30 @@ This content does not replace the block content. You can still place the brick t
             <de><![CDATA[Deaktiviert]]></de>
             <en><![CDATA[Disabled]]></en>
         </locale>
+        <locale name="site.area.window.results.counter">
+            <de><![CDATA[{count} Bausteine]]></de>
+            <en><![CDATA[{count} bricks]]></en>
+        </locale>
+        <locale name="site.area.window.results.empty">
+            <de><![CDATA[Keine passenden Bausteine gefunden.]]></de>
+            <en><![CDATA[No matching bricks found.]]></en>
+        </locale>
+        <locale name="site.area.window.shortcuts.label">
+            <de><![CDATA[Tastaturkürzel]]></de>
+            <en><![CDATA[Keyboard shortcuts]]></en>
+        </locale>
+        <locale name="site.area.window.shortcuts.navigate">
+            <de><![CDATA[Fokus wechseln]]></de>
+            <en><![CDATA[Move focus]]></en>
+        </locale>
+        <locale name="site.area.window.shortcuts.add">
+            <de><![CDATA[Hinzufügen]]></de>
+            <en><![CDATA[Add]]></en>
+        </locale>
+        <locale name="site.area.window.shortcuts.close">
+            <de><![CDATA[Schließen]]></de>
+            <en><![CDATA[Close]]></en>
+        </locale>
         <locale name="site.area.window.delete.title">
             <de><![CDATA[Baustein löschen?]]></de>
             <en><![CDATA[Delete the Brick?]]></en>

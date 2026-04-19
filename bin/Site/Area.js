@@ -9,7 +9,6 @@ define('package/quiqqer/bricks/bin/Site/Area', [
     'qui/controls/windows/Popup',
     'qui/controls/windows/Alert',
     'qui/controls/windows/Confirm',
-    'qui/controls/elements/List',
     'package/quiqqer/bricks/bin/Bricks',
     'package/quiqqer/bricks/bin/AddBrickWindow',
     'Locale',
@@ -18,7 +17,7 @@ define('package/quiqqer/bricks/bin/Site/Area', [
 
     'css!package/quiqqer/bricks/bin/Site/Area.css'
 
-], function (QUI, QUIControl, QUIButton, QUIPopup, QUIAlert, QUIConfirm, QUIList, Bricks, AddBrickWindow, QUILocale, QUIAjax, Sortables) {
+], function (QUI, QUIControl, QUIButton, QUIPopup, QUIAlert, QUIConfirm, Bricks, AddBrickWindow, QUILocale, QUIAjax, Sortables) {
     "use strict";
 
     const lg = 'quiqqer/bricks';
@@ -1165,271 +1164,356 @@ define('package/quiqqer/bricks/bin/Site/Area', [
             }
 
             const self = this;
-            let specialKeyPressed = false;
-            let searchTerm = '';
-            let Timer = null;
-            let itemNodes = [];
-            let Input = null;
-            let CounterNode = null;
-            let availableBricksNumber = 0;
             let popupKeyDownHandler = null;
+            let SearchInput = null;
+            let CounterNode = null;
+            let EmptyState = null;
+            let CardNodes = [];
+            let activeCard = null;
 
-            // restore original title and description of list items
-            const restoreOriginalHtml = function (Item) {
-                Item.querySelector('header').innerHTML = Item.getAttribute('data-qui-title-original');
-                Item.querySelector('.qui-elements-list-item-description').innerHTML = Item.getAttribute(
-                    'data-qui-desc-original');
+            const toPlainText = function (value) {
+                if (!value) {
+                    return '';
+                }
+
+                return new Element('div', {
+                    html: String(value)
+                }).get('text').replace(/\s+/g, ' ').trim();
             };
 
-            // hide all entries (bricks)
-            const hideAll = function () {
-                itemNodes.each(function (Item) {
-                    Item.style.display = 'none';
+            const toPreviewText = function (value, maxLength) {
+                const normalized = toPlainText(value);
+
+                if (!normalized || normalized.length <= maxLength) {
+                    return normalized;
+                }
+
+                return normalized.slice(0, maxLength - 1).trim() + '…';
+            };
+
+            const getDisplayData = function (Brick) {
+                const instanceTitle = Brick.title || Brick.type || '';
+                const brickTypeTitle = Brick.name && typeof Brick.name === 'object'
+                    ? QUILocale.get(Brick.name.group, Brick.name.var)
+                    : instanceTitle;
+                const description = Brick.description || '';
+                const displayDescription = toPreviewText(description, 180);
+                const displayType = Brick.type || '';
+                const image = Brick.mockup || Brick.thumbnail;
+                const isActive = parseInt(Brick.active) === 1;
+
+                return {
+                    id: Brick.id,
+                    instanceTitle: instanceTitle,
+                    brickTypeTitle: brickTypeTitle,
+                    displayDescription: displayDescription,
+                    displayType: displayType,
+                    image: image,
+                    isActive: isActive,
+                    search: [
+                        toPlainText(instanceTitle),
+                        toPlainText(brickTypeTitle),
+                        displayDescription,
+                        displayType,
+                        isActive ? '' : QUILocale.get(lg, 'site.area.window.add.brickIsDisabled')
+                    ].join(' ').toLowerCase()
+                };
+            };
+
+            const getVisibleCards = function () {
+                return CardNodes.filter(function (Card) {
+                    return Card.getStyle('display') !== 'none';
                 });
             };
 
-            // show all entries (bricks)
-            const showAll = function () {
-                itemNodes.each(function (Item) {
-                    Item.style.display = null;
-                    restoreOriginalHtml(Item);
-                });
-            };
-
-            // change number of founded bricks
-            const updateCounter = function (number) {
-                CounterNode.innerHTML = '(' + number + ')';
-            };
-
-            // mark founded term in the string
-            const markFoundedTerm = function (Item, term) {
-                let titleHtml = '',
-                    descHtml = '';
-                const titleTermIndex = Item.getAttribute('data-qui-title').indexOf(term);
-                const descTermIndex = Item.getAttribute('data-qui-desc').indexOf(term);
-
-                // search result in title?
-                if (titleTermIndex >= 0) {
-                    let TitleNode = Item.querySelector('header'),
-                        titleText = TitleNode.innerText;
-                    titleHtml = titleText.substr(0, titleTermIndex);
-                    titleHtml += "<mark>" + titleText.substr(titleTermIndex,
-                        term.length) + "</mark>";
-                    titleHtml += titleText.substr(titleTermIndex + term.length);
-
-                    TitleNode.innerHTML = titleHtml;
-                }
-
-                // search result in description?
-                if (descTermIndex >= 0) {
-                    let DescNode = Item.querySelector('.qui-elements-list-item-description'),
-                        DescTextNode = DescNode.querySelector('[data-name="brick-description"]'),
-                        descText = Item.getAttribute('data-qui-desc-text-original');
-
-                    if (!DescTextNode || !descText) {
-                        return;
-                    }
-
-                    descHtml = descText.substr(0, descTermIndex);
-                    descHtml += "<mark>" + descText.substr(descTermIndex,
-                        term.length) + "</mark>";
-                    descHtml += descText.substr(descTermIndex + term.length);
-
-                    DescTextNode.innerHTML = descHtml;
-                }
-            };
-
-            // execute search / filter
-            const search = function () {
-                let term = Input.value.trim();
-                term = term.toLowerCase();
-
-                if (term === '') {
-                    Input.value = '';
-                }
-
-                // prevents the search from being executed
-                // after action-less keys (alt, shift, ctrl, etc.)
-                if (term === searchTerm) {
+            const setActiveCard = function (Card, focusCard) {
+                if (!Card || Card.getStyle('display') === 'none') {
                     return;
                 }
 
-                if (Timer) {
-                    clearInterval(Timer);
+                CardNodes.forEach(function (Node) {
+                    Node.removeClass('siteAreaWindow-card--active');
+                    Node.setAttribute('aria-current', 'false');
+                });
+
+                activeCard = Card;
+                Card.addClass('siteAreaWindow-card--active');
+                Card.setAttribute('aria-current', 'true');
+
+                if (focusCard) {
+                    Card.focus();
                 }
 
-                Timer = (function () {
-                    searchTerm = term;
+                if (typeof Card.scrollIntoView === 'function') {
+                    Card.scrollIntoView({
+                        block: 'nearest',
+                        inline: 'nearest'
+                    });
+                }
+            };
 
-                    hideAll();
+            const updateCounter = function (count) {
+                CounterNode.set('text', '(' + count + ')');
+            };
 
-                    let counter = 0;
+            const applyFilter = function () {
+                const term = SearchInput.value.trim().toLowerCase();
+                let visibleCount = 0;
 
-                    itemNodes.each(function (Item) {
-                        if (Item.getAttribute('data-qui-title').indexOf(term) >= 0 ||
-                            Item.getAttribute('data-qui-desc').indexOf(term) >= 0 ||
-                            Item.getAttribute('data-qui-badge').indexOf(term) >= 0) {
+                CardNodes.forEach(function (Card) {
+                    const visible = !term || Card.getAttribute('data-search').indexOf(term) !== -1;
 
-                            markFoundedTerm(Item, term);
+                    Card.setStyle('display', visible ? null : 'none');
+                    Card.setAttribute('aria-hidden', visible ? 'false' : 'true');
 
-                            Item.show();
-                            counter++;
-                        }
+                    if (visible) {
+                        visibleCount++;
+                    }
+                });
+
+                updateCounter(visibleCount);
+                EmptyState.setStyle('display', visibleCount ? 'none' : null);
+
+                if (!visibleCount) {
+                    CardNodes.forEach(function (Node) {
+                        Node.removeClass('siteAreaWindow-card--active');
+                        Node.setAttribute('aria-current', 'false');
                     });
 
-                    updateCounter(counter);
-                }).delay(400);
+                    activeCard = null;
+                    SearchInput.focus();
+                    return;
+                }
+
+                if (!activeCard || activeCard.getStyle('display') === 'none') {
+                    setActiveCard(
+                        getVisibleCards()[0],
+                        document.activeElement !== SearchInput
+                    );
+                }
+            };
+
+            const addSelectedBrick = function (Win) {
+                if (!activeCard) {
+                    return;
+                }
+
+                self.addBrickById(activeCard.getAttribute('data-brick-id'));
+                Win.close();
             };
 
             new QUIPopup({
                 title: QUILocale.get(lg, 'site.area.window.add'),
                 icon: 'fa fa-th',
-                maxWidth: 500,
-                maxHeight: 600,
+                maxWidth: 1100,
+                maxHeight: 760,
                 autoclose: false,
                 events: {
                     onOpen: function (Win) {
+                        const ActionBar = Win.getElm().querySelector('.qui-window-popup-buttons');
+                        if (ActionBar) {
+                            ActionBar.remove();
+                        }
+
                         popupKeyDownHandler = function (event) {
-                            if (event.key !== 'esc' && event.key !== 'escape') {
+                            const key = String(event.key || '').toLowerCase();
+
+                            if (key === 'esc' || key === 'escape') {
+                                event.preventDefault();
+                                event.stopPropagation();
+                                Win.close();
                                 return;
                             }
 
-                            event.preventDefault();
-                            event.stopPropagation();
-                            Win.close();
+                            if (key === 'enter' && activeCard) {
+                                event.preventDefault();
+                                event.stopPropagation();
+                                addSelectedBrick(Win);
+                            }
                         };
 
                         document.addEvent('keydown', popupKeyDownHandler);
 
-                        const items = [],
-                            Content = Win.getContent(),
-                            List = new QUIList({
-                                events: {
-                                    onClick: function (List, data) {
-                                        self.addBrickById(data.brickId);
-                                        Win.close();
-                                    }
-                                }
-                            });
+                        const Content = Win.getContent();
+                        const viewData = self.$availableBricks.map(getDisplayData);
+                        const Dialog = new Element('div', {
+                            'class': 'siteAreaWindow-selector'
+                        }).inject(Content);
 
-                        List.inject(Content);
+                        const Toolbar = new Element('div', {
+                            'class': 'siteAreaWindow-toolbar'
+                        }).inject(Dialog);
 
-                        const renderInactiveBadge = (Brick) => {
-                            if (Brick.active) {
-                                return '';
-                            }
+                        const Search = new Element('label', {
+                            'class': 'siteAreaWindow-search'
+                        }).inject(Toolbar);
 
-                            return `<div style="margin-top: 0.25rem;">
-                                        <span class="badge badge-warning badge-sm">
-                                            ${QUILocale.get(lg, 'site.area.window.add.brickIsDisabled')}
-                                        </span>
-                                    </div>`;
-                        };
+                        new Element('span', {
+                            'class': 'fa fa-search siteAreaWindow-searchIcon',
+                            'aria-hidden': 'true'
+                        }).inject(Search);
 
-                        for (let i = 0, len = self.$availableBricks.length; i < len; i++) {
-                            const Brick = self.$availableBricks[i];
-                            const inactiveBadge = renderInactiveBadge(Brick);
-                            const text = `<div data-name="brick-description">${Brick.description}</div>${inactiveBadge}`;
-
-                            items.push({
-                                brickId: Brick.id,
-                                icon: 'fa fa-th',
-                                title: Brick.title,
-                                text: text
-                            });
-                            availableBricksNumber++;
-                        }
-
-                        List.addItems(items);
-
-                        // no filter needed if there are only few bricks
-                        if (availableBricksNumber < 6) {
-                            return;
-                        }
-
-                        itemNodes = List.getElm().getElements('.qui-elements-list-item');
-
-                        itemNodes.forEach((Item) => {
-                            Item.setAttribute(
-                                'data-qui-title',
-                                Item.getElement('header').innerText.toLowerCase()
-                            );
-
-                            Item.setAttribute(
-                                'data-qui-title-original',
-                                Item.getElement('header').innerText
-                            );
-
-                            Item.setAttribute(
-                                'data-qui-desc',
-                                Item.getElement('[data-name="brick-description"]').innerText.toLowerCase()
-                            );
-
-                            Item.setAttribute(
-                                'data-qui-desc-original',
-                                Item.getElement('.qui-elements-list-item-description').innerHTML
-                            );
-
-                            Item.setAttribute(
-                                'data-qui-desc-text-original',
-                                Item.getElement('[data-name="brick-description"]')
-                                    .innerText
-                            );
-
-                            Item.setAttribute(
-                                'data-qui-badge',
-                                Item.getElement('.badge') ? Item.getElement('.badge').innerText.toLowerCase() : ''
-                            );
-                        });
-
-                        // filter
-                        const FilterContainer = new Element('div', {
-                            'class': 'siteAreaWindow-filterContainer',
-                            html: '<span class="fa fa-search"></span>'
-                        });
-
-                        CounterNode = new Element('span', {
-                            'class': 'siteAreaWindow-filterContainer-counter',
-                            text: '(' + availableBricksNumber + ')'
-                        });
-
-                        Input = new Element('input', {
-                            'class': 'siteAreaWindow-filterContainer-input',
-                            type: 'text',
+                        SearchInput = new Element('input', {
+                            'class': 'siteAreaWindow-searchInput',
+                            type: 'search',
                             placeholder: QUILocale.get(lg, 'site.area.window.input.placeholder'),
+                            autocomplete: 'off',
                             events: {
-                                keydown: function (event) {
-                                    if (event.key === 'down' ||
-                                        event.key === 'up' ||
-                                        event.key === 'enter') {
-                                        specialKeyPressed = true;
-                                    }
-                                },
-
-                                keyup: function (event) {
-                                    event.stop();
-
-                                    if (!specialKeyPressed) {
-                                        search();
-                                    }
-
-                                    specialKeyPressed = false;
-                                }
+                                input: applyFilter
                             }
-                        }).inject(FilterContainer, 'top');
+                        }).inject(Search);
 
-                        CounterNode.inject(FilterContainer);
-                        FilterContainer.inject(Content, 'top');
+                        CounterNode = new Element('div', {
+                            'class': 'siteAreaWindow-counter'
+                        }).inject(Search);
 
-                        Input.focus();
+                        const Hints = new Element('div', {
+                            'class': 'siteAreaWindow-hints',
+                            'aria-label': QUILocale.get(lg, 'site.area.window.shortcuts.label')
+                        }).inject(Dialog);
+
+                        [
+                            {
+                                keys: ['Tab'],
+                                label: QUILocale.get(lg, 'site.area.window.shortcuts.navigate')
+                            },
+                            {
+                                keys: ['Enter'],
+                                label: QUILocale.get(lg, 'site.area.window.shortcuts.add')
+                            },
+                            {
+                                keys: ['Esc'],
+                                label: QUILocale.get(lg, 'site.area.window.shortcuts.close')
+                            }
+                        ].forEach(function (entry) {
+                            const Hint = new Element('div', {
+                                'class': 'siteAreaWindow-hint'
+                            }).inject(Hints);
+
+                            const Keys = new Element('div', {
+                                'class': 'siteAreaWindow-hintKeys',
+                                'aria-hidden': 'true'
+                            }).inject(Hint);
+
+                            entry.keys.forEach(function (key, index) {
+                                new Element('kbd', {
+                                    text: key
+                                }).inject(Keys);
+
+                                if (index < entry.keys.length - 1) {
+                                    new Element('span', {
+                                        'class': 'siteAreaWindow-hintSep',
+                                        text: '/'
+                                    }).inject(Keys);
+                                }
+                            });
+
+                            new Element('div', {
+                                'class': 'siteAreaWindow-hintText',
+                                text: entry.label
+                            }).inject(Hint);
+                        });
+
+                        const Grid = new Element('div', {
+                            'class': 'siteAreaWindow-grid'
+                        }).inject(Dialog);
+
+                        EmptyState = new Element('div', {
+                            'class': 'siteAreaWindow-empty',
+                            text: QUILocale.get(lg, 'site.area.window.results.empty'),
+                            styles: {
+                                display: 'none'
+                            }
+                        }).inject(Grid);
+
+                        CardNodes = viewData.map(function (Brick) {
+                            const Card = new Element('button', {
+                                type: 'button',
+                                'class': 'siteAreaWindow-card' + (Brick.isActive ? '' : ' siteAreaWindow-card--inactive'),
+                                'data-brick-id': Brick.id,
+                                'data-search': Brick.search,
+                                'aria-current': 'false',
+                                'aria-hidden': 'false',
+                                events: {
+                                    click: function () {
+                                        setActiveCard(Card, false);
+                                        addSelectedBrick(Win);
+                                    },
+                                    focus: function () {
+                                        setActiveCard(Card, false);
+                                    }
+                                }
+                            }).inject(Grid);
+
+                            const Thumb = new Element('div', {
+                                'class': 'siteAreaWindow-cardThumb'
+                            }).inject(Card);
+
+                            new Element('img', {
+                                src: Brick.image,
+                                alt: Brick.instanceTitle
+                            }).inject(Thumb);
+
+                            const Body = new Element('div', {
+                                'class': 'siteAreaWindow-cardBody'
+                            }).inject(Card);
+
+                            new Element('div', {
+                                'class': 'siteAreaWindow-cardName',
+                                text: Brick.instanceTitle
+                            }).inject(Body);
+
+                            const Badges = new Element('div', {
+                                'class': 'siteAreaWindow-cardBadges'
+                            }).inject(Body);
+
+                            new Element('span', {
+                                'class': 'badge badge-success-light badge-sm',
+                                text: Brick.brickTypeTitle
+                            }).inject(Badges);
+
+                            if (Brick.displayType) {
+                                new Element('span', {
+                                    'class': 'badge badge-light badge-sm',
+                                    text: Brick.displayType
+                                }).inject(Badges);
+                            }
+
+                            if (!Brick.isActive) {
+                                new Element('span', {
+                                    'class': 'badge badge-warning badge-sm',
+                                    text: QUILocale.get(lg, 'site.area.window.add.brickIsDisabled')
+                                }).inject(Badges);
+                            }
+
+                            if (Brick.displayDescription) {
+                                new Element('div', {
+                                    'class': 'siteAreaWindow-cardDescription',
+                                    text: Brick.displayDescription
+                                }).inject(Body);
+                            }
+
+                            return Card;
+                        });
+
+                        if (CardNodes.length) {
+                            setActiveCard(CardNodes[0], false);
+                        }
+
+                        updateCounter(CardNodes.length);
+                        SearchInput.focus();
                     },
                     onClose: function () {
-                        if (!popupKeyDownHandler) {
-                            return;
+                        if (popupKeyDownHandler) {
+                            document.removeEvent('keydown', popupKeyDownHandler);
+                            popupKeyDownHandler = null;
                         }
 
-                        document.removeEvent('keydown', popupKeyDownHandler);
-                        popupKeyDownHandler = null;
+                        SearchInput = null;
+                        CounterNode = null;
+                        EmptyState = null;
+                        CardNodes = [];
+                        activeCard = null;
                     }
                 }
             }).open();
