@@ -11,6 +11,15 @@
             <section class="quiqqer-bricks-controls-multiLayout-area quiqqer-bricks-controls-multiLayout-area--{$area.mode} quiqqer-bricks-controls-multiLayout-area--align-{$area.verticalAlign}{if $areaBackgroundEnabled} is-surface-subtle-enabled{/if}{if $area.backgroundEnabled && $area.backgroundImage} is-background-enabled{/if}{if $area.backgroundColorEnabled} is-background-color-enabled{/if}"
                     data-slot-id="{$area.slotId}"
                     {if $area.slotStyle}style="{$area.slotStyle}"{/if}>
+                {if $area.link}
+                    <a class="quiqqer-bricks-controls-multiLayout-areaLink"
+                       href="{$area.link.href}"
+                       {if $area.link.rel}rel="{$area.link.rel}"{/if}
+                       {if $area.link.target}target="{$area.link.target}"{/if}
+                       {if $area.link.title}title="{$area.link.title}"{/if}
+                       aria-label="{if $area.link.title}{$area.link.title}{else}{$area.title}{/if}"
+                    ></a>
+                {/if}
                 <div class="quiqqer-bricks-controls-multiLayout-areaContent{if empty($area.contentPadding)} quiqqer-bricks-controls-multiLayout-areaContent--noPadding{/if}">
                     {$area.contentHtml}
                 </div>

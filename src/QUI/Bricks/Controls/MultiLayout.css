@@ -51,6 +51,7 @@
     inset: 0;
     pointer-events: none;
     position: absolute;
+    z-index: 0;
 }
 
 .quiqqer-bricks-controls-multiLayout-area::before {
@@ -83,7 +84,22 @@
     padding: 1.5rem;
     position: relative;
     width: 100%;
+}
+
+.quiqqer-bricks-controls-multiLayout-areaLink {
+    inset: 0;
+    position: absolute;
     z-index: 1;
+}
+
+.quiqqer-bricks-controls-multiLayout-areaContent a,
+.quiqqer-bricks-controls-multiLayout-areaContent button,
+.quiqqer-bricks-controls-multiLayout-areaContent input,
+.quiqqer-bricks-controls-multiLayout-areaContent select,
+.quiqqer-bricks-controls-multiLayout-areaContent textarea,
+.quiqqer-bricks-controls-multiLayout-areaContent [role="button"] {
+    position: relative;
+    z-index: 2;
 }
 
 .quiqqer-bricks-controls-multiLayout-areaContent--noPadding {

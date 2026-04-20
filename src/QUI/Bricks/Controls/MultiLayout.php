@@ -9,6 +9,7 @@ namespace QUI\Bricks\Controls;
 use Exception;
 use QUI;
 use QUI\Bricks\Manager;
+use QUI\Projects\Site\Utils as SiteUtils;
 
 use function array_key_exists;
 use function count;
@@ -36,6 +37,19 @@ class MultiLayout extends QUI\Control
     protected const DEFAULT_COLUMNS = 12;
     protected const TABLET_BREAKPOINT_MAX = 1023;
     protected const MOBILE_BREAKPOINT_MAX = 767;
+    protected const LINK_REL_OPTIONS = [
+        '',
+        'nofollow',
+        'noopener',
+        'noreferrer',
+        'noopener noreferrer',
+        'nofollow noopener noreferrer'
+    ];
+    protected const LINK_TARGET_OPTIONS = [
+        '',
+        '_self',
+        '_blank'
+    ];
     protected const PRESETS = [
         'preset-2-equal' => [
             'id' => 'preset-2-equal',
@@ -511,6 +525,8 @@ class MultiLayout extends QUI\Control
      */
     protected function normalizeAreaData(array $area, int $index): array
     {
+        $link = $this->normalizeAreaLink($area['link'] ?? null);
+
         return [
             'title' => isset($area['title']) && is_string($area['title'])
                 ? $area['title']
@@ -555,6 +571,7 @@ class MultiLayout extends QUI\Control
             'textColor' => isset($area['textColor']) && is_string($area['textColor'])
                 ? trim($area['textColor'])
                 : '',
+            'link' => $link,
             'verticalAlign' => isset($area['verticalAlign']) && in_array($area['verticalAlign'], ['top', 'center', 'bottom'], true)
                 ? $area['verticalAlign']
                 : 'center'
@@ -605,8 +622,74 @@ class MultiLayout extends QUI\Control
     protected function prepareArea(array $area): array
     {
         $area['contentHtml'] = $this->renderAreaContent($area);
+        $area['link'] = $this->prepareAreaLink($area['link'] ?? null);
 
         return $area;
+    }
+
+    /**
+     * @param mixed $link
+     * @return array<string, string>|null
+     */
+    protected function normalizeAreaLink(mixed $link): ?array
+    {
+        if (!is_array($link)) {
+            return null;
+        }
+
+        $href = isset($link['href']) && is_string($link['href'])
+            ? trim($link['href'])
+            : '';
+
+        if ($href === '') {
+            return null;
+        }
+
+        $rel = isset($link['rel']) && is_string($link['rel']) && in_array($link['rel'], self::LINK_REL_OPTIONS, true)
+            ? $link['rel']
+            : '';
+        $target = isset($link['target']) && is_string($link['target']) && in_array($link['target'], self::LINK_TARGET_OPTIONS, true)
+            ? $link['target']
+            : '';
+
+        return [
+            'href' => $href,
+            'rel' => $rel,
+            'target' => $target,
+            'title' => isset($link['title']) && is_string($link['title'])
+                ? trim($link['title'])
+                : ''
+        ];
+    }
+
+    /**
+     * @param mixed $link
+     * @return array<string, string>|null
+     */
+    protected function prepareAreaLink(mixed $link): ?array
+    {
+        $link = $this->normalizeAreaLink($link);
+
+        if ($link === null) {
+            return null;
+        }
+
+        $href = $link['href'];
+
+        if (SiteUtils::isSiteLink($href)) {
+            try {
+                $href = SiteUtils::getSiteByLink($href)->getUrlRewritten();
+            } catch (Exception) {
+                return null;
+            }
+        }
+
+        return [
+            'href' => htmlspecialchars($href, ENT_QUOTES),
+            'rel' => htmlspecialchars($link['rel'], ENT_QUOTES),
+            'target' => htmlspecialchars($link['target'], ENT_QUOTES),
+            'title' => htmlspecialchars($link['title'], ENT_QUOTES)
+        ];
     }
 
     /**

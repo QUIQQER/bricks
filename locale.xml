@@ -2980,6 +2980,66 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
             <de><![CDATA[Textfarbe verwenden]]></de>
             <en><![CDATA[Use text color]]></en>
         </locale>
+        <locale name="blockSlot.link.section">
+            <de><![CDATA[Link]]></de>
+            <en><![CDATA[Link]]></en>
+        </locale>
+        <locale name="blockSlot.link.enabled">
+            <de><![CDATA[Link für Kachel verwenden]]></de>
+            <en><![CDATA[Use link for tile]]></en>
+        </locale>
+        <locale name="blockSlot.link.href">
+            <de><![CDATA[Link setzen]]></de>
+            <en><![CDATA[Set link]]></en>
+        </locale>
+        <locale name="blockSlot.link.rel">
+            <de><![CDATA[Rel-Typ]]></de>
+            <en><![CDATA[Rel type]]></en>
+        </locale>
+        <locale name="blockSlot.link.rel.none">
+            <de><![CDATA[Kein rel-Attribut]]></de>
+            <en><![CDATA[No rel attribute]]></en>
+        </locale>
+        <locale name="blockSlot.link.rel.nofollow">
+            <de><![CDATA[nofollow]]></de>
+            <en><![CDATA[nofollow]]></en>
+        </locale>
+        <locale name="blockSlot.link.rel.noopener">
+            <de><![CDATA[noopener]]></de>
+            <en><![CDATA[noopener]]></en>
+        </locale>
+        <locale name="blockSlot.link.rel.noreferrer">
+            <de><![CDATA[noreferrer]]></de>
+            <en><![CDATA[noreferrer]]></en>
+        </locale>
+        <locale name="blockSlot.link.rel.noopenerNoreferrer">
+            <de><![CDATA[noopener noreferrer]]></de>
+            <en><![CDATA[noopener noreferrer]]></en>
+        </locale>
+        <locale name="blockSlot.link.rel.nofollowNoopenerNoreferrer">
+            <de><![CDATA[nofollow noopener noreferrer]]></de>
+            <en><![CDATA[nofollow noopener noreferrer]]></en>
+        </locale>
+        <locale name="blockSlot.link.target">
+            <de><![CDATA[Ziel]]></de>
+            <en><![CDATA[Target]]></en>
+        </locale>
+        <locale name="blockSlot.link.target.none">
+            <de><![CDATA[Standard]]></de>
+            <en><![CDATA[Default]]></en>
+        </locale>
+        <locale name="blockSlot.link.target.self">
+            <de><![CDATA[Gleiches Fenster (_self)]]></de>
+            <en><![CDATA[Same window (_self)]]></en>
+        </locale>
+        <locale name="blockSlot.link.target.blank">
+            <de><![CDATA[Neuer Tab (_blank)]]></de>
+            <en><![CDATA[New tab (_blank)]]></en>
+        </locale>
+        <locale name="blockSlot.link.title">
+            <de><![CDATA[Link-Titel]]></de>
+            <en><![CDATA[Link title]]></en>
+        </locale>
         <locale name="blockSlot.contentPadding">
             <de><![CDATA[Standard-Innenabstand verwenden]]></de>
             <en><![CDATA[Use default inner spacing]]></en>
@@ -3203,6 +3263,66 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
         <locale name="brick.multiLayout.textColor">
             <de><![CDATA[Textfarbe]]></de>
             <en><![CDATA[Text color]]></en>
+        </locale>
+        <locale name="brick.multiLayout.link.section">
+            <de><![CDATA[Link]]></de>
+            <en><![CDATA[Link]]></en>
+        </locale>
+        <locale name="brick.multiLayout.link.enabled">
+            <de><![CDATA[Link für Kachel verwenden]]></de>
+            <en><![CDATA[Use link for tile]]></en>
+        </locale>
+        <locale name="brick.multiLayout.link.href">
+            <de><![CDATA[Link setzen]]></de>
+            <en><![CDATA[Set link]]></en>
+        </locale>
+        <locale name="brick.multiLayout.link.rel">
+            <de><![CDATA[Rel-Typ]]></de>
+            <en><![CDATA[Rel type]]></en>
+        </locale>
+        <locale name="brick.multiLayout.link.rel.none">
+            <de><![CDATA[Kein rel-Attribut]]></de>
+            <en><![CDATA[No rel attribute]]></en>
+        </locale>
+        <locale name="brick.multiLayout.link.rel.nofollow">
+            <de><![CDATA[nofollow]]></de>
+            <en><![CDATA[nofollow]]></en>
+        </locale>
+        <locale name="brick.multiLayout.link.rel.noopener">
+            <de><![CDATA[noopener]]></de>
+            <en><![CDATA[noopener]]></en>
+        </locale>
+        <locale name="brick.multiLayout.link.rel.noreferrer">
+            <de><![CDATA[noreferrer]]></de>
+            <en><![CDATA[noreferrer]]></en>
+        </locale>
+        <locale name="brick.multiLayout.link.rel.noopenerNoreferrer">
+            <de><![CDATA[noopener noreferrer]]></de>
+            <en><![CDATA[noopener noreferrer]]></en>
+        </locale>
+        <locale name="brick.multiLayout.link.rel.nofollowNoopenerNoreferrer">
+            <de><![CDATA[nofollow noopener noreferrer]]></de>
+            <en><![CDATA[nofollow noopener noreferrer]]></en>
+        </locale>
+        <locale name="brick.multiLayout.link.target">
+            <de><![CDATA[Ziel]]></de>
+            <en><![CDATA[Target]]></en>
+        </locale>
+        <locale name="brick.multiLayout.link.target.none">
+            <de><![CDATA[Standard]]></de>
+            <en><![CDATA[Default]]></en>
+        </locale>
+        <locale name="brick.multiLayout.link.target.self">
+            <de><![CDATA[Gleiches Fenster (_self)]]></de>
+            <en><![CDATA[Same window (_self)]]></en>
+        </locale>
+        <locale name="brick.multiLayout.link.target.blank">
+            <de><![CDATA[Neuer Tab (_blank)]]></de>
+            <en><![CDATA[New tab (_blank)]]></en>
+        </locale>
+        <locale name="brick.multiLayout.link.title">
+            <de><![CDATA[Link-Titel]]></de>
+            <en><![CDATA[Link title]]></en>
         </locale>
         <locale name="brick.multiLayout.contentPadding">
             <de><![CDATA[Standard-Innenabstand verwenden]]></de>

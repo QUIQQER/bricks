@@ -5,11 +5,12 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
     'qui/controls/elements/ColorPicker',
     'qui/controls/windows/Confirm',
     'Locale',
+    'utils/Controls',
     'package/quiqqer/bricks/bin/Controls/backend/BrickSelectWindow',
 
     'css!package/quiqqer/bricks/bin/Controls/backend/BlockSlot.css'
 
-], function (QUI, QUIControl, QUIColorPicker, QUIConfirm, QUILocale, BrickSelectWindow) {
+], function (QUI, QUIControl, QUIColorPicker, QUIConfirm, QUILocale, ControlUtils, BrickSelectWindow) {
     "use strict";
 
     const lg = 'quiqqer/bricks';
@@ -26,6 +27,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
         background: true,
         backgroundColor: true,
         textColor: true,
+        link: true,
         image: true
     };
     const IMAGE_FIT_AUTO = 'auto';
@@ -37,6 +39,21 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
     const BACKGROUND_POSITION_LEFT = 'left center';
     const BACKGROUND_POSITION_RIGHT = 'right center';
     const VERTICAL_ALIGN_CENTER = 'center';
+    const LINK_TARGET_SELF = '_self';
+    const LINK_TARGET_BLANK = '_blank';
+    const LINK_REL_OPTIONS = [
+        '',
+        'nofollow',
+        'noopener',
+        'noreferrer',
+        'noopener noreferrer',
+        'nofollow noopener noreferrer'
+    ];
+    const LINK_TARGET_OPTIONS = [
+        '',
+        LINK_TARGET_SELF,
+        LINK_TARGET_BLANK
+    ];
 
     return new Class({
 
@@ -703,6 +720,15 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                             TextColorEnabledField = TextColor.enabledField;
                         }
 
+                        let LinkOptions = null;
+                        let LinkEnabledField = null;
+
+                        if (this.$isSettingVisible('link')) {
+                            const Link = this.$createPopupLinkSettings(Form, area);
+                            LinkOptions = Link.options;
+                            LinkEnabledField = Link.enabledField;
+                        }
+
                         let ImageSettings = null;
 
                         if (this.$isSettingVisible('image')) {
@@ -752,6 +778,17 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                             );
                         };
 
+                        const toggleLinkSettings = function () {
+                            if (!LinkOptions || !LinkEnabledField) {
+                                return;
+                            }
+
+                            LinkOptions.setStyle(
+                                'display',
+                                LinkEnabledField.checked ? '' : 'none'
+                            );
+                        };
+
                         if (ModeField) {
                             ModeField.addEvent('change', toggleImageSettings);
                         }
@@ -768,12 +805,20 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                             TextColorEnabledField.addEvent('change', toggleTextColorSettings);
                         }
 
+                        if (LinkEnabledField) {
+                            LinkEnabledField.addEvent('change', toggleLinkSettings);
+                        }
+
                         toggleImageSettings();
                         toggleBackgroundSettings();
                         toggleOverlaySettings();
                         toggleTextColorSettings();
+                        toggleLinkSettings();
 
-                        QUI.parse(Content).then(function () {
+                        Promise.all([
+                            QUI.parse(Content),
+                            ControlUtils.parse(Content)
+                        ]).then(function () {
                             this.$applyProjectToControls(Content);
                         }.bind(this));
                     }.bind(this),
@@ -800,6 +845,11 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                         );
                         const textColorEnabledField = Content.getElement('input[data-name="textColorEnabled"]');
                         const textColorField = Content.getElement('input[data-name="textColor"]');
+                        const linkEnabledField = Content.getElement('input[data-name="linkEnabled"]');
+                        const linkHrefField = Content.getElement('input[data-name="linkHref"]');
+                        const linkRelField = Content.getElement('select[data-name="linkRel"]');
+                        const linkTargetField = Content.getElement('select[data-name="linkTarget"]');
+                        const linkTitleField = Content.getElement('input[data-name="linkTitle"]');
                         const backgroundColorOpacity = backgroundColorOpacityField
                             ? parseInt(backgroundColorOpacityField.value, 10)
                             : area.backgroundColorOpacity;
@@ -848,6 +898,19 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                             area.textColor = textColorEnabledField && textColorEnabledField.checked && textColorField
                                 ? textColorField.value.trim()
                                 : '';
+                        }
+
+                        if (this.$isSettingVisible('link')) {
+                            area.link = this.$normalizeLink(
+                                linkEnabledField && linkEnabledField.checked
+                                    ? {
+                                        href: linkHrefField ? linkHrefField.value : '',
+                                        rel: linkRelField ? linkRelField.value : '',
+                                        target: linkTargetField ? linkTargetField.value : '',
+                                        title: linkTitleField ? linkTitleField.value : ''
+                                    }
+                                    : null
+                            );
                         }
 
                         this.$onChange();
@@ -1043,6 +1106,97 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                 label: this.$getLocale('backgroundColor.color'),
                 value: area.textColor,
                 name: 'textColor'
+            });
+
+            return {
+                enabledField: EnabledField,
+                options: Options
+            };
+        },
+
+        $createPopupLinkSettings: function (Parent, area) {
+            const Section = this.$createPopupSection(
+                Parent,
+                this.$getLocale('link.section')
+            );
+            const Link = this.$normalizeLink(area.link);
+            const EnabledField = this.$createPopupCheckboxField(
+                Section,
+                this.$getLocale('link.enabled'),
+                !!Link,
+                'linkEnabled'
+            );
+            const Options = new Element('div', {
+                'class': 'quiqqer-bricks-blockSlot-popupSectionBody'
+            }).inject(Section);
+
+            this.$createPopupProjectSiteField(Options, {
+                label: this.$getLocale('link.href'),
+                value: Link ? Link.href : '',
+                name: 'linkHref'
+            });
+
+            this.$createPopupSelectField(
+                Options,
+                this.$getLocale('link.rel'),
+                [
+                    {
+                        value: '',
+                        text: this.$getLocale('link.rel.none')
+                    },
+                    {
+                        value: 'nofollow',
+                        text: this.$getLocale('link.rel.nofollow')
+                    },
+                    {
+                        value: 'noopener',
+                        text: this.$getLocale('link.rel.noopener')
+                    },
+                    {
+                        value: 'noreferrer',
+                        text: this.$getLocale('link.rel.noreferrer')
+                    },
+                    {
+                        value: 'noopener noreferrer',
+                        text: this.$getLocale('link.rel.noopenerNoreferrer')
+                    },
+                    {
+                        value: 'nofollow noopener noreferrer',
+                        text: this.$getLocale('link.rel.nofollowNoopenerNoreferrer')
+                    }
+                ],
+                Link ? Link.rel : '',
+                'data-name',
+                'linkRel'
+            );
+
+            this.$createPopupSelectField(
+                Options,
+                this.$getLocale('link.target'),
+                [
+                    {
+                        value: '',
+                        text: this.$getLocale('link.target.none')
+                    },
+                    {
+                        value: LINK_TARGET_SELF,
+                        text: this.$getLocale('link.target.self')
+                    },
+                    {
+                        value: LINK_TARGET_BLANK,
+                        text: this.$getLocale('link.target.blank')
+                    }
+                ],
+                Link ? Link.target : '',
+                'data-name',
+                'linkTarget'
+            );
+
+            this.$createPopupInputField(Options, {
+                label: this.$getLocale('link.title'),
+                type: 'text',
+                value: Link ? Link.title : '',
+                name: 'linkTitle'
             });
 
             return {
@@ -1250,6 +1404,51 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
             Input.set('data-name', options.name || 'backgroundImage');
 
             return Field;
+        },
+
+        $createPopupProjectSiteField: function (Parent, options) {
+            const Field = new Element('label', {
+                'class': 'quiqqer-bricks-blockSlot-popupField'
+            }).inject(Parent);
+
+            new Element('span', {
+                'class': 'quiqqer-bricks-blockSlot-popupLabel',
+                text: options.label
+            }).inject(Field);
+
+            const Input = new Element('input', {
+                type: 'text',
+                'class': 'quiqqer-bricks-blockSlot-popupInput project-site',
+                'data-external': 1,
+                name: options.name || 'linkHref',
+                value: options.value || ''
+            }).inject(Field);
+
+            Input.set('data-name', options.name || 'linkHref');
+
+            return Field;
+        },
+
+        $normalizeLink: function (link) {
+            if (typeOf(link) !== 'object') {
+                return null;
+            }
+
+            const href = link.href ? link.href.toString().trim() : '';
+
+            if (!href) {
+                return null;
+            }
+
+            const rel = LINK_REL_OPTIONS.indexOf(link.rel) !== -1 ? link.rel : '';
+            const target = LINK_TARGET_OPTIONS.indexOf(link.target) !== -1 ? link.target : '';
+
+            return {
+                href: href,
+                rel: rel,
+                target: target,
+                title: link.title ? link.title.toString().trim() : ''
+            };
         },
 
         $canRemoveAreaContent: function (area) {

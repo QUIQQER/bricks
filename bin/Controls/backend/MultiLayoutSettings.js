@@ -30,6 +30,21 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
     const VERTICAL_ALIGN_TOP = 'top';
     const VERTICAL_ALIGN_CENTER = 'center';
     const VERTICAL_ALIGN_BOTTOM = 'bottom';
+    const LINK_TARGET_SELF = '_self';
+    const LINK_TARGET_BLANK = '_blank';
+    const LINK_REL_OPTIONS = [
+        '',
+        'nofollow',
+        'noopener',
+        'noreferrer',
+        'noopener noreferrer',
+        'nofollow noopener noreferrer'
+    ];
+    const LINK_TARGET_OPTIONS = [
+        '',
+        LINK_TARGET_SELF,
+        LINK_TARGET_BLANK
+    ];
     const DEFAULT_COLUMNS = 12;
     const MIN_SLOT_WIDTH = 2;
     const BREAKPOINTS = ['desktop', 'tablet', 'mobile'];
@@ -246,6 +261,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
                         verticalAlign: true,
                         background: true,
                         backgroundColor: true,
+                        link: true,
                         textColor: true,
                         image: true
                     },
@@ -414,6 +430,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
                         verticalAlign: false,
                         background: false,
                         backgroundColor: false,
+                        link: false,
                         textColor: false,
                         image: false
                     },
@@ -831,6 +848,8 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
 
             backgroundColorOpacity = Math.max(0, Math.min(100, backgroundColorOpacity));
 
+            const link = this.$normalizeLink(area.link);
+
             return {
                 title: area.title || QUILocale.get(lg, 'brick.multiLayout.area.label', {
                     number: index + 1
@@ -852,7 +871,27 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
                 backgroundColor: area.backgroundColor || '#000000',
                 backgroundColorOpacity: backgroundColorOpacity,
                 textColor: area.textColor ? area.textColor.toString().trim() : '',
+                link: link,
                 verticalAlign: verticalAlign
+            };
+        },
+
+        $normalizeLink: function (link) {
+            if (typeOf(link) !== 'object') {
+                return null;
+            }
+
+            const href = link.href ? link.href.toString().trim() : '';
+
+            if (!href) {
+                return null;
+            }
+
+            return {
+                href: href,
+                rel: LINK_REL_OPTIONS.indexOf(link.rel) !== -1 ? link.rel : '',
+                target: LINK_TARGET_OPTIONS.indexOf(link.target) !== -1 ? link.target : '',
+                title: link.title ? link.title.toString().trim() : ''
             };
         },
 
