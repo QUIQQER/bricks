@@ -167,6 +167,7 @@ class Brick extends QUI\QDOM
         }
 
         $this->settings['customCSS'] = '';
+        $this->settings['customCSSScoping'] = true;
         $this->settings['customJS'] = '';
         $this->settings['footer'] = '';
 
@@ -439,30 +440,35 @@ class Brick extends QUI\QDOM
                     continue;
                 }
 
-                if (preg_match('/(^|,)[\s]*(:root|html|body)\b/i', $selector)) {
-                    $out .= $selector . '{' . $declarations . '}';
-                    $i = $j + 1;
-                    continue;
-                }
-
                 $selectors = array_map('trim', explode(',', $selector));
                 $scopedSelectors = [];
+                $unscopedSelectors = [];
 
                 foreach ($selectors as $sel) {
                     if ($sel === '') {
                         continue;
                     }
 
+                    if (preg_match('/(^|[\s>+~(])body\b/i', $sel)) {
+                        $unscopedSelectors[] = $sel;
+                        continue;
+                    }
+
+                    if (preg_match('/^(:root|html)\b/i', $sel)) {
+                        $unscopedSelectors[] = $sel;
+                        continue;
+                    }
+
                     $scopedSelectors[] = $scope . ' ' . $sel;
                 }
 
-                if (empty($scopedSelectors)) {
-                    $out .= $selector . '{' . $declarations . '}';
-                    $i = $j + 1;
-                    continue;
+                if (!empty($unscopedSelectors)) {
+                    $out .= implode(', ', $unscopedSelectors) . '{' . $declarations . '}';
                 }
 
-                $out .= implode(', ', $scopedSelectors) . '{' . $declarations . '}';
+                if (!empty($scopedSelectors)) {
+                    $out .= implode(', ', $scopedSelectors) . '{' . $declarations . '}';
+                }
                 $i = $j + 1;
             }
 
@@ -628,9 +634,16 @@ class Brick extends QUI\QDOM
         $settings = $this->getSettings();
         $css = '';
         $customCSS = '';
+        $useScopedCustomCSS = true;
+
+        if (isset($settings['customCSSScoping'])) {
+            $useScopedCustomCSS = !in_array($settings['customCSSScoping'], [false, 0, '0'], true);
+        }
 
         if (isset($settings['customCSS']) && is_string($settings['customCSS'])) {
-            $customCSS = $this->getScopedCustomCSS($settings['customCSS']);
+            $customCSS = $useScopedCustomCSS
+                ? $this->getScopedCustomCSS($settings['customCSS'])
+                : trim($settings['customCSS']);
         }
 
         if (!empty($customCSS)) {
