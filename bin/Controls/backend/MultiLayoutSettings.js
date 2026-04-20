@@ -32,6 +32,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
     const VERTICAL_ALIGN_BOTTOM = 'bottom';
     const DEFAULT_COLUMNS = 12;
     const MIN_SLOT_WIDTH = 2;
+    const BREAKPOINTS = ['desktop', 'tablet', 'mobile'];
     const AJAX_GET_PRESETS = 'package_quiqqer_bricks_ajax_getMultiLayoutPresets';
 
     return new Class({
@@ -60,9 +61,13 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
             this.$Canvas = null;
             this.$Grid = null;
             this.$GridContainer = null;
-            this.$editMode = EDIT_MODE_CONTENT;
             this.$selectedSlotId = '';
             this.$presets = [];
+            this.$layoutWindow = null;
+            this.$layoutDraft = null;
+            this.$layoutBreakpoint = 'desktop';
+            this.$layoutToolbar = null;
+            this.$layoutCanvas = null;
 
             this.addEvents({
                 onImport: this.$onImport
@@ -92,8 +97,8 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
 
             this.$loadPresets().then(function () {
                 this.$document = this.$normalizeDocument(this.$parseValue(this.$Input.value));
-                this.$selectedSlotId = this.$getDesktopSlots().length
-                    ? this.$getDesktopSlots()[0].id
+                this.$selectedSlotId = this.$getBreakpointSlots('desktop').length
+                    ? this.$getBreakpointSlots('desktop')[0].id
                     : '';
 
                 this.$render();
@@ -142,17 +147,20 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
         $onAreaChange: function (Control, area, slotId) {
             this.$document.areas[slotId] = this.$normalizeArea(area, this.$getSlotIndex(slotId), slotId);
             this.$selectedSlotId = slotId;
-            this.$updateMobileOrder();
             this.$update();
         },
 
         $onSlotRemove: function (Control, slotId) {
-            this.$removeSlot(slotId);
+            this.$removeSlotFromDocument(this.$layoutDraft, slotId);
+            this.$selectedSlotId = this.$getBreakpointSlots('desktop', this.$layoutDraft).length
+                ? this.$getBreakpointSlots('desktop', this.$layoutDraft)[0].id
+                : '';
+            this.$renderLayoutEditor();
         },
 
         $onSlotSelect: function (Control, slotId) {
             this.$selectedSlotId = slotId;
-            this.$refreshSelection();
+            this.$renderLayoutEditor();
         },
 
         $render: function () {
@@ -160,12 +168,10 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
                 return;
             }
 
-            this.$destroyGrid();
             this.$destroyAreaControls();
 
             this.$Toolbar.empty();
             this.$Container.empty();
-            this.$Container.set('data-mode', this.$editMode);
 
             this.$renderToolbar();
 
@@ -173,11 +179,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
                 'class': 'quiqqer-bricks-multiLayout-settings-canvas'
             }).inject(this.$Container);
 
-            if (this.$editMode === EDIT_MODE_LAYOUT) {
-                this.$renderLayoutCanvas();
-            } else {
-                this.$renderContentCanvas();
-            }
+            this.$renderContentCanvas();
         },
 
         $renderToolbar: function () {
@@ -206,75 +208,31 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
                 this.$changePreset(PresetSelect.value);
             }.bind(this));
 
-            const ModeGroup = new Element('div', {
-                'class': 'quiqqer-bricks-multiLayout-settings-toolbarGroup '
-                    + 'quiqqer-bricks-multiLayout-settings-toolbarGroup--modes'
-            }).inject(this.$Toolbar);
-
-            new Element('span', {
-                'class': 'quiqqer-bricks-multiLayout-settings-toolbarLabel',
-                text: QUILocale.get(lg, 'brick.multiLayout.toolbar.mode')
-            }).inject(ModeGroup);
-
-            this.$createModeButton(
-                ModeGroup,
-                EDIT_MODE_CONTENT,
-                QUILocale.get(lg, 'brick.multiLayout.toolbar.mode.content')
-            );
-            this.$createModeButton(
-                ModeGroup,
-                EDIT_MODE_LAYOUT,
-                QUILocale.get(lg, 'brick.multiLayout.toolbar.mode.layout')
-            );
-
             const ActionGroup = new Element('div', {
                 'class': 'quiqqer-bricks-multiLayout-settings-toolbarGroup '
                     + 'quiqqer-bricks-multiLayout-settings-toolbarGroup--actions'
             }).inject(this.$Toolbar);
 
-            if (this.$editMode !== EDIT_MODE_LAYOUT) {
-                return;
-            }
-
             new Element('button', {
                 type: 'button',
                 'class': 'quiqqer-bricks-multiLayout-settings-button',
-                html: '<span class="fa fa-plus"></span><span>'
-                    + QUILocale.get(lg, 'brick.multiLayout.toolbar.addSlot') + '</span>',
+                html: '<span class="fa fa-columns"></span><span>'
+                    + QUILocale.get(lg, 'brick.multiLayout.toolbar.editLayout') + '</span>',
                 events: {
-                    click: this.$addSlot.bind(this)
+                    click: this.$openLayoutEditor.bind(this)
                 }
             }).inject(ActionGroup);
-        },
-
-        $createModeButton: function (Parent, mode, label) {
-            new Element('button', {
-                type: 'button',
-                'class': 'quiqqer-bricks-multiLayout-settings-modeButton'
-                    + (this.$editMode === mode ? ' is-active' : ''),
-                text: label,
-                events: {
-                    click: function () {
-                        if (this.$editMode === mode) {
-                            return;
-                        }
-
-                        this.$editMode = mode;
-                        this.$render();
-                    }.bind(this)
-                }
-            }).inject(Parent);
         },
 
         $renderContentCanvas: function () {
             const Grid = new Element('div', {
                 'class': 'quiqqer-bricks-multiLayout-settings-contentGrid',
                 styles: {
-                    gridTemplateColumns: 'repeat(' + this.$document.columns + ', minmax(0, 1fr))'
+                    gridTemplateColumns: 'repeat(' + this.$getBreakpointColumns('desktop') + ', minmax(0, 1fr))'
                 }
             }).inject(this.$Canvas);
 
-            this.$getOrderedDesktopSlots().forEach(function (slot, index) {
+            this.$getOrderedSlots('desktop').forEach(function (slot, index) {
                 const AreaControl = new BlockSlot({
                     area: this.$document.areas[slot.id],
                     helperContainer: this.$HelperContainer,
@@ -285,7 +243,6 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
                     allowModeSwitch: true,
                     settingsVisibility: {
                         contentPadding: true,
-                        mobileOrder: true,
                         verticalAlign: true,
                         background: true,
                         backgroundColor: true,
@@ -312,12 +269,123 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
             }.bind(this));
         },
 
-        $renderLayoutCanvas: function () {
+        $openLayoutEditor: function () {
+            this.$layoutDraft = this.$cloneDocument(this.$document);
+            this.$layoutBreakpoint = this.$layoutBreakpoint || 'desktop';
+
+            new QUIConfirm({
+                icon: 'fa fa-columns',
+                title: QUILocale.get(lg, 'brick.multiLayout.editor.title'),
+                maxWidth: 1100,
+                maxHeight: 760,
+                information: QUILocale.get(lg, 'brick.multiLayout.editor.information'),
+                text: QUILocale.get(lg, 'brick.multiLayout.editor.text'),
+                events: {
+                    onOpen: function (Win) {
+                        this.$layoutWindow = Win;
+                        this.$renderLayoutEditor();
+                    }.bind(this),
+                    onSubmit: function () {
+                        this.$document = this.$normalizeDocument(this.$layoutDraft);
+                        this.$selectedSlotId = this.$getBreakpointSlots('desktop').some(function (slot) {
+                            return slot.id === this.$selectedSlotId;
+                        }.bind(this))
+                            ? this.$selectedSlotId
+                            : (this.$getBreakpointSlots('desktop')[0] ? this.$getBreakpointSlots('desktop')[0].id : '');
+
+                        this.$destroyGrid();
+                        this.$layoutDraft = null;
+                        this.$layoutWindow = null;
+                        this.$render();
+                        this.$update();
+                    }.bind(this),
+                    onClose: function () {
+                        this.$destroyGrid();
+                        this.$layoutDraft = null;
+                        this.$layoutWindow = null;
+                        this.$layoutToolbar = null;
+                        this.$layoutCanvas = null;
+                        this.$render();
+                    }.bind(this)
+                }
+            }).open();
+        },
+
+        $renderLayoutEditor: function () {
+            if (!this.$layoutWindow) {
+                return;
+            }
+
+            const Content = this.$layoutWindow.getContent();
+
+            this.$destroyGrid();
+            this.$destroyAreaControls();
+
+            Content.set('html', '');
+            Content.addClass('quiqqer-bricks-multiLayout-settings-editorWindow');
+
+            const Header = new Element('div', {
+                'class': 'quiqqer-bricks-multiLayout-settings-editorHeader'
+            }).inject(Content);
+
+            new Element('div', {
+                'class': 'quiqqer-bricks-multiLayout-settings-editorHint',
+                text: QUILocale.get(lg, 'brick.multiLayout.editor.breakpointHint')
+            }).inject(Header);
+
+            this.$layoutToolbar = new Element('div', {
+                'class': 'quiqqer-bricks-multiLayout-settings-editorToolbar'
+            }).inject(Header);
+
+            BREAKPOINTS.forEach(function (breakpoint) {
+                new Element('button', {
+                    type: 'button',
+                    'class': 'quiqqer-bricks-multiLayout-settings-breakpointButton'
+                        + (this.$layoutBreakpoint === breakpoint ? ' is-active' : ''),
+                    text: QUILocale.get(lg, 'brick.multiLayout.breakpoint.' + breakpoint),
+                    events: {
+                        click: function () {
+                            if (this.$layoutBreakpoint === breakpoint) {
+                                return;
+                            }
+
+                            this.$layoutBreakpoint = breakpoint;
+                            this.$renderLayoutEditor();
+                        }.bind(this)
+                    }
+                }).inject(this.$layoutToolbar);
+            }.bind(this));
+
+            const ActionGroup = new Element('div', {
+                'class': 'quiqqer-bricks-multiLayout-settings-editorActions'
+            }).inject(this.$layoutToolbar);
+
+            new Element('button', {
+                type: 'button',
+                'class': 'quiqqer-bricks-multiLayout-settings-button',
+                html: '<span class="fa fa-plus"></span><span>'
+                    + QUILocale.get(lg, 'brick.multiLayout.toolbar.addSlot') + '</span>',
+                events: {
+                    click: function () {
+                        this.$addSlotToDocument(this.$layoutDraft);
+                        this.$renderLayoutEditor();
+                    }.bind(this)
+                }
+            }).inject(ActionGroup);
+
+            this.$layoutCanvas = new Element('div', {
+                'class': 'quiqqer-bricks-multiLayout-settings-editorCanvas'
+            }).inject(Content);
+
+            const GridWrap = new Element('div', {
+                'class': 'quiqqer-bricks-multiLayout-settings-layoutGridWrap'
+            }).inject(this.$layoutCanvas);
+
             this.$GridContainer = new Element('div', {
                 'class': 'quiqqer-bricks-multiLayout-settings-layoutGrid grid-stack'
-            }).inject(this.$Canvas);
+            }).inject(GridWrap);
 
-            this.$getOrderedDesktopSlots().forEach(function (slot, index) {
+            this.$getOrderedSlots(this.$layoutBreakpoint, this.$layoutDraft).forEach(function (slot, index) {
                 const Item = new Element('div', {
                     'class': 'grid-stack-item',
                     'gs-id': slot.id,
@@ -328,22 +396,21 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
                     'gs-min-w': MIN_SLOT_WIDTH
                 }).inject(this.$GridContainer);
 
-                const Content = new Element('div', {
+                const ContentElm = new Element('div', {
                     'class': 'grid-stack-item-content'
                 }).inject(Item);
 
                 const AreaControl = new BlockSlot({
-                    area: this.$document.areas[slot.id],
+                    area: this.$layoutDraft.areas[slot.id],
                     helperContainer: this.$HelperContainer,
                     slotId: slot.id,
                     index: index,
                     interactionMode: EDIT_MODE_LAYOUT,
                     selected: this.$selectedSlotId === slot.id,
-                    allowRemoveSlot: this.$getDesktopSlots().length > 1,
+                    allowRemoveSlot: this.$getBreakpointSlots('desktop', this.$layoutDraft).length > 1,
                     allowModeSwitch: false,
                     settingsVisibility: {
                         contentPadding: false,
-                        mobileOrder: false,
                         verticalAlign: false,
                         background: false,
                         backgroundColor: false,
@@ -356,7 +423,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
                     }
                 });
 
-                AreaControl.inject(Content);
+                AreaControl.inject(ContentElm);
                 this.$AreaControls.push(AreaControl);
             }.bind(this));
 
@@ -369,8 +436,8 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
             }
 
             this.$Grid = GridStack.init({
-                column: this.$document.columns,
-                cellHeight: 200,
+                column: this.$getBreakpointColumns(this.$layoutBreakpoint, this.$layoutDraft),
+                cellHeight: 120,
                 disableOneColumnMode: true,
                 float: true,
                 margin: 12,
@@ -385,7 +452,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
         },
 
         $syncSlotsFromGrid: function () {
-            if (!this.$GridContainer) {
+            if (!this.$GridContainer || !this.$layoutDraft) {
                 return;
             }
 
@@ -402,26 +469,24 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
                     y: Item.gridstackNode.y,
                     w: Item.gridstackNode.w,
                     h: Item.gridstackNode.h
-                }, slots.length));
+                }, slots.length, DEFAULT_COLUMNS, DEFAULT_COLUMNS));
             }.bind(this));
 
-            this.$document.breakpoints.desktop.slots = slots.sort(this.$compareSlots);
-            this.$updateMobileOrder();
-            this.$update();
+            this.$layoutDraft.breakpoints[this.$layoutBreakpoint].slots = slots.sort(this.$compareSlots);
         },
 
         $changePreset: function (presetId) {
             presetId = this.$normalizeLayoutValue(presetId);
 
             if (presetId === this.$document.preset) {
-                this.$syncLayoutInput();
+                this.$update();
                 return;
             }
 
             const applyPreset = function () {
                 this.$document = this.$createDocumentFromPreset(presetId, this.$document);
-                this.$selectedSlotId = this.$getDesktopSlots().length
-                    ? this.$getDesktopSlots()[0].id
+                this.$selectedSlotId = this.$getBreakpointSlots('desktop').length
+                    ? this.$getBreakpointSlots('desktop')[0].id
                     : '';
                 this.$render();
                 this.$update();
@@ -441,44 +506,6 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
                     onSubmit: applyPreset
                 }
             }).open();
-        },
-
-        $addSlot: function () {
-            const nextId = this.$createNextSlotId();
-            const index = this.$getDesktopSlots().length;
-            const defaultSlotWidth = this.$getDefaultSlotWidth();
-            const nextPosition = this.$findNextSlotPosition(defaultSlotWidth, 1);
-
-            this.$document.breakpoints.desktop.slots.push(this.$normalizeSlot({
-                id: nextId,
-                x: nextPosition.x,
-                y: nextPosition.y,
-                w: defaultSlotWidth,
-                h: 1
-            }, index));
-
-            this.$document.areas[nextId] = this.$normalizeArea({}, index, nextId);
-            this.$selectedSlotId = nextId;
-            this.$updateMobileOrder();
-            this.$render();
-            this.$update();
-        },
-
-        $removeSlot: function (slotId) {
-            const slots = this.$getDesktopSlots().filter(function (slot) {
-                return slot.id !== slotId;
-            });
-
-            if (!slots.length) {
-                return;
-            }
-
-            this.$document.breakpoints.desktop.slots = slots;
-            delete this.$document.areas[slotId];
-            this.$selectedSlotId = slots[0].id;
-            this.$updateMobileOrder();
-            this.$render();
-            this.$update();
         },
 
         $destroyGrid: function () {
@@ -508,16 +535,6 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
             }.bind(this));
         },
 
-        $refreshSelection: function () {
-            this.$AreaControls.forEach(function (Control) {
-                if (Control && 'setSelected' in Control) {
-                    Control.setSelected(
-                        'getSlotId' in Control && Control.getSlotId() === this.$selectedSlotId
-                    );
-                }
-            }.bind(this));
-        },
-
         $update: function () {
             this.$Input.value = JSON.encode(this.$document);
         },
@@ -534,71 +551,93 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
             }
         },
 
+        $cloneDocument: function (documentData) {
+            return JSON.decode(JSON.encode(documentData || {}));
+        },
+
         $normalizeDocument: function (value) {
             const preset = this.$getPreset(this.$normalizeLayoutValue(
                 value && value.preset ? value.preset : null
             ));
-            const sourceColumns = value && !isNaN(parseInt(value.columns, 10))
-                ? parseInt(value.columns, 10)
-                : preset.columns;
-            const slotsSource = value
-                && value.breakpoints
-                && value.breakpoints.desktop
-                && typeOf(value.breakpoints.desktop.slots) === 'array'
-                ? value.breakpoints.desktop.slots
-                : preset.slots;
+            const desktopColumns = DEFAULT_COLUMNS;
+            const desktopSlots = this.$normalizeSlots(
+                value && value.breakpoints && value.breakpoints.desktop
+                    ? value.breakpoints.desktop.slots
+                    : preset.slots,
+                value && value.breakpoints && value.breakpoints.desktop
+                    ? value.breakpoints.desktop.columns
+                    : desktopColumns,
+                desktopColumns
+            );
+            const tabletSlots = this.$normalizeBreakpointSlots(
+                value && value.breakpoints && value.breakpoints.tablet
+                    ? value.breakpoints.tablet.slots
+                    : null,
+                desktopSlots,
+                'tablet',
+                value && value.breakpoints && value.breakpoints.tablet
+                    ? value.breakpoints.tablet.columns
+                    : desktopColumns
+            );
+            const mobileSlots = this.$normalizeBreakpointSlots(
+                value && value.breakpoints && value.breakpoints.mobile
+                    ? value.breakpoints.mobile.slots
+                    : null,
+                desktopSlots,
+                'mobile',
+                value && value.breakpoints && value.breakpoints.mobile
+                    ? value.breakpoints.mobile.columns
+                    : desktopColumns
+            );
             const areasSource = value && typeOf(value.areas) === 'object' ? value.areas : {};
-            const slots = this.$normalizeSlots(slotsSource, sourceColumns, preset.columns);
             const areas = {};
 
-            slots.forEach(function (slot, index) {
-                let sourceArea = null;
-
-                if (areasSource[slot.id] && typeOf(areasSource[slot.id]) === 'object') {
-                    sourceArea = areasSource[slot.id];
-                }
-
-                areas[slot.id] = this.$normalizeArea(sourceArea || {}, index, slot.id);
+            desktopSlots.forEach(function (slot, index) {
+                areas[slot.id] = this.$normalizeArea(
+                    areasSource[slot.id] && typeOf(areasSource[slot.id]) === 'object'
+                        ? areasSource[slot.id]
+                        : {},
+                    index,
+                    slot.id
+                );
             }.bind(this));
 
-            const documentData = {
+            return {
                 preset: preset.id,
-                columns: preset.columns,
                 breakpoints: {
                     desktop: {
-                        slots: slots.sort(this.$compareSlots)
+                        columns: desktopColumns,
+                        slots: desktopSlots
                     },
                     tablet: {
-                        mode: 'inherit'
+                        columns: desktopColumns,
+                        slots: tabletSlots
                     },
                     mobile: {
-                        mode: 'stack',
-                        order: []
+                        columns: desktopColumns,
+                        slots: mobileSlots
                     }
                 },
                 areas: areas
             };
-
-            documentData.breakpoints.mobile.order = this.$buildMobileOrder(documentData);
-
-            return documentData;
         },
 
         $createDocumentFromPreset: function (presetId, previousDocument) {
             const preset = this.$getPreset(presetId);
+            const desktopSlots = this.$normalizeSlots(preset.slots, preset.columns, DEFAULT_COLUMNS);
             const nextDocument = this.$normalizeDocument({
                 preset: preset.id,
-                columns: preset.columns,
                 breakpoints: {
                     desktop: {
-                        slots: preset.slots
+                        columns: DEFAULT_COLUMNS,
+                        slots: desktopSlots
                     }
                 },
                 areas: {}
             });
-            const previousSlots = this.$getOrderedSlotsFromDocument(previousDocument);
+            const previousSlots = this.$getOrderedSlots('desktop', previousDocument);
 
-            this.$getOrderedSlotsFromDocument(nextDocument).forEach(function (slot, index) {
+            this.$getOrderedSlots('desktop', nextDocument).forEach(function (slot, index) {
                 const sameSlotArea = previousDocument.areas[slot.id];
                 const mappedSlot = previousSlots[index];
                 const mappedArea = mappedSlot && previousDocument.areas[mappedSlot.id]
@@ -611,8 +650,6 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
                     slot.id
                 );
             }.bind(this));
-
-            nextDocument.breakpoints.mobile.order = this.$buildMobileOrder(nextDocument);
 
             return nextDocument;
         },
@@ -647,10 +684,64 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
             }.bind(this));
 
             return normalized.length
-                ? normalized
+                ? normalized.sort(this.$compareSlots)
                 : this.$getPreset(this.$getDefaultPresetId()).slots.map(function (slot, index) {
                     return this.$normalizeSlot(slot, index, targetColumns, targetColumns);
                 }.bind(this));
+        },
+
+        $normalizeBreakpointSlots: function (slots, desktopSlots, breakpoint, sourceColumns) {
+            const fallback = breakpoint === 'mobile'
+                ? this.$buildMobileDefaultSlots(desktopSlots)
+                : this.$buildTabletDefaultSlots(desktopSlots);
+            const normalizedById = {};
+
+            if (typeOf(slots) === 'array') {
+                slots.forEach(function (slot, index) {
+                    const normalizedSlot = this.$normalizeSlot(
+                        slot,
+                        index,
+                        sourceColumns,
+                        DEFAULT_COLUMNS
+                    );
+
+                    normalizedById[normalizedSlot.id] = normalizedSlot;
+                }.bind(this));
+            }
+
+            return desktopSlots.map(function (desktopSlot, index) {
+                const sourceSlot = normalizedById[desktopSlot.id] || fallback[index] || desktopSlot;
+                const slot = this.$normalizeSlot(sourceSlot, index, DEFAULT_COLUMNS, DEFAULT_COLUMNS);
+
+                slot.id = desktopSlot.id;
+
+                return slot;
+            }.bind(this)).sort(this.$compareSlots);
+        },
+
+        $buildTabletDefaultSlots: function (desktopSlots) {
+            return desktopSlots.map(function (slot, index) {
+                return this.$normalizeSlot(slot, index, DEFAULT_COLUMNS, DEFAULT_COLUMNS);
+            }.bind(this));
+        },
+
+        $buildMobileDefaultSlots: function (desktopSlots) {
+            let currentY = 0;
+
+            return desktopSlots.slice().sort(this.$compareSlots).map(function (slot) {
+                const height = Math.max(1, parseInt(slot.h, 10) || 1);
+                const mobileSlot = {
+                    id: slot.id,
+                    x: 0,
+                    y: currentY,
+                    w: DEFAULT_COLUMNS,
+                    h: height
+                };
+
+                currentY += height;
+
+                return mobileSlot;
+            });
         },
 
         $normalizeSlot: function (slot, index, sourceColumns, targetColumns) {
@@ -698,12 +789,6 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
 
             if ([MODE_EDITOR, MODE_BRICK, MODE_IMAGE].indexOf(mode) === -1) {
                 mode = MODE_EDITOR;
-            }
-
-            let mobileOrder = parseInt(area.mobileOrder, 10);
-
-            if (isNaN(mobileOrder) || mobileOrder < 1) {
-                mobileOrder = index + 1;
             }
 
             let imageFit = area.imageFit;
@@ -767,28 +852,8 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
                 backgroundColor: area.backgroundColor || '#000000',
                 backgroundColorOpacity: backgroundColorOpacity,
                 textColor: area.textColor ? area.textColor.toString().trim() : '',
-                verticalAlign: verticalAlign,
-                mobileOrder: mobileOrder
+                verticalAlign: verticalAlign
             };
-        },
-
-        $buildMobileOrder: function (documentData) {
-            return this.$getOrderedSlotsFromDocument(documentData).sort(function (slotA, slotB) {
-                const areaA = documentData.areas[slotA.id] || {};
-                const areaB = documentData.areas[slotB.id] || {};
-
-                if (areaA.mobileOrder === areaB.mobileOrder) {
-                    return this.$compareSlots(slotA, slotB);
-                }
-
-                return (areaA.mobileOrder || 0) - (areaB.mobileOrder || 0);
-            }.bind(this)).map(function (slot) {
-                return slot.id;
-            });
-        },
-
-        $updateMobileOrder: function () {
-            this.$document.breakpoints.mobile.order = this.$buildMobileOrder(this.$document);
         },
 
         $getSlotGridStyles: function (slot) {
@@ -799,7 +864,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
         },
 
         $hasAreaContent: function () {
-            return this.$getDesktopSlots().some(function (slot) {
+            return this.$getBreakpointSlots('desktop').some(function (slot) {
                 const area = this.$document.areas[slot.id];
 
                 if (!area) {
@@ -826,52 +891,58 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
             return {
                 id: found.id,
                 labelKey: found.labelKey,
-                columns: found.columns,
+                columns: DEFAULT_COLUMNS,
                 defaultSlotWidth: found.defaultSlotWidth,
                 slots: found.slots.map(function (slot, index) {
-                    return this.$normalizeSlot(slot, index, found.columns);
+                    return this.$normalizeSlot(slot, index, DEFAULT_COLUMNS, DEFAULT_COLUMNS);
                 }.bind(this))
             };
         },
 
-        $getDefaultSlotWidth: function () {
-            const preset = this.$getPreset(this.$document && this.$document.preset);
+        $getDefaultSlotWidth: function (documentData) {
+            const preset = this.$getPreset(
+                documentData && documentData.preset
+                    ? documentData.preset
+                    : (this.$document && this.$document.preset)
+            );
             let width = parseInt(preset.defaultSlotWidth, 10);
-            const columns = parseInt(this.$document && this.$document.columns, 10) || DEFAULT_COLUMNS;
 
             if (isNaN(width) || width < 1) {
-                width = columns;
+                width = DEFAULT_COLUMNS;
             }
 
-            return Math.max(1, Math.min(columns, width));
+            return Math.max(1, Math.min(DEFAULT_COLUMNS, width));
         },
 
-        $getDesktopSlots: function () {
-            if (!this.$document
-                || !this.$document.breakpoints
-                || !this.$document.breakpoints.desktop
-                || typeOf(this.$document.breakpoints.desktop.slots) !== 'array'
-            ) {
-                return [];
-            }
+        $getBreakpointColumns: function (breakpoint, documentData) {
+            documentData = documentData || this.$document;
 
-            return this.$document.breakpoints.desktop.slots;
-        },
-
-        $getOrderedDesktopSlots: function () {
-            return this.$getDesktopSlots().slice().sort(this.$compareSlots);
-        },
-
-        $getOrderedSlotsFromDocument: function (documentData) {
             if (!documentData
                 || !documentData.breakpoints
-                || !documentData.breakpoints.desktop
-                || typeOf(documentData.breakpoints.desktop.slots) !== 'array'
+                || !documentData.breakpoints[breakpoint]
+            ) {
+                return DEFAULT_COLUMNS;
+            }
+
+            return parseInt(documentData.breakpoints[breakpoint].columns, 10) || DEFAULT_COLUMNS;
+        },
+
+        $getBreakpointSlots: function (breakpoint, documentData) {
+            documentData = documentData || this.$document;
+
+            if (!documentData
+                || !documentData.breakpoints
+                || !documentData.breakpoints[breakpoint]
+                || typeOf(documentData.breakpoints[breakpoint].slots) !== 'array'
             ) {
                 return [];
             }
 
-            return documentData.breakpoints.desktop.slots.slice().sort(this.$compareSlots);
+            return documentData.breakpoints[breakpoint].slots;
+        },
+
+        $getOrderedSlots: function (breakpoint, documentData) {
+            return this.$getBreakpointSlots(breakpoint, documentData).slice().sort(this.$compareSlots);
         },
 
         $compareSlots: function (slotA, slotB) {
@@ -898,29 +969,18 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
             return slotId;
         },
 
-        $createNextSlotId: function () {
+        $createNextSlotId: function (documentData) {
             const used = {};
 
-            this.$getDesktopSlots().forEach(function (slot) {
+            this.$getBreakpointSlots('desktop', documentData).forEach(function (slot) {
                 used[slot.id] = true;
             });
 
             return this.$createUniqueSlotId(used);
         },
 
-        $getNextSlotY: function () {
-            let maxY = 0;
-
-            this.$getDesktopSlots().forEach(function (slot) {
-                maxY = Math.max(maxY, slot.y + slot.h);
-            });
-
-            return maxY;
-        },
-
-        $findNextSlotPosition: function (width, height) {
-            const columns = parseInt(this.$document && this.$document.columns, 10) || DEFAULT_COLUMNS;
-            const slots = this.$getDesktopSlots();
+        $findNextSlotPosition: function (width, height, slots) {
+            const columns = DEFAULT_COLUMNS;
             let pointer = 0;
 
             width = Math.max(1, Math.min(columns, parseInt(width, 10) || 1));
@@ -946,6 +1006,16 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
             }
         },
 
+        $getNextStackedY: function (slots) {
+            let maxY = 0;
+
+            slots.forEach(function (slot) {
+                maxY = Math.max(maxY, slot.y + slot.h);
+            });
+
+            return maxY;
+        },
+
         $isSlotAreaFree: function (x, y, width, height, slots) {
             return !slots.some(function (slot) {
                 return !(
@@ -957,8 +1027,70 @@ define('package/quiqqer/bricks/bin/Controls/backend/MultiLayoutSettings', [
             });
         },
 
+        $addSlotToDocument: function (documentData) {
+            const nextId = this.$createNextSlotId(documentData);
+            const index = this.$getBreakpointSlots('desktop', documentData).length;
+            const defaultSlotWidth = this.$getDefaultSlotWidth(documentData);
+            const desktopPosition = this.$findNextSlotPosition(
+                defaultSlotWidth,
+                1,
+                this.$getBreakpointSlots('desktop', documentData)
+            );
+
+            documentData.breakpoints.desktop.slots.push(this.$normalizeSlot({
+                id: nextId,
+                x: desktopPosition.x,
+                y: desktopPosition.y,
+                w: defaultSlotWidth,
+                h: 1
+            }, index, DEFAULT_COLUMNS, DEFAULT_COLUMNS));
+
+            documentData.breakpoints.tablet.slots.push(this.$normalizeSlot({
+                id: nextId,
+                x: desktopPosition.x,
+                y: desktopPosition.y,
+                w: defaultSlotWidth,
+                h: 1
+            }, index, DEFAULT_COLUMNS, DEFAULT_COLUMNS));
+
+            documentData.breakpoints.mobile.slots.push(this.$normalizeSlot({
+                id: nextId,
+                x: 0,
+                y: this.$getNextStackedY(this.$getBreakpointSlots('mobile', documentData)),
+                w: DEFAULT_COLUMNS,
+                h: 1
+            }, index, DEFAULT_COLUMNS, DEFAULT_COLUMNS));
+
+            documentData.breakpoints.desktop.slots.sort(this.$compareSlots);
+            documentData.breakpoints.tablet.slots.sort(this.$compareSlots);
+            documentData.breakpoints.mobile.slots.sort(this.$compareSlots);
+            documentData.areas[nextId] = this.$normalizeArea({}, index, nextId);
+            this.$selectedSlotId = nextId;
+        },
+
+        $removeSlotFromDocument: function (documentData, slotId) {
+            const desktopSlots = this.$getBreakpointSlots('desktop', documentData).filter(function (slot) {
+                return slot.id !== slotId;
+            });
+
+            if (!desktopSlots.length) {
+                return;
+            }
+
+            BREAKPOINTS.forEach(function (breakpoint) {
+                documentData.breakpoints[breakpoint].slots = this.$getBreakpointSlots(
+                    breakpoint,
+                    documentData
+                ).filter(function (slot) {
+                    return slot.id !== slotId;
+                });
+            }.bind(this));
+
+            delete documentData.areas[slotId];
+        },
+
         $getSlotIndex: function (slotId) {
-            const slots = this.$getOrderedDesktopSlots();
+            const slots = this.$getOrderedSlots('desktop');
 
             for (let i = 0, len = slots.length; i < len; i++) {
                 if (slots[i].id === slotId) {

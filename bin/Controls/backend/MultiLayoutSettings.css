@@ -103,6 +103,68 @@
     opacity: 0.6;
 }
 
+.quiqqer-bricks-multiLayout-settings-editorWindow {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.quiqqer-bricks-multiLayout-settings-editorHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.quiqqer-bricks-multiLayout-settings-editorHint {
+    color: #52606d;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.quiqqer-bricks-multiLayout-settings-editorToolbar {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.quiqqer-bricks-multiLayout-settings-editorActions {
+    display: flex;
+    margin-left: auto;
+}
+
+.quiqqer-bricks-multiLayout-settings-breakpointButton {
+    align-items: center;
+    background: #f4f7fa;
+    border: 1px solid #d9dfe7;
+    border-radius: 999px;
+    color: #253443;
+    cursor: pointer;
+    display: inline-flex;
+    font-size: 0.9rem;
+    font-weight: 700;
+    min-height: 2.4rem;
+    padding: 0.45rem 0.95rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.quiqqer-bricks-multiLayout-settings-breakpointButton.is-active,
+.quiqqer-bricks-multiLayout-settings-breakpointButton:hover,
+.quiqqer-bricks-multiLayout-settings-breakpointButton:focus {
+    background: #ffffff;
+    border-color: #8eb3d8;
+    box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.12);
+    outline: none;
+}
+
+.quiqqer-bricks-multiLayout-settings-editorCanvas {
+    min-width: 0;
+}
+
+.quiqqer-bricks-multiLayout-settings-layoutGridWrap {
+    min-width: 0;
+}
+
 @media (max-width: 767px) {
     .quiqqer-bricks-multiLayout-settings-toolbar {
         align-items: stretch;
@@ -112,6 +174,16 @@
     .quiqqer-bricks-multiLayout-settings-toolbarGroup,
     .quiqqer-bricks-multiLayout-settings-toolbarGroup--modes,
     .quiqqer-bricks-multiLayout-settings-toolbarGroup--actions {
+        width: 100%;
+    }
+
+    .quiqqer-bricks-multiLayout-settings-editorToolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .quiqqer-bricks-multiLayout-settings-editorActions {
+        margin-left: 0;
         width: 100%;
     }
 

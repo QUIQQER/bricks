@@ -2737,8 +2737,24 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
             <en><![CDATA[MultiLayout]]></en>
         </locale>
         <locale name="brick.multiLayout.description">
-            <de><![CDATA[Mehrspaltiger Baustein mit frei konfigurierbaren Bereichen.]]></de>
-            <en><![CDATA[Multi-column brick with individually configurable areas.]]></en>
+            <de><![CDATA[<p>Mit diesem Baustein baust du flexible Layouts aus mehreren frei belegbaren Bereichen auf. So kombinierst du Inhalte, Bilder und andere Bausteine in einem gemeinsamen, responsiven Raster.</p>
+<ul>
+    <li><strong>Verschiedene Layout-Vorlagen:</strong> Starte mit unterschiedlichen Presets und passe die Anordnung an deinen Inhalt an.</li>
+    <li><strong>Bereiche individuell befüllbar:</strong> Jeder Bereich kann wahlweise Text, ein Bild oder einen anderen Baustein enthalten.</li>
+    <li><strong>Responsive anpassbar:</strong> Desktop, Tablet und Mobile lassen sich passend zur Ausgabe strukturieren.</li>
+    <li><strong>Mobile-Reihenfolge steuerbar:</strong> Lege fest, in welcher Reihenfolge die Bereiche auf kleinen Geräten angezeigt werden.</li>
+    <li><strong>Visuell flexibel:</strong> Pro Bereich sind unter anderem Ausrichtung, Hintergrundbild, Overlay, Hintergrundfarbe und Textfarbe konfigurierbar.</li>
+    <li><strong>Auch für komplexe Seitenbereiche geeignet:</strong> Ideal für Teaser-Zonen, Bild-Text-Kombinationen, Bento-Layouts oder modulare Content-Abschnitte.</li>
+</ul>]]></de>
+            <en><![CDATA[<p>Use this brick to build flexible layouts from multiple freely assignable areas. It lets you combine content, images and other bricks inside one shared responsive grid.</p>
+<ul>
+    <li><strong>Various layout presets:</strong> Start with different presets and adapt the arrangement to your content.</li>
+    <li><strong>Areas can be filled individually:</strong> Each area can contain text, an image or another brick.</li>
+    <li><strong>Responsive by design:</strong> Structure the layout for desktop, tablet and mobile as needed.</li>
+    <li><strong>Controllable mobile order:</strong> Define the order in which areas appear on smaller devices.</li>
+    <li><strong>Visually flexible:</strong> Each area can be configured with alignment, background image, overlay, background color and text color.</li>
+    <li><strong>Suitable for complex page sections:</strong> Ideal for teaser zones, image-text combinations, bento layouts or modular content sections.</li>
+</ul>]]></en>
         </locale>
         <locale name="brick.multiLayout.layout.1">
             <de><![CDATA[Layout 1]]></de>
@@ -3240,6 +3256,10 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
             <de><![CDATA[Preset]]></de>
             <en><![CDATA[Preset]]></en>
         </locale>
+        <locale name="brick.multiLayout.toolbar.editLayout">
+            <de><![CDATA[Layout bearbeiten]]></de>
+            <en><![CDATA[Edit layout]]></en>
+        </locale>
         <locale name="brick.multiLayout.toolbar.mode">
             <de><![CDATA[Bearbeitungsmodus]]></de>
             <en><![CDATA[Edit mode]]></en>
@@ -3255,6 +3275,34 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
         <locale name="brick.multiLayout.toolbar.addSlot">
             <de><![CDATA[Slot hinzufügen]]></de>
             <en><![CDATA[Add slot]]></en>
+        </locale>
+        <locale name="brick.multiLayout.editor.title">
+            <de><![CDATA[MultiLayout bearbeiten]]></de>
+            <en><![CDATA[Edit multi layout]]></en>
+        </locale>
+        <locale name="brick.multiLayout.editor.text">
+            <de><![CDATA[Desktop, Tablet und Mobile können separat angeordnet werden. Änderungen werden erst beim Speichern übernommen.]]></de>
+            <en><![CDATA[Desktop, tablet and mobile can be arranged separately. Changes are only applied after saving.]]></en>
+        </locale>
+        <locale name="brick.multiLayout.editor.information">
+            <de><![CDATA[Tablet startet mit dem Desktop-Layout. Mobile startet gestapelt mit voller Breite, bleibt danach aber frei editierbar.]]></de>
+            <en><![CDATA[Tablet starts from the desktop layout. Mobile starts stacked at full width but stays fully editable afterwards.]]></en>
+        </locale>
+        <locale name="brick.multiLayout.editor.breakpointHint">
+            <de><![CDATA[Desktop ist die Hauptansicht. Tablet übernimmt standardmäßig Desktop, Mobile startet gestapelt mit 12 Spalten Breite pro Slot.]]></de>
+            <en><![CDATA[Desktop is the primary view. Tablet starts from desktop, mobile starts stacked with each slot spanning 12 columns.]]></en>
+        </locale>
+        <locale name="brick.multiLayout.breakpoint.desktop">
+            <de><![CDATA[Desktop]]></de>
+            <en><![CDATA[Desktop]]></en>
+        </locale>
+        <locale name="brick.multiLayout.breakpoint.tablet">
+            <de><![CDATA[Tablet]]></de>
+            <en><![CDATA[Tablet]]></en>
+        </locale>
+        <locale name="brick.multiLayout.breakpoint.mobile">
+            <de><![CDATA[Mobile]]></de>
+            <en><![CDATA[Mobile]]></en>
         </locale>
         <locale name="brick.multiLayout.presetChange.title">
             <de><![CDATA[Preset wechseln?]]></de>

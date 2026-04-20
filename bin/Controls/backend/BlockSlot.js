@@ -22,7 +22,6 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
     const DEFAULT_ALLOWED_MODES = [MODE_EDITOR, MODE_BRICK, MODE_IMAGE];
     const DEFAULT_SETTINGS_VISIBILITY = {
         contentPadding: true,
-        mobileOrder: true,
         verticalAlign: true,
         background: true,
         backgroundColor: true,
@@ -252,13 +251,6 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                 text: this.$getLocale('layout.hint')
             }).inject(Preview);
 
-            new Element('div', {
-                'class': 'quiqqer-bricks-blockSlot-layoutPreviewMeta',
-                text: this.$getLocale('mobileOrder.info', {
-                    number: area.mobileOrder
-                })
-            }).inject(Preview);
-
             const Footer = new Element('div', {
                 'class': 'quiqqer-bricks-blockSlot-cardFooter'
             }).inject(this.$Elm);
@@ -324,13 +316,6 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
             new Element('div', {
                 'class': 'quiqqer-bricks-blockSlot-previewHint',
                 text: this.$getQuickEditLabel(mode)
-            }).inject(PreviewMeta);
-
-            new Element('div', {
-                'class': 'quiqqer-bricks-blockSlot-cardInfo',
-                text: this.$getLocale('mobileOrder.info', {
-                    number: area.mobileOrder
-                })
             }).inject(PreviewMeta);
         },
 
@@ -667,17 +652,6 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                             );
                         }
 
-                        if (this.$isSettingVisible('mobileOrder')) {
-                            this.$createPopupInputField(Form, {
-                                label: this.$getLocale('mobileOrder'),
-                                type: 'number',
-                                value: area.mobileOrder,
-                                min: 1,
-                                step: 1,
-                                name: 'mobileOrder'
-                            });
-                        }
-
                         if (this.$isSettingVisible('verticalAlign')) {
                             this.$createPopupSelectField(
                                 Form,
@@ -808,7 +782,6 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                         const Content = Win.getContent();
                         const modeField = Content.getElement('select[data-name="mode"]');
                         const contentPaddingField = Content.getElement('input[data-name="contentPadding"]');
-                        const orderField = Content.getElement('input[data-name="mobileOrder"]');
                         const verticalAlignField = Content.getElement('select[data-name="verticalAlign"]');
                         const imageFitField = Content.getElement('select[data-name="imageFit"]');
                         const imageMaxWidthField = Content.getElement('input[data-name="imageMaxWidth"]');
@@ -827,7 +800,6 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                         );
                         const textColorEnabledField = Content.getElement('input[data-name="textColorEnabled"]');
                         const textColorField = Content.getElement('input[data-name="textColor"]');
-                        const mobileOrder = orderField ? parseInt(orderField.value, 10) : area.mobileOrder;
                         const backgroundColorOpacity = backgroundColorOpacityField
                             ? parseInt(backgroundColorOpacityField.value, 10)
                             : area.backgroundColorOpacity;
@@ -836,10 +808,6 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
 
                         if (this.$isSettingVisible('contentPadding')) {
                             area.contentPadding = !!(contentPaddingField && contentPaddingField.checked);
-                        }
-
-                        if (this.$isSettingVisible('mobileOrder')) {
-                            area.mobileOrder = isNaN(mobileOrder) || mobileOrder < 1 ? 1 : mobileOrder;
                         }
 
                         if (this.$isSettingVisible('verticalAlign')) {
@@ -1177,7 +1145,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                 value: options.value !== undefined ? options.value : ''
             }).inject(Field);
 
-            Input.set('data-name', options.name || 'mobileOrder');
+            Input.set('data-name', options.name || 'input');
 
             if (options.min !== undefined) {
                 Input.set('min', options.min);

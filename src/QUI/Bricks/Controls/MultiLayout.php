@@ -10,7 +10,6 @@ use Exception;
 use QUI;
 use QUI\Bricks\Manager;
 
-use function array_map;
 use function array_key_exists;
 use function count;
 use function dirname;
@@ -18,6 +17,7 @@ use function htmlspecialchars;
 use function implode;
 use function in_array;
 use function is_array;
+use function is_callable;
 use function is_numeric;
 use function is_string;
 use function json_decode;
@@ -34,6 +34,8 @@ use function usort;
 class MultiLayout extends QUI\Control
 {
     protected const DEFAULT_COLUMNS = 12;
+    protected const TABLET_BREAKPOINT_MAX = 1023;
+    protected const MOBILE_BREAKPOINT_MAX = 767;
     protected const PRESETS = [
         'preset-2-equal' => [
             'id' => 'preset-2-equal',
@@ -228,7 +230,9 @@ class MultiLayout extends QUI\Control
             'layoutDocument' => $document,
             'areas' => $areas,
             'areaCount' => count($areas),
-            'columns' => $document['columns'],
+            'desktopColumns' => $document['breakpoints']['desktop']['columns'],
+            'tabletBreakpointMax' => self::TABLET_BREAKPOINT_MAX,
+            'mobileBreakpointMax' => self::MOBILE_BREAKPOINT_MAX,
             'areaBackgroundEnabled' => !empty($this->getAttribute('areaBackgroundEnabled')),
             'gridGapEnabled' => !empty($this->getAttribute('gridGapEnabled'))
         ]);
@@ -260,51 +264,64 @@ class MultiLayout extends QUI\Control
             $decoded['preset'] ?? $layout
         );
         $presetDefinition = $this->getPresetDefinition($preset);
-        $columns = $presetDefinition['columns'];
-        $sourceColumns = isset($decoded['columns']) && is_numeric($decoded['columns'])
-            ? (int)$decoded['columns']
-            : $columns;
-        $slotsSource = $decoded['breakpoints']['desktop']['slots'] ?? $presetDefinition['slots'];
-        $slots = $this->normalizeDesktopSlots($slotsSource, $sourceColumns, $columns);
+        $desktopColumns = self::DEFAULT_COLUMNS;
+        $desktopSourceColumns = isset($decoded['breakpoints']['desktop']['columns'])
+            && is_numeric($decoded['breakpoints']['desktop']['columns'])
+            ? (int)$decoded['breakpoints']['desktop']['columns']
+            : $desktopColumns;
+        $desktopSlots = $this->normalizeDesktopSlots(
+            $decoded['breakpoints']['desktop']['slots'] ?? $presetDefinition['slots'],
+            $desktopSourceColumns,
+            $desktopColumns
+        );
+        $tabletSlots = $this->normalizeBreakpointSlots(
+            $decoded['breakpoints']['tablet']['slots'] ?? null,
+            isset($decoded['breakpoints']['tablet']['columns']) && is_numeric($decoded['breakpoints']['tablet']['columns'])
+                ? (int)$decoded['breakpoints']['tablet']['columns']
+                : $desktopColumns,
+            $desktopSlots,
+            [$this, 'buildTabletDefaultSlots']
+        );
+        $mobileSlots = $this->normalizeBreakpointSlots(
+            $decoded['breakpoints']['mobile']['slots'] ?? null,
+            isset($decoded['breakpoints']['mobile']['columns']) && is_numeric($decoded['breakpoints']['mobile']['columns'])
+                ? (int)$decoded['breakpoints']['mobile']['columns']
+                : $desktopColumns,
+            $desktopSlots,
+            [$this, 'buildMobileDefaultSlots']
+        );
         $areasSource = is_array($decoded['areas'] ?? null)
             ? $decoded['areas']
             : [];
         $areas = [];
 
-        foreach ($slots as $index => $slot) {
-            $areaSource = [];
-
-            if (
-                isset($areasSource[$slot['id']])
-                && is_array($areasSource[$slot['id']])
-            ) {
-                $areaSource = $areasSource[$slot['id']];
-            }
-
-            $areas[$slot['id']] = $this->normalizeAreaData($areaSource, $index);
+        foreach ($desktopSlots as $index => $slot) {
+            $areas[$slot['id']] = $this->normalizeAreaData(
+                isset($areasSource[$slot['id']]) && is_array($areasSource[$slot['id']])
+                    ? $areasSource[$slot['id']]
+                    : [],
+                $index
+            );
         }
 
-        $document = [
+        return [
             'preset' => $presetDefinition['id'],
-            'columns' => $columns,
             'breakpoints' => [
                 'desktop' => [
-                    'slots' => $slots
+                    'columns' => $desktopColumns,
+                    'slots' => $desktopSlots
                 ],
                 'tablet' => [
-                    'mode' => 'inherit'
+                    'columns' => $desktopColumns,
+                    'slots' => $tabletSlots
                 ],
                 'mobile' => [
-                    'mode' => 'stack',
-                    'order' => []
+                    'columns' => $desktopColumns,
+                    'slots' => $mobileSlots
                 ]
             ],
             'areas' => $areas
         ];
-
-        $document['breakpoints']['mobile']['order'] = $this->buildMobileOrder($document);
-
-        return $document;
     }
 
     protected function parseDocumentValue(mixed $value): mixed
@@ -367,6 +384,83 @@ class MultiLayout extends QUI\Control
     }
 
     /**
+     * @param mixed $slots
+     * @param callable $fallbackBuilder
+     * @param array<int, array<string, int|string>> $desktopSlots
+     * @return array<int, array<string, int|string>>
+     */
+    protected function normalizeBreakpointSlots(
+        mixed $slots,
+        int $sourceColumns,
+        array $desktopSlots,
+        callable $fallbackBuilder
+    ): array {
+        $normalized = [];
+        $slotsById = [];
+
+        if (is_array($slots)) {
+            foreach ($slots as $index => $slot) {
+                $normalizedSlot = $this->normalizeSlot($slot, (int)$index, $sourceColumns, self::DEFAULT_COLUMNS);
+                $slotsById[$normalizedSlot['id']] = $normalizedSlot;
+            }
+        }
+
+        $fallbackSlots = $fallbackBuilder($desktopSlots);
+
+        foreach ($desktopSlots as $index => $desktopSlot) {
+            $slotId = $desktopSlot['id'];
+            $sourceSlot = $slotsById[$slotId] ?? $fallbackSlots[$index] ?? $desktopSlot;
+
+            $slot = $this->normalizeSlot($sourceSlot, (int)$index, self::DEFAULT_COLUMNS, self::DEFAULT_COLUMNS);
+            $slot['id'] = $slotId;
+            $normalized[] = $slot;
+        }
+
+        usort($normalized, [$this, 'compareSlots']);
+
+        return $normalized;
+    }
+
+    /**
+     * @param array<int, array<string, int|string>> $desktopSlots
+     * @return array<int, array<string, int|string>>
+     */
+    protected function buildTabletDefaultSlots(array $desktopSlots): array
+    {
+        return array_values($desktopSlots);
+    }
+
+    /**
+     * @param array<int, array<string, int|string>> $desktopSlots
+     * @return array<int, array<string, int|string>>
+     */
+    protected function buildMobileDefaultSlots(array $desktopSlots): array
+    {
+        usort($desktopSlots, [$this, 'compareSlots']);
+
+        $mobileSlots = [];
+        $y = 0;
+
+        foreach ($desktopSlots as $slot) {
+            $height = isset($slot['h']) && is_numeric($slot['h'])
+                ? max(1, (int)$slot['h'])
+                : 1;
+
+            $mobileSlots[] = [
+                'id' => $slot['id'],
+                'x' => 0,
+                'y' => $y,
+                'w' => self::DEFAULT_COLUMNS,
+                'h' => $height
+            ];
+
+            $y += $height;
+        }
+
+        return $mobileSlots;
+    }
+
+    /**
      * @param mixed $slot
      * @return array<string, int|string>
      */
@@ -417,12 +511,6 @@ class MultiLayout extends QUI\Control
      */
     protected function normalizeAreaData(array $area, int $index): array
     {
-        $mobileOrder = $index + 1;
-
-        if (isset($area['mobileOrder']) && is_numeric($area['mobileOrder'])) {
-            $mobileOrder = max(1, (int)$area['mobileOrder']);
-        }
-
         return [
             'title' => isset($area['title']) && is_string($area['title'])
                 ? $area['title']
@@ -469,35 +557,8 @@ class MultiLayout extends QUI\Control
                 : '',
             'verticalAlign' => isset($area['verticalAlign']) && in_array($area['verticalAlign'], ['top', 'center', 'bottom'], true)
                 ? $area['verticalAlign']
-                : 'center',
-            'mobileOrder' => $mobileOrder
+                : 'center'
         ];
-    }
-
-    /**
-     * @param array<string, mixed> $document
-     * @return array<int, string>
-     */
-    protected function buildMobileOrder(array $document): array
-    {
-        $slots = $document['breakpoints']['desktop']['slots'] ?? [];
-
-        usort($slots, function (array $slotA, array $slotB) use ($document) {
-            $areaA = $document['areas'][$slotA['id']] ?? [];
-            $areaB = $document['areas'][$slotB['id']] ?? [];
-            $mobileOrderA = isset($areaA['mobileOrder']) ? (int)$areaA['mobileOrder'] : 0;
-            $mobileOrderB = isset($areaB['mobileOrder']) ? (int)$areaB['mobileOrder'] : 0;
-
-            if ($mobileOrderA === $mobileOrderB) {
-                return $this->compareSlots($slotA, $slotB);
-            }
-
-            return $mobileOrderA <=> $mobileOrderB;
-        });
-
-        return array_map(static function (array $slot) {
-            return $slot['id'];
-        }, $slots);
     }
 
     /**
@@ -530,7 +591,7 @@ class MultiLayout extends QUI\Control
             $slotId = $slot['id'];
             $area = $document['areas'][$slotId] ?? $this->normalizeAreaData([], $index);
             $area['slotId'] = $slotId;
-            $area['slotStyle'] = $this->buildSlotStyle($slot, $area);
+            $area['slotStyle'] = $this->buildSlotStyle($document, (string)$slotId, $area);
             $areas[] = $this->prepareArea($area);
         }
 
@@ -549,15 +610,26 @@ class MultiLayout extends QUI\Control
     }
 
     /**
-     * @param array<string, int|string> $slot
+     * @param array<string, mixed> $document
      * @param array<string, mixed> $area
      */
-    protected function buildSlotStyle(array $slot, array $area): string
+    protected function buildSlotStyle(array $document, string $slotId, array $area): string
     {
+        $desktopSlot = $this->findSlotById($document['breakpoints']['desktop']['slots'] ?? [], $slotId);
+        $tabletSlot = $this->findSlotById($document['breakpoints']['tablet']['slots'] ?? [], $slotId) ?? $desktopSlot;
+        $mobileSlot = $this->findSlotById($document['breakpoints']['mobile']['slots'] ?? [], $slotId) ?? $desktopSlot;
+
+        if (!$desktopSlot || !$tabletSlot || !$mobileSlot) {
+            return '';
+        }
+
         $style = [
-            'grid-column: ' . ((int)$slot['x'] + 1) . ' / span ' . (int)$slot['w'],
-            'grid-row: ' . ((int)$slot['y'] + 1) . ' / span ' . (int)$slot['h'],
-            'order: ' . max(1, (int)$area['mobileOrder'])
+            '--quiqqer-bricks-multiLayout-desktop-column: ' . $this->buildGridLineValue($desktopSlot),
+            '--quiqqer-bricks-multiLayout-desktop-row: ' . $this->buildGridRowValue($desktopSlot),
+            '--quiqqer-bricks-multiLayout-tablet-column: ' . $this->buildGridLineValue($tabletSlot),
+            '--quiqqer-bricks-multiLayout-tablet-row: ' . $this->buildGridRowValue($tabletSlot),
+            '--quiqqer-bricks-multiLayout-mobile-column: ' . $this->buildGridLineValue($mobileSlot),
+            '--quiqqer-bricks-multiLayout-mobile-row: ' . $this->buildGridRowValue($mobileSlot)
         ];
 
         if (!empty($area['backgroundEnabled']) && !empty($area['backgroundImage'])) {
@@ -583,6 +655,37 @@ class MultiLayout extends QUI\Control
         }
 
         return implode('; ', $style);
+    }
+
+    /**
+     * @param array<string, int|string> $slot
+     */
+    protected function buildGridLineValue(array $slot): string
+    {
+        return ((int)$slot['x'] + 1) . ' / span ' . (int)$slot['w'];
+    }
+
+    /**
+     * @param array<string, int|string> $slot
+     */
+    protected function buildGridRowValue(array $slot): string
+    {
+        return ((int)$slot['y'] + 1) . ' / span ' . (int)$slot['h'];
+    }
+
+    /**
+     * @param array<int, array<string, int|string>> $slots
+     * @return array<string, int|string>|null
+     */
+    protected function findSlotById(array $slots, string $slotId): ?array
+    {
+        foreach ($slots as $slot) {
+            if (($slot['id'] ?? null) === $slotId) {
+                return $slot;
+            }
+        }
+
+        return null;
     }
 
     protected function mapBackgroundSize(string $fit): string
