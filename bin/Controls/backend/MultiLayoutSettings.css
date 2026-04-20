@@ -22,6 +22,11 @@
     min-width: 0;
 }
 
+/*.quiqqer-bricks-multiLayout-settings-editorPresetGroup {*/
+/*    flex: 1 1 15rem;*/
+/*    max-width: 22rem;*/
+/*}*/
+
 .quiqqer-bricks-multiLayout-settings-toolbarGroup--modes,
 .quiqqer-bricks-multiLayout-settings-toolbarGroup--actions {
     flex-direction: row;
@@ -36,9 +41,18 @@
 
 .quiqqer-bricks-multiLayout-settings-select,
 .quiqqer-bricks-multiLayout-settings-button,
-.quiqqer-bricks-multiLayout-settings-modeButton {
+.quiqqer-bricks-multiLayout-settings-modeButton,
+.quiqqer-bricks-multiLayout-settings-presetCard {
     border-radius: 0.6rem;
     min-height: 2.6rem;
+}
+
+.quiqqer-bricks-multiLayout-settings-select {
+    background: #ffffff;
+    border: 1px solid #d9dfe7;
+    color: #253443;
+    padding: 0.6rem 0.9rem;
+    width: 100%;
 }
 
 .quiqqer-bricks-multiLayout-settings-button,
@@ -56,14 +70,70 @@
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
+.quiqqer-bricks-multiLayout-settings-presetActions {
+    display: flex;
+    gap: 0.65rem;
+    min-width: 0;
+}
+
+.quiqqer-bricks-multiLayout-settings-presetCard {
+    background: #ffffff;
+    border: 1px solid #d9dfe7;
+    cursor: pointer;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.quiqqer-bricks-multiLayout-settings-presetGridWrap {
+    background: #f7f9fb;
+    border: 1px solid #d9dfe7;
+    border-radius: 1rem;
+    display: grid;
+    gap: 0.85rem;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    max-height: 540px;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+.quiqqer-bricks-multiLayout-settings-presetCard {
+    min-height: 0;
+    padding: 0.65rem;
+}
+
+.quiqqer-bricks-multiLayout-settings-presetPreview {
+    aspect-ratio: 12 / 7;
+    border-radius: 0.45rem;
+    display: grid;
+    gap: 0.5rem;
+    min-width: 0;
+    overflow: hidden;
+    padding: 0.18rem;
+    width: 100%;
+}
+
+.quiqqer-bricks-multiLayout-settings-presetPreviewSlot {
+    background: #c8d0d9;
+    border-radius: 0.3rem;
+    display: block;
+    min-width: 0;
+}
+
 .quiqqer-bricks-multiLayout-settings-modeButton.is-active,
 .quiqqer-bricks-multiLayout-settings-button:hover,
 .quiqqer-bricks-multiLayout-settings-button:focus,
+.quiqqer-bricks-multiLayout-settings-presetCard:hover,
+.quiqqer-bricks-multiLayout-settings-presetCard:focus,
 .quiqqer-bricks-multiLayout-settings-modeButton:hover,
 .quiqqer-bricks-multiLayout-settings-modeButton:focus {
     border-color: #8eb3d8;
     box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.12);
     outline: none;
+}
+
+.quiqqer-bricks-multiLayout-settings-presetCard.is-active {
+    background: #edf4fb;
+    border-color: #6b9ed2;
+    box-shadow: inset 0 0 0 1px #6b9ed2;
 }
 
 .quiqqer-bricks-multiLayout-settings-container {
@@ -90,17 +160,51 @@
     border: 1px solid #d9dfe7;
     border-radius: 1rem;
     min-height: 420px;
+    overflow: hidden;
     padding: 0.75rem;
+    position: relative;
+}
+
+.quiqqer-bricks-multiLayout-settings-layoutGrid::before {
+    background-image:
+        linear-gradient(
+            to right,
+            rgba(107, 158, 210, 0.14) 0,
+            rgba(107, 158, 210, 0.14) 1px,
+            transparent 1px,
+            transparent 100%
+        ),
+        linear-gradient(
+            to bottom,
+            rgba(107, 158, 210, 0.12) 0,
+            rgba(107, 158, 210, 0.12) 1px,
+            transparent 1px,
+            transparent 100%
+        );
+    background-position: 0 0;
+    background-size: var(--gs-column-width, 80px) var(--gs-cell-height, 160px);
+    border-radius: inherit;
+    content: '';
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+    z-index: 0;
+}
+
+.quiqqer-bricks-multiLayout-settings-layoutGrid > .grid-stack-item,
+.quiqqer-bricks-multiLayout-settings-layoutGrid > .grid-stack-placeholder {
+    z-index: 1;
 }
 
 .quiqqer-bricks-multiLayout-settings-layoutGrid .grid-stack-item-content {
     background: transparent;
     inset: 0.4rem;
-    overflow: visible;
+    overflow: hidden;
 }
 
 .quiqqer-bricks-multiLayout-settings-layoutGrid .ui-resizable-handle {
-    opacity: 0.6;
+    background-image: none;
+    opacity: 0;
 }
 
 .quiqqer-bricks-multiLayout-settings-editorWindow {
@@ -122,7 +226,7 @@
 }
 
 .quiqqer-bricks-multiLayout-settings-editorToolbar {
-    align-items: center;
+    align-items: flex-end;
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
@@ -173,7 +277,10 @@
 
     .quiqqer-bricks-multiLayout-settings-toolbarGroup,
     .quiqqer-bricks-multiLayout-settings-toolbarGroup--modes,
-    .quiqqer-bricks-multiLayout-settings-toolbarGroup--actions {
+    .quiqqer-bricks-multiLayout-settings-toolbarGroup--actions,
+    .quiqqer-bricks-multiLayout-settings-editorPresetGroup,
+    .quiqqer-bricks-multiLayout-settings-presetActions {
+        max-width: none;
         width: 100%;
     }
 
@@ -185,6 +292,15 @@
     .quiqqer-bricks-multiLayout-settings-editorActions {
         margin-left: 0;
         width: 100%;
+    }
+
+    .quiqqer-bricks-multiLayout-settings-presetActions {
+        flex-direction: column;
+    }
+
+    .quiqqer-bricks-multiLayout-settings-presetGridWrap {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        max-height: 420px;
     }
 
     .quiqqer-bricks-multiLayout-settings-contentGrid {

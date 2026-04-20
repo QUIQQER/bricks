@@ -13,11 +13,21 @@
 
 .quiqqer-bricks-blockSlot-card.is-layoutMode {
     border-color: #c9d5e3;
+    cursor: move;
+    gap: 0.65rem;
+    overflow: hidden;
+    padding: 0.75rem 0.75rem 3.5rem;
+    position: relative;
 }
 
 .quiqqer-bricks-blockSlot-card.is-layoutMode.is-selected {
     border-color: #2b6cb0;
     box-shadow: 0 0 0 4px rgba(43, 108, 176, 0.14);
+}
+
+.quiqqer-bricks-blockSlot-card.is-layoutMode .quiqqer-bricks-blockSlot-cardHeader,
+.quiqqer-bricks-blockSlot-card.is-layoutMode .quiqqer-bricks-blockSlot-cardInfo {
+    display: none;
 }
 
 .quiqqer-bricks-blockSlot-cardHeader {
@@ -65,7 +75,6 @@
     display: flex;
     flex: 1;
     flex-direction: column;
-    justify-content: center;
     min-height: 220px;
     overflow: hidden;
     padding: 1rem;
@@ -73,6 +82,7 @@
     text-align: left;
     transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
     width: 100%;
+    justify-content: flex-start;
 }
 
 .quiqqer-bricks-blockSlot-preview {
@@ -81,8 +91,22 @@
 }
 
 .quiqqer-bricks-blockSlot-layoutPreview {
-    cursor: pointer;
+    cursor: inherit;
+    flex: 1 1 auto;
     gap: 0.45rem;
+    justify-content: center;
+    min-height: 0;
+    pointer-events: none;
+    padding: 1.25rem;
+    text-align: center;
+}
+
+.quiqqer-bricks-blockSlot-card.is-layoutMode .quiqqer-bricks-blockSlot-layoutPreview:hover,
+.quiqqer-bricks-blockSlot-card.is-layoutMode .quiqqer-bricks-blockSlot-layoutPreview:focus {
+    border-color: #d9dfe7;
+    box-shadow: none;
+    outline: none;
+    transform: none;
 }
 
 .quiqqer-bricks-blockSlot-preview:hover,
@@ -101,14 +125,14 @@
 
 .quiqqer-bricks-blockSlot-layoutPreviewLabel {
     color: #1f2933;
-    font-size: 1rem;
+    font-size: 1.15rem;
     font-weight: 700;
     line-height: 1.35;
 }
 
 .quiqqer-bricks-blockSlot-layoutPreviewType {
     color: #32557a;
-    font-size: 0.88rem;
+    font-size: 0.98rem;
     font-weight: 700;
 }
 
@@ -127,6 +151,8 @@
     overflow: hidden;
     pointer-events: none;
     position: relative;
+    /*max-height: 100px;*/
+    /*mask-image: linear-gradient(to bottom, black 80%, transparent)*/
 }
 
 .quiqqer-bricks-blockSlot-previewHtml > *:first-child {
@@ -299,6 +325,23 @@
     gap: 0.5rem;
     justify-content: space-between;
     width: 100%;
+}
+
+.quiqqer-bricks-blockSlot-card.is-layoutMode .quiqqer-bricks-blockSlot-cardFooter {
+    bottom: 0.75rem;
+    left: 0.75rem;
+    margin-top: 0;
+    position: absolute;
+    right: 0.75rem;
+}
+
+.quiqqer-bricks-blockSlot-card.is-layoutMode .quiqqer-bricks-blockSlot-cardActions {
+    justify-content: center;
+}
+
+.quiqqer-bricks-blockSlot-card.is-layoutMode .quiqqer-bricks-blockSlot-cardAction {
+    cursor: pointer;
+    margin-left: 0;
 }
 
 .quiqqer-bricks-blockSlot-cardAction {

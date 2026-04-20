@@ -151,6 +151,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
             const interactionMode = this.$interactionMode;
 
             this.$Elm.empty();
+            this.$Elm.removeEvents('click');
             this.$Elm.removeClass('is-layoutMode');
             this.$Elm.removeClass('is-contentMode');
             this.$Elm.removeClass('is-selected');
@@ -243,14 +244,13 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
         },
 
         $renderLayoutMode: function (area, activeMode) {
+            this.$Elm.addEvent('click', function () {
+                this.fireEvent('select', [this, this.$slotId]);
+            }.bind(this));
+
             const Preview = new Element('button', {
                 type: 'button',
-                'class': 'quiqqer-bricks-blockSlot-layoutPreview',
-                events: {
-                    click: function () {
-                        this.fireEvent('select', [this, this.$slotId]);
-                    }.bind(this)
-                }
+                'class': 'quiqqer-bricks-blockSlot-layoutPreview'
             }).inject(this.$Elm);
 
             new Element('div', {
@@ -263,11 +263,6 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                 text: this.$getModeLabel(activeMode)
             }).inject(Preview);
 
-            new Element('div', {
-                'class': 'quiqqer-bricks-blockSlot-layoutPreviewHint',
-                text: this.$getLocale('layout.hint')
-            }).inject(Preview);
-
             const Footer = new Element('div', {
                 'class': 'quiqqer-bricks-blockSlot-cardFooter'
             }).inject(this.$Elm);
@@ -275,13 +270,6 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
             const Actions = new Element('div', {
                 'class': 'quiqqer-bricks-blockSlot-cardActions'
             }).inject(Footer);
-
-            new Element('div', {
-                'class': 'quiqqer-bricks-blockSlot-cardInfo',
-                text: this.$selected
-                    ? this.$getLocale('layout.selected')
-                    : this.$getLocale('layout.idle')
-            }).inject(Actions);
 
             if (this.$allowRemoveSlot) {
                 new Element('button', {
@@ -292,7 +280,10 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                         this.$getLocale('removeSlot.button') + '</span>',
                     title: this.$getLocale('removeSlot.button'),
                     events: {
-                        click: this.$confirmRemoveSlot.bind(this)
+                        click: function (event) {
+                            event.stop();
+                            this.$confirmRemoveSlot();
+                        }.bind(this)
                     }
                 }).inject(Actions);
             }
@@ -646,7 +637,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                     title: area.title
                 }),
                 maxWidth: 520,
-                maxHeight: 520,
+                maxHeight: 700,
                 events: {
                     onOpen: function (Win) {
                         const Content = Win.getContent();

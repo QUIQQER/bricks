@@ -3376,6 +3376,14 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
             <de><![CDATA[Preset]]></de>
             <en><![CDATA[Preset]]></en>
         </locale>
+        <locale name="brick.multiLayout.toolbar.choosePreset">
+            <de><![CDATA[Layout Preset auswählen]]></de>
+            <en><![CDATA[Choose layout preset]]></en>
+        </locale>
+        <locale name="brick.multiLayout.toolbar.backToLayout">
+            <de><![CDATA[Zurück zum Layout]]></de>
+            <en><![CDATA[Back to layout]]></en>
+        </locale>
         <locale name="brick.multiLayout.toolbar.editLayout">
             <de><![CDATA[Layout bearbeiten]]></de>
             <en><![CDATA[Edit layout]]></en>
