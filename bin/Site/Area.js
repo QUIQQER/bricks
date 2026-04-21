@@ -11,13 +11,14 @@ define('package/quiqqer/bricks/bin/Site/Area', [
     'qui/controls/windows/Confirm',
     'package/quiqqer/bricks/bin/Bricks',
     'package/quiqqer/bricks/bin/AddBrickWindow',
+    'package/quiqqer/bricks/bin/Controls/backend/BrickPickerWindow',
     'Locale',
     'Ajax',
     'package/quiqqer/bricks/bin/Sortables',
 
     'css!package/quiqqer/bricks/bin/Site/Area.css'
 
-], function (QUI, QUIControl, QUIButton, QUIPopup, QUIAlert, QUIConfirm, Bricks, AddBrickWindow, QUILocale, QUIAjax, Sortables) {
+], function (QUI, QUIControl, QUIButton, QUIPopup, QUIAlert, QUIConfirm, Bricks, AddBrickWindow, BrickPickerWindow, QUILocale, QUIAjax, Sortables) {
     "use strict";
 
     const lg = 'quiqqer/bricks';
@@ -1163,357 +1164,38 @@ define('package/quiqqer/bricks/bin/Site/Area', [
                 return;
             }
 
-            const self = this;
-            let popupKeyDownHandler = null;
-            let SearchInput = null;
-            let CounterNode = null;
-            let EmptyState = null;
-            let CardNodes = [];
-            let activeCard = null;
+            let selectionInProgress = false;
 
-            const toPlainText = function (value) {
-                if (!value) {
-                    return '';
-                }
-
-                return new Element('div', {
-                    html: String(value)
-                }).get('text').replace(/\s+/g, ' ').trim();
-            };
-
-            const toPreviewText = function (value, maxLength) {
-                const normalized = toPlainText(value);
-
-                if (!normalized || normalized.length <= maxLength) {
-                    return normalized;
-                }
-
-                return normalized.slice(0, maxLength - 1).trim() + '…';
-            };
-
-            const getDisplayData = function (Brick) {
-                const instanceTitle = Brick.title || Brick.type || '';
-                const brickTypeTitle = Brick.name && typeof Brick.name === 'object'
-                    ? QUILocale.get(Brick.name.group, Brick.name.var)
-                    : instanceTitle;
-                const description = Brick.description || '';
-                const displayDescription = toPreviewText(description, 180);
-                const displayType = Brick.type || '';
-                const image = Brick.mockup || Brick.thumbnail;
-                const isActive = parseInt(Brick.active) === 1;
-
-                return {
-                    id: Brick.id,
-                    instanceTitle: instanceTitle,
-                    brickTypeTitle: brickTypeTitle,
-                    displayDescription: displayDescription,
-                    displayType: displayType,
-                    image: image,
-                    isActive: isActive,
-                    search: [
-                        toPlainText(instanceTitle),
-                        toPlainText(brickTypeTitle),
-                        displayDescription,
-                        displayType,
-                        isActive ? '' : QUILocale.get(lg, 'site.area.window.add.brickIsDisabled')
-                    ].join(' ').toLowerCase()
-                };
-            };
-
-            const getVisibleCards = function () {
-                return CardNodes.filter(function (Card) {
-                    return Card.getStyle('display') !== 'none';
-                });
-            };
-
-            const setActiveCard = function (Card, focusCard) {
-                if (!Card || Card.getStyle('display') === 'none') {
+            const addSelectedBrick = function (Win, bricks, Picker) {
+                if (!bricks.length || selectionInProgress) {
                     return;
                 }
 
-                CardNodes.forEach(function (Node) {
-                    Node.removeClass('siteAreaWindow-card--active');
-                    Node.setAttribute('aria-current', 'false');
-                });
+                selectionInProgress = true;
 
-                activeCard = Card;
-                Card.addClass('siteAreaWindow-card--active');
-                Card.setAttribute('aria-current', 'true');
-
-                if (focusCard) {
-                    Card.focus();
+                if (Picker && typeof Picker.disable === 'function') {
+                    Picker.disable();
                 }
 
-                if (typeof Card.scrollIntoView === 'function') {
-                    Card.scrollIntoView({
-                        block: 'nearest',
-                        inline: 'nearest'
-                    });
-                }
-            };
-
-            const updateCounter = function (count) {
-                CounterNode.set('text', '(' + count + ')');
-            };
-
-            const applyFilter = function () {
-                const term = SearchInput.value.trim().toLowerCase();
-                let visibleCount = 0;
-
-                CardNodes.forEach(function (Card) {
-                    const visible = !term || Card.getAttribute('data-search').indexOf(term) !== -1;
-
-                    Card.setStyle('display', visible ? null : 'none');
-                    Card.setAttribute('aria-hidden', visible ? 'false' : 'true');
-
-                    if (visible) {
-                        visibleCount++;
-                    }
-                });
-
-                updateCounter(visibleCount);
-                EmptyState.setStyle('display', visibleCount ? 'none' : null);
-
-                if (!visibleCount) {
-                    CardNodes.forEach(function (Node) {
-                        Node.removeClass('siteAreaWindow-card--active');
-                        Node.setAttribute('aria-current', 'false');
-                    });
-
-                    activeCard = null;
-                    SearchInput.focus();
-                    return;
-                }
-
-                if (!activeCard || activeCard.getStyle('display') === 'none') {
-                    setActiveCard(
-                        getVisibleCards()[0],
-                        document.activeElement !== SearchInput
-                    );
-                }
-            };
-
-            const addSelectedBrick = function (Win) {
-                if (!activeCard) {
-                    return;
-                }
-
-                self.addBrickById(activeCard.getAttribute('data-brick-id'));
+                this.addBrickById(bricks[0].id);
                 Win.close();
-            };
+            }.bind(this);
 
-            new QUIPopup({
+            new BrickPickerWindow({
                 title: QUILocale.get(lg, 'site.area.window.add'),
                 icon: 'fa fa-th',
-                maxWidth: 1100,
-                maxHeight: 760,
-                autoclose: false,
+                pickerOptions: {
+                    items: this.$availableBricks,
+                    multiple: false,
+                    showProjectSelect: false,
+                    autoExecute: true
+                },
                 events: {
-                    onOpen: function (Win) {
-                        const ActionBar = Win.getElm().querySelector('.qui-window-popup-buttons');
-                        if (ActionBar) {
-                            ActionBar.remove();
-                        }
-
-                        popupKeyDownHandler = function (event) {
-                            const key = String(event.key || '').toLowerCase();
-
-                            if (key === 'esc' || key === 'escape') {
-                                event.preventDefault();
-                                event.stopPropagation();
-                                Win.close();
-                                return;
-                            }
-
-                            if (key === 'enter' && activeCard) {
-                                event.preventDefault();
-                                event.stopPropagation();
-                                addSelectedBrick(Win);
-                            }
-                        };
-
-                        document.addEvent('keydown', popupKeyDownHandler);
-
-                        const Content = Win.getContent();
-                        const viewData = self.$availableBricks.map(getDisplayData);
-                        const Dialog = new Element('div', {
-                            'class': 'siteAreaWindow-selector'
-                        }).inject(Content);
-
-                        const Toolbar = new Element('div', {
-                            'class': 'siteAreaWindow-toolbar'
-                        }).inject(Dialog);
-
-                        const Search = new Element('label', {
-                            'class': 'siteAreaWindow-search'
-                        }).inject(Toolbar);
-
-                        new Element('span', {
-                            'class': 'fa fa-search siteAreaWindow-searchIcon',
-                            'aria-hidden': 'true'
-                        }).inject(Search);
-
-                        SearchInput = new Element('input', {
-                            'class': 'siteAreaWindow-searchInput',
-                            type: 'search',
-                            placeholder: QUILocale.get(lg, 'site.area.window.input.placeholder'),
-                            autocomplete: 'off',
-                            events: {
-                                input: applyFilter
-                            }
-                        }).inject(Search);
-
-                        CounterNode = new Element('div', {
-                            'class': 'siteAreaWindow-counter'
-                        }).inject(Search);
-
-                        const Hints = new Element('div', {
-                            'class': 'siteAreaWindow-hints',
-                            'aria-label': QUILocale.get(lg, 'site.area.window.shortcuts.label')
-                        }).inject(Dialog);
-
-                        [
-                            {
-                                keys: ['Tab'],
-                                label: QUILocale.get(lg, 'site.area.window.shortcuts.navigate')
-                            },
-                            {
-                                keys: ['Enter'],
-                                label: QUILocale.get(lg, 'site.area.window.shortcuts.add')
-                            },
-                            {
-                                keys: ['Esc'],
-                                label: QUILocale.get(lg, 'site.area.window.shortcuts.close')
-                            }
-                        ].forEach(function (entry) {
-                            const Hint = new Element('div', {
-                                'class': 'siteAreaWindow-hint'
-                            }).inject(Hints);
-
-                            const Keys = new Element('div', {
-                                'class': 'siteAreaWindow-hintKeys',
-                                'aria-hidden': 'true'
-                            }).inject(Hint);
-
-                            entry.keys.forEach(function (key, index) {
-                                new Element('kbd', {
-                                    text: key
-                                }).inject(Keys);
-
-                                if (index < entry.keys.length - 1) {
-                                    new Element('span', {
-                                        'class': 'siteAreaWindow-hintSep',
-                                        text: '/'
-                                    }).inject(Keys);
-                                }
-                            });
-
-                            new Element('div', {
-                                'class': 'siteAreaWindow-hintText',
-                                text: entry.label
-                            }).inject(Hint);
-                        });
-
-                        const Grid = new Element('div', {
-                            'class': 'siteAreaWindow-grid'
-                        }).inject(Dialog);
-
-                        EmptyState = new Element('div', {
-                            'class': 'siteAreaWindow-empty',
-                            text: QUILocale.get(lg, 'site.area.window.results.empty'),
-                            styles: {
-                                display: 'none'
-                            }
-                        }).inject(Grid);
-
-                        CardNodes = viewData.map(function (Brick) {
-                            const Card = new Element('button', {
-                                type: 'button',
-                                'class': 'siteAreaWindow-card' + (Brick.isActive ? '' : ' siteAreaWindow-card--inactive'),
-                                'data-brick-id': Brick.id,
-                                'data-search': Brick.search,
-                                'aria-current': 'false',
-                                'aria-hidden': 'false',
-                                events: {
-                                    click: function () {
-                                        setActiveCard(Card, false);
-                                        addSelectedBrick(Win);
-                                    },
-                                    focus: function () {
-                                        setActiveCard(Card, false);
-                                    }
-                                }
-                            }).inject(Grid);
-
-                            const Thumb = new Element('div', {
-                                'class': 'siteAreaWindow-cardThumb'
-                            }).inject(Card);
-
-                            new Element('img', {
-                                src: Brick.image,
-                                alt: Brick.instanceTitle
-                            }).inject(Thumb);
-
-                            const Body = new Element('div', {
-                                'class': 'siteAreaWindow-cardBody'
-                            }).inject(Card);
-
-                            new Element('div', {
-                                'class': 'siteAreaWindow-cardName',
-                                text: Brick.instanceTitle
-                            }).inject(Body);
-
-                            const Badges = new Element('div', {
-                                'class': 'siteAreaWindow-cardBadges'
-                            }).inject(Body);
-
-                            new Element('span', {
-                                'class': 'badge badge-success-light badge-sm',
-                                text: Brick.brickTypeTitle
-                            }).inject(Badges);
-
-                            if (Brick.displayType) {
-                                new Element('span', {
-                                    'class': 'badge badge-light badge-sm',
-                                    text: Brick.displayType
-                                }).inject(Badges);
-                            }
-
-                            if (!Brick.isActive) {
-                                new Element('span', {
-                                    'class': 'badge badge-warning badge-sm',
-                                    text: QUILocale.get(lg, 'site.area.window.add.brickIsDisabled')
-                                }).inject(Badges);
-                            }
-
-                            if (Brick.displayDescription) {
-                                new Element('div', {
-                                    'class': 'siteAreaWindow-cardDescription',
-                                    text: Brick.displayDescription
-                                }).inject(Body);
-                            }
-
-                            return Card;
-                        });
-
-                        if (CardNodes.length) {
-                            setActiveCard(CardNodes[0], false);
-                        }
-
-                        updateCounter(CardNodes.length);
-                        SearchInput.focus();
+                    onExecute: function (Win, bricks, Picker) {
+                        addSelectedBrick(Win, bricks, Picker);
                     },
                     onClose: function () {
-                        if (popupKeyDownHandler) {
-                            document.removeEvent('keydown', popupKeyDownHandler);
-                            popupKeyDownHandler = null;
-                        }
-
-                        SearchInput = null;
-                        CounterNode = null;
-                        EmptyState = null;
-                        CardNodes = [];
-                        activeCard = null;
+                        selectionInProgress = false;
                     }
                 }
             }).open();
