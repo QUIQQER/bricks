@@ -1170,6 +1170,7 @@ define('package/quiqqer/bricks/bin/Site/Area', [
             let EmptyState = null;
             let CardNodes = [];
             let activeCard = null;
+            let selectionInProgress = false;
 
             const toPlainText = function (value) {
                 if (!value) {
@@ -1294,9 +1295,19 @@ define('package/quiqqer/bricks/bin/Site/Area', [
             };
 
             const addSelectedBrick = function (Win) {
-                if (!activeCard) {
+                if (!activeCard || selectionInProgress) {
                     return;
                 }
+
+                selectionInProgress = true;
+
+                if (SearchInput) {
+                    SearchInput.set('disabled', true);
+                }
+
+                CardNodes.forEach(function (Card) {
+                    Card.set('disabled', true);
+                });
 
                 self.addBrickById(activeCard.getAttribute('data-brick-id'));
                 Win.close();
@@ -1325,7 +1336,7 @@ define('package/quiqqer/bricks/bin/Site/Area', [
                                 return;
                             }
 
-                            if (key === 'enter' && activeCard) {
+                            if (key === 'enter' && activeCard && !selectionInProgress) {
                                 event.preventDefault();
                                 event.stopPropagation();
                                 addSelectedBrick(Win);
@@ -1514,6 +1525,7 @@ define('package/quiqqer/bricks/bin/Site/Area', [
                         EmptyState = null;
                         CardNodes = [];
                         activeCard = null;
+                        selectionInProgress = false;
                     }
                 }
             }).open();
