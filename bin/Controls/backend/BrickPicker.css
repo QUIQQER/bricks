@@ -1,0 +1,239 @@
+.quiqqer-bricks-brickPicker {
+    --brickPicker-line: #e6eaf2;
+    --brickPicker-muted: #64748b;
+    --brickPicker-focus: rgba(37, 99, 235, 0.35);
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
+    min-height: 0;
+}
+
+.quiqqer-bricks-brickPicker-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.quiqqer-bricks-brickPicker-project {
+    width: 100%;
+}
+
+.quiqqer-bricks-brickPicker-project .qui-controls-project-select,
+.quiqqer-bricks-brickPicker-project .qui-button-select {
+    width: 100%;
+}
+
+.quiqqer-bricks-brickPicker-search {
+    flex: 1 1 auto;
+    position: relative;
+}
+
+.quiqqer-bricks-brickPicker-searchIcon {
+    color: #94a3b8;
+    left: 1rem;
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.quiqqer-bricks-brickPicker-searchInput {
+    background: #fff;
+    border: 1px solid #d1d5de;
+    border-radius: 0.75rem;
+    box-sizing: border-box;
+    color: #0f172a;
+    min-height: 3rem;
+    padding: 0 4.5rem 0 2.75rem;
+    width: 100%;
+}
+
+.quiqqer-bricks-brickPicker-searchInput:hover {
+    border-color: #b4b8c0;
+}
+
+.quiqqer-bricks-brickPicker-searchInput:focus {
+    border-color: rgba(37, 99, 235, 0.45);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    outline: none;
+}
+
+.quiqqer-bricks-brickPicker-counter {
+    color: var(--brickPicker-muted);
+    font-size: 0.875rem;
+    pointer-events: none;
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    z-index: 1;
+}
+
+.quiqqer-bricks-brickPicker-hints {
+    color: var(--brickPicker-muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.quiqqer-bricks-brickPicker-hint {
+    align-items: center;
+    color: var(--brickPicker-muted);
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: auto 1fr;
+    justify-content: flex-start;
+    line-height: 1.25;
+}
+
+.quiqqer-bricks-brickPicker-hintKeys {
+    align-items: center;
+    display: inline-flex;
+    gap: 0.25rem;
+    white-space: nowrap;
+}
+
+.quiqqer-bricks-brickPicker-hintKeys kbd {
+    align-items: center;
+    background: #fff;
+    border: 1px solid var(--brickPicker-line);
+    border-bottom-color: #cbd5e1;
+    border-radius: 0.45rem;
+    box-shadow: 0 1px 0 rgba(15, 23, 42, 0.08);
+    color: #334155;
+    display: inline-flex;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+    font-size: 0.6875rem;
+    justify-content: center;
+    min-height: 1.45rem;
+    min-width: 1.6rem;
+    padding: 0 0.35rem;
+}
+
+.quiqqer-bricks-brickPicker-hintSep {
+    color: #94a3b8;
+}
+
+.quiqqer-bricks-brickPicker-hintText {
+    font-size: 0.75rem;
+}
+
+.quiqqer-bricks-brickPicker-grid {
+    background: #fafafa;
+    border-radius: 0.5rem;
+    align-content: start;
+    align-items: start;
+    display: grid;
+    gap: 1rem;
+    grid-auto-rows: max-content;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    min-height: 0;
+    height: 100%;
+    overflow: auto;
+    padding-block: 0.5rem;
+    padding: 1.5rem;
+}
+
+.quiqqer-bricks-brickPicker-card {
+    background: #fff;
+    border: 1px solid var(--brickPicker-line);
+    border-radius: 1rem;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: 0;
+    overflow: hidden;
+    padding: 0;
+    place-self: start stretch;
+    text-align: left;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+    width: 100%;
+    height: 100%;
+}
+
+.quiqqer-bricks-brickPicker-card--inactive {
+    filter: grayscale(0.5) opacity(0.6);
+}
+
+.quiqqer-bricks-brickPicker-card:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+    transform: translateY(-1px);
+}
+
+.quiqqer-bricks-brickPicker-card:focus {
+    outline: none;
+}
+
+.quiqqer-bricks-brickPicker-card:focus-visible,
+.quiqqer-bricks-brickPicker-card--active,
+.quiqqer-bricks-brickPicker-card--selected {
+    border-color: var(--brickPicker-focus);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.quiqqer-bricks-brickPicker-cardThumb {
+    aspect-ratio: 16 / 10;
+    background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+    border-bottom: 1px solid var(--brickPicker-line);
+    overflow: hidden;
+}
+
+.quiqqer-bricks-brickPicker-cardThumb img {
+    display: block;
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+}
+
+.quiqqer-bricks-brickPicker-cardBody {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+}
+
+.quiqqer-bricks-brickPicker-cardName {
+    color: #0f172a;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+.quiqqer-bricks-brickPicker-cardBadges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.quiqqer-bricks-brickPicker-cardBadges .badge {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.quiqqer-bricks-brickPicker-cardDescription {
+    color: var(--brickPicker-muted);
+    font-size: 0.875rem;
+    line-height: 1.45;
+}
+
+.quiqqer-bricks-brickPicker-empty {
+    border: 1px dashed #cbd5e1;
+    border-radius: 0.75rem;
+    color: var(--brickPicker-muted);
+    display: grid;
+    grid-column: 1 / -1;
+    min-height: 10rem;
+    padding: 1.25rem;
+    place-content: center;
+    text-align: center;
+}
