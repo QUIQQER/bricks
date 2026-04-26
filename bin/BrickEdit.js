@@ -317,11 +317,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                         this.addCategory(categories[i]);
                     }
 
-<<<<<<< HEAD
-                    // this.$sortCategoriesByIndex();
-=======
                     this.$sortCategoriesByIndex();
->>>>>>> next-2.x
                     this.refresh();
 
                     resolve();
@@ -335,23 +331,6 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
         $sortCategoriesByIndex: function () {
             const Bar = this.getCategoryBar(),
-<<<<<<< HEAD
-                categories = Bar.getChildren().slice().sort(function (a, b) {
-                    const aIndex = parseInt(a.getAttribute('index'), 10),
-                        bIndex = parseInt(b.getAttribute('index'), 10),
-                        normalizedA = isNaN(aIndex) ? Number.POSITIVE_INFINITY : aIndex,
-                        normalizedB = isNaN(bIndex) ? Number.POSITIVE_INFINITY : bIndex;
-
-                    if (normalizedA === normalizedB) {
-                        return 0;
-                    }
-
-                    return normalizedA - normalizedB;
-                });
-
-            categories.forEach(function (Category, index) {
-                Bar.moveChildToPos(Category, index + 1);
-=======
                 categories = Bar.getChildren().map(function (Category, position) {
                     const index = parseInt(Category.getAttribute('index'), 10);
 
@@ -370,7 +349,6 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             categories.forEach(function (entry, index) {
                 Bar.moveChildToPos(entry.Category, index + 1);
->>>>>>> next-2.x
             });
         },
 
