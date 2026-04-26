@@ -415,9 +415,7 @@
 }
 
 .quiqqer-bricks-blockSlot-popupField .qui-controls-colorpicker-colorContainer {
-    border-radius: 0.5rem;
-    min-width: 2.5rem;
-    overflow: hidden;
+    flex-grow: 1;
 }
 
 .quiqqer-bricks-blockSlot-popupSelect,

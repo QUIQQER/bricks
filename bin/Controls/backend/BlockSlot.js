@@ -878,8 +878,8 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                                 backgroundColorEnabledField && backgroundColorEnabledField.checked
                             );
                             area.backgroundColor = backgroundColorField
-                                ? backgroundColorField.value || '#000000'
-                                : '#000000';
+                                ? backgroundColorField.value.trim()
+                                : '';
                             area.backgroundColorOpacity = isNaN(backgroundColorOpacity)
                                 ? 100
                                 : Math.max(0, Math.min(100, backgroundColorOpacity));
@@ -1412,7 +1412,10 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                 'class': 'quiqqer-bricks-blockSlot-popupInput project-site',
                 'data-external': 1,
                 name: options.name || 'linkHref',
-                value: options.value || ''
+                value: options.value || '',
+                styles: {
+                    display: 'flex'
+                }
             }).inject(Field);
 
             Input.set('data-name', options.name || 'linkHref');
