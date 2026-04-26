@@ -1,21 +1,20 @@
 define('package/quiqqer/bricks/bin/Controls/backend/BrickSelectWindow', [
 
-    'qui/QUI',
-    'qui/controls/windows/Confirm',
+    'package/quiqqer/bricks/bin/Controls/backend/BrickPickerWindow',
     'Locale'
 
-], function (QUI, QUIConfirm, QUILocale) {
+], function (BrickPickerWindow, QUILocale) {
     "use strict";
 
     const lg = 'quiqqer/bricks';
 
     return new Class({
 
-        Extends: QUIConfirm,
+        Extends: BrickPickerWindow,
         Type: 'package/quiqqer/bricks/bin/Controls/backend/BrickSelectWindow',
 
         Binds: [
-            '$onOpen'
+            'submit'
         ],
 
         options: {
@@ -26,49 +25,19 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickSelectWindow', [
         initialize: function (options) {
             // defaults
             this.setAttributes({
-                maxHeight: 800,
-                maxWidth: 1200,
+                autoclose: true,
                 icon: 'fa fa-cubes',
-                title: QUILocale.get(lg, 'window.brick.select.title')
+                title: QUILocale.get(lg, 'window.brick.select.title'),
+                pickerOptions: {
+                    autoExecute: true,
+                    showProjectSelect: true
+                }
             });
 
             this.parent(options);
-            this.$BricksSelect = null;
 
             this.addEvents({
-                onOpen: this.$onOpen
-            });
-        },
-
-        /**
-         * event: on open
-         *
-         * @param Win
-         */
-        $onOpen: function (Win) {
-            const self = this;
-
-            Win.Loader.show();
-            Win.getContent().set('html', '');
-
-            require([
-                'package/quiqqer/bricks/bin/Controls/backend/BrickList'
-            ], function (BrickList) {
-                self.$BricksSelect = new BrickList({
-                    project: self.getAttribute('project'),
-                    lang: self.getAttribute('lang'),
-                    multiple: self.getAttribute('multiple'),
-                    styles: {
-                        height: '100%'
-                    },
-                    events: {
-                        onDblClick: function () {
-                            self.submit();
-                        }
-                    }
-                }).inject(Win.getContent());
-
-                Win.Loader.hide();
+                onExecute: this.submit
             });
         },
 
@@ -76,11 +45,26 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickSelectWindow', [
          * submit, fires onSubmit
          */
         submit: function () {
-            this.fireEvent('submit', [this, this.$BricksSelect.getValue()]);
+            const Picker = this.getPicker();
+            const value = Picker ? Picker.getValue() : [];
+
+            if (!value.length) {
+                return;
+            }
+
+            this.fireEvent('submit', [this, value]);
 
             if (this.getAttribute('autoclose')) {
                 this.close();
             }
+        },
+
+        getPickerOptions: function () {
+            return Object.merge(this.parent(), {
+                project: this.getAttribute('project'),
+                lang: this.getAttribute('lang'),
+                multiple: this.getAttribute('multiple')
+            });
         }
     });
 });
