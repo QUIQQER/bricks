@@ -174,6 +174,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             this.addCategory({
                 name: 'information',
+                index: 10,
                 icon: 'fa fa-file-o',
                 text: QUILocale.get('quiqqer/system', 'information'),
                 events: {
@@ -183,6 +184,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             this.addCategory({
                 name: 'settings',
+                index: 20,
                 icon: 'fa fa-magic',
                 text: QUILocale.get('quiqqer/system', 'properties'),
                 events: {
@@ -192,6 +194,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             this.addCategory({
                 name: 'extra',
+                index: 30,
                 icon: 'fa fa-gears',
                 text: QUILocale.get(lg, 'brick.panel.category.settings'),
                 events: {
@@ -201,6 +204,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             this.addCategory({
                 name: 'content',
+                index: 40,
                 icon: 'fa fa-file-text-o',
                 text: QUILocale.get('quiqqer/system', 'content'),
                 events: {
@@ -210,6 +214,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             this.addCategory({
                 name: 'footer',
+                index: 50,
                 icon: 'fa fa-file-text',
                 text: QUILocale.get(lg, 'brick.panel.category.footer'),
                 events: {
@@ -219,6 +224,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             this.addCategory({
                 name: 'usage',
+                index: 60,
                 icon: 'fa fa-map-signs',
                 text: QUILocale.get(lg, 'brick.panel.category.usage'),
                 events: {
@@ -228,6 +234,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             this.addCategory({
                 name  : 'customCSS',
+                index : 70,
                 text  : QUILocale.get(lg, 'brick.panel.category.customCSS'),
                 icon  : 'fa fa-css3',
                 events: {
@@ -237,6 +244,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             this.addCategory({
                 name  : 'customJS',
+                index : 80,
                 text  : QUILocale.get(lg, 'brick.panel.category.customJS'),
                 icon  : 'fa fa-code',
                 events: {
@@ -308,6 +316,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                         this.addCategory(categories[i]);
                     }
 
+                    this.$sortCategoriesByIndex();
                     this.refresh();
 
                     resolve();
@@ -316,6 +325,29 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                     brickId: this.getAttribute('id'),
                     onError: reject
                 });
+            });
+        },
+
+        $sortCategoriesByIndex: function () {
+            const Bar = this.getCategoryBar(),
+                categories = Bar.getChildren().map(function (Category, position) {
+                    const index = parseInt(Category.getAttribute('index'), 10);
+
+                    return {
+                        Category: Category,
+                        index   : isNaN(index) ? Number.POSITIVE_INFINITY : index,
+                        position: position
+                    };
+                }).sort(function (a, b) {
+                    if (a.index === b.index) {
+                        return a.position - b.position;
+                    }
+
+                    return a.index - b.index;
+                });
+
+            categories.forEach(function (entry, index) {
+                Bar.moveChildToPos(entry.Category, index + 1);
             });
         },
 
