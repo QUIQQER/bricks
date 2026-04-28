@@ -1341,6 +1341,11 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                 QUI.parse(TableExtra).then(function () {
                     return ControlUtils.parse(TableExtra);
                 }).then(function () {
+                    const Project = Projects.get(
+                        self.getAttribute('projectName'),
+                        self.getAttribute('projectLang')
+                    );
+
                     // set project to the controls
                     TableExtra.getElements('[data-quiid]').each(function (Elm) {
                         const Control = QUI.Controls.getById(
@@ -1348,10 +1353,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                         );
 
                         if ('setProject' in Control) {
-                            Control.setProject(
-                                self.getAttribute('projectName'),
-                                self.getAttribute('projectLang')
-                            );
+                            Control.setProject(Project);
                         }
                     });
 
@@ -1405,6 +1407,19 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                 });
             }).then(function () {
                 return QUI.parse();
+            }).then(function () {
+                const Project = Projects.get(
+                    self.getAttribute('projectName'),
+                    self.getAttribute('projectLang')
+                );
+
+                self.$Container.getElements('[data-quiid]').each(function (Elm) {
+                    const Control = QUI.Controls.getById(Elm.get('data-quiid'));
+
+                    if (Control && 'setProject' in Control) {
+                        Control.setProject(Project);
+                    }
+                });
             }).then(function () {
                 return self.$showCategory();
             }).then(function () {
