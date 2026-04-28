@@ -56,6 +56,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
             '$unload',
             'save',
             'del',
+            '$normalizeCategoryData',
             '$onCategoryEnter',
             '$onCategoryLeave'
         ],
@@ -252,6 +253,8 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                 }
             });
 
+            this.getCategoryBar().setStyle('visibility', 'hidden');
+
             QUI.fireEvent('quiqqerBricksEditPanelCreate', [this]);
         },
 
@@ -313,10 +316,13 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                     }
 
                     for (let i = 0, len = categories.length; i < len; i++) {
-                        this.addCategory(categories[i]);
+                        this.addCategory(
+                            this.$normalizeCategoryData(categories[i])
+                        );
                     }
 
                     this.$sortCategoriesByIndex();
+                    this.getCategoryBar().setStyle('visibility', null);
                     this.refresh();
 
                     resolve();
@@ -326,6 +332,25 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                     onError: reject
                 });
             });
+        },
+
+        /**
+         * Normalize dynamically loaded category data for the desktop panel.
+         *
+         * Dynamic brick categories can contain a correct tooltip title while the
+         * visible button text still uses an untranslated value. Keep both in sync.
+         *
+         * @param {Object} category
+         * @return {Object}
+         */
+        $normalizeCategoryData: function (category) {
+            category = Object.clone(category);
+
+            if (category.title) {
+                category.text = category.title;
+            }
+
+            return category;
         },
 
         $sortCategoriesByIndex: function () {
@@ -1345,6 +1370,11 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                 QUI.parse(TableExtra).then(function () {
                     return ControlUtils.parse(TableExtra);
                 }).then(function () {
+                    const Project = Projects.get(
+                        self.getAttribute('projectName'),
+                        self.getAttribute('projectLang')
+                    );
+
                     // set project to the controls
                     TableExtra.getElements('[data-quiid]').each(function (Elm) {
                         const Control = QUI.Controls.getById(
@@ -1352,10 +1382,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                         );
 
                         if ('setProject' in Control) {
-                            Control.setProject(
-                                self.getAttribute('projectName'),
-                                self.getAttribute('projectLang')
-                            );
+                            Control.setProject(Project);
                         }
                     });
 
@@ -1409,6 +1436,19 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                 });
             }).then(function () {
                 return QUI.parse();
+            }).then(function () {
+                const Project = Projects.get(
+                    self.getAttribute('projectName'),
+                    self.getAttribute('projectLang')
+                );
+
+                self.$Container.getElements('[data-quiid]').each(function (Elm) {
+                    const Control = QUI.Controls.getById(Elm.get('data-quiid'));
+
+                    if (Control && 'setProject' in Control) {
+                        Control.setProject(Project);
+                    }
+                });
             }).then(function () {
                 return self.$showCategory();
             }).then(function () {
