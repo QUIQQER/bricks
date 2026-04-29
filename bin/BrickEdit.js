@@ -41,6 +41,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
             '$onInject',
             '$onCreate',
             '$onDestroy',
+            '$resizeEditor',
 
             'showInformation',
             'showSettings',
@@ -55,6 +56,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
             '$unload',
             'save',
             'del',
+            '$normalizeCategoryData',
             '$onCategoryEnter',
             '$onCategoryLeave'
         ],
@@ -77,6 +79,8 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             this.$Container = null;
             this.$Editor = false;
+            this.$EditorCell = null;
+            this.$EditorContainer = null;
             this.$Areas = false;
 
             this.addEvents({
@@ -91,6 +95,8 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                             Control.resize();
                         }
                     });
+
+                    this.$resizeEditor();
                 }.bind(this),
                 onCategoryEnter: this.$onCategoryEnter,
                 onCategoryLeave: this.$onCategoryLeave
@@ -169,6 +175,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             this.addCategory({
                 name: 'information',
+                index: 10,
                 icon: 'fa fa-file-o',
                 text: QUILocale.get('quiqqer/system', 'information'),
                 events: {
@@ -178,6 +185,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             this.addCategory({
                 name: 'settings',
+                index: 20,
                 icon: 'fa fa-magic',
                 text: QUILocale.get('quiqqer/system', 'properties'),
                 events: {
@@ -187,6 +195,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             this.addCategory({
                 name: 'extra',
+                index: 30,
                 icon: 'fa fa-gears',
                 text: QUILocale.get(lg, 'brick.panel.category.settings'),
                 events: {
@@ -196,6 +205,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             this.addCategory({
                 name: 'content',
+                index: 40,
                 icon: 'fa fa-file-text-o',
                 text: QUILocale.get('quiqqer/system', 'content'),
                 events: {
@@ -205,6 +215,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             this.addCategory({
                 name: 'footer',
+                index: 50,
                 icon: 'fa fa-file-text',
                 text: QUILocale.get(lg, 'brick.panel.category.footer'),
                 events: {
@@ -214,6 +225,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             this.addCategory({
                 name: 'usage',
+                index: 60,
                 icon: 'fa fa-map-signs',
                 text: QUILocale.get(lg, 'brick.panel.category.usage'),
                 events: {
@@ -223,6 +235,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             this.addCategory({
                 name  : 'customCSS',
+                index : 70,
                 text  : QUILocale.get(lg, 'brick.panel.category.customCSS'),
                 icon  : 'fa fa-css3',
                 events: {
@@ -232,12 +245,15 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             this.addCategory({
                 name  : 'customJS',
+                index : 80,
                 text  : QUILocale.get(lg, 'brick.panel.category.customJS'),
                 icon  : 'fa fa-code',
                 events: {
                     onClick: this.openCustomJS
                 }
             });
+
+            this.getCategoryBar().setStyle('visibility', 'hidden');
 
             QUI.fireEvent('quiqqerBricksEditPanelCreate', [this]);
         },
@@ -300,9 +316,13 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                     }
 
                     for (let i = 0, len = categories.length; i < len; i++) {
-                        this.addCategory(categories[i]);
+                        this.addCategory(
+                            this.$normalizeCategoryData(categories[i])
+                        );
                     }
 
+                    this.$sortCategoriesByIndex();
+                    this.getCategoryBar().setStyle('visibility', null);
                     this.refresh();
 
                     resolve();
@@ -315,12 +335,57 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
         },
 
         /**
+         * Normalize dynamically loaded category data for the desktop panel.
+         *
+         * Dynamic brick categories can contain a correct tooltip title while the
+         * visible button text still uses an untranslated value. Keep both in sync.
+         *
+         * @param {Object} category
+         * @return {Object}
+         */
+        $normalizeCategoryData: function (category) {
+            category = Object.clone(category);
+
+            if (category.title) {
+                category.text = category.title;
+            }
+
+            return category;
+        },
+
+        $sortCategoriesByIndex: function () {
+            const Bar = this.getCategoryBar(),
+                categories = Bar.getChildren().map(function (Category, position) {
+                    const index = parseInt(Category.getAttribute('index'), 10);
+
+                    return {
+                        Category: Category,
+                        index   : isNaN(index) ? Number.POSITIVE_INFINITY : index,
+                        position: position
+                    };
+                }).sort(function (a, b) {
+                    if (a.index === b.index) {
+                        return a.position - b.position;
+                    }
+
+                    return a.index - b.index;
+                });
+
+            categories.forEach(function (entry, index) {
+                Bar.moveChildToPos(entry.Category, index + 1);
+            });
+        },
+
+        /**
          * event : on destroy
          */
         $onDestroy: function () {
             if (this.$Editor) {
                 this.$Editor.destroy();
             }
+
+            this.$EditorCell = null;
+            this.$EditorContainer = null;
 
             if (this.$Areas) {
                 this.$Areas.destroy();
@@ -456,6 +521,11 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
                         if (unload === 'customCSS') {
                             data.settings.customCSS = value;
+                            const customCSSScoping = Form.getElement('[name="customCSSScoping"]');
+
+                            if (customCSSScoping) {
+                                data.settings.customCSSScoping = customCSSScoping.checked;
+                            }
                         }
 
                         if (unload === 'customJS') {
@@ -539,19 +609,38 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
             }).then(function () {
                 return new Promise(function (resolve) {
                     const hint = QUILocale.get(lg, 'brick.panel.category.customCSS.hint');
+                    const scopingLabel = QUILocale.get(lg, 'brick.panel.category.customCSS.scoping');
 
                     self.$Container.set('html', `
-                    <div class="quiqqer-bricks-brickedit-wrapper"><form></form><div class="hint">${hint}</div></div>
+                    <div class="quiqqer-bricks-brickedit-wrapper">
+                        <form></form>
+                        <label class="custom-css-scope-toggle" style="display:block;margin-top:10px;">
+                            <input type="checkbox" name="customCSSScoping" value="1"> ${scopingLabel}
+                        </label>
+                        <div class="hint">${hint}</div>
+                    </div>
                     `);
 
                     require(['package/quiqqer/bricks/bin/Controls/backend/CustomCSS'], function (CustomCSS) {
                         const Form = self.getContent().getElement('form');
+                        const ScopingCheckbox = self.getContent().getElement('[name="customCSSScoping"]');
                         const data = self.getAttribute('data');
 
                         let css = '';
+                        let customCSSScoping = true;
 
                         if (data && data.settings && typeof data.settings.customCSS !== 'undefined') {
                             css = data.settings.customCSS;
+                        }
+
+                        if (data && data.settings && typeof data.settings.customCSSScoping !== 'undefined') {
+                            customCSSScoping = data.settings.customCSSScoping !== false &&
+                                data.settings.customCSSScoping !== '0' &&
+                                data.settings.customCSSScoping !== 0;
+                        }
+
+                        if (ScopingCheckbox) {
+                            ScopingCheckbox.checked = customCSSScoping;
                         }
 
                         self.$Control = new CustomCSS({
@@ -1049,17 +1138,9 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
             const self = this;
 
             return new Promise(function (resolve) {
-                const TableBody = self.$Container.getElement('table.brick-edit-content tbody'),
-                    TD = new Element('td'),
-                    TR = new Element('tr', {
-                        'class': 'odd'
-                    });
+                const EditorBody = self.$Container.getElement('.brick-edit-content__body');
 
-                TD.inject(TR);
-                TR.inject(TableBody);
-
-                const Wrapper = self.getContent().querySelector('form') || self.getContent();
-                Wrapper.querySelector('table').style.height = '100%';
+                self.$EditorCell = EditorBody;
 
                 // load ckeditor
                 require(['classes/editor/Manager'], function (EditorManager) {
@@ -1074,30 +1155,60 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
                         self.$Editor.setProject(Project);
 
-                        let height = 300;
-
-                        if ((TD.getSize().y - 180) > height) {
-                            height = TD.getSize().y - 180;
-                        }
-
-                        const EditorContainer = new Element('div', {
+                        self.$EditorContainer = new Element('div', {
                             styles: {
                                 clear: 'both',
                                 'float': 'left',
                                 height: '100%',
+                                'min-height': 300,
+                                'box-sizing': 'border-box',
                                 width: '100%'
                             }
-                        }).inject(TD);
+                        }).inject(EditorBody);
 
                         self.$Editor.addEvent('onLoaded', resolve);
-                        self.$Editor.inject(EditorContainer);
-                        self.$Editor.setHeight(height - 180);
-                        self.$Editor.setWidth(EditorContainer.getSize().x);
+                        self.$Editor.inject(self.$EditorContainer);
+                        self.$resizeEditor();
 
                         self.$Editor.setContent(initialContent);
                     });
                 });
             });
+        },
+
+        /**
+         * Resize the content editor to the available container space.
+         */
+        $resizeEditor: function () {
+            if (!this.$Editor || !this.$EditorContainer || !this.$EditorCell) {
+                return;
+            }
+
+            const Table = this.$Container
+                ? this.$Container.getElement('.brick-edit-content')
+                : null;
+            const containerHeight = this.$Container ? this.$Container.getSize().y : 0;
+            const tableTop = Table ? Table.getPosition(this.$Container).y : 0;
+
+            let availableHeight = containerHeight - tableTop;
+
+            const width = this.$EditorContainer.getSize().x;
+
+            if (!width) {
+                return;
+            }
+
+            availableHeight = Math.max(availableHeight, 300);
+
+            this.$EditorCell.setStyle('height', availableHeight);
+            this.$EditorContainer.setStyle('height', availableHeight);
+
+            this.$Editor.setWidth(width);
+            this.$Editor.setHeight(availableHeight);
+
+            if ("resize" in this.$Editor) {
+                this.$Editor.resize();
+            }
         },
 
         /**
@@ -1259,6 +1370,11 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                 QUI.parse(TableExtra).then(function () {
                     return ControlUtils.parse(TableExtra);
                 }).then(function () {
+                    const Project = Projects.get(
+                        self.getAttribute('projectName'),
+                        self.getAttribute('projectLang')
+                    );
+
                     // set project to the controls
                     TableExtra.getElements('[data-quiid]').each(function (Elm) {
                         const Control = QUI.Controls.getById(
@@ -1266,10 +1382,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                         );
 
                         if ('setProject' in Control) {
-                            Control.setProject(
-                                self.getAttribute('projectName'),
-                                self.getAttribute('projectLang')
-                            );
+                            Control.setProject(Project);
                         }
                     });
 
@@ -1323,6 +1436,19 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                 });
             }).then(function () {
                 return QUI.parse();
+            }).then(function () {
+                const Project = Projects.get(
+                    self.getAttribute('projectName'),
+                    self.getAttribute('projectLang')
+                );
+
+                self.$Container.getElements('[data-quiid]').each(function (Elm) {
+                    const Control = QUI.Controls.getById(Elm.get('data-quiid'));
+
+                    if (Control && 'setProject' in Control) {
+                        Control.setProject(Project);
+                    }
+                });
             }).then(function () {
                 return self.$showCategory();
             }).then(function () {

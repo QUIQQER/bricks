@@ -818,8 +818,12 @@ This content does not replace the block content. You can still place the brick t
             <en><![CDATA[Custom JavaScript]]></en>
         </locale>
         <locale name="brick.panel.category.customCSS.hint">
-            <de><![CDATA[<strong>Hinweis:</strong><br>Dein CSS wird automatisch auf diesen Baustein begrenzt (scoped). Du kannst z.B. einfache Regeln wie <code>p { font-size: 1.5rem; }</code> verwenden. Diese wirken sich nicht auf andere Elemente außerhalb dieses Bausteins aus. Auch in <code>@media</code> und <code>@supports</code> verschachtelte CSS-Regeln werden unterstützt.<br>Mehr Informationen zur Nutzung von Custom CSS findest du hier: <a href="https://dev.quiqqer.com/quiqqer/bricks/-/wikis/home/Verwendung/Eigenes-CSS" target="_blank">Bausteine - Custom CSS</a>]]></de>
-            <en><![CDATA[<strong>Note:</strong><br>Your CSS is automatically limited to this brick (scoped). You can use simple rules like <code>p { font-size: 1.5rem; }</code>. They won’t affect other elements outside this brick. CSS rules nested in <code>@media</code> and <code>@supports</code> are supported as well.<br>More information about using Custom CSS can be found here: <a href="https://dev.quiqqer.com/quiqqer/bricks/-/wikis/home/Verwendung/Eigenes-CSS" target="_blank">Bricks - Custom CSS</a>]]></en>
+            <de><![CDATA[<strong>Hinweis:</strong><br>Dein CSS wird standardmäßig automatisch auf diesen Baustein begrenzt (scoped). Du kannst das Scoping bei Bedarf deaktivieren. Regeln mit <code>body</code> bleiben auch bei aktivem Scoping ungescoped. Du kannst z.B. einfache Regeln wie <code>p { font-size: 1.5rem; }</code> verwenden. Diese wirken sich nicht auf andere Elemente außerhalb dieses Bausteins aus. Auch in <code>@media</code> und <code>@supports</code> verschachtelte CSS-Regeln werden unterstützt.<br>Mehr Informationen zur Nutzung von Custom CSS findest du hier: <a href="https://dev.quiqqer.com/quiqqer/bricks/-/wikis/home/Verwendung/Eigenes-CSS" target="_blank">Bausteine - Custom CSS</a>]]></de>
+            <en><![CDATA[<strong>Note:</strong><br>Your CSS is automatically limited to this brick (scoped) by default. You can disable scoping if needed. Rules containing <code>body</code> remain unscoped even when scoping is active. You can use simple rules like <code>p { font-size: 1.5rem; }</code>. They won’t affect other elements outside this brick. CSS rules nested in <code>@media</code> and <code>@supports</code> are supported as well.<br>More information about using Custom CSS can be found here: <a href="https://dev.quiqqer.com/quiqqer/bricks/-/wikis/home/Verwendung/Eigenes-CSS" target="_blank">Bricks - Custom CSS</a>]]></en>
+        </locale>
+        <locale name="brick.panel.category.customCSS.scoping">
+            <de><![CDATA[CSS auf diesen Baustein begrenzen]]></de>
+            <en><![CDATA[Limit CSS to this brick]]></en>
         </locale>
         <locale name="brick.panel.category.customJS.hint">
             <de><![CDATA[<strong>Hinweis:</strong><br>Custom JS ist für kleinere funktionale Erweiterungen gedacht. Wenn der Baustein ein JavaScript-Control mitliefert, läuft dein Code automatisch im passenden Kontext (Zugriff auf <code>this</code> und <code>brickId</code>). Beachte: Dein Code greift erst, sobald das Control geladen ist – sichtbare Änderungen können dadurch nachträglich erscheinen. <br>Mehr Informationen findest du hier: <a href="https://dev.quiqqer.com/quiqqer/bricks/-/wikis/home/Verwendung/Eigenes-JS" target="_blank">Bausteine - Custom JS</a>]]></de>
@@ -1038,6 +1042,30 @@ This content does not replace the block content. You can still place the brick t
         <locale name="site.area.window.add.brickIsDisabled">
             <de><![CDATA[Deaktiviert]]></de>
             <en><![CDATA[Disabled]]></en>
+        </locale>
+        <locale name="site.area.window.results.counter">
+            <de><![CDATA[{count} Bausteine]]></de>
+            <en><![CDATA[{count} bricks]]></en>
+        </locale>
+        <locale name="site.area.window.results.empty">
+            <de><![CDATA[Keine passenden Bausteine gefunden.]]></de>
+            <en><![CDATA[No matching bricks found.]]></en>
+        </locale>
+        <locale name="site.area.window.shortcuts.label">
+            <de><![CDATA[Tastaturkürzel]]></de>
+            <en><![CDATA[Keyboard shortcuts]]></en>
+        </locale>
+        <locale name="site.area.window.shortcuts.navigate">
+            <de><![CDATA[Fokus wechseln]]></de>
+            <en><![CDATA[Move focus]]></en>
+        </locale>
+        <locale name="site.area.window.shortcuts.add">
+            <de><![CDATA[Hinzufügen]]></de>
+            <en><![CDATA[Add]]></en>
+        </locale>
+        <locale name="site.area.window.shortcuts.close">
+            <de><![CDATA[Schließen]]></de>
+            <en><![CDATA[Close]]></en>
         </locale>
         <locale name="site.area.window.delete.title">
             <de><![CDATA[Baustein löschen?]]></de>

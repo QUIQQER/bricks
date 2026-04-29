@@ -586,6 +586,32 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                 }
             }
 
+            if (!FocusEl) {
+                Dialog.setAttribute('tabindex', '-1');
+                FocusEl = Dialog;
+            }
+
+            const setBackgroundInertState = (hidden) => {
+                const Aside = this.$Content ? this.$Content.getElement('[data-name="aside"]') : null;
+                const Main = this.$Content ? this.$Content.getElement('[data-name="main"]') : null;
+                const value = hidden ? 'true' : null;
+
+                [Aside, Main].forEach((Elm) => {
+                    if (!Elm) {
+                        return;
+                    }
+
+                    if (hidden) {
+                        Elm.setAttribute('aria-hidden', value);
+                        Elm.setAttribute('inert', 'inert');
+                        return;
+                    }
+
+                    Elm.removeProperty('aria-hidden');
+                    Elm.removeProperty('inert');
+                });
+            };
+
             const close = () => {
                 if (Overlay && Overlay.destroy) {
                     Overlay.destroy();
@@ -601,16 +627,7 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                     this.$Container.removeClass('qui-addBrick-container--overlay-open');
                 }
 
-                const Aside = this.$Content ? this.$Content.getElement('[data-name="aside"]') : null;
-                const Main = this.$Content ? this.$Content.getElement('[data-name="main"]') : null;
-
-                if (Aside) {
-                    Aside.removeProperty('aria-hidden');
-                }
-
-                if (Main) {
-                    Main.removeProperty('aria-hidden');
-                }
+                setBackgroundInertState(false);
 
                 document.removeEvent('keydown', this.onOverlayKeyDown);
                 this.cacheDom();
@@ -636,17 +653,6 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
                 this.$Container.addClass('qui-addBrick-container--overlay-open');
             }
 
-            const Aside = this.$Content ? this.$Content.getElement('[data-name="aside"]') : null;
-            const Main = this.$Content ? this.$Content.getElement('[data-name="main"]') : null;
-
-            if (Aside) {
-                Aside.setAttribute('aria-hidden', 'true');
-            }
-
-            if (Main) {
-                Main.setAttribute('aria-hidden', 'true');
-            }
-
             if (opts.backdropClosable) {
                 Overlay.addEvent('click', (event) => {
                     if (event.target === Overlay) {
@@ -658,13 +664,25 @@ define('package/quiqqer/bricks/bin/AddBrickWindow', [
             Overlay.inject(this.$Container);
             this.cacheDom();
 
-            document.addEvent('keydown', this.onOverlayKeyDown);
-
             if (FocusEl && FocusEl.focus) {
-                (function () {
-                    FocusEl.focus();
-                }).delay(0);
+                FocusEl.focus();
             }
+
+            if (!Overlay.contains(document.activeElement)) {
+                const activeElement = document.activeElement;
+
+                if (activeElement && activeElement.blur) {
+                    activeElement.blur();
+                }
+
+                if (FocusEl && FocusEl.focus) {
+                    FocusEl.focus();
+                }
+            }
+
+            setBackgroundInertState(true);
+
+            document.addEvent('keydown', this.onOverlayKeyDown);
 
             return {
                 overlay: Overlay,

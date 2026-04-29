@@ -17,21 +17,43 @@ QUI::getAjax()->registerFunction(
     function ($project, $area = false) {
         $Project = QUI::getProjectManager()->decode($project);
         $BrickManager = QUI\Bricks\Manager::init();
+        $placeholderMockup = '/packages/quiqqer/bricks/bin/images/mockup-placeholder.svg';
 
         $bricks = $BrickManager?->getBricksFromProject($Project) ?? [];
+        $availableBricks = $BrickManager?->getAvailableBricks() ?? [];
         $result = [];
+        $availableByControl = [];
+
+        foreach ($availableBricks as $availableBrick) {
+            if (empty($availableBrick['control'])) {
+                continue;
+            }
+
+            $availableByControl[$availableBrick['control']] = $availableBrick;
+        }
 
         foreach ($bricks as $Brick) {
             /* @var $Brick QUI\Bricks\Brick */
+            $attributes = $Brick->getAttributes();
+            $type = $Brick->getAttribute('type');
+            $definitionData = $availableByControl[$type] ?? [];
+
+            $mockup = $definitionData['mockup'] ?? $placeholderMockup;
+            $thumbnail = $definitionData['thumbnail'] ?? $mockup;
+
+            $attributes['name'] = $definitionData['title'] ?? ($definitionData['name'] ?? '');
+            $attributes['mockup'] = $mockup;
+            $attributes['thumbnail'] = $thumbnail;
+
             if (!$area) {
-                $result[] = $Brick->getAttributes();
+                $result[] = $attributes;
                 continue;
             }
 
             $areas = $Brick->getAttribute('areas');
 
             if (str_contains($areas, ',' . $area . ',')) {
-                $result[] = $Brick->getAttributes();
+                $result[] = $attributes;
             }
         }
 
