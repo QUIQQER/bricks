@@ -34,6 +34,7 @@
 
         <provider>
             <desktopSearch src="\QUI\Bricks\BackendSearch\Provider\Bricks"/>
+            <mcp src="\QUI\Bricks\MCP\Provider"/>
         </provider>
 
     </package>
