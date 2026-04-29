@@ -1148,7 +1148,7 @@ class Manager
 
     /**
      * @param integer|string $brickId - Brick-ID
-     * @param array<array<string, mixed>> $brickData - Brick data
+     * @param array<string, mixed> $brickData - Brick data
      * @throws QUI\Exception
      */
     public function saveBrick(int | string $brickId, array $brickData): void
