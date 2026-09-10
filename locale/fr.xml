@@ -1,0 +1,3120 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<locales>
+    <groups name="quiqqer/bricks" datatype="php,js">
+        <locale name="package.title">
+            <fr><![CDATA[QUIQQER - Module de blocs]]></fr>
+        </locale>
+        <locale name="package.description">
+            <fr><![CDATA[Le système de blocs permet de personnaliser votre site. Vous pouvez facilement créer, déplacer ou supprimer des blocs dans les différentes zones du modèle.]]></fr>
+        </locale>
+        <locale name="Provider.Rest.title">
+            <fr><![CDATA[API REST des blocs QUIQQER]]></fr>
+        </locale>
+        <locale name="brick.deprecated">
+            <fr><![CDATA[Ce bloc est obsolète et ne doit plus être utilisé. Il risque de ne plus fonctionner correctement dans les versions récentes.]]></fr>
+        </locale>
+        <locale name="brick.edit.customId">
+            <fr><![CDATA[ID personnalisé]]></fr>
+        </locale>
+        <locale name="brick.edit.customId.description">
+            <fr><![CDATA[ID HTML facultatif pour ce bloc. Il peut servir d’ancre pour les liens directs vers cette section, ainsi que pour le suivi, le CSS ou le JavaScript. Il doit être unique sur la page et est adapté aux URL lors de l’enregistrement.]]></fr>
+        </locale>
+        <locale name="brickFullWidth">
+            <fr><![CDATA[Autoriser la pleine largeur]]></fr>
+        </locale>
+        <locale name="brick.control.setting.site">
+            <fr><![CDATA[Ajouter des pages]]></fr>
+        </locale>
+        <locale name="permission.quiqqer.bricks._header">
+            <fr><![CDATA[Blocs]]></fr>
+        </locale>
+        <locale name="permission.quiqqer.bricks.mcp">
+            <fr><![CDATA[Peut modifier les blocs via MCP.]]></fr>
+        </locale>
+        <locale name="permission.quiqqer.bricks.rest">
+            <fr><![CDATA[Peut utiliser les blocs via l’API REST.]]></fr>
+        </locale>
+        <locale name="permission.quiqqer.bricks.assign">
+            <fr><![CDATA[Peut attribuer des blocs aux pages.]]></fr>
+        </locale>
+        <locale name="permission.quiqqer.bricks.delete">
+            <fr><![CDATA[Peut supprimer des blocs.]]></fr>
+        </locale>
+        <locale name="permission.quiqqer.bricks.edit">
+            <fr><![CDATA[Peut modifier les blocs.]]></fr>
+        </locale>
+        <locale name="permission.quiqqer.bricks.create">
+            <fr><![CDATA[Peut créer des blocs.]]></fr>
+        </locale>
+        <locale name="menu.bricks.text">
+            <fr><![CDATA[Gestion des blocs]]></fr>
+        </locale>
+        <locale name="brick.content.title">
+            <fr><![CDATA[Blocs : contenu]]></fr>
+        </locale>
+        <locale name="brick.content.type.label">
+            <fr><![CDATA[Contenu]]></fr>
+        </locale>
+        <locale name="brick.content.description">
+            <fr><![CDATA[Un bloc avec un éditeur de texte permettant également d’insérer des images et d’autres contenus.]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.title">
+            <fr><![CDATA[Fil d’Ariane]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.description">
+            <fr><![CDATA[Ce bloc affiche le chemin vers la page actuelle et facilite l’orientation sur le site. Il convient particulièrement aux structures à plusieurs niveaux et aux grandes rubriques.<ul><li>Affiche le chemin jusqu’à la page actuelle</li><li>Facilite l’orientation et la navigation</li><li>Propose différents séparateurs, tailles de police et mises en évidence</li><li>Permet d’afficher ou de masquer un texte d’introduction</li><li>Reste lisible sur mobile et ordinateur, même avec de longs chemins</li></ul>]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.showTitle">
+            <fr><![CDATA[Afficher le texte d’introduction]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.showTitle.description">
+            <fr><![CDATA[Affiche ou masque le texte qui précède le fil d’Ariane. Activé par défaut.]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.titleText">
+            <fr><![CDATA[Texte d’introduction]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.titleText.description">
+            <fr><![CDATA[Texte personnalisé avant le fil d’Ariane. Laissez vide pour utiliser le texte par défaut de la langue.]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.firstItemText">
+            <fr><![CDATA[Texte du premier élément]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.firstItemText.description">
+            <fr><![CDATA[Remplace uniquement le texte visible du premier élément du fil d’Ariane. L’URL et la cible restent inchangées.]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.fontSize">
+            <fr><![CDATA[Taille de police]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.fontSize.description">
+            <fr><![CDATA[Définit la taille du texte d’introduction et des éléments du fil d’Ariane. Par défaut : petit.]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.fontSize.option.xs">
+            <fr><![CDATA[Très petit]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.fontSize.option.s">
+            <fr><![CDATA[Petit]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.fontSize.option.normal">
+            <fr><![CDATA[Par défaut]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.fontSize.option.lg">
+            <fr><![CDATA[Grand]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.fontSize.option.xl">
+            <fr><![CDATA[Très grand]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.separator">
+            <fr><![CDATA[Séparateur]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.separator.description">
+            <fr><![CDATA[Définit la séparation visuelle des éléments du fil d’Ariane. Par défaut : angle vers la droite.]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.separator.option.angleRight">
+            <fr><![CDATA[Angle vers la droite]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.separator.option.chevronRight">
+            <fr><![CDATA[Chevron vers la droite]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.separator.option.anglesRight">
+            <fr><![CDATA[Double angle vers la droite]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.separator.option.caretRight">
+            <fr><![CDATA[Triangle vers la droite]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.separator.option.slash">
+            <fr><![CDATA[Barre oblique]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.separator.option.bullet">
+            <fr><![CDATA[Puce]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.separator.option.pipe">
+            <fr><![CDATA[Barre verticale]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.lastItemStyle">
+            <fr><![CDATA[Mettre en évidence le dernier élément]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.lastItemStyle.description">
+            <fr><![CDATA[Détermine si et comment mettre en évidence l’élément actuel ou final du fil d’Ariane. Par défaut : aucune mise en évidence.]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.lastItemStyle.option.none">
+            <fr><![CDATA[Ne pas mettre en évidence]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.lastItemStyle.option.primary">
+            <fr><![CDATA[Couleur principale]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.lastItemStyle.option.bold">
+            <fr><![CDATA[Gras]]></fr>
+        </locale>
+        <locale name="brick.control.breadcrumb.setting.lastItemStyle.option.primaryBold">
+            <fr><![CDATA[Couleur principale et gras]]></fr>
+        </locale>
+        <locale name="brick.control.contact.title">
+            <fr><![CDATA[Formulaire de contact standard]]></fr>
+        </locale>
+        <locale name="brick.control.contact.description">
+            <fr><![CDATA[Un formulaire de contact prêt à l’emploi]]></fr>
+        </locale>
+        <!-- Simple contact form as brick (new) -->
+        <locale name="brick.control.simpleContact.title">
+            <fr><![CDATA[Formulaire de contact simple]]></fr>
+        </locale>
+        <locale name="brick.control.simpleContact.description">
+            <fr><![CDATA[Un formulaire de contact prêt à l’emploi]]></fr>
+        </locale>
+        <locale name="control.simpleContact.name">
+            <fr><![CDATA[Nom complet]]></fr>
+        </locale>
+        <locale name="control.simpleContact.name.placeholder">
+            <fr><![CDATA[Saisissez votre nom complet]]></fr>
+        </locale>
+        <locale name="control.simpleContact.email">
+            <fr><![CDATA[Adresse e-mail]]></fr>
+        </locale>
+        <locale name="control.simpleContact.captcha">
+            <fr><![CDATA[Vérification de sécurité]]></fr>
+        </locale>
+        <locale name="control.simpleContact.email.placeholder">
+            <fr><![CDATA[Saisissez votre adresse e-mail]]></fr>
+        </locale>
+        <locale name="control.simpleContact.message">
+            <fr><![CDATA[Votre message]]></fr>
+        </locale>
+        <locale name="control.simpleContact.message.placeholder">
+            <fr><![CDATA[Comment pouvons-nous vous aider ?]]></fr>
+        </locale>
+        <locale name="control.simpleContact.sendButton">
+            <fr><![CDATA[Envoyer]]></fr>
+        </locale>
+        <locale name="control.simpleContact.privacyPolicy.label">
+            <fr><![CDATA[J’ai pris connaissance de la [politique de confidentialité].]]></fr>
+        </locale>
+        <locale name="brick.control.simpleContact.template">
+            <fr><![CDATA[Modèles]]></fr>
+        </locale>
+        <locale name="brick.control.simpleContact.template.default">
+            <fr><![CDATA[Par défaut]]></fr>
+        </locale>
+        <locale name="brick.control.simpleContact.template.twoColumn">
+            <fr><![CDATA[Deux colonnes]]></fr>
+        </locale>
+        <locale name="brick.control.simpleContact.template.horizontal">
+            <fr><![CDATA[Horizontal : texte à gauche]]></fr>
+        </locale>
+        <locale name="brick.control.simpleContact.template.horizontalTextRight">
+            <fr><![CDATA[Horizontal : texte à droite]]></fr>
+        </locale>
+        <locale name="brick.control.simpleContact.mailTo">
+            <fr><![CDATA[Adresse e-mail de réception des messages]]></fr>
+        </locale>
+        <locale name="brick.control.simpleContact.successful">
+            <fr><![CDATA[Merci pour votre message. Nous vous répondrons dès que possible.]]></fr>
+        </locale>
+        <locale name="brick.control.simpleContact.error.serverError">
+            <fr><![CDATA[Votre message n’a pas pu être envoyé. Réessayez plus tard ou contactez notre assistance par e-mail.]]></fr>
+        </locale>
+        <locale name="brick.control.simpleContact.error.serverError">
+            <fr><![CDATA[Votre message n’a pas pu être envoyé. Réessayez plus tard ou contactez notre assistance par e-mail.]]></fr>
+        </locale>
+        <locale name="brick.control.simpleContact.error.wrongEmail">
+            <fr><![CDATA[L’adresse e-mail saisie n’est pas valide. Veuillez saisir une adresse valide.]]></fr>
+        </locale>
+        <locale name="brick.control.simpleContact.error.privacyPolicyRequired">
+            <fr><![CDATA[Veuillez accepter la politique de confidentialité pour continuer.]]></fr>
+        </locale>
+        <locale name="brick.control.simpleContact.showPrivacyPolicyCheckbox">
+            <fr><![CDATA[Afficher la case de confidentialité (obligatoire)]]></fr>
+        </locale>
+        <locale name="brick.control.simpleContact.useCaptcha">
+            <fr><![CDATA[Protéger le formulaire contre le spam avec un CAPTCHA (nécessite l’installation de <b>quiqqer/captcha</b>)]]></fr>
+        </locale>
+        <locale name="brick.control.simpleContact.formContent">
+            <fr><![CDATA[Contenu au-dessus du formulaire]]></fr>
+        </locale>
+        <locale name="brick.control.simpleContact.formContent.desc">
+            <fr><![CDATA[Ce contenu disparaît après l’envoi du formulaire.]]></fr>
+        </locale>
+        <locale name="brick.control.simpleContact.mail.privacyPolicy_accepted">
+            <fr><![CDATA[L’utilisateur a accepté la politique de confidentialité.]]></fr>
+        </locale>
+        <locale name="brick.control.simpleContact.error.captcha_failed">
+            <fr><![CDATA[Veuillez effectuer la vérification de sécurité (CAPTCHA).]]></fr>
+        </locale>
+        <locale name="brick.control.navigation.title">
+            <fr><![CDATA[Blocs : navigation]]></fr>
+        </locale>
+        <locale name="brick.control.navigation.description">
+            <fr><![CDATA[Navigation pour la barre latérale. La page de départ et le nombre de niveaux sont librement configurables.]]></fr>
+        </locale>
+        <locale name="brick.control.navigation.setting.startId">
+            <fr><![CDATA[ID de départ]]></fr>
+        </locale>
+        <locale name="brick.control.navigation.setting.homelink">
+            <fr><![CDATA[Afficher le lien vers l’accueil]]></fr>
+        </locale>
+        <locale name="brick.control.navigation.setting.levels">
+            <fr><![CDATA[Niveaux de navigation]]></fr>
+        </locale>
+        <locale name="brick.control.langSwitch.title">
+            <fr><![CDATA[Sélecteur de langue]]></fr>
+        </locale>
+        <locale name="brick.control.langSwitch.description">
+            <fr><![CDATA[Permet de passer d’une langue disponible à une autre sur le site.]]></fr>
+        </locale>
+        <locale name="brick.control.navigation.setting.showFlags">
+            <fr><![CDATA[Afficher les drapeaux]]></fr>
+        </locale>
+        <locale name="brick.control.navigation.setting.showText">
+            <fr><![CDATA[Afficher le texte]]></fr>
+        </locale>
+        <locale name="brick.control.navigation.setting.DropDown">
+            <fr><![CDATA[Liste déroulante avec drapeaux]]></fr>
+        </locale>
+        <locale name="area.window.title">
+            <fr><![CDATA[Zones de blocs]]></fr>
+        </locale>
+        <locale name="brick.edit.area.add">
+            <fr><![CDATA[Ajouter une zone de blocs]]></fr>
+        </locale>
+        <locale name="brick.edit.header">
+            <fr><![CDATA[Paramètres du bloc]]></fr>
+        </locale>
+        <locale name="brick.sheet.edit.title">
+            <fr><![CDATA[Modifier le bloc]]></fr>
+        </locale>
+        <locale name="brick.edit.backendTitle">
+            <fr><![CDATA[Nom du bloc]]></fr>
+        </locale>
+        <locale name="brick.edit.frontendTitle">
+            <fr><![CDATA[Titre sur le site]]></fr>
+        </locale>
+        <locale name="brick.edit.description">
+            <fr><![CDATA[Description du bloc]]></fr>
+        </locale>
+        <locale name="brick.edit.status">
+            <fr><![CDATA[Actif]]></fr>
+        </locale>
+        <locale name="brick.edit.status.inactive.message">
+            <fr><![CDATA[Ce bloc est désactivé et ne sera pas affiché sur le site.]]></fr>
+        </locale>
+        <locale name="brick.edit.type">
+            <fr><![CDATA[Type de bloc]]></fr>
+        </locale>
+        <locale name="brick.edit.showBrickDataBtnTitle">
+            <fr><![CDATA[Afficher les données du bloc en JSON]]></fr>
+        </locale>
+        <locale name="brick.edit.showBrickData.window.title">
+            <fr><![CDATA[Données du bloc en JSON]]></fr>
+        </locale>
+        <locale name="brick.edit.showBrickData.window.text">
+            <fr><![CDATA[Ces données permettent de copier et coller des blocs entre différents systèmes.]]></fr>
+        </locale>
+        <locale name="brick.edit.showBrickData.window.copyBtn">
+            <fr><![CDATA[Copier dans le presse-papiers]]></fr>
+        </locale>
+        <locale name="brick.edit.type.title">
+            <fr><![CDATA[Titre du type de bloc]]></fr>
+        </locale>
+        <locale name="brick.edit.allowed.areas">
+            <fr><![CDATA[Zones de blocs autorisées]]></fr>
+        </locale>
+        <locale name="brick.edit.content">
+            <fr><![CDATA[Contenu du bloc]]></fr>
+        </locale>
+        <locale name="brick.edit.footer">
+            <fr><![CDATA[Pied de bloc]]></fr>
+        </locale>
+        <locale name="brick.edit.footer.hint">
+            <fr><![CDATA[Le pied de bloc permet d’ajouter du contenu sous le bloc : remarques, conditions, notes de bas de page, petits boutons, liens ou textes complémentaires. En savoir plus : <a href="https://dev.quiqqer.com/quiqqer/bricks/-/wikis/home/Verwendung/Baustein-Footer" target="_blank">Pied de bloc</a>]]></fr>
+        </locale>
+        <locale name="brick.edit.extra.header">
+            <fr><![CDATA[Paramètres supplémentaires]]></fr>
+        </locale>
+        <locale name="bricks.SocialBox.title">
+            <fr><![CDATA[Réseaux sociaux]]></fr>
+        </locale>
+        <locale name="brick.control.banner.setting.title">
+            <fr><![CDATA[Titre du bloc]]></fr>
+        </locale>
+        <locale name="brick.control.banner.setting.text">
+            <fr><![CDATA[Texte de la bannière]]></fr>
+        </locale>
+        <locale name="site.area.button.area.more.openIt">
+            <fr><![CDATA[Paramètres]]></fr>
+        </locale>
+        <locale name="site.area.button.area.sort">
+            <fr><![CDATA[Trier les blocs]]></fr>
+        </locale>
+        <locale name="brick.control.banner.title">
+            <fr><![CDATA[Bannière de texte]]></fr>
+        </locale>
+        <locale name="brick.control.sidebox1.title">
+            <fr><![CDATA[Encadré avec une page]]></fr>
+        </locale>
+        <locale name="brick.control.sidebox2.title">
+            <fr><![CDATA[Encadré avec deux pages]]></fr>
+        </locale>
+        <locale name="brick.control.sidebox3.title">
+            <fr><![CDATA[Encadré avec trois pages]]></fr>
+        </locale>
+        <locale name="brick.control.sidebox4.title">
+            <fr><![CDATA[Encadré avec quatre pages]]></fr>
+        </locale>
+        <locale name="brick.control.sidebox4.setting.site">
+            <fr><![CDATA[Ajouter des pages]]></fr>
+        </locale>
+        <locale name="brick.control.slider.template">
+            <fr><![CDATA[Modèle du diaporama]]></fr>
+        </locale>
+        <locale name="brick.control.slider.template.onlyImages">
+            <fr><![CDATA[Image uniquement (par défaut)]]></fr>
+        </locale>
+        <locale name="brick.control.slider.template.imageAndText">
+            <fr><![CDATA[Image, titre et description]]></fr>
+        </locale>
+        <locale name="brick.control.slider.template.slideHeight">
+            <fr><![CDATA[Hauteur du diaporama]]></fr>
+        </locale>
+        <locale name="brick.control.slider.button" html="true">
+            <fr><![CDATA[Plus <span class="fa fa-angle-right"></span>]]></fr>
+        </locale>
+        <locale name="brick.control.slider.more">
+            <fr><![CDATA[Plus]]></fr>
+        </locale>
+        <locale name="brick.control.setting.limit">
+            <fr><![CDATA[Limite]]></fr>
+        </locale>
+        <locale name="brick.control.setting.moreLink">
+            <fr><![CDATA[Lien « Plus »]]></fr>
+        </locale>
+        <locale name="controls.pagination.mobile.option">
+            <fr><![CDATA[Page [from] sur [max]]]></fr>
+        </locale>
+        <locale name="controls.pagination.first.page">
+            <fr><![CDATA[Première page]]></fr>
+        </locale>
+        <locale name="controls.pagination.back">
+            <fr><![CDATA[précédent]]></fr>
+        </locale>
+        <locale name="controls.pagination.next">
+            <fr><![CDATA[suivant]]></fr>
+        </locale>
+        <locale name="controls.pagination.last.page">
+            <fr><![CDATA[Dernière page]]></fr>
+        </locale>
+        <locale name="brick.control.setting.order">
+            <fr><![CDATA[Trier]]></fr>
+        </locale>
+        <locale name="brick.control.order.order_field">
+            <fr><![CDATA[Manuel]]></fr>
+        </locale>
+        <locale name="site.area.window.settings.setting.width">
+            <fr><![CDATA[Largeur]]></fr>
+        </locale>
+        <locale name="site.area.window.settings.setting.height">
+            <fr><![CDATA[Hauteur]]></fr>
+        </locale>
+        <locale name="site.area.window.settings.setting.classes">
+            <fr><![CDATA[Classes CSS]]></fr>
+        </locale>
+        <!-- Basic slider -->
+        <locale name="brick.control.basicSlider.title">
+            <fr><![CDATA[Diaporama simple]]></fr>
+        </locale>
+        <locale name="brick.control.basicSlider.description">
+            <fr><![CDATA[Un diaporama d’images simple, affiché à côté du texte, à gauche ou à droite selon le réglage.]]></fr>
+        </locale>
+        <locale name="brick.control.basicSlider.mediaFolder">
+            <fr><![CDATA[Dossier d’images]]></fr>
+        </locale>
+        <locale name="brick.control.basicSlider.settings.delay">
+            <fr><![CDATA[Délai avant la diapositive suivante]]></fr>
+        </locale>
+        <locale name="brick.control.basicSlider.settings.delay.desc">
+            <fr><![CDATA[Délai avant la diapositive suivante en millisecondes. 1000 correspond à 1 seconde.]]></fr>
+        </locale>
+        <locale name="brick.basicSlider.animationType">
+            <fr><![CDATA[Type d’animation]]></fr>
+        </locale>
+        <locale name="brick.basicSlider.animationType.hideSlideToLeftShowSlideFromLeft">
+            <fr><![CDATA[Sortir à gauche et entrer depuis la gauche]]></fr>
+        </locale>
+        <locale name="brick.basicSlider.animationType.hideSlideToLeftShowSlideFromRight">
+            <fr><![CDATA[Sortir à gauche et entrer depuis la droite]]></fr>
+        </locale>
+        <locale name="brick.basicSlider.animationType.hideSlideToRightShowSlideFromRight">
+            <fr><![CDATA[Sortir à droite et entrer depuis la droite]]></fr>
+        </locale>
+        <locale name="brick.basicSlider.animationType.hideSlideToRightShowSlideFromLeft">
+            <fr><![CDATA[Sortir à droite et entrer depuis la gauche]]></fr>
+        </locale>
+        <locale name="brick.basicSlider.animationType.hideSlideToBottomShowSlideFromBottom">
+            <fr><![CDATA[Sortir vers le bas et entrer par le bas]]></fr>
+        </locale>
+        <locale name="brick.basicSlider.animationType.hideSlideToBottomShowSlideFromTop">
+            <fr><![CDATA[Sortir vers le bas et entrer par le haut]]></fr>
+        </locale>
+        <locale name="brick.basicSlider.animationType.fadeOutFadeIn">
+            <fr><![CDATA[Fondu en sortie et en entrée]]></fr>
+        </locale>
+        <locale name="brick.basicSlider.animationType.hideScaleOutShowFromScaleOut">
+            <fr><![CDATA[Réduire en sortie et agrandir depuis une petite taille en entrée]]></fr>
+        </locale>
+        <locale name="brick.basicSlider.animationType.hideScaleInShowFromScaleIn">
+            <fr><![CDATA[Agrandir en sortie et réduire depuis une grande taille en entrée]]></fr>
+        </locale>
+        <locale name="brick.basicSlider.animationType.hideScaleOutShowFromScaleIn">
+            <fr><![CDATA[Réduire en sortie et réduire depuis une grande taille en entrée]]></fr>
+        </locale>
+        <locale name="brick.basicSlider.animationType.hideScaleInShowFromScaleOut">
+            <fr><![CDATA[Agrandir en sortie et agrandir depuis une petite taille en entrée]]></fr>
+        </locale>
+        <locale name="brick.control.basicSlider.imgLeft">
+            <fr><![CDATA[Afficher les images à gauche]]></fr>
+        </locale>
+        <locale name="brick.control.basicSlider.imgLeft.desc">
+            <fr><![CDATA[Affiche les images à gauche du diaporama et le texte à droite. Sans cette option, le texte apparaît sous les images.]]></fr>
+        </locale>
+        <locale name="brick.control.basicSlider.imgTopMobile">
+            <fr><![CDATA[Images au-dessus du texte (mobile)]]></fr>
+        </locale>
+        <locale name="brick.control.basicSlider.imgTopMobile.desc">
+            <fr><![CDATA[Si cette option est activée, les images apparaissent au-dessus du texte sur mobile. Sinon, le texte précède les images.]]></fr>
+        </locale>
+        <locale name="brick.control.basicSlider.showDotNav">
+            <fr><![CDATA[Afficher la navigation par points]]></fr>
+        </locale>
+        <locale name="brick.control.basicSlider.maxImageWidth">
+            <fr><![CDATA[Largeur maximale des images (pixels)]]></fr>
+        </locale>
+        <locale name="brick.control.basicSlider.sliderHeight">
+            <fr><![CDATA[Hauteur du diaporama (pixels)]]></fr>
+        </locale>
+        <locale name="brick.control.basicSlider.sliderHeight.desc">
+            <fr><![CDATA[Définit la hauteur maximale du conteneur du diaporama. Utile lorsque les images ont des tailles différentes : une hauteur fixe évite les sauts lors des transitions et garde les images centrées. Si toutes les images ont le même format et la même taille, ce réglage est facultatif.]]></fr>
+        </locale>
+        <locale name="brick.control.basicSlider.sliderHeightMobile">
+            <fr><![CDATA[Hauteur du diaporama sur mobile (pixels)]]></fr>
+        </locale>
+        <locale name="brick.basicSlider.textPosition">
+            <fr><![CDATA[Position du texte]]></fr>
+        </locale>
+        <locale name="brick.basicSlider.textPosition.top">
+            <fr><![CDATA[En haut]]></fr>
+        </locale>
+        <locale name="brick.basicSlider.textPosition.center">
+            <fr><![CDATA[Au centre]]></fr>
+        </locale>
+        <locale name="brick.basicSlider.textPosition.bottom">
+            <fr><![CDATA[En bas]]></fr>
+        </locale>
+        <locale name="brick.control.basicSlider.sliderContent">
+            <fr><![CDATA[Contenu à côté des images]]></fr>
+        </locale>
+        <locale name="brick.control.basicSlider.sliderContent.desc">
+            <fr><![CDATA[Ce contenu apparaît à côté des images, à gauche ou à droite selon le réglage. Il ne remplace pas le contenu du bloc : vous pouvez toujours placer du texte au-dessus du diaporama.]]></fr>
+        </locale>
+        <locale name="brick.control.slider.title">
+            <fr><![CDATA[Présentation de pages (carrousel)]]></fr>
+        </locale>
+        <locale name="brick.control.promosliderWallpaper.title">
+            <fr><![CDATA[Diaporama promotionnel avec arrière-plan]]></fr>
+        </locale>
+        <locale name="brick.control.promosliderWallpaper.settings.preloadFirstImage">
+            <fr><![CDATA[Précharger la première image]]></fr>
+        </locale>
+        <locale name="brick.control.promosliderWallpaper.settings.preloadFirstImage.desc">
+            <fr><![CDATA[Précharge l’image de la première diapositive en basse qualité comme arrière-plan.]]></fr>
+        </locale>
+        <locale name="brick.control.promosliderWallpaper2Content.title">
+            <fr><![CDATA[Diaporama promotionnel avec arrière-plan et deux zones de contenu]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.title">
+            <fr><![CDATA[Diaporama promotionnel]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.pagefit">
+            <fr><![CDATA[Adapter aux proportions de la page (Pagefit)]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.pagefitcut">
+            <fr><![CDATA[Recadrage Pagefit]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.pagefitcutmobile">
+            <fr><![CDATA[Recadrage Pagefit (mobile)]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.image-as-wallpaper">
+            <fr><![CDATA[Image d’arrière-plan]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.image-wallpaper-position">
+            <fr><![CDATA[Position de l’arrière-plan]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.image-wallpaper-attachment">
+            <fr><![CDATA[Fixation de l’arrière-plan]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.image-wallpaper-attachment.fixed">
+            <fr><![CDATA[fixe]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.image-wallpaper-size">
+            <fr><![CDATA[Ajustement de l’image]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.image-wallpaper-size.cover">
+            <fr><![CDATA[Remplir toute la zone]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.image-wallpaper-size.contain">
+            <fr><![CDATA[Afficher l’image entière]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.settings">
+            <fr><![CDATA[Paramètres de la diapositive]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.settings.desktopslides">
+            <fr><![CDATA[Diapositives pour ordinateur]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.settings.isMobileSlidesEnabled">
+            <fr><![CDATA[Diapositives spécifiques au mobile]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.settings.mobileslides">
+            <fr><![CDATA[Diapositives pour mobile]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.settings.navigation-position">
+            <fr><![CDATA[Position de la navigation]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.settings.autostart">
+            <fr><![CDATA[Démarrage automatique]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.settings.shownavigation">
+            <fr><![CDATA[Afficher la navigation]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.settings.showarrows">
+            <fr><![CDATA[Flèches de navigation]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.settings.showarrows.showHoverScale">
+            <fr><![CDATA[Afficher : effet de zoom]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.settings.showarrows.showHoverSlide">
+            <fr><![CDATA[Afficher : effet de glissement]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.settings.showarrows.showHoverBackgroundLight">
+            <fr><![CDATA[Afficher : effet de fond clair]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.settings.showarrows.showHoverBackgroundDark">
+            <fr><![CDATA[Afficher : effet de fond sombre]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.settings.showarrows.showHoverOpacity">
+            <fr><![CDATA[Afficher : effet d’opacité]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.settings.showarrows.hide">
+            <fr><![CDATA[Désactiver]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.settings.delay">
+            <fr><![CDATA[Délai avant la diapositive suivante]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.navigation-position-inner">
+            <fr><![CDATA[à l’intérieur]]></fr>
+        </locale>
+        <locale name="brick.control.promoslider.navigation-position-outer">
+            <fr><![CDATA[à l’extérieur]]></fr>
+        </locale>
+        <locale name="brick.control.Infinite.title">
+            <fr><![CDATA[Chargement progressif des pages]]></fr>
+        </locale>
+        <locale name="brick.control.setting.site">
+            <fr><![CDATA[Ajouter des pages]]></fr>
+        </locale>
+        <locale name="brick.control.sidebox3TitleTop.title">
+            <fr><![CDATA[Trois pages l’une sous l’autre]]></fr>
+        </locale>
+        <locale name="brick.control.Infinite.childrenPerRow">
+            <fr><![CDATA[Nombre maximal d’entrées par ligne]]></fr>
+        </locale>
+        <locale name="brick.control.Infinite.rows">
+            <fr><![CDATA[Nombre de lignes]]></fr>
+        </locale>
+        <locale name="brick.control.Infinite.loadingrows">
+            <fr><![CDATA[Nombre de lignes à charger]]></fr>
+        </locale>
+        <locale name="brick.control.Infinite.more.button">
+            <fr><![CDATA[plus]]></fr>
+        </locale>
+        <locale name="brick.control.setting.site">
+            <fr><![CDATA[Ajouter des pages]]></fr>
+        </locale>
+        <locale name="brick.panel.category.settings">
+            <fr><![CDATA[Gestion et paramètres]]></fr>
+        </locale>
+        <locale name="brick.panel.category.footer">
+            <fr><![CDATA[Pied de bloc]]></fr>
+        </locale>
+        <locale name="brick.panel.category.usage">
+            <fr><![CDATA[Utilisation]]></fr>
+        </locale>
+        <locale name="brick.panel.category.customCSS">
+            <fr><![CDATA[CSS personnalisé]]></fr>
+        </locale>
+        <locale name="brick.panel.category.customJS">
+            <fr><![CDATA[JavaScript personnalisé]]></fr>
+        </locale>
+        <locale name="brick.panel.category.customCSS.hint">
+            <fr><![CDATA[<strong>Remarque :</strong><br>Par défaut, votre CSS est automatiquement limité à ce bloc. Vous pouvez désactiver cette limitation. Les règles contenant <code>body</code> conservent une portée globale, même lorsque la limitation est active. Vous pouvez utiliser des règles simples comme <code>p { font-size: 1.5rem; }</code> sans affecter les éléments extérieurs au bloc. Les règles CSS imbriquées dans <code>@media</code> et <code>@supports</code> sont également prises en charge.<br>En savoir plus : <a href="https://dev.quiqqer.com/quiqqer/bricks/-/wikis/home/Verwendung/Eigenes-CSS" target="_blank">Blocs : CSS personnalisé</a>]]></fr>
+        </locale>
+        <locale name="brick.panel.category.customCSS.scoping">
+            <fr><![CDATA[Limiter le CSS à ce bloc]]></fr>
+        </locale>
+        <locale name="brick.panel.category.customJS.hint">
+            <fr><![CDATA[<strong>Remarque :</strong><br>Le JavaScript personnalisé est destiné à de petites extensions fonctionnelles. Si le bloc fournit un contrôle JavaScript, votre code s’exécute automatiquement dans son contexte, avec accès à <code>this</code> et <code>brickId</code>. Il ne s’exécute qu’une fois le contrôle chargé ; les changements visibles peuvent donc apparaître légèrement plus tard. <br>En savoir plus : <a href="https://dev.quiqqer.com/quiqqer/bricks/-/wikis/home/Verwendung/Eigenes-JS" target="_blank">Blocs : JavaScript personnalisé</a>]]></fr>
+        </locale>
+        <locale name="brick.panel.usage.grid.url">
+            <fr><![CDATA[URL de la page]]></fr>
+        </locale>
+        <locale name="brick.panel.usage.grid.editSite">
+            <fr><![CDATA[Modifier la page]]></fr>
+        </locale>
+        <locale name="brick.panel.usage.grid.openFrontend">
+            <fr><![CDATA[Ouvrir dans le navigateur]]></fr>
+        </locale>
+        <locale name="pdfPreview.brick.title">
+            <fr><![CDATA[Aperçu PDF]]></fr>
+        </locale>
+        <locale name="pdfPreview.brick.description">
+            <fr><![CDATA[Affiche un PDF dans un bloc avec une vue page par page.]]></fr>
+        </locale>
+        <locale name="brick.control.pdfView.file">
+            <fr><![CDATA[Fichier PDF]]></fr>
+        </locale>
+        <locale name="brick.control.pdfView.file.description">
+            <fr><![CDATA[Veuillez sélectionner uniquement un fichier PDF.]]></fr>
+        </locale>
+        <locale name="brick.control.pdfView.sheetsNumber">
+            <fr><![CDATA[Nombre de pages]]></fr>
+        </locale>
+        <locale name="brick.control.pdfView.sheetsNumber.description">
+            <fr><![CDATA[Indique le nombre de pages du PDF sélectionné. Le site affiche un encadré par page. <br>La structure HTML contient ainsi le bon nombre d’encadrés avant le chargement du PDF. Cela améliore la vitesse de chargement et évite les décalages de mise en page (CLS), pour un affichage stable dès le départ.]]></fr>
+        </locale>
+        <locale name="brick.control.pdfView.aspectRatio">
+            <fr><![CDATA[Rapport largeur/hauteur]]></fr>
+        </locale>
+        <locale name="brick.control.pdfView.aspectRatio.description">
+            <fr><![CDATA[Réserve de l’espace sur le site selon les proportions indiquées avant de charger le PDF. <br>Saisissez une valeur CSS valide pour <code>aspect-ratio</code> au format NOMBRE/NOMBRE. <strong>La valeur par défaut correspond à une page A4 (210/297).</strong>]]></fr>
+        </locale>
+        <locale name="pdfPreview.brick.frontend.loading.title">
+            <fr><![CDATA[Chargement du fichier…]]></fr>
+        </locale>
+    </groups>
+    <groups name="quiqqer/bricks" datatype="php">
+        <locale name="site.panel.bricks.category.title">
+            <fr><![CDATA[Blocs]]></fr>
+        </locale>
+        <locale name="continue.reading">
+            <fr><![CDATA[Lire la suite]]></fr>
+        </locale>
+        <locale name="brick.control.navigation.setting.co">
+            <fr><![CDATA[]]></fr>
+        </locale>
+        <locale name="brick.edit.settings.proportion.header">
+            <fr><![CDATA[Propriétés du bloc]]></fr>
+        </locale>
+        <locale name="brick.edit.height">
+            <fr><![CDATA[Hauteur du bloc]]></fr>
+        </locale>
+        <locale name="brick.edit.classes">
+            <fr><![CDATA[Classes CSS supplémentaires]]></fr>
+        </locale>
+        <locale name="brick.edit.width">
+            <fr><![CDATA[Largeur du bloc]]></fr>
+        </locale>
+        <locale name="brick.edit.settings.flexible.header">
+            <fr><![CDATA[Paramètres personnalisables]]></fr>
+        </locale>
+        <locale name="brick.edit.settings.flexible.header.description">
+            <fr><![CDATA[Déterminez quels paramètres pourront être personnalisés par d’autres personnes.]]></fr>
+        </locale>
+        <locale name="site.area.window.settings.setting.inheritance">
+            <fr><![CDATA[Bloc hérité]]></fr>
+        </locale>
+        <locale name="site.area.window.settings.setting.visibility">
+            <fr><![CDATA[Visibilité]]></fr>
+        </locale>
+        <locale name="site.area.window.settings.setting.visibility.always">
+            <fr><![CDATA[Toujours]]></fr>
+        </locale>
+        <locale name="site.area.window.settings.setting.visibility.guest">
+            <fr><![CDATA[Visiteurs non connectés uniquement]]></fr>
+        </locale>
+        <locale name="site.area.window.settings.setting.visibility.authenticated">
+            <fr><![CDATA[Utilisateurs connectés uniquement]]></fr>
+        </locale>
+        <locale name="site.area.window.settings.setting.visibility.groups">
+            <fr><![CDATA[Groupes spécifiques uniquement]]></fr>
+        </locale>
+        <locale name="site.area.window.settings.setting.visibility.groups.label">
+            <fr><![CDATA[Groupes]]></fr>
+        </locale>
+        <locale name="site.area.window.settings.section.custom">
+            <fr><![CDATA[Paramètres personnalisables de cette page]]></fr>
+        </locale>
+        <!-- Tour Data -->
+        <locale name="tour.general.BricksTitle">
+            <fr><![CDATA[Blocs]]></fr>
+        </locale>
+        <locale name="tour.general.BricksDescription">
+            <fr><![CDATA[Les blocs permettent de personnaliser votre site en remplissant les zones d’un modèle avec des galeries, formulaires de contact, bannières, références, actualités et bien d’autres éléments.]]></fr>
+        </locale>
+        <locale name="exception.type.is.not.allowed">
+            <fr><![CDATA[Ce type de bloc n’est pas autorisé. Le bloc n’a pas été enregistré.]]></fr>
+        </locale>
+    </groups>
+    <groups name="quiqqer/bricks" datatype="js">
+        <locale name="brick.type">
+            <fr><![CDATA[Type de bloc]]></fr>
+        </locale>
+        <locale name="panel.title">
+            <fr><![CDATA[#[brickId] - [brickTitle] : bloc]]></fr>
+        </locale>
+        <locale name="brick.window.popup.saveAndClose">
+            <fr><![CDATA[Enregistrer et fermer]]></fr>
+        </locale>
+        <locale name="brick.window.popup.openInPanel">
+            <fr><![CDATA[Ouvrir le bloc dans le panneau]]></fr>
+        </locale>
+        <locale name="brickId">
+            <fr><![CDATA[ID du bloc]]></fr>
+        </locale>
+        <locale name="window.brick.delete.title">
+            <fr><![CDATA[Voulez-vous supprimer ce bloc ?]]></fr>
+        </locale>
+        <locale name="window.brick.delete.text">
+            <fr><![CDATA[Voulez-vous vraiment supprimer le bloc #[brickId] - [brickTitle] ?]]></fr>
+        </locale>
+        <locale name="window.brick.delete.information">
+            <fr><![CDATA[Le bloc sera supprimé définitivement.]]></fr>
+        </locale>
+        <locale name="window.brick.no.extra.settings">
+            <fr><![CDATA[Ce bloc n’a pas de paramètres supplémentaires.]]></fr>
+        </locale>
+        <locale name="site.area.button.area.settings">
+            <fr><![CDATA[Paramètres de la zone de blocs]]></fr>
+        </locale>
+        <locale name="site.area.button.add">
+            <fr><![CDATA[Ajouter un bloc]]></fr>
+        </locale>
+        <locale name="site.area.button.create">
+            <fr><![CDATA[Créer un bloc]]></fr>
+        </locale>
+        <locale name="site.area.button.delete">
+            <fr><![CDATA[Supprimer le bloc]]></fr>
+        </locale>
+        <locale name="site.area.button.settings">
+            <fr><![CDATA[Paramètres du bloc]]></fr>
+        </locale>
+        <locale name="site.area.window.add">
+            <fr><![CDATA[Ajouter un bloc]]></fr>
+        </locale>
+        <locale name="site.area.window.input.placeholder">
+            <fr><![CDATA[Filtrer par titre, description ou ID]]></fr>
+        </locale>
+        <locale name="site.area.window.add.brickIsDisabled">
+            <fr><![CDATA[Désactivé]]></fr>
+        </locale>
+        <locale name="site.area.window.results.counter">
+            <fr><![CDATA[{count} blocs]]></fr>
+        </locale>
+        <locale name="site.area.window.results.empty">
+            <fr><![CDATA[Aucun bloc correspondant trouvé.]]></fr>
+        </locale>
+        <locale name="brickPicker.results.emptyFiltered">
+            <fr><![CDATA[Aucun bloc adapté à cette sélection n’est disponible. Créez d’abord un bloc compatible.]]></fr>
+        </locale>
+        <locale name="site.area.window.shortcuts.label">
+            <fr><![CDATA[Raccourcis clavier]]></fr>
+        </locale>
+        <locale name="site.area.window.shortcuts.navigate">
+            <fr><![CDATA[Déplacer le focus]]></fr>
+        </locale>
+        <locale name="site.area.window.shortcuts.add">
+            <fr><![CDATA[Ajouter]]></fr>
+        </locale>
+        <locale name="site.area.window.shortcuts.close">
+            <fr><![CDATA[Fermer]]></fr>
+        </locale>
+        <locale name="site.area.window.filter.showInactive">
+            <fr><![CDATA[Afficher les blocs inactifs]]></fr>
+        </locale>
+        <locale name="site.area.window.delete.title">
+            <fr><![CDATA[Supprimer le bloc ?]]></fr>
+        </locale>
+        <locale name="site.area.window.delete.text">
+            <fr><![CDATA[Voulez-vous vraiment supprimer le bloc ?]]></fr>
+        </locale>
+        <locale name="site.area.window.delete.information">
+            <fr><![CDATA[Voulez-vous vraiment retirer le bloc de cette page ?]]></fr>
+        </locale>
+        <locale name="site.area.window.deactivate.title">
+            <fr><![CDATA[Blocs dans la zone]]></fr>
+        </locale>
+        <locale name="site.area.window.deactivate.text">
+            <fr><![CDATA[Blocs dans la zone]]></fr>
+        </locale>
+        <locale name="site.area.window.deactivate.information" html="true">
+            <fr><![CDATA[<p>La zone contient encore des blocs.<br />Elle ne peut être désactivée que si elle est vide.<br />Voulez-vous retirer les blocs de cette zone ?</p>]]></fr>
+        </locale>
+        <locale name="area.window.settings.title">
+            <fr><![CDATA[Paramètres de la zone de blocs]]></fr>
+        </locale>
+        <locale name="area.window.settings.deactivate">
+            <fr><![CDATA[Désactiver la zone de blocs]]></fr>
+        </locale>
+        <locale name="site.area.window.settings.title">
+            <fr><![CDATA[Paramètres du bloc]]></fr>
+        </locale>
+        <locale name="site.area.window.noBricksInArea.title">
+            <fr><![CDATA[Aucun bloc n’est attribué à cette zone]]></fr>
+        </locale>
+        <locale name="site.area.window.noBricksInArea.content" html="true">
+            <fr><![CDATA[Aucun bloc n’est attribué à cette zone.<br />Vous pouvez gérer et attribuer des blocs dans <b>Administration → Blocs</b>.]]></fr>
+        </locale>
+        <locale name="site.area.badge.disabled">
+            <fr><![CDATA[Désactivé]]></fr>
+        </locale>
+        <locale name="site.area.badge.inheritance">
+            <fr><![CDATA[Hérité]]></fr>
+        </locale>
+        <locale name="site.area.badge.visibility.guest">
+            <fr><![CDATA[Visible pour : visiteurs non connectés]]></fr>
+        </locale>
+        <locale name="site.area.badge.visibility.authenticated">
+            <fr><![CDATA[Visible pour : utilisateurs connectés]]></fr>
+        </locale>
+        <locale name="site.area.badge.visibility.group.text">
+            <fr><![CDATA[Visible pour : [groupName]]]></fr>
+        </locale>
+        <locale name="site.area.badge.visibility.groups.loading">
+            <fr><![CDATA[Chargement des groupes…]]></fr>
+        </locale>
+        <locale name="manager.button.add">
+            <fr><![CDATA[Ajouter un bloc]]></fr>
+        </locale>
+        <locale name="manager.button.edit.title">
+            <fr><![CDATA[Modifier le bloc sélectionné]]></fr>
+        </locale>
+        <locale name="manager.button.edit.text">
+            <fr><![CDATA[Modifier]]></fr>
+        </locale>
+        <locale name="manager.button.copy.title">
+            <fr><![CDATA[Copier le bloc sélectionné]]></fr>
+        </locale>
+        <locale name="manager.button.copy.text">
+            <fr><![CDATA[Copier]]></fr>
+        </locale>
+        <locale name="manager.button.delete">
+            <fr><![CDATA[Supprimer les blocs sélectionnés]]></fr>
+        </locale>
+        <locale name="manager.grid.status">
+            <fr><![CDATA[Actif]]></fr>
+        </locale>
+        <locale name="manager.grid.status.active">
+            <fr><![CDATA[Le bloc est actif]]></fr>
+        </locale>
+        <locale name="manager.grid.status.inactive">
+            <fr><![CDATA[Le bloc est désactivé]]></fr>
+        </locale>
+        <locale name="manager.grid.missingControl.badge">
+            <fr><![CDATA[Indisponible]]></fr>
+        </locale>
+        <locale name="manager.grid.missingControl.info">
+            <fr><![CDATA[Ce bloc n’est pas disponible dans le système. Le paquet correspondant est peut-être absent.]]></fr>
+        </locale>
+        <locale name="manager.window.delete.title">
+            <fr><![CDATA[Supprimer des blocs]]></fr>
+        </locale>
+        <locale name="manager.window.delete.information">
+            <fr><![CDATA[<h1>Voulez-vous vraiment supprimer les blocs avec ces ID ?</h1>[list]]]></fr>
+        </locale>
+        <locale name="bricks.message.no.areas.found">
+            <fr><![CDATA[Aucune zone de blocs trouvée.]]></fr>
+        </locale>
+        <locale name="message.brick.save.success">
+            <fr><![CDATA[Le bloc a bien été enregistré.]]></fr>
+        </locale>
+        <locale name="quiqqer.products.control.slidesettings.text">
+            <fr><![CDATA[Texte]]></fr>
+        </locale>
+        <locale name="quiqqer.products.control.slidesettings.type">
+            <fr><![CDATA[Alignement]]></fr>
+        </locale>
+        <locale name="quiqqer.products.control.promoslider.image">
+            <fr><![CDATA[Image d’arrière-plan]]></fr>
+        </locale>
+        <locale name="quiqqer.products.control.promoslider.url">
+            <fr><![CDATA[Adresse de destination]]></fr>
+        </locale>
+        <locale name="quiqqer.products.control.promoslider.left">
+            <fr><![CDATA[Contenu à gauche]]></fr>
+        </locale>
+        <locale name="quiqqer.products.control.promoslider.right">
+            <fr><![CDATA[Contenu à droite]]></fr>
+        </locale>
+        <locale name="quiqqer.products.control.delete.title">
+            <fr><![CDATA[Voulez-vous vraiment retirer cette diapositive ?]]></fr>
+        </locale>
+        <locale name="quiqqer.products.control.delete.text">
+            <fr><![CDATA[Voulez-vous vraiment retirer cette diapositive ?]]></fr>
+        </locale>
+        <locale name="quiqqer.products.control.delete.information">
+            <fr><![CDATA[La diapositive ne pourra pas être restaurée]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.promoslider.button.text.enable">
+            <fr><![CDATA[Activer]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.promoslider.button.text.disable">
+            <fr><![CDATA[Désactiver]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.promoslider.create.isDisabled">
+            <fr><![CDATA[Désactiver la diapositive]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.promoslider.create.isDisabled.short">
+            <fr><![CDATA[Désactivée]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.promoslider.create.image">
+            <fr><![CDATA[Image]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.promoslider.create.url">
+            <fr><![CDATA[URL]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.promoslider.create.url.warning" html="true">
+            <fr><![CDATA[Si une URL est indiquée ici, le contenu ne doit comporter aucun autre lien ni élément <a>.]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.promoslider.create.newTab">
+            <fr><![CDATA[Ouvrir le lien dans un nouvel onglet]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.promoslider.create.newTab.short">
+            <fr><![CDATA[Nouvel onglet]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.promoslider.create.title">
+            <fr><![CDATA[Titre]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.promoslider.create.text">
+            <fr><![CDATA[Texte]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.promoslider.create.align">
+            <fr><![CDATA[Aligner]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.promoslider.create.align.left">
+            <fr><![CDATA[Placer le texte à gauche]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.promoslider.create.align.right">
+            <fr><![CDATA[Placer le texte à droite]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.promoslider.adddialog.title">
+            <fr><![CDATA[Ajouter une diapositive]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.promoslider.editialog.title">
+            <fr><![CDATA[Modifier la diapositive]]></fr>
+        </locale>
+        <!-- content switcher -->
+        <locale name="contentSwitcher.entries.button.text">
+            <fr><![CDATA[Ajouter une entrée]]></fr>
+        </locale>
+        <locale name="contentSwitcher.entries.entry.picture">
+            <fr><![CDATA[Image]]></fr>
+        </locale>
+        <locale name="contentSwitcher.entries.entry.title">
+            <fr><![CDATA[Titre]]></fr>
+        </locale>
+        <locale name="contentSwitcher.entries.entry.content">
+            <fr><![CDATA[Contenu]]></fr>
+        </locale>
+        <!-- Customer Reviews -->
+        <locale name="customerReviews.reviews.addButton">
+            <fr><![CDATA[Ajouter un avis client]]></fr>
+        </locale>
+        <locale name="customerReviews.reviews.entry.avatar">
+            <fr><![CDATA[Avatar]]></fr>
+        </locale>
+        <locale name="customerReviews.reviews.entry.userName">
+            <fr><![CDATA[Nom du client ou de l’entreprise]]></fr>
+        </locale>
+        <locale name="customerReviews.reviews.entry.userName.placeholder">
+            <fr><![CDATA[Camille Martin]]></fr>
+        </locale>
+        <locale name="customerReviews.reviews.entry.jobTitle">
+            <fr><![CDATA[Information complémentaire (p. ex. fonction)]]></fr>
+        </locale>
+        <locale name="customerReviews.reviews.entry.jobTitle.placeholder">
+            <fr><![CDATA[Direction générale]]></fr>
+        </locale>
+        <locale name="customerReviews.reviews.entry.url">
+            <fr><![CDATA[Adresse web]]></fr>
+        </locale>
+        <locale name="customerReviews.reviews.entry.url.placeholder">
+            <fr><![CDATA[https://www.example-company.com]]></fr>
+        </locale>
+        <locale name="customerReviews.reviews.entry.urlTitle">
+            <fr><![CDATA[Libellé alternatif pour le lien web]]></fr>
+        </locale>
+        <locale name="customerReviews.reviews.entry.urlTitle.placeholder">
+            <fr><![CDATA[example-company.com]]></fr>
+        </locale>
+        <locale name="customerReviews.reviews.entry.content">
+            <fr><![CDATA[Avis court]]></fr>
+        </locale>
+        <locale name="dialog.copy.title">
+            <fr><![CDATA[Copier le bloc #[id]]]></fr>
+        </locale>
+        <locale name="dialog.copy.message">
+            <fr><![CDATA[Sélectionnez la langue dans laquelle copier le bloc. Vous pouvez également saisir un titre et une description pour la copie. Tous les autres paramètres seront copiés automatiquement.]]></fr>
+        </locale>
+        <!--<editor-fold desc="Tour"-->
+        <!-- General -->
+        <locale name="tour.general.bricks.Step1.Title">
+            <fr><![CDATA[Blocs]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step1_1.Text">
+            <fr><![CDATA[Bienvenue dans la <b>visite guidée des blocs</b>.<br/><br/>Les blocs sont placés dans des zones qui varient selon le modèle.<br/><br/>Prenez un instant pour observer l’image : elle indique le nom de chaque zone. Cliquez dessus pour l’agrandir.<br/>]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step1_2.Text">
+            <fr><![CDATA[<br/><br/><a target="_blank" href="https://www.quiqqer.com/Entdecken/Was-kann-QUIQQER/Das-bringt-es-mit/Bausteine">FAQ : zones de blocs</a>]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step2.Text">
+            <fr><![CDATA[Commençons par créer un bloc.<br/>Le menu de gestion des blocs se trouve dans <b>Administration</b>.]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step3.Text">
+            <fr><![CDATA[Sélectionnez <b>Gestion des blocs</b>…]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step4.Text">
+            <fr><![CDATA[Voici le panneau des blocs.<br/>Vous pouvez y gérer vos blocs sous forme de liste.]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step5.Text">
+            <fr><![CDATA[Cliquez sur <b>Ajouter un bloc</b> pour en créer un.]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step6.Text">
+            <fr><![CDATA[Une fenêtre s’est ouverte pour indiquer le <b>titre</b> et le <b>type</b> du bloc…]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step7.Text">
+            <fr><![CDATA[Sélectionnez dans la liste, par exemple, le <b>bloc :<br/>Formulaire de contact simple</b>…]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step8.Text">
+            <fr><![CDATA[Choisissez maintenant un titre explicite pour ce bloc.]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step9.Text">
+            <fr><![CDATA[Cliquez sur <b>Valider</b> pour confirmer les données.]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step10.Text">
+            <fr><![CDATA[Le panneau du nouveau bloc s’ouvre ensuite automatiquement.]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step11.Text">
+            <fr><![CDATA[Dans <b>Informations</b>, vous trouverez :<ul><li>le <b>titre</b> du bloc</li><li>un champ pour ajouter une <b>description</b></li><li>et le <b>type de bloc</b></li></ul>]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step12_1.Text">
+            <fr><![CDATA[Dans <b>Propriétés</b>, vous pouvez définir :<ul><li>les <b>zones</b> où le bloc peut être placé</li><li>les paramètres modifiables par les utilisateurs du système de gestion de contenu (CMS)</li></ul>]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step12_2.Text">
+            <fr><![CDATA[Cliquez sur <b>Ajouter une zone de blocs</b>…]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step12_3.Text">
+            <fr><![CDATA[La <b>fenêtre des zones de blocs</b> affiche toutes les zones disponibles. Maintenez la touche <b>CTRL</b> enfoncée pour en sélectionner plusieurs.]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step12_4.Text">
+            <fr><![CDATA[Pour cet exemple, sélectionnez la <b>zone de blocs du pied de page</b>…]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step12_5.Text">
+            <fr><![CDATA[…puis confirmez avec <b>Appliquer</b>.]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step13.Text">
+            <fr><![CDATA[Les <b>paramètres</b> dépendent du type de bloc. Ils comprennent notamment :<ul><li>le <b>titre</b></li><li>la <b>taille du bloc</b> : hauteur et largeur</li><li>des classes <b>CSS</b> supplémentaires, particulièrement utiles avec le CSS personnalisé</li><li>pour le bloc Google Maps, la rue, le code postal, la ville et le zoom</li></ul>]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step14.Text">
+            <fr><![CDATA[Dans <b>Contenu</b>, un éditeur visuel permet de rédiger le contenu du bloc.]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step15.Text">
+            <fr><![CDATA[N’oubliez pas d’<b>enregistrer</b> les paramètres…]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step16.Text">
+            <fr><![CDATA[…puis fermez l’éditeur de ce bloc.]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step17.Text">
+            <fr><![CDATA[Nous pouvons maintenant insérer le formulaire de contact dans les zones d’une page.<br/>Ouvrons la page d’accueil du projet par défaut (<b>Main-Project</b>).]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step17_2.Text">
+            <fr><![CDATA[Vous pouvez ajouter ces blocs à n’importe quelle page de vos projets.]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step18.Text">
+            <fr><![CDATA[Sélectionnez l’entrée <b>Blocs</b>.]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step18_2.Text">
+            <fr><![CDATA[Ce menu permet de placer des blocs aux emplacements représentés à droite.]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step19.Text">
+            <fr><![CDATA[Cliquez ici pour ajouter le formulaire de contact au pied de la page d’accueil.]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step20.Text">
+            <fr><![CDATA[Sélectionnez ici votre formulaire de contact en cliquant dessus.]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step21.Text">
+            <fr><![CDATA[Nous pouvons ensuite modifier les <b>paramètres d’héritage</b> du bloc.]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step22.Text">
+            <fr><![CDATA[Si vous cochez cette case, toutes les sous-pages hériteront du bloc dans leur pied de page.<br/>Ici, cela concerne toutes les pages du projet, puisqu’elles dépendent de la page d’accueil.]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step23.Text">
+            <fr><![CDATA[Confirmez les paramètres.]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step24.Text">
+            <fr><![CDATA[Vous pouvez ici <b>retirer</b> le bloc de la page.]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step25.Text">
+            <fr><![CDATA[L’<b>aperçu</b> permet de voir les modifications apportées à votre page.]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step26.Text">
+            <fr><![CDATA[Le résultat vous convient ?<br/>N’oubliez pas d’<b>enregistrer</b> les modifications.]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Step26.Text">
+            <fr><![CDATA[<b>Félicitations !</b><br/>Vous avez terminé la visite guidée des blocs.]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.img.altText">
+            <fr><![CDATA[Illustration des différentes zones où des blocs peuvent être insérés.]]></fr>
+        </locale>
+        <!-- Bricks Buttons -->
+        <locale name="tour.general.bricks.Button.Ende">
+            <fr><![CDATA[Quitter]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Button.Abbruch">
+            <fr><![CDATA[Annuler]]></fr>
+        </locale>
+        <locale name="tour.general.bricks.Button.Weiter">
+            <fr><![CDATA[Continuer]]></fr>
+        </locale>
+        <!--</editor-fold>-->
+        <locale name="window.brick.select.title">
+            <fr><![CDATA[Sélection du bloc]]></fr>
+        </locale>
+    </groups>
+    <groups name="quiqqer/bricks" datatype="js,php">
+        <locale name="brick.control.navigation.setting.content">
+            <fr><![CDATA[Texte au-dessus du formulaire de contact]]></fr>
+        </locale>
+        <locale name="brick.control.sidebox1.setting.site">
+            <fr><![CDATA[Ajouter des pages]]></fr>
+        </locale>
+        <locale name="brick.control.setting.showTitle">
+            <fr><![CDATA[Afficher les titres des pages]]></fr>
+        </locale>
+        <locale name="brick.control.setting.showImage">
+            <fr><![CDATA[Afficher les images des pages]]></fr>
+        </locale>
+        <locale name="brick.control.setting.showShort">
+            <fr><![CDATA[Afficher les descriptions courtes des pages]]></fr>
+        </locale>
+        <locale name="brick.control.setting.showContent">
+            <fr><![CDATA[Afficher le contenu des pages]]></fr>
+        </locale>
+        <locale name="brick.control.sidebox2.setting.site">
+            <fr><![CDATA[Ajouter des pages]]></fr>
+        </locale>
+        <locale name="brick.control.sidebox3.setting.site">
+            <fr><![CDATA[Ajouter des pages]]></fr>
+        </locale>
+        <locale name="SocialBox.title">
+            <fr><![CDATA[Titre du bloc]]></fr>
+        </locale>
+        <locale name="SocialBox.socialList">
+            <fr><![CDATA[Liens vers les réseaux sociaux]]></fr>
+        </locale>
+        <locale name="exception.brick.has.no.title">
+            <fr><![CDATA[Ajoutez un titre.]]></fr>
+        </locale>
+        <locale name="exception.brick.title.already.exists">
+            <fr><![CDATA[Un bloc intitulé « [brickTitle] » existe déjà. Les titres identiques compliquent la gestion. Choisissez un autre titre pour ce bloc.]]></fr>
+        </locale>
+        <locale name="exception.brick.createFromData.brick.type.not.found">
+            <fr><![CDATA[Le type ou le nom du bloc est introuvable dans les données importées.]]></fr>
+        </locale>
+        <locale name="exception.brick.createFromData.invalid.data">
+            <fr><![CDATA[Le texte collé n’est pas valide.]]></fr>
+        </locale>
+        <locale name="exception.brick.createFromData.brick.type.not.found.in.quiqqer">
+            <fr><![CDATA[Impossible d’importer le bloc. Le type de bloc [brickType] n’existe pas dans cette installation de QUIQQER.]]></fr>
+        </locale>
+        <locale name="addBrickWindow.aside.title">
+            <fr><![CDATA[Rechercher des blocs]]></fr>
+        </locale>
+        <locale name="addBrickWindow.aside.desc">
+            <fr><![CDATA[Parcourez les blocs ou créez-en un à partir de données JSON.]]></fr>
+        </locale>
+        <locale name="addBrickWindow.aside.toolbar.btn.import.title">
+            <fr><![CDATA[Importer un bloc depuis JSON]]></fr>
+        </locale>
+        <locale name="addBrickWindow.aside.toolbar.input.placeholder">
+            <fr><![CDATA[Rechercher un bloc…]]></fr>
+        </locale>
+        <locale name="addBrickWindow.aside.toolbar.select.title">
+            <fr><![CDATA[Filtre par paquet]]></fr>
+        </locale>
+        <locale name="addBrickWindow.aside.toolbar.select.option.all">
+            <fr><![CDATA[Tous]]></fr>
+        </locale>
+        <locale name="addBrickWindow.aside.toolbar.keyboardNavigationDescription">
+            <fr><![CDATA[Parcourir la sélection]]></fr>
+        </locale>
+        <locale name="addBrickWindow.aside.toolbar.keyboardCreateDescription">
+            <fr><![CDATA[Crée le bloc sélectionné]]></fr>
+        </locale>
+        <locale name="addBrickWindow.aside.toolbar.keyboardImportText">
+            <fr><![CDATA[Importer un bloc JSON]]></fr>
+        </locale>
+        <locale name="addBrickWindow.aside.toolbar.shortcuts.show">
+            <fr><![CDATA[Afficher l’aide clavier]]></fr>
+        </locale>
+        <locale name="addBrickWindow.aside.toolbar.shortcuts.hide">
+            <fr><![CDATA[Masquer l’aide clavier]]></fr>
+        </locale>
+        <locale name="addBrickWindow.aside.toolbar.shortcuts.label">
+            <fr><![CDATA[Raccourcis]]></fr>
+        </locale>
+        <locale name="addBrickWindow.deprecated.badge">
+            <fr><![CDATA[Obsolète]]></fr>
+        </locale>
+        <locale name="addBrickWindow.recommendedText.badge">
+            <fr><![CDATA[Recommandé <i class="fa-regular fa-star"></i>]]></fr>
+        </locale>
+        <locale name="addBrickWindow.aside.footer.toggle.deprecated.show">
+            <fr><![CDATA[Afficher les blocs obsolètes]]></fr>
+        </locale>
+        <locale name="addBrickWindow.aside.footer.toggle.deprecated.hide">
+            <fr><![CDATA[Masquer les blocs obsolètes]]></fr>
+        </locale>
+        <locale name="addBrickWindow.aside.toolbar.count.single">
+            <fr><![CDATA[bloc trouvé]]></fr>
+        </locale>
+        <locale name="addBrickWindow.aside.toolbar.count.multi">
+            <fr><![CDATA[Blocs trouvés]]></fr>
+        </locale>
+        <locale name="addBrickWindow.aside.list.empty">
+            <fr><![CDATA[Aucun bloc correspondant trouvé]]></fr>
+        </locale>
+        <locale name="addBrickWindow.details.btn.add">
+            <fr><![CDATA[Sélectionner]]></fr>
+        </locale>
+        <locale name="addBrickWindow.details.brickTypeContent.title">
+            <fr><![CDATA[Contenu simple]]></fr>
+        </locale>
+        <locale name="addBrickWindow.details.brickTypeContent.desc">
+            <fr><![CDATA[Ce bloc affiche uniquement son contenu. Il convient aussi bien aux structures HTML personnalisées complexes qu’aux textes simples.]]></fr>
+        </locale>
+        <locale name="addBrickWindow.details.section.info">
+            <fr><![CDATA[Paquet et informations]]></fr>
+        </locale>
+        <locale name="addBrickWindow.details.section.desc">
+            <fr><![CDATA[Description]]></fr>
+        </locale>
+        <locale name="addBrickWindow.details.section.gallery">
+            <fr><![CDATA[Images supplémentaires]]></fr>
+        </locale>
+        <locale name="addBrickWindow.overlay.btn.cancel">
+            <fr><![CDATA[Annuler]]></fr>
+        </locale>
+        <locale name="addBrickWindow.overlay.create.title">
+            <fr><![CDATA[Créer un bloc]]></fr>
+        </locale>
+        <locale name="addBrickWindow.overlay.create.desc.title">
+            <fr><![CDATA[Vous allez créer le bloc suivant :]]></fr>
+        </locale>
+        <locale name="addBrickWindow.overlay.create.desc.label.name">
+            <fr><![CDATA[Nom]]></fr>
+        </locale>
+        <locale name="addBrickWindow.overlay.create.desc.label.type">
+            <fr><![CDATA[Type]]></fr>
+        </locale>
+        <locale name="addBrickWindow.overlay.create.desc">
+            <fr><![CDATA[Saisissez un nom unique, encore inutilisé, qui décrive idéalement le rôle du bloc.]]></fr>
+        </locale>
+        <locale name="addBrickWindow.overlay.create.input.placeholder">
+            <fr><![CDATA[Titre]]></fr>
+        </locale>
+        <locale name="addBrickWindow.overlay.create.btn.create">
+            <fr><![CDATA[Créer un bloc]]></fr>
+        </locale>
+        <locale name="addBrickWindow.overlay.create.error.noProject">
+            <fr><![CDATA[Sélectionnez d’abord un projet et une langue.]]></fr>
+        </locale>
+        <locale name="addBrickWindow.overlay.create.error.brickType">
+            <fr><![CDATA[Sélectionnez d’abord un type de bloc.]]></fr>
+        </locale>
+        <locale name="addBrickWindow.overlay.create.error.missingTitle">
+            <fr><![CDATA[Saisissez un titre.]]></fr>
+        </locale>
+        <locale name="addBrickWindow.overlay.createFromData.title">
+            <fr><![CDATA[Créer un bloc depuis JSON]]></fr>
+        </locale>
+        <locale name="addBrickWindow.overlay.createFromData.desc">
+            <fr><![CDATA[Collez les données du bloc au format JSON dans le champ.]]></fr>
+        </locale>
+        <locale name="addBrickWindow.overlay.createFromData.btn.import">
+            <fr><![CDATA[Importer]]></fr>
+        </locale>
+        <locale name="addBrickWindow.overlay.createFromData.info.project">
+            <fr><![CDATA[<strong>Adapter le nom du projet</strong><br>Si le nom du projet dans le JSON ne correspond pas au projet sélectionné, il sera ajusté automatiquement. Décochez la case si vous ne souhaitez pas cette modification.]]></fr>
+        </locale>
+        <locale name="addBrickWindow.overlay.createFromData.info.lang">
+            <fr><![CDATA[<strong>Adapter la langue</strong><br>Si la langue dans le JSON ne correspond pas à la langue sélectionnée, elle sera ajustée automatiquement. Décochez la case si vous ne souhaitez pas cette modification.]]></fr>
+        </locale>
+        <locale name="addBrickWindow.overlay.createFromData.info.general">
+            <fr><![CDATA[<strong>Attention :</strong> Après la création du bloc, vous devez adapter manuellement les liens vers les pages internes et les images, ainsi que les images utilisées dans ses paramètres. Cette étape ne peut pas être automatisée.]]></fr>
+        </locale>
+        <locale name="addBrickWindow.overlay.createFromData.btn.paste">
+            <fr><![CDATA[Coller les données]]></fr>
+        </locale>
+        <locale name="addBrickWindow.overlay.createFromData.error.pasteNotAvailable">
+            <fr><![CDATA[Le presse-papiers n’est pas disponible dans ce navigateur.]]></fr>
+        </locale>
+        <locale name="addBrickWindow.overlay.createFromData.error.pasteError">
+            <fr><![CDATA[Impossible de lire le presse-papiers.]]></fr>
+        </locale>
+        <locale name="addBrickWindow.overlay.createFromData.error.empty">
+            <fr><![CDATA[Collez les données JSON.]]></fr>
+        </locale>
+        <locale name="addBrickWindow.overlay.createFromData.error.invalidJson">
+            <fr><![CDATA[JSON non valide. Vérifiez la syntaxe.]]></fr>
+        </locale>
+        <locale name="addBrickWindow.overlay.createFromData.error.invalidObject">
+            <fr><![CDATA[Données JSON non valides. Un objet est attendu.]]></fr>
+        </locale>
+        <locale name="addBrickWindow.overlay.createFromData.error.missingAttributes">
+            <fr><![CDATA[Données non valides. Un objet avec « attributes » est attendu.]]></fr>
+        </locale>
+        <locale name="addBrickWindow.overlay.createFromData.error.failed">
+            <fr><![CDATA[L’importation a échoué.]]></fr>
+        </locale>
+        <locale name="brick.control.googlemaps.title">
+            <fr><![CDATA[Carte]]></fr>
+        </locale>
+        <locale name="brick.control.googlemaps.description">
+            <fr><![CDATA[Paramètres de la carte]]></fr>
+        </locale>
+        <!-- Content Switcher -->
+        <locale name="bricks.ContentSwitcher.title">
+            <fr><![CDATA[Contenu alterné]]></fr>
+        </locale>
+        <locale name="bricks.ContentSwitcher.description">
+            <fr><![CDATA[Le texte et l’image alternent à gauche et à droite.]]></fr>
+        </locale>
+        <locale name="ContentSwitcher.title">
+            <fr><![CDATA[Titre du bloc]]></fr>
+        </locale>
+        <locale name="ContentSwitcher.startImgOnLeft">
+            <fr><![CDATA[Commencer avec l’image à gauche]]></fr>
+        </locale>
+        <locale name="ContentSwitcher.entries">
+            <fr><![CDATA[Entrées]]></fr>
+        </locale>
+        <!-- Customer Reviews -->
+        <locale name="bricks.customerReviews.title">
+            <fr><![CDATA[Avis clients]]></fr>
+        </locale>
+        <locale name="bricks.customerReviews.description">
+            <fr><![CDATA[Permet d’ajouter des avis clients et de les afficher sur le site.]]></fr>
+        </locale>
+        <locale name="bricks.customerReviews.showAvatar">
+            <fr><![CDATA[Afficher l’image (avatar)]]></fr>
+        </locale>
+        <locale name="bricks.customerReviews.template">
+            <fr><![CDATA[Modèle]]></fr>
+        </locale>
+        <locale name="bricks.customerReviews.template.wideBoxes">
+            <fr><![CDATA[Encadrés larges]]></fr>
+        </locale>
+        <locale name="bricks.customerReviews.template.smallBoxes">
+            <fr><![CDATA[Petits encadrés]]></fr>
+        </locale>
+        <locale name="bricks.customerReviews.random">
+            <fr><![CDATA[Sélection aléatoire]]></fr>
+        </locale>
+        <locale name="bricks.customerReviews.random.off">
+            <fr><![CDATA[Désactivée (afficher toutes les entrées)]]></fr>
+        </locale>
+        <locale name="bricks.customerReviews.random.1">
+            <fr><![CDATA[Afficher 1 entrée au maximum]]></fr>
+        </locale>
+        <locale name="bricks.customerReviews.random.2">
+            <fr><![CDATA[Afficher 2 entrées au maximum]]></fr>
+        </locale>
+        <locale name="bricks.customerReviews.random.3">
+            <fr><![CDATA[Afficher 3 entrées au maximum]]></fr>
+        </locale>
+        <locale name="bricks.customerReviews.random.4">
+            <fr><![CDATA[Afficher 4 entrées au maximum]]></fr>
+        </locale>
+        <locale name="bricks.customerReviews.random.5">
+            <fr><![CDATA[Afficher 5 entrées au maximum]]></fr>
+        </locale>
+        <locale name="bricks.customerReviews.random.6">
+            <fr><![CDATA[Afficher 6 entrées au maximum]]></fr>
+        </locale>
+        <locale name="bricks.customerReviews.random.7">
+            <fr><![CDATA[Afficher 7 entrées au maximum]]></fr>
+        </locale>
+        <locale name="bricks.customerReviews.random.8">
+            <fr><![CDATA[Afficher 8 entrées au maximum]]></fr>
+        </locale>
+        <locale name="bricks.customerReviews.random.9">
+            <fr><![CDATA[Afficher 9 entrées au maximum]]></fr>
+        </locale>
+        <locale name="bricks.customerReviews.random.10">
+            <fr><![CDATA[Afficher 10 entrées au maximum]]></fr>
+        </locale>
+        <locale name="bricks.customerReviews.entries">
+            <fr><![CDATA[Avis]]></fr>
+        </locale>
+        <!-- Customer Reviews Slider -->
+        <locale name="bricks.customerReviewsSlider.title">
+            <fr><![CDATA[Diaporama d’avis clients]]></fr>
+        </locale>
+        <locale name="bricks.customerReviewsSlider.description">
+            <fr><![CDATA[Affiche les avis clients dans un diaporama.]]></fr>
+        </locale>
+        <locale name="bricks.customerReviewsSlider.template">
+            <fr><![CDATA[Modèle]]></fr>
+        </locale>
+        <locale name="bricks.customerReviewsSlider.template.default">
+            <fr><![CDATA[Par défaut]]></fr>
+        </locale>
+        <locale name="bricks.customerReviewsSlider.template.templateOne">
+            <fr><![CDATA[Modèle 1]]></fr>
+        </locale>
+        <locale name="bricks.customerReviewsSlider.template.templateOne">
+            <fr><![CDATA[Modèle 1]]></fr>
+        </locale>
+        <locale name="bricks.customerReviewsSlider.perView">
+            <fr><![CDATA[Nombre d’entrées visibles]]></fr>
+        </locale>
+        <locale name="bricks.customerReviewsSlider.perView.desc">
+            <fr><![CDATA[Définit le nombre d’avis visibles simultanément. La valeur par défaut est 2 : deux avis sont affichés à la fois. <strong>Attention :</strong> Tous les modèles ne prennent pas en charge ce réglage.]]></fr>
+        </locale>
+        <locale name="bricks.customerReviewsSlider.gap">
+            <fr><![CDATA[Espacement entre les diapositives]]></fr>
+        </locale>
+        <locale name="bricks.customerReviewsSlider.autoplay">
+            <fr><![CDATA[Lecture automatique]]></fr>
+        </locale>
+        <locale name="bricks.customerReviewsSlider.delay">
+            <fr><![CDATA[Délai avant la diapositive suivante]]></fr>
+        </locale>
+        <locale name="bricks.customerReviewsSlider.delay.desc">
+            <fr><![CDATA[Ce réglage ne fonctionne que si la lecture automatique est activée.]]></fr>
+        </locale>
+        <locale name="bricks.customerReviewsSlider.arrows">
+            <fr><![CDATA[Afficher les flèches de navigation]]></fr>
+        </locale>
+        <locale name="bricks.customerReviewsSlider.height">
+            <fr><![CDATA[Hauteur du diaporama]]></fr>
+        </locale>
+        <locale name="bricks.customerReviewsSlider.height.fixed">
+            <fr><![CDATA[Fixe]]></fr>
+        </locale>
+        <locale name="bricks.customerReviewsSlider.height.variable">
+            <fr><![CDATA[Variable]]></fr>
+        </locale>
+        <locale name="bricks.customerReviewsSlider.settings.entries">
+            <fr><![CDATA[Avis]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsSlider.settings.createPopup.disable">
+            <fr><![CDATA[Désactiver l’entrée]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsSlider.settings.createPopup.avatar">
+            <fr><![CDATA[Avatar]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsSlider.settings.createPopup.customerName">
+            <fr><![CDATA[Nom du client]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsSlider.settings.createPopup.addition">
+            <fr><![CDATA[Information complémentaire (p. ex. fonction)]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsSlider.settings.createPopup.url">
+            <fr><![CDATA[Adresse web]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsSlider.settings.createPopup.urlTitle">
+            <fr><![CDATA[Libellé alternatif pour le lien web (facultatif)]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsSlider.settings.createPopup.review">
+            <fr><![CDATA[Avis]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsSlider.create.isDisabled.short">
+            <fr><![CDATA[Désactivé]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsSlider.create.avatar.short">
+            <fr><![CDATA[Avatar]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsSlider.create.customerName.short">
+            <fr><![CDATA[Nom du client]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsSlider.create.addition.short">
+            <fr><![CDATA[Information complémentaire]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsSlider.create.url.short">
+            <fr><![CDATA[Adresse web]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsSlider.create.urlTitle.short">
+            <fr><![CDATA[Libellé du lien web]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsSlider.create.review.short">
+            <fr><![CDATA[Avis]]></fr>
+        </locale>
+        <!-- Customer Reviews Flow -->
+        <locale name="bricks.customerReviewsFlow.title">
+            <fr><![CDATA[Défilement continu d’avis clients]]></fr>
+        </locale>
+        <locale name="bricks.customerReviewsFlow.description">
+            <fr><![CDATA[<p>Ce bloc affiche des <strong>avis clients dans des lignes à défilement automatique</strong>. Les entrées se déplacent en continu et conviennent particulièrement aux pages d’accueil, pages de destination et sections de confiance.</p><ul><li><strong>Plusieurs lignes :</strong> Configurez une ou plusieurs lignes remplies automatiquement d’avis.</li><li><strong>Mouvement automatique :</strong> Les avis défilent en continu sans clic.</li><li><strong>Direction flexible :</strong> Toutes les lignes peuvent aller dans le même sens ou alterner leur direction.</li><li><strong>Avis personnalisés :</strong> Gérez directement dans le bloc l’image, le nom, le complément, le libellé du lien, le lien et le texte de l’avis.</li><li><strong>Réglages précis :</strong> Ajustez la vitesse, les espacements sur ordinateur et mobile et le comportement au survol.</li><li><strong>Preuve sociale :</strong> Présentez commentaires et témoignages de façon compacte et dynamique.</li></ul><p>Ce bloc utilise des lignes à défilement automatique, et non un diaporama classique avec flèches ou points.</p>]]></fr>
+        </locale>
+        <locale name="bricks.customerReviewsFlow.rows">
+            <fr><![CDATA[Nombre de lignes]]></fr>
+        </locale>
+        <locale name="bricks.customerReviewsFlow.rows.desc">
+            <fr><![CDATA[Les avis sont répartis automatiquement entre les lignes configurées.]]></fr>
+        </locale>
+        <locale name="bricks.customerReviewsFlow.animationDirection">
+            <fr><![CDATA[Direction de l’animation]]></fr>
+        </locale>
+        <locale name="bricks.customerReviewsFlow.animationDirection.alternate">
+            <fr><![CDATA[Alterner par ligne]]></fr>
+        </locale>
+        <locale name="bricks.customerReviewsFlow.settings.entries">
+            <fr><![CDATA[Avis]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.settings.createPopup.disable">
+            <fr><![CDATA[Désactiver l’entrée]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.settings.createPopup.avatar">
+            <fr><![CDATA[Avatar]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.settings.createPopup.customerName">
+            <fr><![CDATA[Nom du client]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.settings.createPopup.addition">
+            <fr><![CDATA[Information complémentaire (p. ex. fonction)]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.settings.createPopup.url">
+            <fr><![CDATA[Adresse web]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.settings.createPopup.urlTitle">
+            <fr><![CDATA[Libellé alternatif pour le lien web (facultatif)]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.settings.createPopup.review">
+            <fr><![CDATA[Avis]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.create.isDisabled.short">
+            <fr><![CDATA[Désactivé]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.create.avatar.short">
+            <fr><![CDATA[Avatar]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.create.customerName.short">
+            <fr><![CDATA[Nom du client]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.create.addition.short">
+            <fr><![CDATA[Information complémentaire]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.create.url.short">
+            <fr><![CDATA[Adresse web]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.create.urlTitle.short">
+            <fr><![CDATA[Libellé du lien web]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.customerReviewsFlow.create.review.short">
+            <fr><![CDATA[Avis]]></fr>
+        </locale>
+        <!-- Simple Google Maps -->
+        <locale name="brick.control.simplegooglemaps.title">
+            <fr><![CDATA[Google Maps simple]]></fr>
+        </locale>
+        <locale name="brick.control.simplegooglemaps.description">
+            <fr><![CDATA[Paramètres de la carte]]></fr>
+        </locale>
+        <locale name="brick.control.simplegooglemaps.settings.preventLoadMap">
+            <fr><![CDATA[Désactiver le chargement automatique]]></fr>
+        </locale>
+        <locale name="brick.control.simplegooglemaps.settings.preventLoadMap.desc">
+            <fr><![CDATA[L’utilisateur doit autoriser le chargement de la carte Google en cliquant sur un bouton. S’il a déjà accepté les cookies nécessaires et que le module « QUIQQER - GDPR » (<code>quiqqer/gdpr</code>) est installé, la carte se charge automatiquement sans nouvelle demande de consentement.]]></fr>
+        </locale>
+        <locale name="brick.control.simplegooglemaps.settings.template">
+            <fr><![CDATA[Modèle]]></fr>
+        </locale>
+        <locale name="brick.control.simplegooglemaps.settings.template.standard">
+            <fr><![CDATA[Contenu au-dessus de la carte]]></fr>
+        </locale>
+        <locale name="brick.control.simplegooglemaps.settings.template.nextToEachOther">
+            <fr><![CDATA[Côte à côte : carte à gauche, contenu à droite]]></fr>
+        </locale>
+        <locale name="brick.control.simplegooglemaps.settings.template.nextToEachOther.right">
+            <fr><![CDATA[Côte à côte : carte à droite, contenu à gauche]]></fr>
+        </locale>
+        <locale name="brick.control.simplegooglemaps.settings.place">
+            <fr><![CDATA[Lieu Google]]></fr>
+        </locale>
+        <locale name="brick.control.simplegooglemaps.settings.title">
+            <fr><![CDATA[Titre]]></fr>
+        </locale>
+        <locale name="brick.control.simplegooglemaps.settings.street">
+            <fr><![CDATA[Rue]]></fr>
+        </locale>
+        <locale name="brick.control.simplegooglemaps.settings.zip">
+            <fr><![CDATA[Code postal]]></fr>
+        </locale>
+        <locale name="brick.control.simplegooglemaps.settings.city">
+            <fr><![CDATA[Ville]]></fr>
+        </locale>
+        <locale name="brick.control.simplegooglemaps.settings.zoom">
+            <fr><![CDATA[Zoom]]></fr>
+        </locale>
+        <locale name="brick.control.simplegooglemaps.settings.zoom.desc">
+            <fr><![CDATA[La valeur par défaut est 15. Plus le nombre est élevé, plus la carte est agrandie. Les valeurs vont de 0 (le monde entier) à 21 (bâtiments individuels). Le maximum peut varier selon les données cartographiques disponibles pour le lieu sélectionné.]]></fr>
+        </locale>
+        <locale name="brick.control.simplegooglemaps.settings.api">
+            <fr><![CDATA[Clé API]]></fr>
+        </locale>
+        <locale name="brick.control.simplegooglemaps.frontend.buttonShow">
+            <fr><![CDATA[Activer Google Maps]]></fr>
+        </locale>
+        <!-- Box Content -->
+        <locale name="bricks.BoxContent.title">
+            <fr><![CDATA[Texte dans des encadrés]]></fr>
+        </locale>
+        <locale name="bricks.BoxContent.description">
+            <fr><![CDATA[Affiche du texte dans des encadrés disposés sur une ligne.]]></fr>
+        </locale>
+        <locale name="bricks.BoxContent.centerText">
+            <fr><![CDATA[Centrer le texte]]></fr>
+        </locale>
+        <locale name="BoxContent.entries">
+            <fr><![CDATA[Entrées]]></fr>
+        </locale>
+        <locale name="control.boxContent.entries.disable">
+            <fr><![CDATA[Désactiver l’entrée]]></fr>
+        </locale>
+        <locale name="control.boxContent.entries.title">
+            <fr><![CDATA[Titre]]></fr>
+        </locale>
+        <locale name="control.boxContent.entries.text">
+            <fr><![CDATA[Texte]]></fr>
+        </locale>
+        <locale name="control.boxContent.entries.delete.title">
+            <fr><![CDATA[Voulez-vous vraiment retirer cette diapositive ?]]></fr>
+        </locale>
+        <locale name="control.boxContent.entries.delete.information">
+            <fr><![CDATA[La diapositive ne pourra pas être restaurée]]></fr>
+        </locale>
+        <locale name="control.boxContent.entries.edit.title">
+            <fr><![CDATA[Modifier l’entrée]]></fr>
+        </locale>
+        <locale name="control.boxContent.entries.add.title">
+            <fr><![CDATA[Ajouter une entrée]]></fr>
+        </locale>
+        <!-- Box Content Advanced -->
+        <locale name="bricks.BoxContentAdvanced.title">
+            <fr><![CDATA[Texte et image dans des encadrés]]></fr>
+        </locale>
+        <locale name="bricks.BoxContentAdvanced.description">
+            <fr><![CDATA[Affiche le contenu dans des encadrés côte à côte. Le bloc propose plusieurs modèles.]]></fr>
+        </locale>
+        <locale name="bricks.BoxContentAdvanced.template">
+            <fr><![CDATA[Modèle]]></fr>
+        </locale>
+        <locale name="bricks.BoxContentAdvanced.template.standard">
+            <fr><![CDATA[Standard]]></fr>
+        </locale>
+        <locale name="bricks.BoxContentAdvanced.template.boxWithShadow">
+            <fr><![CDATA[Encadrés modernes avec ombre]]></fr>
+        </locale>
+        <locale name="bricks.BoxContentAdvanced.centerText">
+            <fr><![CDATA[Centrer le titre et le contenu]]></fr>
+        </locale>
+        <locale name="bricks.BoxContentAdvanced.entriesPerLine">
+            <fr><![CDATA[Nombre d’encadrés par ligne]]></fr>
+        </locale>
+        <locale name="bricks.BoxContentAdvanced.entries">
+            <fr><![CDATA[Entrées]]></fr>
+        </locale>
+        <locale name="bricks.BoxContentAdvanced.entries.addButton">
+            <fr><![CDATA[Ajouter une entrée]]></fr>
+        </locale>
+        <locale name="bricks.BoxContentAdvanced.entries.settings.entryImage">
+            <fr><![CDATA[Image]]></fr>
+        </locale>
+        <locale name="bricks.BoxContentAdvanced.entries.settings.entryUrl">
+            <fr><![CDATA[URL de la page]]></fr>
+        </locale>
+        <locale name="bricks.BoxContentAdvanced.entries.settings.entryOrder">
+            <fr><![CDATA[Priorité]]></fr>
+        </locale>
+        <locale name="bricks.BoxContentAdvanced.entries.settings.entryTitle">
+            <fr><![CDATA[Titre]]></fr>
+        </locale>
+        <locale name="bricks.BoxContentAdvanced.entries.settings.entrySubTitle">
+            <fr><![CDATA[Sous-titre]]></fr>
+        </locale>
+        <locale name="bricks.BoxContentAdvanced.entries.settings.entryContent">
+            <fr><![CDATA[Texte]]></fr>
+        </locale>
+        <!-- Image Brick -->
+        <locale name="bricks.control.image.title">
+            <fr><![CDATA[Bannière d’image]]></fr>
+        </locale>
+        <locale name="bricks.control.image.description">
+            <fr><![CDATA[Permet d’ajouter une image avec un lien facultatif.]]></fr>
+        </locale>
+        <locale name="bricks.control.image.link">
+            <fr><![CDATA[Lien]]></fr>
+        </locale>
+        <locale name="bricks.control.image.linkTarget">
+            <fr><![CDATA[Cible du lien]]></fr>
+        </locale>
+        <locale name="bricks.control.image.linkTarget.description">
+            <fr><![CDATA[Définit si le lien s’ouvre dans la même fenêtre ou dans une nouvelle. « noopener » est ajouté automatiquement pour une nouvelle fenêtre.]]></fr>
+        </locale>
+        <locale name="bricks.control.image.linkTarget.sameWindow">
+            <fr><![CDATA[Ouvrir dans la même fenêtre]]></fr>
+        </locale>
+        <locale name="bricks.control.image.linkTarget.newWindow">
+            <fr><![CDATA[Ouvrir dans une nouvelle fenêtre]]></fr>
+        </locale>
+        <locale name="bricks.control.image.linkRel">
+            <fr><![CDATA[Relation du lien (rel)]]></fr>
+        </locale>
+        <locale name="bricks.control.image.linkRel.description">
+            <fr><![CDATA[Relation facultative entre la page actuelle et la cible du lien.]]></fr>
+        </locale>
+        <locale name="bricks.control.image.linkRel.default">
+            <fr><![CDATA[Par défaut]]></fr>
+        </locale>
+        <locale name="bricks.control.image.picture">
+            <fr><![CDATA[Sélectionner une image]]></fr>
+        </locale>
+        <locale name="bricks.control.image.altText">
+            <fr><![CDATA[Texte alternatif]]></fr>
+        </locale>
+        <locale name="bricks.control.image.altText.description">
+            <fr><![CDATA[Texte alternatif facultatif pour l’image. Si le champ est vide, le texte alternatif du média sélectionné est utilisé.]]></fr>
+        </locale>
+        <locale name="bricks.control.image.imageTitle">
+            <fr><![CDATA[Titre de l’image]]></fr>
+        </locale>
+        <locale name="bricks.control.image.imageTitle.description">
+            <fr><![CDATA[Titre facultatif affiché au survol de l’image. Si le champ est vide, le titre du média sélectionné est utilisé.]]></fr>
+        </locale>
+        <!-- sites listing -->
+        <locale name="bricks.list.title">
+            <fr><![CDATA[Liste de pages]]></fr>
+        </locale>
+        <locale name="bricks.list.description">
+            <fr><![CDATA[Liste de pages, par exemple les dernières actualités]]></fr>
+        </locale>
+        <!-- templates / layout -->
+        <locale name="brick.listTemplate">
+            <fr><![CDATA[Mise en page]]></fr>
+        </locale>
+        <!-- max sites -->
+        <locale name="brick.max">
+            <fr><![CDATA[Nombre de pages]]></fr>
+        </locale>
+        <!-- show short -->
+        <locale name="brick.showShort">
+            <fr><![CDATA[Afficher la description courte]]></fr>
+        </locale>
+        <!-- show creator -->
+        <locale name="brick.showCreator">
+            <fr><![CDATA[Afficher l’auteur]]></fr>
+        </locale>
+        <!-- show date -->
+        <locale name="brick.showDate">
+            <fr><![CDATA[Afficher la date]]></fr>
+        </locale>
+        <!-- show time -->
+        <locale name="brick.showTime">
+            <fr><![CDATA[Afficher l’heure]]></fr>
+        </locale>
+        <!-- show pagination / sheets -->
+        <locale name="brick.showSheets">
+            <fr><![CDATA[Afficher la pagination]]></fr>
+        </locale>
+        <!-- show images -->
+        <locale name="brick.showImages">
+            <fr><![CDATA[Afficher l’image]]></fr>
+        </locale>
+        <locale name="bricks.sectionTitle">
+            <fr><![CDATA[Blocs : dernières actualités]]></fr>
+        </locale>
+        <!-- Text and image -->
+        <locale name="brick.textAndImage.title">
+            <fr><![CDATA[Texte à côté de l’image]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.description">
+            <fr><![CDATA[Le texte s’affiche à côté de l’image, à droite ou à gauche.]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.image">
+            <fr><![CDATA[Image]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.imageOnLeft">
+            <fr><![CDATA[Image à gauche]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.imageShadow">
+            <fr><![CDATA[Ajouter une ombre à l’image]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.fullImageHeight">
+            <fr><![CDATA[Agrandir l’image]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.fullImageHeight.desc">
+            <fr><![CDATA[Si le texte est plus haut que l’image, l’image est agrandie à la même hauteur.]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.imageZoom">
+            <fr><![CDATA[Agrandir les images au clic]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.imageZoom.desc" html="true">
+            <fr><![CDATA[Si cette option est activée, un clic sur une image permet de l’agrandir. Cette fonction nécessite le paquet QUIQQER <code>quiqqer/gallery</code>.]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.maxImageWidth">
+            <fr><![CDATA[Largeur maximale des images]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.imageLoading">
+            <fr><![CDATA[Mode de chargement de l’image]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.imageLoading.desc">
+            <fr><![CDATA[Utilisez le chargement immédiat uniquement pour les images principales ou les images visibles en haut de page.]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.imageLoading.lazy">
+            <fr><![CDATA[Différé (chargement à la demande)]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.imageLoading.eager">
+            <fr><![CDATA[Immédiat (priorité élevée)]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.textPosition">
+            <fr><![CDATA[Position du texte]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.textPosition.top">
+            <fr><![CDATA[En haut]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.textPosition.center">
+            <fr><![CDATA[Au centre]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.textPosition.bottom">
+            <fr><![CDATA[En bas]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.textImageRatio">
+            <fr><![CDATA[Proportion entre texte et image]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.textImageRatio.30">
+            <fr><![CDATA[Texte 30 % - Image 70 %]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.textImageRatio.35">
+            <fr><![CDATA[Texte 35 % - Image 65 %]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.textImageRatio.40">
+            <fr><![CDATA[Texte 40 % - Image 60 %]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.textImageRatio.45">
+            <fr><![CDATA[Texte 45 % - Image 55 %]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.textImageRatio.50">
+            <fr><![CDATA[Texte 50 % - Image 50 % (par défaut)]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.textImageRatio.55">
+            <fr><![CDATA[Texte 55 % - Image 45 %]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.textImageRatio.60">
+            <fr><![CDATA[Texte 60 % - Image 40 %]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.textImageRatio.65">
+            <fr><![CDATA[Texte 65 % - Image 35 %]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.textImageRatio.70">
+            <fr><![CDATA[Texte 70 % - Image 30 %]]></fr>
+        </locale>
+        <!-- Text and image multiple -->
+        <locale name="brick.textAndImageMultiple.title">
+            <fr><![CDATA[Texte à côté de l’image (plusieurs sections)]]></fr>
+        </locale>
+        <locale name="brick.textAndImageMultiple.description">
+            <fr><![CDATA[Plusieurs sections associant du texte à une image.]]></fr>
+        </locale>
+        <locale name="brick.textAndImageMultiple.textPosition">
+            <fr><![CDATA[Position du texte]]></fr>
+        </locale>
+        <locale name="brick.textAndImageMultiple.textPosition.top">
+            <fr><![CDATA[En haut]]></fr>
+        </locale>
+        <locale name="brick.textAndImageMultiple.textPosition.center">
+            <fr><![CDATA[Au centre]]></fr>
+        </locale>
+        <locale name="brick.textAndImageMultiple.textPosition.bottom">
+            <fr><![CDATA[En bas]]></fr>
+        </locale>
+        <locale name="brick.textAndImageMultiple.imagePosition">
+            <fr><![CDATA[Position de l’image]]></fr>
+        </locale>
+        <locale name="brick.textAndImageMultiple.imagePosition.imageLeft">
+            <fr><![CDATA[Toutes les images à gauche]]></fr>
+        </locale>
+        <locale name="brick.textAndImageMultiple.imagePosition.imageRight">
+            <fr><![CDATA[Toutes les images à droite]]></fr>
+        </locale>
+        <locale name="brick.textAndImageMultiple.imagePosition.imageLeftAlternately">
+            <fr><![CDATA[Images alternées, en commençant à gauche]]></fr>
+        </locale>
+        <locale name="brick.textAndImageMultiple.imagePosition.imageRightAlternately">
+            <fr><![CDATA[Images alternées, en commençant à droite]]></fr>
+        </locale>
+        <locale name="brick.textAndImageMultiple.settings.entries">
+            <fr><![CDATA[Entrées]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.title">
+            <fr><![CDATA[Mise en page flexible]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.description">
+            <fr><![CDATA[<p>Ce bloc permet de concevoir des sections adaptées à votre contenu. Combinez textes, images, boutons et autres blocs dans une grille flexible qui répond à vos besoins.</p><p>Qu’il s’agisse d’une accroche compacte, d’une grande section ou d’une zone modulaire avec plusieurs points forts, MultiLayout fournit la structure adaptée sans imposer de schéma rigide.</p><ul><li><strong>Modèles flexibles :</strong> Partez d’un modèle et adaptez l’agencement à votre contenu.</li><li><strong>Zones libres :</strong> Remplissez chaque zone avec du texte, des images, des boutons ou d’autres blocs.</li><li><strong>Mises en page imbriquées :</strong> Ajoutez des structures dans une zone pour organiser le contenu plus finement.</li><li><strong>Structure responsive :</strong> Adaptez la structure aux ordinateurs, tablettes et mobiles.</li><li><strong>Ordre sur mobile :</strong> Définissez l’ordre d’affichage du contenu sur les petits écrans.</li><li><strong>Styles personnalisables :</strong> Réglez alignement, image de fond, superposition, couleurs et espacements par zone.</li><li><strong>Usages variés :</strong> Idéal pour les accroches, associations image-texte, mises en page bento et sections modulaires.</li></ul><p>Créez aussi bien de simples mises en avant que des sections complexes avec un seul bloc, directement dans l’éditeur et sans écrire de code.</p>]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.layout.1">
+            <fr><![CDATA[Mise en page 1]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.layout.2">
+            <fr><![CDATA[Mise en page 2]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.layout.3">
+            <fr><![CDATA[Mise en page 3]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.layout.4">
+            <fr><![CDATA[Mise en page 4]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.layout.5">
+            <fr><![CDATA[Mise en page 5]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.layout.6">
+            <fr><![CDATA[Mise en page 6]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.layout.7">
+            <fr><![CDATA[Mise en page 7]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.layout.8">
+            <fr><![CDATA[Mise en page 8]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.layout.9">
+            <fr><![CDATA[Mise en page 9]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.layout.10">
+            <fr><![CDATA[Mise en page 10]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.layout.11">
+            <fr><![CDATA[Mise en page 11]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.layout.12">
+            <fr><![CDATA[Mise en page 12]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.layout.13">
+            <fr><![CDATA[Mise en page 13]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.layout.14">
+            <fr><![CDATA[Mise en page 14]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.areas">
+            <fr><![CDATA[Zones]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.areaBackgroundEnabled">
+            <fr><![CDATA[Utiliser une couleur de fond pour les zones]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.areaBackgroundEnabled.desc">
+            <fr><![CDATA[Applique une couleur de fond uniforme à toutes les zones. Chaque zone peut la remplacer dans ses propres paramètres.]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.gridGap">
+            <fr><![CDATA[Espacement entre les cellules]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.gridGap.desc">
+            <fr><![CDATA[Contrôle l’espace libre entre les cellules. Les petites valeurs donnent un aspect compact, les grandes aèrent le contenu. Les préréglages s’adaptent à la largeur disponible : aucun = 0, petit = discret, normal = équilibré, grand = aéré, très grand = très aéré.]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.gridGap.option.none">
+            <fr><![CDATA[Aucun espacement]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.gridGap.option.small">
+            <fr><![CDATA[Petit (discret)]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.gridGap.option.normal">
+            <fr><![CDATA[Normal (équilibré)]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.gridGap.option.large">
+            <fr><![CDATA[Grand (aéré)]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.gridGap.option.extraLarge">
+            <fr><![CDATA[Très grand (très aéré)]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.gridGap.option.separate">
+            <fr><![CDATA[Régler séparément les espacements vertical et horizontal]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.gridRowGap">
+            <fr><![CDATA[Espacement vertical]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.gridColumnGap">
+            <fr><![CDATA[Espacement horizontal]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.tileMinHeight">
+            <fr><![CDATA[Hauteur minimale des cellules]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.tileMinHeight.desc">
+            <fr><![CDATA[Définit la hauteur minimale de chaque cellule pour garder une présentation uniforme malgré des contenus de longueurs différentes. Sans hauteur minimale, la cellule suit le contenu. L’option manuelle permet une valeur CSS comme 240px, 18rem ou 30vh.]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.tileMinHeight.option.none">
+            <fr><![CDATA[Aucune hauteur minimale]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.tileMinHeight.option.compact">
+            <fr><![CDATA[Compacte]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.tileMinHeight.option.standard">
+            <fr><![CDATA[Standard]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.tileMinHeight.option.large">
+            <fr><![CDATA[Grand]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.tileMinHeight.option.extraLarge">
+            <fr><![CDATA[Très grand]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.tileMinHeight.option.manual">
+            <fr><![CDATA[Manuel]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.tileMinHeight.value">
+            <fr><![CDATA[Valeur personnalisée de hauteur minimale]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.tileMinHeight.value.help">
+            <fr><![CDATA[Utilisé uniquement avec l’option « Manuel », par exemple 240px, 18rem ou 30vh. Les nombres sans unité sont interprétés en px.]]></fr>
+        </locale>
+        <locale name="blockSlot.mode">
+            <fr><![CDATA[Mode]]></fr>
+        </locale>
+        <locale name="blockSlot.mode.editor">
+            <fr><![CDATA[Éditeur]]></fr>
+        </locale>
+        <locale name="blockSlot.mode.brick">
+            <fr><![CDATA[Bloc]]></fr>
+        </locale>
+        <locale name="blockSlot.mode.image">
+            <fr><![CDATA[Image]]></fr>
+        </locale>
+        <locale name="blockSlot.mode.subLayout">
+            <fr><![CDATA[Mise en page imbriquée]]></fr>
+        </locale>
+        <locale name="blockSlot.mobileOrder">
+            <fr><![CDATA[Ordre sur mobile]]></fr>
+        </locale>
+        <locale name="blockSlot.mobileOrder.info">
+            <fr><![CDATA[Ordre sur mobile : [number]]]></fr>
+        </locale>
+        <locale name="blockSlot.verticalAlign">
+            <fr><![CDATA[Alignement vertical]]></fr>
+        </locale>
+        <locale name="blockSlot.verticalAlign.top">
+            <fr><![CDATA[En haut]]></fr>
+        </locale>
+        <locale name="blockSlot.verticalAlign.center">
+            <fr><![CDATA[Au centre]]></fr>
+        </locale>
+        <locale name="blockSlot.verticalAlign.bottom">
+            <fr><![CDATA[En bas]]></fr>
+        </locale>
+        <locale name="blockSlot.verticalAlign.stretch">
+            <fr><![CDATA[Pleine hauteur]]></fr>
+        </locale>
+        <locale name="blockSlot.verticalAlign.sticky">
+            <fr><![CDATA[Fixe au défilement]]></fr>
+        </locale>
+        <locale name="blockSlot.stickyOffset">
+            <fr><![CDATA[Décalage supérieur en position fixe]]></fr>
+        </locale>
+        <locale name="blockSlot.stickyOffset.help">
+            <fr><![CDATA[Distance depuis le haut lorsque la zone reste fixe. Vide = automatiquement sous la navigation. Exemples : 80px, 5rem, 6vh ; les nombres sans unité sont interprétés en px. S’applique uniquement en mode éditeur et si une zone voisine est plus haute.]]></fr>
+        </locale>
+        <locale name="blockSlot.customMinHeight.section">
+            <fr><![CDATA[Hauteur minimale]]></fr>
+        </locale>
+        <locale name="blockSlot.customMinHeight.enabled">
+            <fr><![CDATA[Utiliser une hauteur minimale personnalisée]]></fr>
+        </locale>
+        <locale name="blockSlot.customMinHeight.select">
+            <fr><![CDATA[Hauteur minimale]]></fr>
+        </locale>
+        <locale name="blockSlot.customMinHeight.value">
+            <fr><![CDATA[Valeur personnalisée]]></fr>
+        </locale>
+        <locale name="blockSlot.customMinHeight.value.help">
+            <fr><![CDATA[p. ex. 240px, 18rem, 30vh ; les nombres sans unité sont interprétés en px]]></fr>
+        </locale>
+        <locale name="blockSlot.customCss.section">
+            <fr><![CDATA[CSS personnalisé]]></fr>
+        </locale>
+        <locale name="blockSlot.customCss.classes">
+            <fr><![CDATA[Classes CSS]]></fr>
+        </locale>
+        <locale name="blockSlot.customCss.help">
+            <fr><![CDATA[Saisissez plusieurs classes séparées par des virgules, p. ex. class-a, class-b]]></fr>
+        </locale>
+        <locale name="blockSlot.customMinHeight.option.none">
+            <fr><![CDATA[Aucune hauteur minimale]]></fr>
+        </locale>
+        <locale name="blockSlot.customMinHeight.option.compact">
+            <fr><![CDATA[Compact]]></fr>
+        </locale>
+        <locale name="blockSlot.customMinHeight.option.standard">
+            <fr><![CDATA[Standard]]></fr>
+        </locale>
+        <locale name="blockSlot.customMinHeight.option.large">
+            <fr><![CDATA[Grand]]></fr>
+        </locale>
+        <locale name="blockSlot.customMinHeight.option.extraLarge">
+            <fr><![CDATA[Très grand]]></fr>
+        </locale>
+        <locale name="blockSlot.customMinHeight.option.manual">
+            <fr><![CDATA[Manuel]]></fr>
+        </locale>
+        <locale name="blockSlot.editor.empty">
+            <fr><![CDATA[Aucun contenu pour le moment]]></fr>
+        </locale>
+        <locale name="blockSlot.brick.empty">
+            <fr><![CDATA[Aucun bloc sélectionné]]></fr>
+        </locale>
+        <locale name="blockSlot.brick.untitled">
+            <fr><![CDATA[Bloc sans titre]]></fr>
+        </locale>
+        <locale name="blockSlot.image.empty">
+            <fr><![CDATA[Aucune image sélectionnée]]></fr>
+        </locale>
+        <locale name="blockSlot.subLayout.title">
+            <fr><![CDATA[Mise en page imbriquée]]></fr>
+        </locale>
+        <locale name="blockSlot.subLayout.section">
+            <fr><![CDATA[Mise en page imbriquée]]></fr>
+        </locale>
+        <locale name="blockSlot.subLayout.tileMinHeight">
+            <fr><![CDATA[Hauteur minimale des cellules]]></fr>
+        </locale>
+        <locale name="blockSlot.subLayout.tileMinHeight.value">
+            <fr><![CDATA[Valeur personnalisée]]></fr>
+        </locale>
+        <locale name="blockSlot.subLayout.tileMinHeight.value.help">
+            <fr><![CDATA[Les nombres sans unité sont interprétés en pixels, p. ex. 240 ou 15rem.]]></fr>
+        </locale>
+        <locale name="blockSlot.image.fit">
+            <fr><![CDATA[Mode d’affichage]]></fr>
+        </locale>
+        <locale name="blockSlot.image.fit.auto">
+            <fr><![CDATA[Automatique]]></fr>
+        </locale>
+        <locale name="blockSlot.image.fit.cover">
+            <fr><![CDATA[Couvrir la zone]]></fr>
+        </locale>
+        <locale name="blockSlot.image.fit.contain">
+            <fr><![CDATA[Afficher en entier]]></fr>
+        </locale>
+        <locale name="blockSlot.image.section">
+            <fr><![CDATA[Image]]></fr>
+        </locale>
+        <locale name="blockSlot.image.width">
+            <fr><![CDATA[Largeur]]></fr>
+        </locale>
+        <locale name="blockSlot.image.width.help">
+            <fr><![CDATA[p. ex. 320px, 50%, 30rem ; vide = automatique ; les nombres sans unité sont interprétés en px]]></fr>
+        </locale>
+        <locale name="blockSlot.image.height">
+            <fr><![CDATA[Hauteur]]></fr>
+        </locale>
+        <locale name="blockSlot.image.height.help">
+            <fr><![CDATA[p. ex. 320px, 50%, 30rem ; vide = automatique ; les nombres sans unité sont interprétés en px]]></fr>
+        </locale>
+        <locale name="blockSlot.image.position">
+            <fr><![CDATA[Position de l’image]]></fr>
+        </locale>
+        <locale name="blockSlot.image.position.leftTop">
+            <fr><![CDATA[En haut à gauche]]></fr>
+        </locale>
+        <locale name="blockSlot.image.position.centerTop">
+            <fr><![CDATA[En haut au centre]]></fr>
+        </locale>
+        <locale name="blockSlot.image.position.rightTop">
+            <fr><![CDATA[En haut à droite]]></fr>
+        </locale>
+        <locale name="blockSlot.image.position.leftCenter">
+            <fr><![CDATA[Au centre à gauche]]></fr>
+        </locale>
+        <locale name="blockSlot.image.position.center">
+            <fr><![CDATA[Au centre]]></fr>
+        </locale>
+        <locale name="blockSlot.image.position.rightCenter">
+            <fr><![CDATA[Au centre à droite]]></fr>
+        </locale>
+        <locale name="blockSlot.image.position.leftBottom">
+            <fr><![CDATA[En bas à gauche]]></fr>
+        </locale>
+        <locale name="blockSlot.image.position.centerBottom">
+            <fr><![CDATA[En bas au centre]]></fr>
+        </locale>
+        <locale name="blockSlot.image.position.rightBottom">
+            <fr><![CDATA[En bas à droite]]></fr>
+        </locale>
+        <locale name="blockSlot.background.section">
+            <fr><![CDATA[Image d’arrière-plan]]></fr>
+        </locale>
+        <locale name="blockSlot.background.enabled">
+            <fr><![CDATA[Utiliser une image d’arrière-plan]]></fr>
+        </locale>
+        <locale name="blockSlot.background.image">
+            <fr><![CDATA[Image d’arrière-plan]]></fr>
+        </locale>
+        <locale name="blockSlot.background.fit">
+            <fr><![CDATA[Mode d’affichage]]></fr>
+        </locale>
+        <locale name="blockSlot.background.fit.auto">
+            <fr><![CDATA[Original]]></fr>
+        </locale>
+        <locale name="blockSlot.background.fit.cover">
+            <fr><![CDATA[Couvrir la zone]]></fr>
+        </locale>
+        <locale name="blockSlot.background.fit.contain">
+            <fr><![CDATA[Afficher en entier]]></fr>
+        </locale>
+        <locale name="blockSlot.background.position">
+            <fr><![CDATA[Position]]></fr>
+        </locale>
+        <locale name="blockSlot.background.position.leftTop">
+            <fr><![CDATA[En haut à gauche]]></fr>
+        </locale>
+        <locale name="blockSlot.background.position.centerTop">
+            <fr><![CDATA[En haut au centre]]></fr>
+        </locale>
+        <locale name="blockSlot.background.position.rightTop">
+            <fr><![CDATA[En haut à droite]]></fr>
+        </locale>
+        <locale name="blockSlot.background.position.leftCenter">
+            <fr><![CDATA[Au centre à gauche]]></fr>
+        </locale>
+        <locale name="blockSlot.background.position.center">
+            <fr><![CDATA[Au centre]]></fr>
+        </locale>
+        <locale name="blockSlot.background.position.rightCenter">
+            <fr><![CDATA[Au centre à droite]]></fr>
+        </locale>
+        <locale name="blockSlot.background.position.leftBottom">
+            <fr><![CDATA[En bas à gauche]]></fr>
+        </locale>
+        <locale name="blockSlot.background.position.centerBottom">
+            <fr><![CDATA[En bas au centre]]></fr>
+        </locale>
+        <locale name="blockSlot.background.position.rightBottom">
+            <fr><![CDATA[En bas à droite]]></fr>
+        </locale>
+        <locale name="blockSlot.backgroundColor.section">
+            <fr><![CDATA[Couleur d’arrière-plan]]></fr>
+        </locale>
+        <locale name="blockSlot.backgroundColor.enabled">
+            <fr><![CDATA[Utiliser une couleur d’arrière-plan personnalisée]]></fr>
+        </locale>
+        <locale name="blockSlot.backgroundColor.color">
+            <fr><![CDATA[Couleur]]></fr>
+        </locale>
+        <locale name="blockSlot.backgroundOverlay.enabled">
+            <fr><![CDATA[Utiliser une superposition de couleur]]></fr>
+        </locale>
+        <locale name="blockSlot.backgroundOverlay.description">
+            <fr><![CDATA[Teinte l’image d’arrière-plan, par exemple pour améliorer la lisibilité du texte.]]></fr>
+        </locale>
+        <locale name="blockSlot.backgroundOverlay.color">
+            <fr><![CDATA[Couleur]]></fr>
+        </locale>
+        <locale name="blockSlot.backgroundOverlay.opacity">
+            <fr><![CDATA[Opacité]]></fr>
+        </locale>
+        <locale name="blockSlot.textColor.section">
+            <fr><![CDATA[Couleur du texte]]></fr>
+        </locale>
+        <locale name="blockSlot.textColor.enabled">
+            <fr><![CDATA[Utiliser une couleur de texte]]></fr>
+        </locale>
+        <locale name="blockSlot.link.section">
+            <fr><![CDATA[Lien]]></fr>
+        </locale>
+        <locale name="blockSlot.link.enabled">
+            <fr><![CDATA[Ajouter un lien à la cellule]]></fr>
+        </locale>
+        <locale name="blockSlot.link.href">
+            <fr><![CDATA[Définir le lien]]></fr>
+        </locale>
+        <locale name="blockSlot.link.rel">
+            <fr><![CDATA[Type de relation (rel)]]></fr>
+        </locale>
+        <locale name="blockSlot.link.rel.none">
+            <fr><![CDATA[Sans attribut rel]]></fr>
+        </locale>
+        <locale name="blockSlot.link.rel.nofollow">
+            <fr><![CDATA[nofollow]]></fr>
+        </locale>
+        <locale name="blockSlot.link.rel.noopener">
+            <fr><![CDATA[noopener]]></fr>
+        </locale>
+        <locale name="blockSlot.link.rel.noreferrer">
+            <fr><![CDATA[noreferrer]]></fr>
+        </locale>
+        <locale name="blockSlot.link.rel.noopenerNoreferrer">
+            <fr><![CDATA[noopener noreferrer]]></fr>
+        </locale>
+        <locale name="blockSlot.link.rel.nofollowNoopenerNoreferrer">
+            <fr><![CDATA[nofollow noopener noreferrer]]></fr>
+        </locale>
+        <locale name="blockSlot.link.target">
+            <fr><![CDATA[Cible]]></fr>
+        </locale>
+        <locale name="blockSlot.link.target.none">
+            <fr><![CDATA[Par défaut]]></fr>
+        </locale>
+        <locale name="blockSlot.link.target.self">
+            <fr><![CDATA[Même fenêtre (_self)]]></fr>
+        </locale>
+        <locale name="blockSlot.link.target.blank">
+            <fr><![CDATA[Nouvel onglet (_blank)]]></fr>
+        </locale>
+        <locale name="blockSlot.link.title">
+            <fr><![CDATA[Titre du lien]]></fr>
+        </locale>
+        <locale name="blockSlot.contentPaddingPreset">
+            <fr><![CDATA[Espacement intérieur]]></fr>
+        </locale>
+        <locale name="blockSlot.contentPaddingPreset.option.none">
+            <fr><![CDATA[Aucun espacement]]></fr>
+        </locale>
+        <locale name="blockSlot.contentPaddingPreset.option.small">
+            <fr><![CDATA[Petit]]></fr>
+        </locale>
+        <locale name="blockSlot.contentPaddingPreset.option.normal">
+            <fr><![CDATA[Normal]]></fr>
+        </locale>
+        <locale name="blockSlot.contentPaddingPreset.option.large">
+            <fr><![CDATA[Grand]]></fr>
+        </locale>
+        <locale name="blockSlot.contentPaddingPreset.option.extraLarge">
+            <fr><![CDATA[Très grand]]></fr>
+        </locale>
+        <locale name="blockSlot.quickEdit.title">
+            <fr><![CDATA[Modification rapide : [mode]]]></fr>
+        </locale>
+        <locale name="blockSlot.quickEdit.editor">
+            <fr><![CDATA[Cliquez pour modifier]]></fr>
+        </locale>
+        <locale name="blockSlot.quickEdit.brick">
+            <fr><![CDATA[Cliquez pour sélectionner]]></fr>
+        </locale>
+        <locale name="blockSlot.quickEdit.image">
+            <fr><![CDATA[Cliquez pour choisir une image]]></fr>
+        </locale>
+        <locale name="blockSlot.quickEdit.subLayout">
+            <fr><![CDATA[Modifier la mise en page imbriquée]]></fr>
+        </locale>
+        <locale name="blockSlot.settings.button">
+            <fr><![CDATA[Paramètres]]></fr>
+        </locale>
+        <locale name="blockSlot.settings.popup.title">
+            <fr><![CDATA[Paramètres de [title]]]></fr>
+        </locale>
+        <locale name="blockSlot.edit.button">
+            <fr><![CDATA[Modifier]]></fr>
+        </locale>
+        <locale name="blockSlot.edit.title">
+            <fr><![CDATA[Modifier le bloc]]></fr>
+        </locale>
+        <locale name="blockSlot.remove.button">
+            <fr><![CDATA[Supprimer]]></fr>
+        </locale>
+        <locale name="blockSlot.remove.button.image">
+            <fr><![CDATA[Supprimer l’image]]></fr>
+        </locale>
+        <locale name="blockSlot.remove.button.brick">
+            <fr><![CDATA[Supprimer le bloc]]></fr>
+        </locale>
+        <locale name="blockSlot.remove.popup.title">
+            <fr><![CDATA[Supprimer le contenu de [title] ?]]></fr>
+        </locale>
+        <locale name="blockSlot.remove.popup.text">
+            <fr><![CDATA[Voulez-vous vraiment supprimer le contenu de type « [mode] » ?]]></fr>
+        </locale>
+        <locale name="blockSlot.remove.popup.information">
+            <fr><![CDATA[Le contenu de cette zone sera effacé. Ses paramètres seront conservés.]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.area.label">
+            <fr><![CDATA[Zone [number]]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.mode">
+            <fr><![CDATA[Mode]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.mode.editor">
+            <fr><![CDATA[Éditeur]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.mode.brick">
+            <fr><![CDATA[Bloc]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.mode.image">
+            <fr><![CDATA[Image]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.mobileOrder">
+            <fr><![CDATA[Ordre sur mobile]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.mobileOrder.info">
+            <fr><![CDATA[Ordre sur mobile : [number]]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.verticalAlign">
+            <fr><![CDATA[Alignement vertical]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.verticalAlign.top">
+            <fr><![CDATA[En haut]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.verticalAlign.center">
+            <fr><![CDATA[Au centre]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.verticalAlign.bottom">
+            <fr><![CDATA[En bas]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.verticalAlign.stretch">
+            <fr><![CDATA[Pleine hauteur]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.editorContent">
+            <fr><![CDATA[Contenu]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.editor.empty">
+            <fr><![CDATA[Aucun contenu pour le moment]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.brick.empty">
+            <fr><![CDATA[Aucun bloc sélectionné]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.brick.untitled">
+            <fr><![CDATA[Bloc sans titre]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.brick.select">
+            <fr><![CDATA[Sélectionner un bloc]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.image.empty">
+            <fr><![CDATA[Aucune image sélectionnée]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.image.fit">
+            <fr><![CDATA[Mode d’affichage]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.image.fit.auto">
+            <fr><![CDATA[Automatique]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.image.fit.cover">
+            <fr><![CDATA[Couvrir la zone]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.image.fit.contain">
+            <fr><![CDATA[Afficher en entier]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.image.section">
+            <fr><![CDATA[Image]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.image.width">
+            <fr><![CDATA[Largeur]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.image.width.help">
+            <fr><![CDATA[p. ex. 320px, 50%, 30rem ; vide = automatique ; les nombres sans unité sont interprétés en px]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.background.section">
+            <fr><![CDATA[Image d’arrière-plan]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.background.enabled">
+            <fr><![CDATA[Utiliser une image d’arrière-plan]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.background.image">
+            <fr><![CDATA[Image d’arrière-plan]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.background.fit">
+            <fr><![CDATA[Mode d’affichage]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.background.fit.auto">
+            <fr><![CDATA[Original]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.background.fit.cover">
+            <fr><![CDATA[Couvrir la zone]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.background.fit.contain">
+            <fr><![CDATA[Afficher en entier]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.background.position">
+            <fr><![CDATA[Position]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.background.position.center">
+            <fr><![CDATA[Au centre]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.background.position.top">
+            <fr><![CDATA[En haut]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.background.position.bottom">
+            <fr><![CDATA[En bas]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.background.position.left">
+            <fr><![CDATA[Gauche]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.background.position.right">
+            <fr><![CDATA[Droite]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.backgroundColor.section">
+            <fr><![CDATA[Couleur d’arrière-plan (superposition)]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.backgroundColor.enabled">
+            <fr><![CDATA[Utiliser une superposition]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.backgroundColor.description">
+            <fr><![CDATA[Définit la couleur superposée à l’image d’arrière-plan de cette zone.]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.backgroundColor.color">
+            <fr><![CDATA[Couleur]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.backgroundColor.opacity">
+            <fr><![CDATA[Opacité]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.textColor.section">
+            <fr><![CDATA[Couleur du texte]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.textColor.enabled">
+            <fr><![CDATA[Utiliser une couleur de texte]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.textColor">
+            <fr><![CDATA[Couleur du texte]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.link.section">
+            <fr><![CDATA[Lien]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.link.enabled">
+            <fr><![CDATA[Ajouter un lien à la cellule]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.link.href">
+            <fr><![CDATA[Définir le lien]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.link.rel">
+            <fr><![CDATA[Type de relation (rel)]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.link.rel.none">
+            <fr><![CDATA[Sans attribut rel]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.link.rel.nofollow">
+            <fr><![CDATA[nofollow]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.link.rel.noopener">
+            <fr><![CDATA[noopener]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.link.rel.noreferrer">
+            <fr><![CDATA[noreferrer]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.link.rel.noopenerNoreferrer">
+            <fr><![CDATA[noopener noreferrer]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.link.rel.nofollowNoopenerNoreferrer">
+            <fr><![CDATA[nofollow noopener noreferrer]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.link.target">
+            <fr><![CDATA[Cible]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.link.target.none">
+            <fr><![CDATA[Par défaut]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.link.target.self">
+            <fr><![CDATA[Même fenêtre (_self)]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.link.target.blank">
+            <fr><![CDATA[Nouvel onglet (_blank)]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.link.title">
+            <fr><![CDATA[Titre du lien]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.contentPadding">
+            <fr><![CDATA[Utiliser l’espacement intérieur par défaut]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.backgroundColor.badge">
+            <fr><![CDATA[Calque de couleur]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.quickEdit.title">
+            <fr><![CDATA[Modification rapide : [mode]]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.quickEdit.editor">
+            <fr><![CDATA[Cliquez pour modifier]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.quickEdit.brick">
+            <fr><![CDATA[Cliquez pour sélectionner]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.quickEdit.image">
+            <fr><![CDATA[Cliquez pour choisir une image]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.settings.button">
+            <fr><![CDATA[Paramètres]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.settings.popup.title">
+            <fr><![CDATA[Paramètres de [title]]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.remove.button">
+            <fr><![CDATA[Supprimer]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.remove.popup.title">
+            <fr><![CDATA[Supprimer le contenu de [title] ?]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.remove.popup.text">
+            <fr><![CDATA[Voulez-vous vraiment supprimer le contenu de type « [mode] » ?]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.remove.popup.information">
+            <fr><![CDATA[Le contenu de cette zone sera effacé. Ses paramètres seront conservés.]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.toolbar.preset">
+            <fr><![CDATA[Préréglage]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.toolbar.choosePreset">
+            <fr><![CDATA[Choisir une mise en page prédéfinie]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.toolbar.backToLayout">
+            <fr><![CDATA[Revenir à la mise en page]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.toolbar.editLayout">
+            <fr><![CDATA[Modifier la mise en page]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.toolbar.mode">
+            <fr><![CDATA[Mode de modification]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.toolbar.mode.content">
+            <fr><![CDATA[Modifier le contenu]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.toolbar.mode.layout">
+            <fr><![CDATA[Modifier la mise en page]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.toolbar.addSlot">
+            <fr><![CDATA[Ajouter une cellule]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.editor.title">
+            <fr><![CDATA[Modifier la mise en page multiple]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.editor.text">
+            <fr><![CDATA[Les versions pour ordinateur, tablette et mobile peuvent être organisées séparément. Les modifications ne sont appliquées qu’après l’enregistrement.]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.editor.information">
+            <fr><![CDATA[La version pour tablette reprend initialement la mise en page pour ordinateur. Sur mobile, les cellules sont d’abord empilées sur toute la largeur, mais restent entièrement modifiables ensuite.]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.editor.breakpointHint">
+            <fr><![CDATA[La vue pour ordinateur est la vue principale. La tablette reprend cette disposition ; sur mobile, les cellules sont initialement empilées et occupent chacune 12 colonnes.]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.subLayout.editor.title">
+            <fr><![CDATA[Modifier la mise en page imbriquée]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.subLayout.editor.text">
+            <fr><![CDATA[La mise en page imbriquée appartient directement à cette cellule et n’est pas enregistrée comme un bloc distinct.]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.subLayout.editor.information">
+            <fr><![CDATA[Une mise en page imbriquée ne peut contenir que l’éditeur, des images et des blocs. Il n’est pas possible d’y imbriquer d’autres mises en page.]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.subLayout.editor.hint">
+            <fr><![CDATA[Modifiez le contenu de la mise en page imbriquée ou passez à la vue de mise en page pour ordinateur, tablette et mobile.]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.subLayout.toolbar.editContent">
+            <fr><![CDATA[Modifier le contenu]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.subLayout.toolbar.editLayout">
+            <fr><![CDATA[Modifier la mise en page]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.breakpoint.desktop">
+            <fr><![CDATA[Ordinateur]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.breakpoint.tablet">
+            <fr><![CDATA[Tablette]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.breakpoint.mobile">
+            <fr><![CDATA[Mobile]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.presetChange.title">
+            <fr><![CDATA[Changer de préréglage ?]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.presetChange.text">
+            <fr><![CDATA[Changer de préréglage remplace la disposition pour ordinateur. Le contenu existant sera réparti au mieux entre les nouvelles cellules.]]></fr>
+        </locale>
+        <locale name="brick.multiLayout.presetChange.information">
+            <fr><![CDATA[Le contenu qui ne peut pas être réaffecté ne sera supprimé qu’après cette confirmation.]]></fr>
+        </locale>
+        <locale name="blockSlot.interaction.content">
+            <fr><![CDATA[Contenu]]></fr>
+        </locale>
+        <locale name="blockSlot.interaction.layout">
+            <fr><![CDATA[Mise en page]]></fr>
+        </locale>
+        <locale name="blockSlot.layout.hint">
+            <fr><![CDATA[Déplacez et redimensionnez les éléments en mode mise en page.]]></fr>
+        </locale>
+        <locale name="blockSlot.layout.selected">
+            <fr><![CDATA[Cellule sélectionnée]]></fr>
+        </locale>
+        <locale name="blockSlot.layout.idle">
+            <fr><![CDATA[Cliquez pour accéder aux actions de mise en page]]></fr>
+        </locale>
+        <locale name="blockSlot.slot.label">
+            <fr><![CDATA[ID : [id]]]></fr>
+        </locale>
+        <locale name="blockSlot.removeSlot.button">
+            <fr><![CDATA[Supprimer la cellule]]></fr>
+        </locale>
+        <locale name="blockSlot.removeSlot.popup.title">
+            <fr><![CDATA[Supprimer la cellule [title] ?]]></fr>
+        </locale>
+        <locale name="blockSlot.removeSlot.popup.text">
+            <fr><![CDATA[La cellule et le contenu qui lui est associé seront supprimés.]]></fr>
+        </locale>
+        <locale name="blockSlot.removeSlot.popup.information">
+            <fr><![CDATA[Cette action affecte la structure de la mise en page et le contenu de cette cellule.]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.textAndImageMultiple.create.isDisabled">
+            <fr><![CDATA[Désactiver les entrées]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.textAndImageMultiple.create.isDisabled.short">
+            <fr><![CDATA[Désactivé]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.textAndImageMultiple.settings.createPopup.disable">
+            <fr><![CDATA[Désactiver l’entrée]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.textAndImageMultiple.settings.createPopup.image">
+            <fr><![CDATA[Image]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.textAndImageMultiple.settings.createPopup.title">
+            <fr><![CDATA[Titre]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.textAndImageMultiple.settings.createPopup.content">
+            <fr><![CDATA[Texte]]></fr>
+        </locale>
+        <!-- Buttons -->
+        <locale name="brick.buttons.title">
+            <fr><![CDATA[Boutons]]></fr>
+        </locale>
+        <locale name="brick.buttons.description">
+            <fr><![CDATA[<p>Ce bloc permet de créer une liste de boutons, par exemple pour des téléchargements, des liens de contact ou des actions importantes. Vous pouvez personnaliser et associer un lien à chaque bouton individuellement.</p><p><strong>Mode d’affichage</strong></p><ul><li><strong>Bouton</strong> : texte, avec une icône facultative.</li><li><strong>Icône seule</strong> : seuls les boutons avec icône sont affichés. Les entrées sans icône sont automatiquement masquées.</li></ul><p><strong>Options de chaque bouton</strong></p><ul><li><strong>Texte</strong> : le libellé du bouton.</li><li><strong>Icône</strong> : symbole facultatif si le site utilise un jeu d’icônes tel que Font Awesome.</li><li><strong>Position de l’icône</strong> : avant ou après le texte.</li><li><strong>Style du bouton</strong> : par exemple, principal, secondaire, succès ou avertissement, selon le thème.</li><li><strong>Taille</strong> : par défaut, petite ou grande.</li><li><strong>Lien</strong> : page interne ou adresse externe.</li><li><strong>Ouvrir dans un nouvel onglet</strong> : ouvre le lien dans un autre onglet ou une autre fenêtre.</li><li><strong>Infobulle (title)</strong> : courte indication au survol.</li><li><strong>Accessibilité (libellé ARIA)</strong> : utile pour les boutons avec icône seule, afin que les lecteurs d’écran annoncent leur fonction.</li><li><strong>Désactivé</strong> : le bouton est affiché, mais n’est pas cliquable.</li><li><strong>Pleine largeur</strong> : le bouton occupe toute la largeur disponible.</li><li><strong>Action au clic</strong> : option avancée permettant d’exécuter une fonction.</li><li><strong>Classe CSS supplémentaire</strong> : option avancée pour personnaliser le style.</li><li><strong>Masquer l’entrée</strong> : le bouton n’est pas affiché du tout.</li></ul>]]></fr>
+        </locale>
+        <!-- Button (single) -->
+        <locale name="brick.button.title">
+            <fr><![CDATA[Bouton]]></fr>
+        </locale>
+        <locale name="brick.button.description">
+            <fr><![CDATA[<p>Un bouton unique dont le style et le lien se configurent entièrement dans ses paramètres. Contrairement au bloc « Boutons », le mode d’affichage et la taille sont définis pour ce bouton.</p><p><strong>Options disponibles</strong></p><ul><li><strong>Mode d’affichage</strong> : bouton, icône seule ou icône seule ronde.</li><li><strong>Texte et icône</strong> : libellé, symbole facultatif et position de celui-ci.</li><li><strong>Style et taille</strong> : par exemple, principal ou secondaire ; taille par défaut, petite ou grande.</li><li><strong>Destination</strong> : page interne, lien externe ou bloc à ouvrir dans une fenêtre contextuelle.</li></ul>]]></fr>
+        </locale>
+        <locale name="brick.buttons.settings.displayMode">
+            <fr><![CDATA[Mode d’affichage]]></fr>
+        </locale>
+        <locale name="brick.buttons.settings.displayMode.button">
+            <fr><![CDATA[Bouton]]></fr>
+        </locale>
+        <locale name="brick.buttons.settings.displayMode.iconOnly">
+            <fr><![CDATA[Icône seule]]></fr>
+        </locale>
+        <locale name="brick.buttons.settings.displayMode.iconOnlyRounded">
+            <fr><![CDATA[Icône seule (ronde)]]></fr>
+        </locale>
+        <locale name="brick.buttons.settings.size">
+            <fr><![CDATA[Taille du bouton]]></fr>
+        </locale>
+        <locale name="brick.buttons.settings.size.default">
+            <fr><![CDATA[Par défaut]]></fr>
+        </locale>
+        <locale name="brick.buttons.settings.size.small">
+            <fr><![CDATA[Petit]]></fr>
+        </locale>
+        <locale name="brick.buttons.settings.size.large">
+            <fr><![CDATA[Grand]]></fr>
+        </locale>
+        <locale name="brick.buttons.settings.entries">
+            <fr><![CDATA[Boutons]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.create.isDisabled.short">
+            <fr><![CDATA[Désactivé]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.create.preview">
+            <fr><![CDATA[Aperçu]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.create.text">
+            <fr><![CDATA[Texte]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.create.iconClass">
+            <fr><![CDATA[Classe de l’icône]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.create.btnType">
+            <fr><![CDATA[Type de bouton]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.create.href">
+            <fr><![CDATA[Lien]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.create.targetBlank.short">
+            <fr><![CDATA[_blank]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.disable">
+            <fr><![CDATA[Désactiver l’entrée]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.text">
+            <fr><![CDATA[Texte]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.identifier">
+            <fr><![CDATA[Identifiant]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.identifierDesc">
+            <fr><![CDATA[Ajouté au site sous la forme <code>data-identifier</code>, il peut servir par exemple au suivi avec Matomo. <br>Exemple : <code>data-identifier="MY_VALUE"</code>]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.dataAttributes">
+            <fr><![CDATA[Attributs supplémentaires du bouton]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.dataAttributesDesc">
+            <fr><![CDATA[Attributs data-* supplémentaires pour le bouton, par exemple pour le suivi. Le préfixe data- est ajouté automatiquement et les espaces sont remplacés par des tirets. Les noms réservés, tels que data-qui, data-name et data-identifier, sont ignorés.]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.brickParams">
+            <fr><![CDATA[Attributs du bloc ouvert]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.brickParamsDesc">
+            <fr><![CDATA[Valeurs transmises au bloc ouvert dans la fenêtre contextuelle. Les attributs du bouton ci-dessus restent sur le bouton lui-même. Chaque bloc détermine s’il exploite une valeur. Exemple : <code>context</code> avec la valeur <code>Package: Starter · Variant: Buy</code>.]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.iconClass">
+            <fr><![CDATA[Classe de l’icône Font Awesome]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.iconPosition">
+            <fr><![CDATA[Position de l’icône]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.iconPosition.start">
+            <fr><![CDATA[Au début]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.iconPosition.end">
+            <fr><![CDATA[À la fin]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.btnType">
+            <fr><![CDATA[Type de bouton]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.size">
+            <fr><![CDATA[Taille]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.size.default">
+            <fr><![CDATA[Par défaut]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.size.inherit">
+            <fr><![CDATA[Utiliser le réglage général]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.size.small">
+            <fr><![CDATA[Petit]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.size.large">
+            <fr><![CDATA[Grand]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick">
+            <fr><![CDATA[Ouvrir le bloc dans une fenêtre contextuelle]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.desc">
+            <fr><![CDATA[Si vous sélectionnez un bloc, il s’ouvre dans une fenêtre modale sur le site. L’option « Lien » est alors ignorée.]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.select">
+            <fr><![CDATA[Sélectionner un bloc]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.clear">
+            <fr><![CDATA[Vider]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.titleLabel">
+            <fr><![CDATA[Titre du bloc]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.winWidth">
+            <fr><![CDATA[Largeur de la fenêtre contextuelle (px)]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.winHeight">
+            <fr><![CDATA[Hauteur de la fenêtre contextuelle (px)]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.spacing">
+            <fr><![CDATA[Espacement intérieur de la fenêtre contextuelle]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.spacingDesc">
+            <fr><![CDATA[Activé par défaut. Désactivez-le si le bloc gère lui-même l’espacement intérieur de la fenêtre, par exemple pour un contenu sans marges.]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.href">
+            <fr><![CDATA[Lien]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.targetBlank">
+            <fr><![CDATA[Ouvrir dans un nouvel onglet (_blank)]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.title">
+            <fr><![CDATA[Attribut title]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.ariaLabel">
+            <fr><![CDATA[Libellé ARIA]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.disabled">
+            <fr><![CDATA[Bouton désactivé]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.fullWidth">
+            <fr><![CDATA[Pleine largeur (btn-full)]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.onClick">
+            <fr><![CDATA[Fonction JS (onclick)]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.customClass">
+            <fr><![CDATA[Classe CSS personnalisée]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.textRatio">
+            <fr><![CDATA[Proportion entre texte et image]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.textRatio.30">
+            <fr><![CDATA[Texte 30 % - Image 70 %]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.textRatio.35">
+            <fr><![CDATA[Texte 35 % - Image 65 %]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.textRatio.40">
+            <fr><![CDATA[Texte 40 % - Image 60 %]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.textRatio.45">
+            <fr><![CDATA[Texte 45 % - Image 55 %]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.textRatio.50">
+            <fr><![CDATA[Texte 50 % - Image 50 % (par défaut)]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.textRatio.55">
+            <fr><![CDATA[Texte 55 % - Image 45 %]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.textRatio.60">
+            <fr><![CDATA[Texte 60 % - Image 40 %]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.textRatio.65">
+            <fr><![CDATA[Texte 65 % - Image 35 %]]></fr>
+        </locale>
+        <locale name="brick.textAndImage.textRatio.70">
+            <fr><![CDATA[Texte 70 % - Image 30 %]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.entires.adddialog.title">
+            <fr><![CDATA[Ajouter une entrée]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.entires.editdialog.title">
+            <fr><![CDATA[Modifier l’entrée]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.entires.delete.title">
+            <fr><![CDATA[Voulez-vous vraiment supprimer cette entrée ?]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.entires.delete.text">
+            <fr><![CDATA[Voulez-vous vraiment supprimer cette entrée ?]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.entires.delete.information">
+            <fr><![CDATA[L’entrée ne pourra pas être restaurée.]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.adddialog.title">
+            <fr><![CDATA[Ajouter un bouton]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.editdialog.title">
+            <fr><![CDATA[Modifier le bouton]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.delete.text">
+            <fr><![CDATA[Voulez-vous vraiment supprimer ce bouton ?]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.delete.information">
+            <fr><![CDATA[Le bouton ne pourra pas être restauré.]]></fr>
+        </locale>
+        <!-- Accordion -->
+        <locale name="brick.accordion.title">
+            <fr><![CDATA[Menu accordéon]]></fr>
+        </locale>
+        <locale name="brick.accordion.description">
+            <fr><![CDATA[Ce bloc permet d’organiser le contenu en sections dépliables. Il convient particulièrement aux FAQ, aux pages d’aide et aux contenus répartis en sections avec un titre et un texte.<ul><li>Nombre illimité d’entrées dépliables</li><li>Idéal pour les FAQ, l’aide et les informations</li><li>Plusieurs mises en page pour s’adapter au contexte de la page</li><li>Affichage sur une ou deux colonnes</li><li>Position et style de l’icône personnalisables</li><li>Possibilité d’ouvrir la première entrée au chargement ou de garder plusieurs entrées ouvertes en même temps</li></ul>]]></fr>
+        </locale>
+        <locale name="brick.accordion.template">
+            <fr><![CDATA[Mise en page]]></fr>
+        </locale>
+        <locale name="brick.accordion.template.default">
+            <fr><![CDATA[Par défaut]]></fr>
+        </locale>
+        <locale name="brick.accordion.template.simple">
+            <fr><![CDATA[Simple]]></fr>
+        </locale>
+        <locale name="brick.accordion.template.boxOutline">
+            <fr><![CDATA[Avec bordure]]></fr>
+        </locale>
+        <locale name="brick.accordion.template.boxOutlineAccent">
+            <fr><![CDATA[Bordure avec couleur d’accentuation]]></fr>
+        </locale>
+        <locale name="brick.accordion.template.boxOutlineAccentOpen">
+            <fr><![CDATA[Bordure accentuée à l’ouverture]]></fr>
+        </locale>
+        <locale name="brick.accordion.template.boxOutlineTextColor">
+            <fr><![CDATA[Bordure de la couleur du texte]]></fr>
+        </locale>
+        <locale name="brick.accordion.template.boxFill">
+            <fr><![CDATA[Fond discret]]></fr>
+        </locale>
+        <locale name="brick.accordion.template.boxFillAccent">
+            <fr><![CDATA[Fond avec couleur d’accentuation]]></fr>
+        </locale>
+        <locale name="brick.accordion.template.boxFillAccentOpen">
+            <fr><![CDATA[Fond accentué à l’ouverture]]></fr>
+        </locale>
+        <locale name="brick.accordion.template.card">
+            <fr><![CDATA[Carte]]></fr>
+        </locale>
+        <locale name="brick.accordion.template.cardFillAccent">
+            <fr><![CDATA[Carte avec couleur d’accentuation]]></fr>
+        </locale>
+        <locale name="brick.accordion.columns">
+            <fr><![CDATA[Colonnes]]></fr>
+        </locale>
+        <locale name="brick.accordion.columns.1">
+            <fr><![CDATA[1 colonne]]></fr>
+        </locale>
+        <locale name="brick.accordion.columns.2">
+            <fr><![CDATA[2 colonnes]]></fr>
+        </locale>
+        <locale name="brick.accordion.iconPosition">
+            <fr><![CDATA[Position de l’icône]]></fr>
+        </locale>
+        <locale name="brick.accordion.iconPosition.right">
+            <fr><![CDATA[Droite]]></fr>
+        </locale>
+        <locale name="brick.accordion.iconPosition.left">
+            <fr><![CDATA[Gauche]]></fr>
+        </locale>
+        <locale name="brick.accordion.iconStyle">
+            <fr><![CDATA[Style de l’icône]]></fr>
+        </locale>
+        <locale name="brick.accordion.iconStyle.angle">
+            <fr><![CDATA[Chevron]]></fr>
+        </locale>
+        <locale name="brick.accordion.iconStyle.plus">
+            <fr><![CDATA[Signe plus]]></fr>
+        </locale>
+        <locale name="brick.accordion.stayOpen">
+            <fr><![CDATA[Garder les entrées ouvertes]]></fr>
+        </locale>
+        <locale name="brick.accordion.stayOpen.desc">
+            <fr><![CDATA[Les entrées de l’accordéon restent ouvertes lorsqu’une autre entrée est ouverte.]]></fr>
+        </locale>
+        <locale name="brick.accordion.openFirst">
+            <fr><![CDATA[Ouvrir la première entrée au chargement]]></fr>
+        </locale>
+        <locale name="brick.accordion.listMaxWidth">
+            <fr><![CDATA[Largeur maximale de l’accordéon]]></fr>
+        </locale>
+        <locale name="brick.accordion.listMaxWidth.desc">
+            <fr><![CDATA[Les nombres sont interprétés comme des pixels. Les autres valeurs CSS valides, telles que 30rem ou clamp(...), sont conservées telles quelles. Laissez le champ vide ou indiquez 0 pour désactiver la limite.]]></fr>
+        </locale>
+        <locale name="brick.accordion.entries">
+            <fr><![CDATA[Éléments de l’accordéon]]></fr>
+        </locale>
+        <locale name="brick.accordion.category.entries">
+            <fr><![CDATA[Éléments de l’accordéon]]></fr>
+        </locale>
+        <locale name="bricks.accordion.settings.addButton">
+            <fr><![CDATA[Ajouter un élément]]></fr>
+        </locale>
+        <locale name="brick.accordion.settings.title">
+            <fr><![CDATA[Titre]]></fr>
+        </locale>
+        <locale name="brick.accordion.settings.disabled">
+            <fr><![CDATA[Désactiver l’entrée]]></fr>
+        </locale>
+        <locale name="brick.accordion.settings.disabled.short">
+            <fr><![CDATA[Désactivé]]></fr>
+        </locale>
+        <locale name="brick.accordion.settings.content">
+            <fr><![CDATA[Contenu]]></fr>
+        </locale>
+        <locale name="brick.accordion.useFaqStructuredData">
+            <fr><![CDATA[Activer le balisage de schéma FAQ]]></fr>
+        </locale>
+        <locale name="brick.accordion.useFaqStructuredData.desc" html="true">
+            <fr><![CDATA[Si cette option est activée, un extrait de code JSON-LD est généré. Cela permet à Google d’afficher les questions fréquentes directement dans les résultats de recherche. Pour en savoir plus, consultez <a href="https://developers.google.com/search/docs/advanced/structured-data/faqpage" target="_blank">Baliser vos FAQ avec des données structurées</a>.]]></fr>
+        </locale>
+        <locale name="search.provider.bricks.filter.label">
+            <fr><![CDATA[Blocs]]></fr>
+        </locale>
+        <locale name="search.provider.bricks.group.label">
+            <fr><![CDATA[Blocs]]></fr>
+        </locale>
+    </groups>
+</locales>
