@@ -50,6 +50,7 @@ class Button extends QUI\Control
             'fullWidth' => false,
             'onClick' => '',
             'dataAttributes' => [],
+            'brickParams' => [],
         ]);
 
         parent::__construct($attributes);
@@ -101,7 +102,37 @@ class Button extends QUI\Control
             'disabled' => $this->getAttribute('disabled'),
             'fullWidth' => $this->getAttribute('fullWidth'),
             'onClick' => $this->getAttribute('onClick'),
-            'dataAttributes' => Utils::dataAttributesFromEntries($this->getAttribute('dataAttributes')),
+            'dataAttributes' => $this->getButtonDataAttributes(),
+            'brickParams' => Utils::dataAttributesFromEntries($this->getAttribute('brickParams')),
         ]);
+    }
+
+    /**
+     * Add the window sizing capability declared by the selected brick type.
+     *
+     * @return array<string, string>
+     */
+    private function getButtonDataAttributes(): array
+    {
+        $attributes = Utils::dataAttributesFromEntries($this->getAttribute('dataAttributes'));
+        $brickId = (int)$this->getAttribute('openBrickId');
+
+        if ($brickId <= 0) {
+            return $attributes;
+        }
+
+        $Manager = QUI\Bricks\Manager::init();
+
+        if ($Manager === null) {
+            return $attributes;
+        }
+
+        $brickType = $Manager->getBrickTypeById($brickId);
+
+        if ($brickType !== null && $Manager->supportsWindowAutoHeight($brickType)) {
+            $attributes['window-auto-height'] = '1';
+        }
+
+        return $attributes;
     }
 }

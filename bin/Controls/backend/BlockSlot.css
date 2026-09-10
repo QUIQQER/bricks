@@ -460,15 +460,11 @@
     font-weight: 600;
 }
 
+/* the picker brings its own flex layout; only the spacing between swatch and
+   buttons is specific to this dialog */
 .quiqqer-bricks-blockSlot-popupField .qui-controls-colorpicker {
     align-items: stretch;
-    display: flex;
     gap: 0.5rem;
-    width: 100%;
-}
-
-.quiqqer-bricks-blockSlot-popupField .qui-controls-colorpicker-colorContainer {
-    flex-grow: 1;
 }
 
 .quiqqer-bricks-blockSlot-popupSelect,

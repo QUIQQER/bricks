@@ -22,6 +22,7 @@ use function array_filter;
 use function array_fill_keys;
 use function array_flip;
 use function array_intersect;
+use function array_key_exists;
 use function array_map;
 use function array_merge;
 use function array_reverse;
@@ -81,6 +82,18 @@ class Manager
      * @var array<Brick>
      */
     protected array $brickUIDs = [];
+
+    /**
+     * Brick types resolved without creating full Brick instances.
+     *
+     * @var array<int, null|string>
+     */
+    protected array $brickTypes = [];
+
+    /**
+     * @var null|array<string, true>
+     */
+    protected ?array $windowAutoHeightTypes = null;
 
     /**
      * @var null|array<string, int>
@@ -605,8 +618,83 @@ class Manager
         $Brick->setAttribute('id', $id);
 
         $this->bricks[$id] = $Brick;
+        $type = $data['type'] ?? null;
+        $this->brickTypes[$id] = is_string($type) && trim($type) !== '' ? $type : null;
 
         return $this->bricks[$id];
+    }
+
+    /**
+     * Return only a brick's control type without creating the Brick or its Control.
+     */
+    public function getBrickTypeById(int $id): ?string
+    {
+        if ($id <= 0) {
+            return null;
+        }
+
+        if (array_key_exists($id, $this->brickTypes)) {
+            return $this->brickTypes[$id];
+        }
+
+        if (isset($this->bricks[$id])) {
+            $type = $this->bricks[$id]->getAttribute('type');
+            $this->brickTypes[$id] = is_string($type) && trim($type) !== '' ? $type : null;
+
+            return $this->brickTypes[$id];
+        }
+
+        $this->brickTypes[$id] = $this->fetchBrickTypeById($id);
+
+        return $this->brickTypes[$id];
+    }
+
+    /**
+     * Check the capability declared by an available brick type.
+     */
+    public function supportsWindowAutoHeight(string $brickType): bool
+    {
+        $brickType = ltrim(trim($brickType), '\\');
+
+        if ($brickType === '') {
+            return false;
+        }
+
+        if ($this->windowAutoHeightTypes === null) {
+            $this->windowAutoHeightTypes = [];
+
+            foreach ($this->getAvailableBricks() as $definition) {
+                if ((int)($definition['supportsWindowAutoHeight'] ?? 0) !== 1) {
+                    continue;
+                }
+
+                $control = ltrim(trim((string)($definition['control'] ?? '')), '\\');
+
+                if ($control !== '') {
+                    $this->windowAutoHeightTypes[$control] = true;
+                }
+            }
+        }
+
+        return isset($this->windowAutoHeightTypes[$brickType]);
+    }
+
+    /**
+     * Resolve a brick type with one indexed column lookup.
+     */
+    protected function fetchBrickTypeById(int $id): ?string
+    {
+        $QueryBuilder = QUI::getQueryBuilder();
+        $type = $QueryBuilder
+            ->select('type')
+            ->from(QUI\Utils\Doctrine::quoteIdentifier($this->getTable()))
+            ->where($QueryBuilder->expr()->eq('id', ':id'))
+            ->setParameter('id', $id)
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchOne();
+
+        return is_string($type) && trim($type) !== '' ? $type : null;
     }
 
     /**

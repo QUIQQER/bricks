@@ -571,11 +571,16 @@ class Brick extends QUI\QDOM
             $result = $this->extendCustomJs($result);
             $result = $this->extendFooter($result);
 
-            QUI\Cache\Manager::set($cacheName, [
-                'html' => $result,
-                'cssClasses' => $this->cssClasses,
-                'cssFiles' => []
-            ]);
+            // only write when the brick is actually cacheable; a render that
+            // carries request specific settings would otherwise still mint an
+            // entry, keyed by those settings
+            if ($this->getAttribute('cacheable')) {
+                QUI\Cache\Manager::set($cacheName, [
+                    'html' => $result,
+                    'cssClasses' => $this->cssClasses,
+                    'cssFiles' => []
+                ]);
+            }
 
             return $result;
         }
@@ -630,11 +635,15 @@ class Brick extends QUI\QDOM
 
         $cssFiles = $Control->getCSSFiles();
 
-        QUI\Cache\Manager::set($cacheName, [
-            'html' => $result,
-            'cssClasses' => $this->cssClasses,
-            'cssFiles' => $cssFiles
-        ]);
+        // see above: a non-cacheable render must not write either, otherwise
+        // request specific settings end up in the shared cache
+        if ($this->getAttribute('cacheable')) {
+            QUI\Cache\Manager::set($cacheName, [
+                'html' => $result,
+                'cssClasses' => $this->cssClasses,
+                'cssFiles' => $cssFiles
+            ]);
+        }
 
         return $result;
     }

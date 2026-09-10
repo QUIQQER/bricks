@@ -2609,6 +2609,17 @@
                         <locale group="quiqqer/bricks" var="quiqqer.bricks.buttons.settings.createPopup.dataAttributesDesc"/>
                     </description>
                 </setting>
+
+                <setting name="brickParams" type="hidden"
+                         data-qui="package/quiqqer/components/bin/Controls/DataAttributes"
+                         data-dependency="openBrickId"
+                         data-dependency-options="*"
+                >
+                    <locale group="quiqqer/bricks" var="quiqqer.bricks.buttons.settings.createPopup.brickParams"/>
+                    <description>
+                        <locale group="quiqqer/bricks" var="quiqqer.bricks.buttons.settings.createPopup.brickParamsDesc"/>
+                    </description>
+                </setting>
             </settings>
         </brick>
 

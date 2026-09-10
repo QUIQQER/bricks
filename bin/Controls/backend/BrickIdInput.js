@@ -43,7 +43,19 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickIdInput', [
 
         options: {
             project: false,
-            lang: false
+            lang: false,
+
+            // Restrict what the picker offers. Written in a bricks.xml as
+            // data-qui-options-brickcategories / -brickcontrols, therefore
+            // all lowercase and comma separated. Both are combined with OR:
+            // a brick qualifies through its category OR through its control
+            // being named explicitly. Neither set means no filtering.
+            brickcategories: false,
+            brickcontrols: false,
+
+            // Optional message for the picker's empty state, e.g. to say
+            // which kind of brick has to be created first.
+            emptytext: ''
         },
 
         initialize: function (options) {
@@ -157,6 +169,9 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickIdInput', [
                     project: projectData.project,
                     lang: projectData.lang,
                     multiple: false,
+                    brickCategories: self.getAttribute('brickcategories'),
+                    brickControls: self.getAttribute('brickcontrols'),
+                    emptyText: self.getAttribute('emptytext'),
                     events: {
                         onSubmit: function (Win, bricks) {
                             if (!bricks.length) {

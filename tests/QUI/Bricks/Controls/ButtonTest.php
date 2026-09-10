@@ -3,7 +3,9 @@
 namespace QUITests\Bricks\Controls;
 
 use PHPUnit\Framework\TestCase;
+use QUI\Bricks\Brick;
 use QUI\Bricks\Controls\Button;
+use QUI\Bricks\Manager;
 
 class ButtonTest extends TestCase
 {
@@ -40,6 +42,52 @@ class ButtonTest extends TestCase
         $this->assertStringContainsString('data-label="primary"', $html);
         $this->assertStringNotContainsString('data-data-', $html);
         $this->assertStringNotContainsString('ignored', $html);
+    }
+
+    public function testAutoHeightMarkerUsesCachedTypeWithoutLoadingTargetBrick(): void
+    {
+        $previousManager = Manager::$BrickManager;
+        $Manager = new class (true) extends Manager {
+            public int $typeLookups = 0;
+
+            protected function fetchBrickTypeById(int $id): ?string
+            {
+                $this->typeLookups++;
+
+                return $id === 42 ? '\\Vendor\\FlexibleBrick' : null;
+            }
+
+            public function getAvailableBricks(): array
+            {
+                return [[
+                    'control' => '\\Vendor\\FlexibleBrick',
+                    'supportsWindowAutoHeight' => 1
+                ]];
+            }
+
+            public function getBrickById(int $id): Brick
+            {
+                throw new \LogicException('The full target brick must not be loaded.');
+            }
+        };
+
+        Manager::$BrickManager = $Manager;
+
+        try {
+            $html = (new Button([
+                'text' => 'Open',
+                'openBrickId' => 42,
+                'dataAttributes' => [
+                    ['name' => 'data-track-id', 'value' => 'cta']
+                ]
+            ]))->create();
+        } finally {
+            Manager::$BrickManager = $previousManager;
+        }
+
+        $this->assertStringContainsString('data-window-auto-height="1"', $html);
+        $this->assertStringContainsString('data-track-id="cta"', $html);
+        $this->assertSame(1, $Manager->typeLookups);
     }
 
     public function testDisplayModeIsAppliedPerButton(): void

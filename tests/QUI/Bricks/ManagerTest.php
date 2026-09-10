@@ -42,6 +42,56 @@ class ManagerTest extends TestCase
         $this->assertSame('quiqqer/package/quiqqer/bricks/', Manager::getBrickCacheNamespace());
     }
 
+    public function testBrickTypeLookupCachesExistingAndMissingIds(): void
+    {
+        $Manager = new class (true) extends Manager {
+            public int $lookups = 0;
+
+            protected function fetchBrickTypeById(int $id): ?string
+            {
+                $this->lookups++;
+
+                return $id === 42 ? '\\Vendor\\FlexibleBrick' : null;
+            }
+        };
+
+        $this->assertSame('\\Vendor\\FlexibleBrick', $Manager->getBrickTypeById(42));
+        $this->assertSame('\\Vendor\\FlexibleBrick', $Manager->getBrickTypeById(42));
+        $this->assertNull($Manager->getBrickTypeById(404));
+        $this->assertNull($Manager->getBrickTypeById(404));
+        $this->assertNull($Manager->getBrickTypeById(0));
+        $this->assertSame(2, $Manager->lookups);
+    }
+
+    public function testWindowAutoHeightCapabilityBelongsToTheExactBrickType(): void
+    {
+        $Manager = new class (true) extends Manager {
+            public int $definitionLookups = 0;
+
+            public function getAvailableBricks(): array
+            {
+                $this->definitionLookups++;
+
+                return [
+                    [
+                        'control' => '\\Vendor\\FlexibleBrick',
+                        'supportsWindowAutoHeight' => 1
+                    ],
+                    [
+                        'control' => '\\Vendor\\FixedBrick',
+                        'supportsWindowAutoHeight' => 0
+                    ]
+                ];
+            }
+        };
+
+        $this->assertTrue($Manager->supportsWindowAutoHeight('Vendor\\FlexibleBrick'));
+        $this->assertTrue($Manager->supportsWindowAutoHeight(' \\Vendor\\FlexibleBrick '));
+        $this->assertFalse($Manager->supportsWindowAutoHeight('\\Vendor\\FixedBrick'));
+        $this->assertFalse($Manager->supportsWindowAutoHeight('\\Vendor\\UnknownBrick'));
+        $this->assertSame(1, $Manager->definitionLookups);
+    }
+
     public function testParseSettingToBrickArray(): void
     {
         $doc = new DOMDocument();

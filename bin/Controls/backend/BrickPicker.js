@@ -42,7 +42,21 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickPicker', [
             styles: false,
             multiple: false,
             showProjectSelect: true,
-            autoExecute: false
+            autoExecute: false,
+
+            // Restrict what may be picked. Both lists are combined with OR:
+            // a brick qualifies when it carries one of the categories OR its
+            // control is named explicitly. The category covers the normal
+            // case, the control list is the exception for a brick that does
+            // not (and should not have to) declare a category.
+            // Neither set means no filtering at all.
+            brickCategories: false,
+            brickControls: false,
+
+            // Message shown when the filter leaves nothing to pick. Empty
+            // falls back to a generic text, so a caller may but need not
+            // explain what is missing.
+            emptyText: ''
         },
 
         initialize: function (options) {
@@ -199,7 +213,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickPicker', [
 
             this.$EmptyState = new Element('div', {
                 'class': 'quiqqer-bricks-brickPicker-empty',
-                text: QUILocale.get(lg, 'site.area.window.results.empty'),
+                text: this.$getEmptyText(),
                 styles: {
                     display: 'none'
                 }
@@ -324,10 +338,98 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickPicker', [
             Select.setValue(exactMatchValue || projectFallbackValue || fallbackValue);
         },
 
+        /**
+         * Text for the empty state.
+         *
+         * With a filter active "no results" would be misleading - there may
+         * well be bricks, just none that qualify. A caller who knows what is
+         * missing can say so through the emptyText option; otherwise a
+         * generic hint about the filter is still better than nothing.
+         *
+         * @return {String}
+         */
+        $getEmptyText: function () {
+            const custom = (this.getAttribute('emptyText') || '').toString().trim();
+
+            if (custom !== '') {
+                return custom;
+            }
+
+            const isFiltered = this.$normalizeFilterList(this.getAttribute('brickCategories')).length
+                || this.$normalizeFilterList(this.getAttribute('brickControls')).length;
+
+            return QUILocale.get(
+                lg,
+                isFiltered ? 'brickPicker.results.emptyFiltered' : 'site.area.window.results.empty'
+            );
+        },
+
         setItems: function (items) {
-            this.$Items = Array.isArray(items) ? items.slice() : [];
+            this.$Items = this.$filterItems(Array.isArray(items) ? items.slice() : []);
             this.$SelectedIds = [];
             this.$renderItems();
+        },
+
+        /**
+         * Reduce the given bricks to those the caller allows.
+         *
+         * Filtering happens here rather than in the rendering, so every path
+         * that fills the picker (preset items, project reload) is covered by
+         * the same rule and getValue() can never return a brick that was
+         * filtered out.
+         *
+         * @param {Array} items
+         * @return {Array}
+         */
+        $filterItems: function (items) {
+            const categories = this.$normalizeFilterList(this.getAttribute('brickCategories'));
+            const controls = this.$normalizeFilterList(this.getAttribute('brickControls'));
+
+            if (!categories.length && !controls.length) {
+                return items;
+            }
+
+            return items.filter(function (item) {
+                if (!item) {
+                    return false;
+                }
+
+                const control = (item.type || '').toString().trim().toLowerCase().replace(/^\\+/, '');
+
+                if (controls.length && controls.indexOf(control) !== -1) {
+                    return true;
+                }
+
+                if (!categories.length || !Array.isArray(item.categories)) {
+                    return false;
+                }
+
+                return item.categories.some(function (category) {
+                    return categories.indexOf((category || '').toString().trim().toLowerCase()) !== -1;
+                });
+            });
+        },
+
+        /**
+         * Accept a filter list as an array or as a comma separated string
+         * (the form a data-qui-options attribute can carry) and normalise it
+         * for comparison.
+         *
+         * @param {Array|String|Boolean} value
+         * @return {Array}
+         */
+        $normalizeFilterList: function (value) {
+            if (!value) {
+                return [];
+            }
+
+            const entries = Array.isArray(value) ? value : value.toString().split(',');
+
+            return entries.map(function (entry) {
+                return (entry || '').toString().trim().toLowerCase().replace(/^\\+/, '');
+            }).filter(function (entry) {
+                return entry !== '';
+            });
         },
 
         refresh: function () {

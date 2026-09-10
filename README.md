@@ -71,6 +71,91 @@ More information about how to provide a brick and mockups:
 https://dev.quiqqer.com/quiqqer/package-bricks/-/wikis/dev/bricks
 
 
+### Brick categories
+
+A brick definition may declare what it is good for, so another package can
+offer a filtered choice of bricks without naming a control class:
+
+```xml
+<brick control="\QUI\SalesAgent\Controls\Agent" category="aiAgent">
+```
+
+`category` is a free vocabulary and accepts a comma separated list, so a
+brick can belong to more than one. Declaring nothing is the normal case; an
+uncategorised brick stays selectable everywhere.
+
+The brick picker filters on it through two options, combined with **OR** - a
+brick qualifies through its category *or* through its control being named
+explicitly:
+
+```xml
+<setting name="agentBrickId" type="hidden"
+         data-qui="package/quiqqer/bricks/bin/Controls/backend/BrickIdInput"
+         data-qui-options-brickcategories="aiAgent"
+>
+```
+
+`data-qui-options-brickcontrols` takes control class names the same way and
+exists for the case "these two bricks as well", so no brick has to be given
+a category just to be selectable somewhere. Setting neither option filters
+nothing, which is the previous behaviour.
+
+When the filter leaves nothing to pick, the picker says so instead of
+showing "no results" - a caller that knows which brick is missing can
+replace the text with `data-qui-options-emptytext`.
+
+In PHP, `Utils::getBrickDefinitionsByCategory()` answers the related
+question "can this system do X at all", by looking at the brick definitions
+of all installed packages rather than at the bricks of a project.
+
+
+### Passing parameters to a brick opened in a popup
+
+A button that opens a brick in a popup can hand values over to that brick,
+for example which package the visitor just clicked. Editors fill the button
+setting *Attributes for the opened brick*; it is deliberately a second field
+next to the button's own data attributes, so the two never mix.
+
+The values travel as one JSON attribute and are applied by the render ajax:
+
+```html
+<button type="button"
+        data-qui="package/quiqqer/components/bin/Controls/Button/OpenBrick"
+        data-open-brick-id="233"
+        data-brick-params='{"context":"Package: Starter"}'>
+    Request
+</button>
+```
+
+The same works from JavaScript, through the `brickParams` option:
+
+```js
+new BrickWindow({
+    brickId: 233,
+    brickParams: {context: 'Package: Starter'}
+}).open();
+```
+
+**Every parameter is applied with the `param-` prefix** (see
+`Utils::brickParamsFromRequest()` and `Utils::BRICK_PARAM_PREFIX`). A brick
+reads `param-context`, never `context`. This is a security boundary, not a
+naming style: `Brick::setSetting()` writes straight through to the control, so
+an unprefixed passthrough would let a visitor overwrite real settings such as a
+prompt or a recipient address. A brick opts in by reading the prefixed name;
+one that reads nothing is unaffected.
+
+A render carrying parameters is **not cached**: the values come from the client
+and the brick cache is keyed by the settings hash, so caching would mint an
+entry per distinct value.
+
+Applying the prefix is idempotent, so a brick that hands its own parameters
+on to a nested brick can pass them straight through: it holds them under the
+prefixed name, and sending `param-context` yields `param-context`, not
+`param-param-context`. Prefixing twice would not be rejected - the doubled
+name passes the name rule - it would just quietly arrive where nothing reads
+it.
+
+
 Support
 -------
 

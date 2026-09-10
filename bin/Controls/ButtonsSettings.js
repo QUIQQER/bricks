@@ -220,6 +220,9 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                     }, {
                         dataIndex: 'dataAttributes',
                         hidden: true
+                    }, {
+                        dataIndex: 'brickParams',
+                        hidden: true
                     }
                 ]
             });
@@ -337,7 +340,8 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                     ariaLabel: entry.ariaLabel || '',
                     onClick: entry.onClick || '',
                     customClass: entry.customClass || '',
-                    dataAttributes: JSON.stringify(this.$normalizeDataAttributes(entry.dataAttributes))
+                    dataAttributes: JSON.stringify(this.$normalizeDataAttributes(entry.dataAttributes)),
+                    brickParams: JSON.stringify(this.$normalizeDataAttributes(entry.brickParams))
                 };
 
                 insert.isDisabled = this.$normalizeFlag(entry.isDisabled);
@@ -504,6 +508,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
 
                     const Form = Dialog.getContent().getElement('form');
                     const DataAttributes = this.$getDataAttributesControl(Dialog.getContent());
+                    const BrickParams = this.$getDataAttributesControl(Dialog.getContent(), 'brickParams');
 
                     this.edit(index, {
                         text: Form.elements.text.value,
@@ -526,6 +531,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                         onClick: Form.elements.onClick.value,
                         customClass: Form.elements.customClass.value,
                         dataAttributes: DataAttributes ? DataAttributes.getValue() : [],
+                        brickParams: BrickParams ? BrickParams.getValue() : [],
                         isDisabled: Dialog.IsDisabledSwitch.getStatus()
                     });
 
@@ -556,6 +562,12 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
 
                     if (DataAttributes) {
                         DataAttributes.setValue(data.dataAttributes || []);
+                    }
+
+                    const BrickParams = this.$getDataAttributesControl(Dialog.getContent(), 'brickParams');
+
+                    if (BrickParams) {
+                        BrickParams.setValue(data.brickParams || []);
                     }
 
                     if (this.$normalizeFlag(data.isDisabled)) {
@@ -603,6 +615,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
 
                     const Form = Dialog.getContent().getElement('form');
                     const DataAttributes = this.$getDataAttributesControl(Dialog.getContent());
+                    const BrickParams = this.$getDataAttributesControl(Dialog.getContent(), 'brickParams');
 
                     this.add({
                         text: Form.elements.text.value,
@@ -625,6 +638,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                         onClick: Form.elements.onClick.value,
                         customClass: Form.elements.customClass.value,
                         dataAttributes: DataAttributes ? DataAttributes.getValue() : [],
+                        brickParams: BrickParams ? BrickParams.getValue() : [],
                         isDisabled: Dialog.IsDisabledSwitch.getStatus()
                     });
 
@@ -687,7 +701,9 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                                     fieldOnClick: QUILocale.get(lg, prefix + 'onClick'),
                                     fieldCustomClass: QUILocale.get(lg, prefix + 'customClass'),
                                     fieldDataAttributes: QUILocale.get(lg, prefix + 'dataAttributes'),
-                                    fieldDataAttributesDesc: QUILocale.get(lg, prefix + 'dataAttributesDesc')
+                                    fieldDataAttributesDesc: QUILocale.get(lg, prefix + 'dataAttributesDesc'),
+                                    fieldBrickParams: QUILocale.get(lg, prefix + 'brickParams'),
+                                    fieldBrickParamsDesc: QUILocale.get(lg, prefix + 'brickParamsDesc')
                                 }),
                                 'class': 'quiqqer-bricks-buttons-settings-entry'
                             }).inject(Win.getContent());
@@ -807,6 +823,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                 onClick: entry.onClick || '',
                 customClass: entry.customClass || '',
                 dataAttributes: this.$normalizeDataAttributes(entry.dataAttributes),
+                brickParams: this.$normalizeDataAttributes(entry.brickParams),
                 isDisabled: this.$normalizeFlag(entry.isDisabled)
             };
         },
@@ -846,15 +863,32 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
             return result;
         },
 
-        $getDataAttributesControl: function (scope) {
+        /**
+         * The dialog holds two DataAttributes editors – one for the button's
+         * own attributes, one for the parameters handed to the opened brick –
+         * so they are told apart by the hidden input's name.
+         *
+         * @param {HTMLElement} scope
+         * @param {String} [name] - input name, defaults to the button attributes
+         * @returns {Object|null}
+         */
+        $getDataAttributesControl: function (scope, name) {
             if (!scope) {
                 return null;
             }
 
+            name = name || 'dataAttributes';
+
             const controls = QUI.Controls.getControlsInElement(scope);
 
             return controls.filter(function (Control) {
-                return Control.getType() === 'package/quiqqer/components/bin/Controls/DataAttributes';
+                if (Control.getType() !== 'package/quiqqer/components/bin/Controls/DataAttributes') {
+                    return false;
+                }
+
+                const Elm = Control.getElm();
+
+                return Elm && Elm.get('name') === name;
             })[0] || null;
         },
 

@@ -19,7 +19,12 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickSelectWindow', [
 
         options: {
             project: false,
-            lang: false
+            lang: false,
+
+            // forwarded to the picker, see BrickPicker
+            brickCategories: false,
+            brickControls: false,
+            emptyText: ''
         },
 
         initialize: function (options) {
@@ -63,7 +68,10 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickSelectWindow', [
             return Object.merge(this.parent(), {
                 project: this.getAttribute('project'),
                 lang: this.getAttribute('lang'),
-                multiple: this.getAttribute('multiple')
+                multiple: this.getAttribute('multiple'),
+                brickCategories: this.getAttribute('brickCategories'),
+                brickControls: this.getAttribute('brickControls'),
+                emptyText: this.getAttribute('emptyText')
             });
         }
     });
