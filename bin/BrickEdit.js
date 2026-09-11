@@ -171,7 +171,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
             this.addButton({
                 name: 'save',
                 textimage: 'fa fa-save',
-                text: QUILocale.get('quiqqer/system', 'save'),
+                text: QUILocale.get('quiqqer/core', 'save'),
                 events: {
                     click: this.save
                 }
@@ -180,7 +180,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
             this.addButton({
                 name: 'delete',
                 icon: 'fa fa-trash-o',
-                title: QUILocale.get('quiqqer/system', 'delete'),
+                title: QUILocale.get('quiqqer/core', 'delete'),
                 events: {
                     click: this.del
                 },
@@ -193,7 +193,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                 name: 'information',
                 index: 10,
                 icon: 'fa fa-file-o',
-                text: QUILocale.get('quiqqer/system', 'information'),
+                text: QUILocale.get('quiqqer/core', 'information'),
                 events: {
                     onClick: this.showInformation
                 }
@@ -203,7 +203,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                 name: 'settings',
                 index: 20,
                 icon: 'fa fa-magic',
-                text: QUILocale.get('quiqqer/system', 'properties'),
+                text: QUILocale.get('quiqqer/core', 'properties'),
                 events: {
                     onClick: this.showSettings
                 }
@@ -223,7 +223,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                 name: 'content',
                 index: 40,
                 icon: 'fa fa-file-text-o',
-                text: QUILocale.get('quiqqer/system', 'content'),
+                text: QUILocale.get('quiqqer/core', 'content'),
                 events: {
                     onClick: this.showContent
                 }

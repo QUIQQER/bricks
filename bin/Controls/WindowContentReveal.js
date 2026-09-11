@@ -50,6 +50,9 @@ define('package/quiqqer/bricks/bin/Controls/WindowContentReveal', [], function (
                 await loadContent();
                 await document.fonts.ready;
                 win.fireEvent('contentReady', [win]);
+                // Start the opening animation at the measured, viewport-clamped
+                // height instead of animating down from the unconstrained content.
+                elm.style.height = win.getOpeningHeight() + 'px';
             } finally {
                 win.setAttribute('contentPending', false);
                 elm.style.visibility = previousVisibility;

@@ -61,22 +61,22 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickUsage', [
 
             this.$Grid = new Grid(Container, {
                 columnModel: [{
-                    header: QUILocale.get('quiqqer/system', 'project'),
+                    header: QUILocale.get('quiqqer/core', 'project'),
                     dataIndex: 'project',
                     dataType: 'string',
                     width: 100
                 }, {
-                    header: QUILocale.get('quiqqer/system', 'language'),
+                    header: QUILocale.get('quiqqer/core', 'language'),
                     dataIndex: 'lang',
                     dataType: 'string',
                     width: 100
                 }, {
-                    header: QUILocale.get('quiqqer/system', 'id'),
+                    header: QUILocale.get('quiqqer/core', 'id'),
                     dataIndex: 'id',
                     dataType: 'string',
                     width: 100
                 }, {
-                    header: QUILocale.get('quiqqer/system', 'title'),
+                    header: QUILocale.get('quiqqer/core', 'title'),
                     dataIndex: 'title',
                     dataType: 'string',
                     width: 200
