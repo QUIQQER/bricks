@@ -104,7 +104,7 @@ define('package/quiqqer/bricks/bin/Controls/Slider/PromosliderSettings', [
                 }, {
                     name: 'add',
                     textimage: 'fa fa-plus',
-                    text: QUILocale.get('quiqqer/system', 'add'),
+                    text: QUILocale.get('quiqqer/core', 'add'),
                     events: {
                         onClick: this.$openAddDialog
                     }
@@ -113,7 +113,7 @@ define('package/quiqqer/bricks/bin/Controls/Slider/PromosliderSettings', [
                 }, {
                     name: 'edit',
                     textimage: 'fa fa-edit',
-                    text: QUILocale.get('quiqqer/system', 'edit'),
+                    text: QUILocale.get('quiqqer/core', 'edit'),
                     disabled: true,
                     events: {
                         onClick: this.$openEditDialog
@@ -121,7 +121,7 @@ define('package/quiqqer/bricks/bin/Controls/Slider/PromosliderSettings', [
                 }, {
                     name: 'delete',
                     textimage: 'fa fa-trash',
-                    text: QUILocale.get('quiqqer/system', 'delete'),
+                    text: QUILocale.get('quiqqer/core', 'delete'),
                     disabled: true,
                     events: {
                         onClick: this.$openDeleteDialog
@@ -136,12 +136,12 @@ define('package/quiqqer/bricks/bin/Controls/Slider/PromosliderSettings', [
                     dataIndex: 'isDisabled',
                     hidden: true
                 }, {
-                    header: QUILocale.get('quiqqer/system', 'image'),
+                    header: QUILocale.get('quiqqer/core', 'image'),
                     dataIndex: 'imagePreview',
                     dataType: 'node',
                     width: 60
                 }, {
-                    header: QUILocale.get('quiqqer/system', 'title'),
+                    header: QUILocale.get('quiqqer/core', 'title'),
                     dataIndex: 'title',
                     dataType: 'string',
                     width: 300
@@ -524,7 +524,7 @@ define('package/quiqqer/bricks/bin/Controls/Slider/PromosliderSettings', [
                 maxWidth: 600,
                 maxHeight: 400,
                 ok_button: {
-                    text: QUILocale.get('quiqqer/system', 'delete'),
+                    text: QUILocale.get('quiqqer/core', 'delete'),
                     textimage: 'fa fa-trash'
                 },
                 events: {

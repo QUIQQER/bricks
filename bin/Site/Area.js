@@ -1248,7 +1248,7 @@ define('package/quiqqer/bricks/bin/Site/Area', [
                     content: QUILocale.get(lg, 'site.area.window.noBricksInArea.content'),
                     maxHeight: 300,
                     maxWidth: 450,
-                    closeButtonText: QUILocale.get('quiqqer/system', 'ok')
+                    closeButtonText: QUILocale.get('quiqqer/core', 'ok')
                 }).open();
 
                 return;
@@ -1337,11 +1337,11 @@ define('package/quiqqer/bricks/bin/Site/Area', [
                 maxHeight: 400,
                 autoclose: false,
                 ok_button: {
-                    text: QUILocale.get('quiqqer/system', 'accept'),
+                    text: QUILocale.get('quiqqer/core', 'accept'),
                     textimage: 'fa fa-save'
                 },
                 cancel_button: {
-                    text: QUILocale.get('quiqqer/system', 'cancel'),
+                    text: QUILocale.get('quiqqer/core', 'cancel'),
                     textimage: 'fa fa-remove'
                 },
                 events: {

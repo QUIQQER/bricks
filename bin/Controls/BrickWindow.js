@@ -19,6 +19,9 @@ define('package/quiqqer/bricks/bin/Controls/BrickWindow', [
         options: {
             brickId: false,
             prepareContent: false,
+            // Opt-in for content sizing controls: maxHeight is a working height,
+            // not a ceiling for their natural content height.
+            contentAutoHeight: false,
             // parameters handed to the rendered brick, e.g. {context: '...'}.
             // The server applies them prefixed, so they can never overwrite a
             // brick setting; a brick opts in by reading the prefixed value.
