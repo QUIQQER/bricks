@@ -153,7 +153,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickPicker', [
                     keys: ['Enter'],
                     label: this.getAttribute('autoExecute')
                         ? QUILocale.get(lg, 'site.area.window.shortcuts.add')
-                        : QUILocale.get('quiqqer/system', 'accept')
+                        : QUILocale.get('quiqqer/core', 'accept')
                 },
                 {
                     keys: ['Esc'],

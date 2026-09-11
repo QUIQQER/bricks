@@ -172,7 +172,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickEditWindow', [
 
             this.$SaveButton = new Element('button', {
                 'class': saveButtonClass,
-                html: QUILocale.get('quiqqer/system', 'save'),
+                html: QUILocale.get('quiqqer/core', 'save'),
                 type: 'button',
                 events: {
                     click: this.save
