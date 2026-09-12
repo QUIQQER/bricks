@@ -3104,6 +3104,15 @@
         <locale name="brick.accordion.settings.disabled.short">
             <pl><![CDATA[Wyłączony]]></pl>
         </locale>
+        <locale name="brick.accordion.settings.delete.title">
+            <pl><![CDATA[Usuń wpis]]></pl>
+        </locale>
+        <locale name="brick.accordion.settings.delete.text">
+            <pl><![CDATA[Usuń wpis]]></pl>
+        </locale>
+        <locale name="brick.accordion.settings.delete.information">
+            <pl><![CDATA[Czy na pewno chcesz usunąć ten wpis? Zmiana zostanie zastosowana po zapisaniu bloku.]]></pl>
+        </locale>
         <locale name="brick.accordion.settings.content">
             <pl><![CDATA[Treść]]></pl>
         </locale>
