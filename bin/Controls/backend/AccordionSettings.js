@@ -432,9 +432,9 @@ define('package/quiqqer/bricks/bin/Controls/backend/AccordionSettings', [
         $openDeleteDialog: function () {
             new QUIConfirm({
                 icon: 'fa fa-trash',
-                title: QUILocale.get('quiqqer/core', 'delete'),
-                text: QUILocale.get('quiqqer/core', 'delete'),
-                information: QUILocale.get('quiqqer/system', 'delete.confirm'),
+                title: QUILocale.get(lg, 'brick.accordion.settings.delete.title'),
+                text: QUILocale.get(lg, 'brick.accordion.settings.delete.text'),
+                information: QUILocale.get(lg, 'brick.accordion.settings.delete.information'),
                 texticon: false,
                 maxWidth: 600,
                 maxHeight: 400,

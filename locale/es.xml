@@ -3101,6 +3101,15 @@
         <locale name="brick.accordion.settings.disabled.short">
             <es><![CDATA[Desactivado]]></es>
         </locale>
+        <locale name="brick.accordion.settings.delete.title">
+            <es><![CDATA[Eliminar entrada]]></es>
+        </locale>
+        <locale name="brick.accordion.settings.delete.text">
+            <es><![CDATA[Eliminar entrada]]></es>
+        </locale>
+        <locale name="brick.accordion.settings.delete.information">
+            <es><![CDATA[¿Desea eliminar realmente esta entrada? El cambio se aplicará al guardar el módulo.]]></es>
+        </locale>
         <locale name="brick.accordion.settings.content">
             <es><![CDATA[Contenido]]></es>
         </locale>
