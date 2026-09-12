@@ -3210,6 +3210,15 @@ This content does not replace the block content. You can still place the brick t
         <locale name="brick.accordion.settings.disabled.short">
             <en><![CDATA[Disabled]]></en>
         </locale>
+        <locale name="brick.accordion.settings.delete.title">
+            <en><![CDATA[Delete entry]]></en>
+        </locale>
+        <locale name="brick.accordion.settings.delete.text">
+            <en><![CDATA[Delete entry]]></en>
+        </locale>
+        <locale name="brick.accordion.settings.delete.information">
+            <en><![CDATA[Do you really want to delete this entry? The change takes effect once you save the brick.]]></en>
+        </locale>
         <locale name="brick.accordion.settings.content">
             <en><![CDATA[Content]]></en>
         </locale>

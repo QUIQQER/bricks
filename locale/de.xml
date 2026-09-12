@@ -3221,6 +3221,15 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
         <locale name="brick.accordion.settings.disabled.short">
             <de><![CDATA[Deaktiviert]]></de>
         </locale>
+        <locale name="brick.accordion.settings.delete.title">
+            <de><![CDATA[Eintrag löschen]]></de>
+        </locale>
+        <locale name="brick.accordion.settings.delete.text">
+            <de><![CDATA[Eintrag löschen]]></de>
+        </locale>
+        <locale name="brick.accordion.settings.delete.information">
+            <de><![CDATA[Möchten Sie diesen Eintrag wirklich löschen? Die Änderung wird erst beim Speichern des Bausteins übernommen.]]></de>
+        </locale>
         <locale name="brick.accordion.settings.content">
             <de><![CDATA[Inhalt]]></de>
         </locale>
