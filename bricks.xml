@@ -2577,7 +2577,7 @@
                     <locale group="quiqqer/bricks" var="quiqqer.bricks.buttons.settings.createPopup.targetBlank"/>
                 </setting>
 
-                <setting name="title" type="text">
+                <setting name="titleAttribute" type="text">
                     <locale group="quiqqer/bricks" var="quiqqer.bricks.buttons.settings.createPopup.title"/>
                 </setting>
 

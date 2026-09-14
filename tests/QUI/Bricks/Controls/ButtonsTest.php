@@ -36,6 +36,7 @@ class ButtonsTest extends TestCase
             'buttons' => [
                 [
                     'text' => 'Track',
+                    'titleAttribute' => 'Track this action',
                     'dataAttributes' => [
                         ['name' => 'data-track-id', 'value' => '42'],
                         ['name' => 'plain', 'value' => 'ignored'],
@@ -46,6 +47,7 @@ class ButtonsTest extends TestCase
         ]))->create();
 
         $this->assertStringContainsString('data-track-id="42"', $html);
+        $this->assertStringContainsString('title="Track this action"', $html);
         $this->assertStringNotContainsString('data-data-', $html);
         $this->assertStringNotContainsString('ignored', $html);
     }

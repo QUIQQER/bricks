@@ -336,7 +336,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                     href: entry.href || '',
                     iconPosition: entry.iconPosition || 'start',
                     size: entry.size || '',
-                    title: entry.title || '',
+                    titleAttribute: entry.titleAttribute || '',
                     ariaLabel: entry.ariaLabel || '',
                     onClick: entry.onClick || '',
                     customClass: entry.customClass || '',
@@ -524,7 +524,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                         openBrickSpacing: Form.elements.openBrickSpacing.checked ? 1 : 0,
                         href: Form.elements.href.value,
                         targetBlank: Dialog.TargetBlankSwitch.getStatus(),
-                        title: Form.elements.title.value,
+                        titleAttribute: Form.elements.titleAttribute.value,
                         ariaLabel: Form.elements.ariaLabel.value,
                         disabled: Dialog.DisabledSwitch.getStatus(),
                         fullWidth: Dialog.FullWidthSwitch.getStatus(),
@@ -553,7 +553,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                     Form.elements.openBrickWinHeight.value = this.$normalizePopupDimension(data.openBrickWinHeight);
                     this.$setOpenBrickTitleDisplay(Form, Form.elements.openBrickTitle.value);
                     Form.elements.href.value = data.href || '';
-                    Form.elements.title.value = data.title || '';
+                    Form.elements.titleAttribute.value = data.titleAttribute || '';
                     Form.elements.ariaLabel.value = data.ariaLabel || '';
                     Form.elements.onClick.value = data.onClick || '';
                     Form.elements.customClass.value = data.customClass || '';
@@ -631,7 +631,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                         openBrickSpacing: Form.elements.openBrickSpacing.checked ? 1 : 0,
                         href: Form.elements.href.value,
                         targetBlank: Dialog.TargetBlankSwitch.getStatus(),
-                        title: Form.elements.title.value,
+                        titleAttribute: Form.elements.titleAttribute.value,
                         ariaLabel: Form.elements.ariaLabel.value,
                         disabled: Dialog.DisabledSwitch.getStatus(),
                         fullWidth: Dialog.FullWidthSwitch.getStatus(),
@@ -816,7 +816,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                 openBrickSpacing: this.$normalizeOpenBrickSpacing(entry.openBrickSpacing),
                 href: entry.href || '',
                 targetBlank: this.$normalizeFlag(entry.targetBlank),
-                title: entry.title || '',
+                titleAttribute: entry.titleAttribute || '',
                 ariaLabel: entry.ariaLabel || '',
                 disabled: this.$normalizeFlag(entry.disabled),
                 fullWidth: this.$normalizeFlag(entry.fullWidth),
