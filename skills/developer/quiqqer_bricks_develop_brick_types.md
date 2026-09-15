@@ -47,6 +47,31 @@ editing the corresponding files; their rules override legacy patterns found in o
 - Follow the package's existing `Bricks` or `Controls` namespace convention; both occur in QUIQQER.
 - Declare every reused package in `composer.json`. Do not assume an optional package is installed.
 
+## Reserved Brick Setting Names
+
+Do not reuse attributes owned by the bricks runtime as top-level brick-specific setting names in
+`<setting name="...">` or custom-tab `<input conf="...">` declarations. The runtime passes brick data to
+the control and writes some attributes again during rendering, so a collision can replace the configured
+value or give one name two different meanings.
+
+- Standard brick content and editor settings: `title`, `content`, `frontendTitle`, `width`, `height`,
+  `classes`, `customId`, `customCSS`, `customCSSScoping`, `customJS`, and `footer`.
+- Brick metadata and lifecycle attributes: `type`, `description`, `active`, `c_date`, `c_user`, `e_date`,
+  `e_user`, `project`, `lang`, `areas`, `hasContent`, `recommended`, `cacheable`, and `deprecated`.
+- Runtime identity and context attributes: `id`, `uniqueId`, `frontendId`, `Site`, `data-brickid`, and
+  `data-brickuid`.
+- Control root attributes such as `class`, `nodeName`, `styles`, `events`, and `qui-class` belong in the
+  PHP control and must not be exposed as ordinary brick-specific editor settings.
+
+`title` is especially unsafe: after applying the saved settings, the bricks runtime replaces the control's
+`title` attribute with the brick's `frontendTitle` or removes it. Use a purpose-specific name such as
+`titleAttribute`, `heading`, `introContent`, or `buttonLabel` instead. Read standard values such as `content`
+and `frontendTitle` from the control when needed, but do not redeclare them for a different purpose.
+
+This restriction applies to top-level settings passed onto the brick control. Keys inside a structured JSON
+setting do not collide with brick attributes; for example, an entry inside a `buttons` setting may carry its
+own `title`. Map nested values explicitly when composing a child control.
+
 ## CSS Class Naming And BEM
 
 - Derive the control root class from vendor, package, namespace folders below the package namespace, and control name:
@@ -479,6 +504,8 @@ needed for the task:
 - Confirm the PSR-4 namespace, class path, `bricks.xml` control name, and declared package dependencies.
 - Confirm the PHP control owns the convention-based root class and its owned markup uses pragmatic BEM names.
 - Confirm XML defaults, PHP defaults, JavaScript defaults, and CSS fallbacks describe the same behavior.
+- Confirm every top-level `<setting name>` and custom-tab `<input conf>` avoids reserved brick and control
+  attribute names.
 - Confirm every locale exists and is available to PHP or JavaScript where required.
 - Confirm the brick description reads as a teaser for editors and AI, and every setting whose effect
   is not obvious from its label carries a description.
