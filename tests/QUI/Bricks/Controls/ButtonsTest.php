@@ -52,6 +52,32 @@ class ButtonsTest extends TestCase
         $this->assertStringNotContainsString('ignored', $html);
     }
 
+    public function testMobileModeIsAppliedPerPopupButton(): void
+    {
+        $html = (new Buttons([
+            'buttons' => [
+                [
+                    'text' => 'Default fullscreen',
+                    'openBrickId' => 17,
+                ],
+                [
+                    'text' => 'Popup',
+                    'openBrickId' => 18,
+                    'openBrickMobileMode' => 'popup',
+                ],
+            ],
+        ]))->create();
+
+        $this->assertStringContainsString(
+            'data-open-brick-id="17" data-win-mobile-mode="fullScreen"',
+            $html
+        );
+        $this->assertStringContainsString(
+            'data-open-brick-id="18" data-win-mobile-mode="popup"',
+            $html
+        );
+    }
+
     public function testNoButtonCssIsForwardedWithoutEntries(): void
     {
         $Brick = new Buttons(['buttons' => []]);

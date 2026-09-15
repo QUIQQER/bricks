@@ -155,11 +155,28 @@ class ButtonTest extends TestCase
             $openBrickId?->item(0)?->attributes?->getNamedItem('data-qui')?->nodeValue
         );
 
-        foreach (['openBrickWinWidth', 'openBrickWinHeight', 'openBrickSpacing'] as $name) {
+        foreach (['openBrickWinWidth', 'openBrickWinHeight', 'openBrickMobileMode', 'openBrickSpacing'] as $name) {
             $node = $XPath->query($base . '/settings/setting[@name="' . $name . '"]')?->item(0);
             $this->assertSame('openBrickId', $node?->attributes?->getNamedItem('data-dependency')?->nodeValue, $name);
             $this->assertSame('*', $node?->attributes?->getNamedItem('data-dependency-options')?->nodeValue, $name);
         }
+
+        $mobileModeOptions = $XPath->query(
+            $base . '/settings/setting[@name="openBrickMobileMode"]/option'
+        );
+        $this->assertSame(
+            ['fullScreen', 'popup'],
+            array_map(
+                static fn(\DOMNode $option): string => (string)$option->attributes?->getNamedItem('value')?->nodeValue,
+                iterator_to_array($mobileModeOptions ?: [])
+            )
+        );
+        $this->assertSame(
+            'fullScreen',
+            trim((string)$XPath->evaluate(
+                'string(' . $base . '/settings/setting[@name="openBrickMobileMode"]/defaultValue)'
+            ))
+        );
 
         $href = $XPath->query($base . '/settings/setting[@name="href"]')?->item(0);
         $this->assertSame('openBrickId', $href?->attributes?->getNamedItem('data-dependency')?->nodeValue);
