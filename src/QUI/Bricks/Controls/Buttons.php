@@ -64,6 +64,8 @@ class Buttons extends QUI\Control
 
             $button['iconType'] = $button['iconType'] ?? 'fa';
             $button['size'] = !empty($button['size']) ? $button['size'] : $defaultSize;
+            $button['title'] = $button['titleAttribute'] ?? '';
+            unset($button['titleAttribute']);
             $button['dataAttributes'] = Utils::dataAttributesFromEntries($button['dataAttributes'] ?? []);
             $button['brickParams'] = Utils::dataAttributesFromEntries($button['brickParams'] ?? []);
 

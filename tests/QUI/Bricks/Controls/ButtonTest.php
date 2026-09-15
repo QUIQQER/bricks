@@ -15,11 +15,13 @@ class ButtonTest extends TestCase
             'text' => '<strong>"Go"</strong>',
             'btnType' => 'secondary-outline',
             'size' => 'lg',
+            'titleAttribute' => 'Continue to checkout',
         ]))->create();
 
         $this->assertStringContainsString('class="quiqqer-bricks-button"', $html);
         $this->assertStringContainsString('<button', $html);
         $this->assertStringContainsString('class="btn btn-secondary-outline btn-lg"', $html);
+        $this->assertStringContainsString('title="Continue to checkout"', $html);
         $this->assertStringContainsString(
             '<span class="btn__text">&lt;strong&gt;&quot;Go&quot;&lt;/strong&gt;</span>',
             $html
@@ -173,6 +175,8 @@ class ButtonTest extends TestCase
         );
 
         $this->assertCount(1, $XPath->query($base . '/settings/setting[@name="size"]') ?: []);
+        $this->assertCount(1, $XPath->query($base . '/settings/setting[@name="titleAttribute"]') ?: []);
+        $this->assertCount(0, $XPath->query($base . '/settings/setting[@name="title"]') ?: []);
 
         $dataAttributes = $XPath->query($base . '/settings/setting[@name="dataAttributes"]')?->item(0);
         $this->assertSame(
