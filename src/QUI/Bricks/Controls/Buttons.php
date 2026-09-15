@@ -69,6 +69,14 @@ class Buttons extends QUI\Control
             $button['dataAttributes'] = Utils::dataAttributesFromEntries($button['dataAttributes'] ?? []);
             $button['brickParams'] = Utils::dataAttributesFromEntries($button['brickParams'] ?? []);
 
+            $brickId = (int)($button['openBrickId'] ?? 0);
+            $Manager = $brickId > 0 ? QUI\Bricks\Manager::init() : null;
+            $brickType = $Manager?->getBrickTypeById($brickId);
+
+            if ($brickType !== null && $Manager->supportsWindowAutoHeight($brickType)) {
+                $button['dataAttributes']['window-auto-height'] = '1';
+            }
+
             $Button = new Button(array_merge($button, [
                 'displayMode' => $displayMode,
             ]));
