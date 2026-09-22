@@ -135,6 +135,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickIdInput', [
             Field.appendChild(this.$Title);
 
             SelectButton.addEventListener('click', this.$openSelect);
+            this.$Display.addEventListener('click', this.$openSelect);
             this.$EditButton.addEventListener('click', this.$openEdit);
             ClearButton.addEventListener('click', this.$clear);
 
@@ -161,6 +162,22 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickIdInput', [
          */
         setProject: function (Project) {
             this.setAttribute('project', Project);
+        },
+
+        /**
+         * Restore a reference and its cached title, then refresh the title.
+         *
+         * @param {Number|String} value
+         * @param {String} [title]
+         */
+        setValue: function (value, title) {
+            const brickId = parseInt(value, 10);
+
+            this.$Input.value = !isNaN(brickId) && brickId > 0 ? brickId : '';
+            this.$setTitle(this.$getValue() ? (title || '').toString().trim() : '');
+            this.$updateDisplay();
+            this.$Input.dispatchEvent(new Event('change'));
+            this.$loadBrickTitle();
         },
 
         $getValue: function () {
@@ -241,10 +258,15 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickIdInput', [
             this.$EditButton.disabled = value <= 0;
         },
 
+        /**
+         * Update the label and notify consumers through titleChange(Control, title).
+         */
         $setTitle: function (title) {
             if (!this.$Title) {
                 return;
             }
+
+            this.fireEvent('titleChange', [this, title]);
 
             if (!title) {
                 this.$Title.textContent = '';

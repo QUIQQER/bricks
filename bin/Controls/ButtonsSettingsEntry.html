@@ -100,23 +100,9 @@
                 <label class="field-container">
                     <span class="field-container-item">{{fieldOpenBrick}}</span>
                     <span class="field-container-field">
-                        <span class="quiqqer-bricks-buttons-settings-entry-openBrickRow">
-                            <input name="openBrickId"
-                               class="quiqqer-bricks-buttons-settings-entry-openBrickId"
-                               readonly
-                               placeholder="ID"
-                               data-qui="package/quiqqer/core/bin/QUI/controls/settings/Dependency"
-                            />
-                            <button type="button" name="selectBrick" class="btn btn-light">
-                                {{fieldOpenBrickSelect}} <i class="fa-solid fa-cubes"></i>
-                            </button>
-                            <button type="button" name="clearBrick" class="btn btn-danger" title="{{fieldOpenBrickClear}}">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>
-                        </span>
+                        <input name="openBrickId" type="hidden"
+                               data-qui="package/quiqqer/bricks/bin/Controls/backend/BrickIdInput"/>
                         <input name="openBrickTitle" type="hidden"/>
-                        <small class="quiqqer-bricks-buttons-settings-entry-openBrickTitle"
-                               data-name="openBrickTitleDisplay"></small>
                     </span>
                 </label>
                 <div class="field-container-item-desc">
