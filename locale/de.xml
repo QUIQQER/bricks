@@ -3030,6 +3030,18 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
         <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.winHeight">
             <de><![CDATA[Popup Höhe (px)]]></de>
         </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode">
+            <de><![CDATA[Darstellung auf Mobilgeräten]]></de>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileModeDesc">
+            <de><![CDATA[Legt fest, ob das Popup auf Mobilgeräten im Vollbild oder mit Randabstand geöffnet wird.]]></de>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode.fullScreen">
+            <de><![CDATA[Vollbild]]></de>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode.popup">
+            <de><![CDATA[Popup mit Randabstand]]></de>
+        </locale>
         <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.spacing">
             <de><![CDATA[Abstand im Popup]]></de>
         </locale>

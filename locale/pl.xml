@@ -2914,6 +2914,18 @@
         <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.winHeight">
             <pl><![CDATA[Wysokość wyskakującego okna (px)]]></pl>
         </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode">
+            <pl><![CDATA[Wyświetlanie na urządzeniach mobilnych]]></pl>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileModeDesc">
+            <pl><![CDATA[Określa, czy okno otwiera się na pełnym ekranie, czy z marginesem na urządzeniach mobilnych.]]></pl>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode.fullScreen">
+            <pl><![CDATA[Pełny ekran]]></pl>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode.popup">
+            <pl><![CDATA[Okno z marginesem]]></pl>
+        </locale>
         <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.spacing">
             <pl><![CDATA[Odstępy wewnątrz wyskakującego okna]]></pl>
         </locale>

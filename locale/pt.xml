@@ -2911,6 +2911,18 @@
         <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.winHeight">
             <pt><![CDATA[Altura da janela sobreposta (px)]]></pt>
         </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode">
+            <pt><![CDATA[Apresentação em dispositivos móveis]]></pt>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileModeDesc">
+            <pt><![CDATA[Define se a janela abre em ecrã inteiro ou com margem em dispositivos móveis.]]></pt>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode.fullScreen">
+            <pt><![CDATA[Ecrã inteiro]]></pt>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode.popup">
+            <pt><![CDATA[Janela com margem]]></pt>
+        </locale>
         <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.spacing">
             <pt><![CDATA[Espaçamento interior da janela sobreposta]]></pt>
         </locale>

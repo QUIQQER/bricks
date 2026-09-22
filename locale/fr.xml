@@ -2911,6 +2911,18 @@
         <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.winHeight">
             <fr><![CDATA[Hauteur de la fenêtre contextuelle (px)]]></fr>
         </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode">
+            <fr><![CDATA[Affichage sur les appareils mobiles]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileModeDesc">
+            <fr><![CDATA[Détermine si la fenêtre s’ouvre en plein écran ou avec une marge sur les appareils mobiles.]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode.fullScreen">
+            <fr><![CDATA[Plein écran]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode.popup">
+            <fr><![CDATA[Fenêtre avec marge]]></fr>
+        </locale>
         <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.spacing">
             <fr><![CDATA[Espacement intérieur de la fenêtre contextuelle]]></fr>
         </locale>
