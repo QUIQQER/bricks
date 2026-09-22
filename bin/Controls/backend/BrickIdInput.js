@@ -2,8 +2,8 @@
  * Settings input control for a single "open brick" reference.
  *
  * Enhances a hidden input that stores a brick id. It renders a read-only
- * display, a select button (opens the brick picker) and a clear button, and
- * toggles dependent fields declared with:
+ * display, select, edit and clear buttons, and toggles dependent fields
+ * declared with:
  *
  *   data-dependency="<name of this input>"
  *   data-dependency-options="*"   -> visible while a brick is selected
@@ -37,6 +37,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickIdInput', [
         Binds: [
             '$onImport',
             '$openSelect',
+            '$openEdit',
             '$clear',
             '$applyDependencies'
         ],
@@ -63,6 +64,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickIdInput', [
 
             this.$Input = null;
             this.$Display = null;
+            this.$EditButton = null;
             this.$Title = null;
             this.$Fields = [];
 
@@ -104,6 +106,14 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickIdInput', [
             SelectButton.innerHTML = QUILocale.get(lg, 'quiqqer.bricks.buttons.settings.createPopup.openBrick.select') +
                 ' <span class="fa fa-cubes" aria-hidden="true"></span>';
 
+            this.$EditButton = document.createElement('button');
+            this.$EditButton.type = 'button';
+            this.$EditButton.className = 'btn btn-light';
+            this.$EditButton.setAttribute('data-name', 'edit');
+            this.$EditButton.title = QUILocale.get(lg, 'brick.sheet.edit.title');
+            this.$EditButton.setAttribute('aria-label', this.$EditButton.title);
+            this.$EditButton.innerHTML = '<span class="fa fa-edit" aria-hidden="true"></span>';
+
             const ClearButton = document.createElement('button');
             ClearButton.type = 'button';
             ClearButton.className = 'btn btn-danger';
@@ -114,6 +124,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickIdInput', [
 
             Row.appendChild(this.$Display);
             Row.appendChild(SelectButton);
+            Row.appendChild(this.$EditButton);
             Row.appendChild(ClearButton);
 
             this.$Title = document.createElement('small');
@@ -124,6 +135,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickIdInput', [
             Field.appendChild(this.$Title);
 
             SelectButton.addEventListener('click', this.$openSelect);
+            this.$EditButton.addEventListener('click', this.$openEdit);
             ClearButton.addEventListener('click', this.$clear);
 
             // dependent fields in the same settings table
@@ -143,7 +155,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickIdInput', [
         },
 
         /**
-         * Store the project and forward it to nothing else; used for the picker.
+         * Store the project for the picker and editor.
          *
          * @param {Object|String} Project
          */
@@ -188,6 +200,33 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickIdInput', [
             });
         },
 
+        $openEdit: function () {
+            require([
+                'package/quiqqer/bricks/bin/Controls/backend/BrickEditWindow'
+            ], (BrickEditWindow) => {
+                const brickId = this.$getValue();
+
+                if (!brickId || !this.$Input.isConnected) {
+                    return;
+                }
+
+                const projectData = this.$getProjectAndLang();
+
+                new BrickEditWindow({
+                    brickId: brickId,
+                    projectName: projectData.project,
+                    projectLang: projectData.lang,
+                    events: {
+                        onClose: () => {
+                            if (this.$Input.isConnected) {
+                                this.$loadBrickTitle();
+                            }
+                        }
+                    }
+                }).open();
+            });
+        },
+
         $clear: function () {
             this.$Input.value = '';
             this.$setTitle('');
@@ -199,6 +238,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickIdInput', [
             const value = this.$getValue();
 
             this.$Display.value = value > 0 ? '#' + value : '';
+            this.$EditButton.disabled = value <= 0;
         },
 
         $setTitle: function (title) {
@@ -230,6 +270,10 @@ define('package/quiqqer/bricks/bin/Controls/backend/BrickIdInput', [
             const self = this;
 
             QUIAjax.get('package_quiqqer_bricks_ajax_getBrick', function (result) {
+                if (self.$getValue() !== value || !self.$Input.isConnected) {
+                    return;
+                }
+
                 if (result && result.attributes && result.attributes.title) {
                     self.$setTitle(result.attributes.title.toString().trim());
                 }
