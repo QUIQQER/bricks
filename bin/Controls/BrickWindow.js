@@ -58,15 +58,8 @@ define('package/quiqqer/bricks/bin/Controls/BrickWindow', [
         },
 
         $shouldPrepareContent: function () {
-            if (this.getAttribute('prepareContent')) {
-                return true;
-            }
-
-            const brickId = Number(this.getAttribute('brickId'));
-
-            return brickId > 0 && document.querySelector(
-                '[data-open-brick-id="' + brickId + '"][data-window-auto-height="1"]'
-            ) !== null;
+            return Boolean(this.getAttribute('prepareContent'))
+                || this.getAttribute('contentAutoHeight') === true;
         },
 
         $onOpen: function () {

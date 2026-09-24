@@ -2911,6 +2911,18 @@
         <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.winHeight">
             <it><![CDATA[Altezza della finestra popup (px)]]></it>
         </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode">
+            <it><![CDATA[Visualizzazione sui dispositivi mobili]]></it>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileModeDesc">
+            <it><![CDATA[Definisce se la finestra si apre a schermo intero o con margine sui dispositivi mobili.]]></it>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode.fullScreen">
+            <it><![CDATA[Schermo intero]]></it>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode.popup">
+            <it><![CDATA[Finestra con margine]]></it>
+        </locale>
         <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.spacing">
             <it><![CDATA[Spaziatura interna della finestra popup]]></it>
         </locale>
@@ -3094,6 +3106,12 @@
         </locale>
         <locale name="brick.accordion.settings.title">
             <it><![CDATA[Titolo]]></it>
+        </locale>
+        <locale name="brick.accordion.settings.anchor">
+            <it><![CDATA[Ancora]]></it>
+        </locale>
+        <locale name="brick.accordion.settings.anchor.description">
+            <it><![CDATA[Facoltativo. Consente di collegarsi direttamente a questa voce, ad es. con #costi-di-spedizione. La voce viene aperta e la pagina scorre fino ad essa. L'ancora deve essere univoca in tutta la pagina: assegnarla una sola volta ed evitare termini generici come "content" o "header". I caratteri non consentiti vengono rimossi automaticamente.]]></it>
         </locale>
         <locale name="brick.accordion.settings.disabled">
             <it><![CDATA[Disattiva voce]]></it>

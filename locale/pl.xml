@@ -2914,6 +2914,18 @@
         <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.winHeight">
             <pl><![CDATA[Wysokość wyskakującego okna (px)]]></pl>
         </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode">
+            <pl><![CDATA[Wyświetlanie na urządzeniach mobilnych]]></pl>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileModeDesc">
+            <pl><![CDATA[Określa, czy okno otwiera się na pełnym ekranie, czy z marginesem na urządzeniach mobilnych.]]></pl>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode.fullScreen">
+            <pl><![CDATA[Pełny ekran]]></pl>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode.popup">
+            <pl><![CDATA[Okno z marginesem]]></pl>
+        </locale>
         <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.spacing">
             <pl><![CDATA[Odstępy wewnątrz wyskakującego okna]]></pl>
         </locale>
@@ -3097,6 +3109,12 @@
         </locale>
         <locale name="brick.accordion.settings.title">
             <pl><![CDATA[Tytuł]]></pl>
+        </locale>
+        <locale name="brick.accordion.settings.anchor">
+            <pl><![CDATA[Kotwica]]></pl>
+        </locale>
+        <locale name="brick.accordion.settings.anchor.description">
+            <pl><![CDATA[Opcjonalnie. Umożliwia bezpośrednie linkowanie do tego wpisu, np. za pomocą #koszty-wysylki. Wpis zostanie otwarty, a strona przewinie się do niego. Kotwica musi być unikalna na całej stronie: należy nadać ją tylko raz i unikać ogólnych nazw, takich jak "content" lub "header". Niedozwolone znaki są usuwane automatycznie.]]></pl>
         </locale>
         <locale name="brick.accordion.settings.disabled">
             <pl><![CDATA[Wyłącz wpis]]></pl>

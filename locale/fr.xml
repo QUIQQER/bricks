@@ -2911,6 +2911,18 @@
         <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.winHeight">
             <fr><![CDATA[Hauteur de la fenêtre contextuelle (px)]]></fr>
         </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode">
+            <fr><![CDATA[Affichage sur les appareils mobiles]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileModeDesc">
+            <fr><![CDATA[Détermine si la fenêtre s’ouvre en plein écran ou avec une marge sur les appareils mobiles.]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode.fullScreen">
+            <fr><![CDATA[Plein écran]]></fr>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode.popup">
+            <fr><![CDATA[Fenêtre avec marge]]></fr>
+        </locale>
         <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.spacing">
             <fr><![CDATA[Espacement intérieur de la fenêtre contextuelle]]></fr>
         </locale>
@@ -3094,6 +3106,12 @@
         </locale>
         <locale name="brick.accordion.settings.title">
             <fr><![CDATA[Titre]]></fr>
+        </locale>
+        <locale name="brick.accordion.settings.anchor">
+            <fr><![CDATA[Ancre]]></fr>
+        </locale>
+        <locale name="brick.accordion.settings.anchor.description">
+            <fr><![CDATA[Facultatif. Permet de créer un lien direct vers cette entrée, p. ex. avec #frais-de-livraison. L'entrée s'ouvre et la page défile jusqu'à elle. L'ancre doit être unique sur toute la page : ne l'attribuer qu'une seule fois et éviter les termes génériques comme « content » ou « header ». Les caractères non autorisés sont supprimés automatiquement.]]></fr>
         </locale>
         <locale name="brick.accordion.settings.disabled">
             <fr><![CDATA[Désactiver l’entrée]]></fr>

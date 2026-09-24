@@ -2911,6 +2911,18 @@
         <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.winHeight">
             <es><![CDATA[Altura de la ventana emergente (px)]]></es>
         </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode">
+            <es><![CDATA[Visualización en dispositivos móviles]]></es>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileModeDesc">
+            <es><![CDATA[Define si la ventana se abre a pantalla completa o con margen en dispositivos móviles.]]></es>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode.fullScreen">
+            <es><![CDATA[Pantalla completa]]></es>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode.popup">
+            <es><![CDATA[Ventana con margen]]></es>
+        </locale>
         <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.spacing">
             <es><![CDATA[Espaciado interior de la ventana emergente]]></es>
         </locale>
@@ -3094,6 +3106,12 @@
         </locale>
         <locale name="brick.accordion.settings.title">
             <es><![CDATA[Título]]></es>
+        </locale>
+        <locale name="brick.accordion.settings.anchor">
+            <es><![CDATA[Ancla]]></es>
+        </locale>
+        <locale name="brick.accordion.settings.anchor.description">
+            <es><![CDATA[Opcional. Permite enlazar directamente a esta entrada, p. ej. con #gastos-de-envio. La entrada se abre y la página se desplaza hasta ella. El ancla debe ser única en toda la página: asignarla solo una vez y evitar términos genéricos como "content" o "header". Los caracteres no permitidos se eliminan automáticamente.]]></es>
         </locale>
         <locale name="brick.accordion.settings.disabled">
             <es><![CDATA[Desactivar entrada]]></es>

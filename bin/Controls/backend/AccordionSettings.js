@@ -8,11 +8,12 @@ define('package/quiqqer/bricks/bin/Controls/backend/AccordionSettings', [
     'Mustache',
     'controls/grid/Grid',
     'utils/Controls',
+    'package/quiqqer/bricks/bin/utils/Anchor',
 
     'text!package/quiqqer/bricks/bin/Controls/backend/AccordionSettings.html',
     'css!package/quiqqer/bricks/bin/Controls/backend/AccordionSettings.css'
 
-], function (QUI, QUIControl, QUIConfirm, QUISwitch, QUILocale, Mustache, Grid, ControlsUtils, template) {
+], function (QUI, QUIControl, QUIConfirm, QUISwitch, QUILocale, Mustache, Grid, ControlsUtils, AnchorUtils, template) {
     "use strict";
 
     const lg = 'quiqqer/bricks';
@@ -146,6 +147,11 @@ define('package/quiqqer/bricks/bin/Controls/backend/AccordionSettings', [
                         dataIndex: 'entryTitle',
                         dataType: 'code',
                         width: 220
+                    }, {
+                        header: QUILocale.get(lg, 'brick.accordion.settings.anchor'),
+                        dataIndex: 'anchor',
+                        dataType: 'code',
+                        width: 150
                     }, {
                         dataIndex: 'entryContent',
                         hidden: true
@@ -300,6 +306,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/AccordionSettings', [
                         }
                     }),
                     entryTitle: 'entryTitle' in entry ? entry.entryTitle : '',
+                    anchor: entry.anchor || '',
                     entryContent: 'entryContent' in entry ? entry.entryContent : '',
                     entryContentPreview: this.$createContentPreview(entry)
                 });
@@ -369,6 +376,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/AccordionSettings', [
             this.$data.push({
                 disabled: 'disabled' in params ? parseInt(params.disabled) : 0,
                 entryTitle: 'entryTitle' in params ? params.entryTitle : '',
+                anchor: params.anchor || '',
                 entryContent: 'entryContent' in params ? params.entryContent : ''
             });
 
@@ -384,6 +392,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/AccordionSettings', [
             this.$data[index] = {
                 disabled: 'disabled' in params ? parseInt(params.disabled) : 0,
                 entryTitle: 'entryTitle' in params ? params.entryTitle : '',
+                anchor: params.anchor || '',
                 entryContent: 'entryContent' in params ? params.entryContent : ''
             };
 
@@ -420,6 +429,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/AccordionSettings', [
                 data.push({
                     disabled: parseInt(gridData[i].disabled) ? 1 : 0,
                     entryTitle: gridData[i].entryTitle,
+                    anchor: gridData[i].anchor,
                     entryContent: gridData[i].entryContent
                 });
             }
@@ -476,6 +486,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/AccordionSettings', [
                     self.edit(index, {
                         disabled: Dialog.DisabledSwitch.getStatus() ? 1 : 0,
                         entryTitle: Form.elements.entryTitle.value,
+                        anchor: AnchorUtils.finalize(Form.elements.anchor.value),
                         entryContent: Form.elements.entryContent.value
                     });
 
@@ -492,6 +503,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/AccordionSettings', [
                     }
 
                     Form.elements.entryTitle.value = data.entryTitle || '';
+                    Form.elements.anchor.value = data.anchor || '';
                     Form.elements.entryContent.value = data.entryContent || '';
                     Form.elements.entryTitle.fireEvent('change');
                     Form.elements.entryContent.fireEvent('change');
@@ -512,6 +524,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/AccordionSettings', [
                     this.add({
                         disabled: Dialog.DisabledSwitch.getStatus() ? 1 : 0,
                         entryTitle: Form.elements.entryTitle.value,
+                        anchor: AnchorUtils.finalize(Form.elements.anchor.value),
                         entryContent: Form.elements.entryContent.value
                     });
 
@@ -539,10 +552,15 @@ define('package/quiqqer/bricks/bin/Controls/backend/AccordionSettings', [
                                 html: Mustache.render(template, {
                                     disabled: QUILocale.get(lg, 'brick.accordion.settings.disabled'),
                                     title: QUILocale.get(lg, 'brick.accordion.settings.title'),
+                                    anchor: QUILocale.get(lg, 'brick.accordion.settings.anchor'),
+                                    anchorDescription: QUILocale.get(lg, 'brick.accordion.settings.anchor.description'),
+                                    idPrefix: String.uniqueID(),
                                     content: QUILocale.get(lg, 'brick.accordion.settings.content')
                                 }),
                                 'class': 'quiqqer-bricks-accordion-settings-dialog'
                             }).inject(Win.getContent());
+
+                            AnchorUtils.bindInput(Container.querySelector('input[name="anchor"]'));
 
                             const contentField = Container.getElement('.field-entryContent');
 

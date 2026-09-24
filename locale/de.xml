@@ -3030,6 +3030,18 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
         <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.winHeight">
             <de><![CDATA[Popup Höhe (px)]]></de>
         </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode">
+            <de><![CDATA[Darstellung auf Mobilgeräten]]></de>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileModeDesc">
+            <de><![CDATA[Legt fest, ob das Popup auf Mobilgeräten im Vollbild oder mit Randabstand geöffnet wird.]]></de>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode.fullScreen">
+            <de><![CDATA[Vollbild]]></de>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode.popup">
+            <de><![CDATA[Popup mit Randabstand]]></de>
+        </locale>
         <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.spacing">
             <de><![CDATA[Abstand im Popup]]></de>
         </locale>
@@ -3214,6 +3226,12 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
         </locale>
         <locale name="brick.accordion.settings.title">
             <de><![CDATA[Titel]]></de>
+        </locale>
+        <locale name="brick.accordion.settings.anchor">
+            <de><![CDATA[Anker]]></de>
+        </locale>
+        <locale name="brick.accordion.settings.anchor.description">
+            <de><![CDATA[Optional. Damit lässt sich direkt auf diesen Eintrag verlinken, z. B. mit #versandkosten. Beim Aufruf wird der Eintrag geöffnet und die Seite scrollt dorthin. Der Anker muss auf der gesamten Seite eindeutig sein: nur einmal vergeben und keine allgemeinen Begriffe wie „content“ oder „header“ verwenden. Unerlaubte Zeichen werden automatisch entfernt.]]></de>
         </locale>
         <locale name="brick.accordion.settings.disabled">
             <de><![CDATA[Eintrag deaktivieren]]></de>

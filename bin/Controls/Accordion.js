@@ -22,6 +22,8 @@ define('package/quiqqer/bricks/bin/Controls/Accordion', [
 
         Binds: [
             '$onImport',
+            '$onDestroy',
+            '$onHashChange',
             '$toggle',
             'open',
             'close'
@@ -33,7 +35,8 @@ define('package/quiqqer/bricks/bin/Controls/Accordion', [
             this.accordionItems = [];
 
             this.addEvents({
-                onImport: this.$onImport
+                onImport: this.$onImport,
+                onDestroy: this.$onDestroy
             });
         },
 
@@ -54,6 +57,79 @@ define('package/quiqqer/bricks/bin/Controls/Accordion', [
 
                 Header.addEvent('click', self.$toggle);
             });
+
+            // deep link: open the entry referenced by the URL hash
+            this.openFromHash(false);
+            window.addEventListener('hashchange', this.$onHashChange);
+        },
+
+        $onDestroy: function () {
+            window.removeEventListener('hashchange', this.$onHashChange);
+        },
+
+        $onHashChange: function () {
+            this.openFromHash(true);
+        },
+
+        /**
+         * Open the entry that the URL hash points to and scroll to the target.
+         * The target can be the entry itself (its anchor) or any element with
+         * an id inside the entry.
+         *
+         * @param {Boolean} animate - false on page load, so nothing moves
+         *                            while the page scrolls to the target
+         */
+        openFromHash: function (animate) {
+            const Target = this.$getHashTarget();
+            const Item = Target?.closest('[data-name="item"]');
+
+            if (!Item || !this.getElm().contains(Item)) {
+                return;
+            }
+
+            const scrollToTarget = () => Target.scrollIntoView({block: 'start'});
+            const ContentWrapper = Item.querySelector('[data-name="content-wrapper"]');
+            const Content = ContentWrapper?.querySelector('[data-name="content"]');
+
+            if (Item.open || !Content) {
+                scrollToTarget();
+                return;
+            }
+
+            if (animate && !this.prefersReducedMotion()) {
+                // scroll after the height animation, closing entries above
+                // would otherwise shift the target
+                this.open(ContentWrapper, Content, Item);
+                setTimeout(scrollToTarget, this.$getTransitionDurationMs(Item));
+                return;
+            }
+
+            if (this.getAttribute('stayopen') === false) {
+                Array.from(this.accordionItems).forEach((Other) => {
+                    Other.open = false;
+                });
+            }
+
+            Item.open = true;
+            scrollToTarget();
+        },
+
+        /**
+         * @return {HTMLElement|null}
+         */
+        $getHashTarget: function () {
+            const hash = window.location.hash.substring(1);
+
+            if (hash === '') {
+                return null;
+            }
+
+            try {
+                // umlauts arrive percent-encoded
+                return document.getElementById(decodeURIComponent(hash));
+            } catch (e) {
+                return document.getElementById(hash);
+            }
         },
 
         $toggle: function (event) {
@@ -152,6 +228,17 @@ define('package/quiqqer/bricks/bin/Controls/Accordion', [
                 .getPropertyValue('--_transition-duration').trim();
 
             return value || '500ms';
+        },
+
+        /**
+         * @param {HTMLElement} Item
+         * @return {Number}
+         */
+        $getTransitionDurationMs: function (Item) {
+            const value = this.getTransitionDuration(Item);
+            const duration = parseFloat(value) * (value.endsWith('ms') ? 1 : 1000);
+
+            return Number.isNaN(duration) ? 500 : duration;
         }
     });
 });

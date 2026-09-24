@@ -3020,6 +3020,18 @@ This content does not replace the block content. You can still place the brick t
         <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.winHeight">
             <en><![CDATA[Popup height (px)]]></en>
         </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode">
+            <en><![CDATA[Display on mobile devices]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileModeDesc">
+            <en><![CDATA[Determines whether the popup opens full screen or with outer spacing on mobile devices.]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode.fullScreen">
+            <en><![CDATA[Full screen]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode.popup">
+            <en><![CDATA[Popup with outer spacing]]></en>
+        </locale>
         <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.spacing">
             <en><![CDATA[Popup spacing]]></en>
         </locale>
@@ -3203,6 +3215,12 @@ This content does not replace the block content. You can still place the brick t
         </locale>
         <locale name="brick.accordion.settings.title">
             <en><![CDATA[Title]]></en>
+        </locale>
+        <locale name="brick.accordion.settings.anchor">
+            <en><![CDATA[Anchor]]></en>
+        </locale>
+        <locale name="brick.accordion.settings.anchor.description">
+            <en><![CDATA[Optional. Allows linking directly to this entry, e.g. with #shipping-costs. The entry is opened and the page scrolls to it. The anchor must be unique on the whole page: assign it only once and avoid generic terms such as "content" or "header". Invalid characters are removed automatically.]]></en>
         </locale>
         <locale name="brick.accordion.settings.disabled">
             <en><![CDATA[Disable entry]]></en>

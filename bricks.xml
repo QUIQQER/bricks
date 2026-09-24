@@ -2551,6 +2551,24 @@
                     <locale group="quiqqer/bricks" var="quiqqer.bricks.buttons.settings.createPopup.openBrick.winHeight"/>
                 </setting>
 
+                <setting name="openBrickMobileMode" type="select"
+                         data-dependency="openBrickId"
+                         data-dependency-options="*"
+                >
+                    <locale group="quiqqer/bricks" var="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode"/>
+                    <description>
+                        <locale group="quiqqer/bricks" var="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileModeDesc"/>
+                    </description>
+
+                    <option value="fullScreen">
+                        <locale group="quiqqer/bricks" var="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode.fullScreen"/>
+                    </option>
+                    <option value="popup">
+                        <locale group="quiqqer/bricks" var="quiqqer.bricks.buttons.settings.createPopup.openBrick.mobileMode.popup"/>
+                    </option>
+                    <defaultValue>fullScreen</defaultValue>
+                </setting>
+
                 <setting name="openBrickSpacing" type="checkbox"
                          data-dependency="openBrickId"
                          data-dependency-options="*"
@@ -2602,7 +2620,7 @@
 
                 <setting name="dataAttributes" type="hidden"
                          data-qui="package/quiqqer/components/bin/Controls/DataAttributes"
-                         data-qui-options-reserved="data-open-brick-id,data-win-width,data-win-height,data-win-spacing"
+                         data-qui-options-reserved="data-open-brick-id,data-win-width,data-win-height,data-win-mobile-mode,data-win-spacing"
                 >
                     <locale group="quiqqer/bricks" var="quiqqer.bricks.buttons.settings.createPopup.dataAttributes"/>
                     <description>

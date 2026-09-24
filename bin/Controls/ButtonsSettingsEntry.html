@@ -100,23 +100,9 @@
                 <label class="field-container">
                     <span class="field-container-item">{{fieldOpenBrick}}</span>
                     <span class="field-container-field">
-                        <span class="quiqqer-bricks-buttons-settings-entry-openBrickRow">
-                            <input name="openBrickId"
-                               class="quiqqer-bricks-buttons-settings-entry-openBrickId"
-                               readonly
-                               placeholder="ID"
-                               data-qui="package/quiqqer/core/bin/QUI/controls/settings/Dependency"
-                            />
-                            <button type="button" name="selectBrick" class="btn btn-light">
-                                {{fieldOpenBrickSelect}} <i class="fa-solid fa-cubes"></i>
-                            </button>
-                            <button type="button" name="clearBrick" class="btn btn-danger" title="{{fieldOpenBrickClear}}">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>
-                        </span>
+                        <input name="openBrickId" type="hidden"
+                               data-qui="package/quiqqer/bricks/bin/Controls/backend/BrickIdInput"/>
                         <input name="openBrickTitle" type="hidden"/>
-                        <small class="quiqqer-bricks-buttons-settings-entry-openBrickTitle"
-                               data-name="openBrickTitleDisplay"></small>
                     </span>
                 </label>
                 <div class="field-container-item-desc">
@@ -152,6 +138,24 @@
                            data-dependency-options="*"
                     />
                 </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="field-container">
+                    <span class="field-container-item">{{fieldOpenBrickMobileMode}}</span>
+                    <select name="openBrickMobileMode"
+                            class="field-container-field"
+                            data-dependency="openBrickId"
+                            data-dependency-options="*"
+                    >
+                        <option value="fullScreen">{{fieldOpenBrickMobileModeFullScreen}}</option>
+                        <option value="popup">{{fieldOpenBrickMobileModePopup}}</option>
+                    </select>
+                </label>
+                <div class="field-container-item-desc">
+                    {{fieldOpenBrickMobileModeDesc}}
+                </div>
             </td>
         </tr>
         <tr>
@@ -248,7 +252,7 @@
                         <input type="hidden"
                                name="dataAttributes"
                                data-qui="package/quiqqer/components/bin/Controls/DataAttributes"
-                               data-qui-options-reserved="data-open-brick-id,data-win-width,data-win-height,data-win-spacing"
+                               data-qui-options-reserved="data-open-brick-id,data-win-width,data-win-height,data-win-mobile-mode,data-win-spacing"
                         />
                     </div>
                 </div>
