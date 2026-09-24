@@ -22,7 +22,8 @@ class Accordion extends QUI\Control
     /**
      * [
      *   'entryTitle' => string,
-     *   'entryContent' => string
+     *   'entryContent' => string,
+     *   'anchor' => string (optional, rendered as id for deep links)
      * ]
      *
      * @var array<int, mixed>
@@ -87,7 +88,7 @@ class Accordion extends QUI\Control
             $entries = [];
         }
 
-        $entries = $this->filterDisabledEntries($entries);
+        $entries = $this->prepareAnchors($this->filterDisabledEntries($entries));
         $template = $this->getTemplateName();
         $columns = $this->getColumns();
         $iconPosition = $this->getIconPosition();
@@ -364,6 +365,33 @@ class Accordion extends QUI\Control
 
             return !in_array($entry['disabled'], [true, 1, '1'], true);
         }));
+    }
+
+    /**
+     * Clean the optional anchor of every entry, entries without a usable
+     * anchor get none.
+     *
+     * @param array<int, mixed> $entries
+     * @return array<int, mixed>
+     */
+    protected function prepareAnchors(array $entries): array
+    {
+        foreach ($entries as $key => $entry) {
+            if (!is_array($entry) || !isset($entry['anchor'])) {
+                continue;
+            }
+
+            $anchor = QUI\Bricks\Utils::cleanupAnchor((string)$entry['anchor']);
+
+            if ($anchor === '') {
+                unset($entries[$key]['anchor']);
+                continue;
+            }
+
+            $entries[$key]['anchor'] = $anchor;
+        }
+
+        return $entries;
     }
 
     protected function normalizeFAQSchemaText(mixed $value): string

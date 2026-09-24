@@ -27,6 +27,20 @@
             <td>
                 <label class="field-container">
                     <span class="field-container-item">
+                        {{anchor}}
+                    </span>
+                    <input type="text" name="anchor" class="field-container-field"
+                           aria-describedby="{{idPrefix}}-anchor-description"/>
+                </label>
+                <div class="field-container-item-desc" id="{{idPrefix}}-anchor-description">
+                    {{anchorDescription}}
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="field-container">
+                    <span class="field-container-item">
                         {{content}}
                     </span>
                     <input name="entryContent" class="field-container-field field-entryContent"

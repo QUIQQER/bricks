@@ -26,6 +26,7 @@ use function is_string;
 use function json_decode;
 use function md5;
 use function preg_match;
+use function preg_replace;
 use function realpath;
 use function str_starts_with;
 use function strlen;
@@ -566,6 +567,27 @@ class Utils
         }
 
         return $normalized;
+    }
+
+    /**
+     * Clean a user entered anchor (fragment id) for deep links, e.g. to an
+     * accordion entry.
+     *
+     * Uses the same rules as site URLs: forbidden URL signs are removed and
+     * whitespace becomes the URL space character. Case and umlauts are kept,
+     * so the anchor stays what the editor entered.
+     *
+     * Mirrors cleanup() / finalize() in package/quiqqer/bricks/bin/utils/Anchor.
+     *
+     * @param string $anchor Raw anchor, a leading "#" is allowed
+     * @return string Cleaned anchor, empty if nothing usable is left
+     */
+    public static function cleanupAnchor(string $anchor): string
+    {
+        $anchor = (string)preg_replace('/\s+/u', ' ', $anchor);
+        $anchor = QUI\Projects\Site\Utils::clearUrl($anchor);
+
+        return trim($anchor, QUI\Rewrite::URL_SPACE_CHARACTER . ' ');
     }
 
     /**

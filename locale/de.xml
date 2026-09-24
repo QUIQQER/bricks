@@ -3227,6 +3227,12 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
         <locale name="brick.accordion.settings.title">
             <de><![CDATA[Titel]]></de>
         </locale>
+        <locale name="brick.accordion.settings.anchor">
+            <de><![CDATA[Anker]]></de>
+        </locale>
+        <locale name="brick.accordion.settings.anchor.description">
+            <de><![CDATA[Optional. Damit lässt sich direkt auf diesen Eintrag verlinken, z. B. mit #versandkosten. Beim Aufruf wird der Eintrag geöffnet und die Seite scrollt dorthin. Der Anker muss auf der gesamten Seite eindeutig sein: nur einmal vergeben und keine allgemeinen Begriffe wie „content“ oder „header“ verwenden. Unerlaubte Zeichen werden automatisch entfernt.]]></de>
+        </locale>
         <locale name="brick.accordion.settings.disabled">
             <de><![CDATA[Eintrag deaktivieren]]></de>
         </locale>
