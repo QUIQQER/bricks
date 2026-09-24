@@ -14,7 +14,7 @@
             {foreach from=$entriesColumnLeft item=item}
                 {$entry = $item['entry']}
                 {$index = $item['index']}
-                <details class="quiqqer-accordion-item quiqqer-accordion-item--{$template}"{if $openFirst && $index == 0} open{/if}>
+                <details class="quiqqer-accordion-item quiqqer-accordion-item--{$template}" data-name="item"{if !empty($entry['anchor'])} id="{$entry['anchor']|escape:'html'}"{/if}{if $openFirst && $index == 0} open{/if}>
                     {if isset($entry['entryTitle'])}
                         <summary class="quiqqer-accordion-item-header">
                             <span class="quiqqer-accordion-item-header-text">{$entry['entryTitle']}</span>
@@ -23,8 +23,8 @@
                     {/if}
 
                     {if isset($entry['entryContent'])}
-                        <div class="quiqqer-accordion-item-content-wrapper">
-                            <div class="quiqqer-accordion-item-content">
+                        <div class="quiqqer-accordion-item-content-wrapper" data-name="content-wrapper">
+                            <div class="quiqqer-accordion-item-content" data-name="content">
                                 <div class="quiqqer-accordion-item-content-inner">
                                     {$entry['entryContent']}
                                 </div>
@@ -40,7 +40,7 @@
             {foreach from=$entriesColumnRight item=item}
                 {$entry = $item['entry']}
                 {$index = $item['index']}
-                <details class="quiqqer-accordion-item quiqqer-accordion-item--{$template}"{if $openFirst && $index == 0} open{/if}>
+                <details class="quiqqer-accordion-item quiqqer-accordion-item--{$template}" data-name="item"{if !empty($entry['anchor'])} id="{$entry['anchor']|escape:'html'}"{/if}{if $openFirst && $index == 0} open{/if}>
                     {if isset($entry['entryTitle'])}
                         <summary class="quiqqer-accordion-item-header">
                             <span class="quiqqer-accordion-item-header-text">{$entry['entryTitle']}</span>
@@ -49,8 +49,8 @@
                     {/if}
 
                     {if isset($entry['entryContent'])}
-                        <div class="quiqqer-accordion-item-content-wrapper">
-                            <div class="quiqqer-accordion-item-content">
+                        <div class="quiqqer-accordion-item-content-wrapper" data-name="content-wrapper">
+                            <div class="quiqqer-accordion-item-content" data-name="content">
                                 <div class="quiqqer-accordion-item-content-inner">
                                     {$entry['entryContent']}
                                 </div>

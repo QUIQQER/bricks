@@ -278,4 +278,28 @@ XML
         $this->assertSame([], Utils::brickParamsFromRequest(null));
         $this->assertSame([], Utils::brickParamsFromRequest(''));
     }
+
+    /**
+     * Keep in sync with the JS helper package/quiqqer/bricks/bin/utils/Anchor.
+     *
+     * @return array<string, array{0: string, 1: string}>
+     */
+    public static function anchorProvider(): array
+    {
+        return [
+            'leading hash and space' => ['#Versand Info', 'Versand-Info'],
+            'umlauts and signs' => ['Rückgabe & Kosten', 'Rückgabe-Kosten'],
+            'duplicate separators' => ['  a--b  ', 'a-b'],
+            'trailing separator' => ['versand-', 'versand'],
+            'brackets and slashes' => ['x[1]/y+z', 'x1yz'],
+            'underscore' => ['Größe_Ä', 'GrößeÄ'],
+            'nothing usable' => ['#?!', ''],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('anchorProvider')]
+    public function testCleanupAnchor(string $input, string $expected): void
+    {
+        $this->assertSame($expected, Utils::cleanupAnchor($input));
+    }
 }

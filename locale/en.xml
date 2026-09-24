@@ -3216,6 +3216,12 @@ This content does not replace the block content. You can still place the brick t
         <locale name="brick.accordion.settings.title">
             <en><![CDATA[Title]]></en>
         </locale>
+        <locale name="brick.accordion.settings.anchor">
+            <en><![CDATA[Anchor]]></en>
+        </locale>
+        <locale name="brick.accordion.settings.anchor.description">
+            <en><![CDATA[Optional. Allows linking directly to this entry, e.g. with #shipping-costs. The entry is opened and the page scrolls to it. The anchor must be unique on the whole page: assign it only once and avoid generic terms such as "content" or "header". Invalid characters are removed automatically.]]></en>
+        </locale>
         <locale name="brick.accordion.settings.disabled">
             <en><![CDATA[Disable entry]]></en>
         </locale>

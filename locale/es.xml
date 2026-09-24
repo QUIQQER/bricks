@@ -3107,6 +3107,12 @@
         <locale name="brick.accordion.settings.title">
             <es><![CDATA[Título]]></es>
         </locale>
+        <locale name="brick.accordion.settings.anchor">
+            <es><![CDATA[Ancla]]></es>
+        </locale>
+        <locale name="brick.accordion.settings.anchor.description">
+            <es><![CDATA[Opcional. Permite enlazar directamente a esta entrada, p. ej. con #gastos-de-envio. La entrada se abre y la página se desplaza hasta ella. El ancla debe ser única en toda la página: asignarla solo una vez y evitar términos genéricos como "content" o "header". Los caracteres no permitidos se eliminan automáticamente.]]></es>
+        </locale>
         <locale name="brick.accordion.settings.disabled">
             <es><![CDATA[Desactivar entrada]]></es>
         </locale>

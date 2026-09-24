@@ -3107,6 +3107,12 @@
         <locale name="brick.accordion.settings.title">
             <it><![CDATA[Titolo]]></it>
         </locale>
+        <locale name="brick.accordion.settings.anchor">
+            <it><![CDATA[Ancora]]></it>
+        </locale>
+        <locale name="brick.accordion.settings.anchor.description">
+            <it><![CDATA[Facoltativo. Consente di collegarsi direttamente a questa voce, ad es. con #costi-di-spedizione. La voce viene aperta e la pagina scorre fino ad essa. L'ancora deve essere univoca in tutta la pagina: assegnarla una sola volta ed evitare termini generici come "content" o "header". I caratteri non consentiti vengono rimossi automaticamente.]]></it>
+        </locale>
         <locale name="brick.accordion.settings.disabled">
             <it><![CDATA[Disattiva voce]]></it>
         </locale>

@@ -184,4 +184,27 @@ class AccordionTest extends TestCase
         );
         $this->assertStringNotContainsString('--_q-controlConf-list-maxWidth:', $DisabledControl->create());
     }
+
+    public function testAnchorIsRenderedAsCleanedId(): void
+    {
+        $Control = new \QUI\Bricks\Controls\Accordion([
+            'entries' => [[
+                'entryTitle' => 'With anchor',
+                'entryContent' => 'Answer',
+                'anchor' => '#Versand Info'
+            ], [
+                'entryTitle' => 'Unusable anchor',
+                'entryContent' => 'Answer',
+                'anchor' => '?!'
+            ], [
+                'entryTitle' => 'Without anchor',
+                'entryContent' => 'Answer'
+            ]]
+        ]);
+
+        $body = $Control->getBody();
+
+        $this->assertStringContainsString('id="Versand-Info"', $body);
+        $this->assertSame(1, substr_count($body, ' id="'));
+    }
 }
