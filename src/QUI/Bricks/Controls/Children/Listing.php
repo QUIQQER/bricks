@@ -39,6 +39,7 @@ class Listing extends QUI\Control
             'child-itemprop' => 'itemListElement',
             'template' => 'cards',
             'order' => 'c_date DESC',
+            'pinnedFirst' => false,
             'cardLayout' => 'standard',
             'cardColumns' => 3,
             'cardColumnsTablet' => '',
@@ -68,6 +69,14 @@ class Listing extends QUI\Control
 
         $Control->setAttribute('parentInputList', $this->getAttribute('site'));
         $Control->setAttribute('order', $this->getAttribute('order'));
+
+        if ($this->getAttribute('pinnedFirst') && $this->getAttribute('site')) {
+            $Control->setAttribute('pinnedAttribute', [
+                'quiqqer.settings.blog.pinned',
+                'quiqqer.settings.news.pinned'
+            ]);
+        }
+
         $Control->setAttribute('display', $this->getAttribute('template'));
         $Control->setAttribute('limit', $this->getAttribute('max'));
         $Control->setAttribute('showShort', $this->getAttribute('showShort'));

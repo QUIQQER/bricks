@@ -1893,6 +1893,12 @@ This content does not replace the block content. You can still place the brick t
         <locale name="brick.showTime">
             <en><![CDATA[Show time]]></en>
         </locale>
+        <locale name="brick.list.pinnedFirst">
+            <en><![CDATA[Pinned posts first]]></en>
+        </locale>
+        <locale name="brick.list.pinnedFirst.description">
+            <en><![CDATA[Displays pinned blog and news posts before the other pages. The selected sort order is preserved within both groups.]]></en>
+        </locale>
         <!-- show pagination / sheets -->
         <locale name="brick.showSheets">
             <en><![CDATA[Show sheets (pagination)]]></en>

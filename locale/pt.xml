@@ -1828,6 +1828,12 @@
         <locale name="brick.showTime">
             <pt><![CDATA[Mostrar hora]]></pt>
         </locale>
+        <locale name="brick.list.pinnedFirst">
+            <pt><![CDATA[Publicações fixadas primeiro]]></pt>
+        </locale>
+        <locale name="brick.list.pinnedFirst.description">
+            <pt><![CDATA[Apresenta as publicações de blogue e notícias fixadas antes das restantes páginas. A ordenação selecionada é mantida em ambos os grupos.]]></pt>
+        </locale>
         <!-- show pagination / sheets -->
         <locale name="brick.showSheets">
             <pt><![CDATA[Mostrar paginação]]></pt>
