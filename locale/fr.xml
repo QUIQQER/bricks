@@ -1828,6 +1828,12 @@
         <locale name="brick.showTime">
             <fr><![CDATA[Afficher l’heure]]></fr>
         </locale>
+        <locale name="brick.list.pinnedFirst">
+            <fr><![CDATA[Articles épinglés en premier]]></fr>
+        </locale>
+        <locale name="brick.list.pinnedFirst.description">
+            <fr><![CDATA[Affiche les articles de blog et les actualités épinglés avant les autres pages. Le tri choisi est conservé dans les deux groupes.]]></fr>
+        </locale>
         <!-- show pagination / sheets -->
         <locale name="brick.showSheets">
             <fr><![CDATA[Afficher la pagination]]></fr>
