@@ -47,6 +47,37 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
         return value.replace(spaceReg, spaceChar);
     };
 
+    const setBrickDataToForm = function (data, form) {
+        if (!form || form.nodeName !== 'FORM') {
+            QUIFormUtils.setDataToForm(data, form);
+            return;
+        }
+
+        const formData = Object.assign({}, data);
+
+        Object.keys(formData).forEach(function (name) {
+            const value = formData[name];
+
+            if (!value || Array.isArray(value) || typeof value !== 'object') {
+                return;
+            }
+
+            const prototype = Object.getPrototypeOf(value);
+
+            if (prototype !== Object.prototype && prototype !== null) {
+                return;
+            }
+
+            const field = form.elements.namedItem(name);
+
+            if (field && field.nodeName === 'INPUT' && field.type === 'hidden') {
+                formData[name] = JSON.stringify(value);
+            }
+        });
+
+        QUIFormUtils.setDataToForm(formData, form);
+    };
+
     return new Class({
 
         Extends: QUIPanel,
@@ -489,12 +520,12 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
          * @return Promise
          */
         $load: function () {
-            QUIFormUtils.setDataToForm(
+            setBrickDataToForm(
                 this.getAttribute('data').attributes,
                 this.$Container.getElement('form')
             );
 
-            QUIFormUtils.setDataToForm(
+            setBrickDataToForm(
                 this.getAttribute('data').settings,
                 this.$Container.getElement('form')
             );
@@ -1408,7 +1439,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                 TableExtra.setStyle('display', null);
 
                 // set data
-                QUIFormUtils.setDataToForm(
+                setBrickDataToForm(
                     this.getAttribute('data').settings,
                     Form
                 );
