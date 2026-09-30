@@ -1730,6 +1730,14 @@
                     </option>
                 </setting>
 
+                <setting name="pinnedFirst" type="checkbox">
+                    <locale group="quiqqer/bricks" var="brick.list.pinnedFirst"/>
+                    <description>
+                        <locale group="quiqqer/bricks" var="brick.list.pinnedFirst.description"/>
+                    </description>
+                    <defaultValue>0</defaultValue>
+                </setting>
+
                 <setting name="template" type="select" default="cards"
                          data-qui="package/quiqqer/core/bin/QUI/controls/settings/Dependency">
                     <locale group="quiqqer/bricks" var="brick.listTemplate"/>

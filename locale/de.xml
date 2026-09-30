@@ -1903,6 +1903,12 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
         <locale name="brick.showTime">
             <de><![CDATA[Uhrzeit anzeigen]]></de>
         </locale>
+        <locale name="brick.list.pinnedFirst">
+            <de><![CDATA[Angeheftete Beiträge zuerst]]></de>
+        </locale>
+        <locale name="brick.list.pinnedFirst.description">
+            <de><![CDATA[Zeigt angeheftete Blog- und News-Beiträge vor den übrigen Seiten. Innerhalb beider Gruppen bleibt die gewählte Sortierung erhalten.]]></de>
+        </locale>
         <!-- show pagination / sheets -->
         <locale name="brick.showSheets">
             <de><![CDATA[Seitennummerierung anzeigen]]></de>
