@@ -135,6 +135,7 @@ class ButtonsTest extends TestCase
                     'text' => 'Popup',
                     'openBrickId' => 18,
                     'openBrickMobileMode' => 'popup',
+                    'openBrickPrepareContent' => true,
                 ],
             ],
         ]))->create();
@@ -143,8 +144,9 @@ class ButtonsTest extends TestCase
             'data-open-brick-id="17" data-win-mobile-mode="fullScreen"',
             $html
         );
+        $this->assertSame(1, substr_count($html, 'data-win-prepare-content="1"'));
         $this->assertStringContainsString(
-            'data-open-brick-id="18" data-win-mobile-mode="popup"',
+            'data-open-brick-id="18" data-win-mobile-mode="popup" data-win-prepare-content="1"',
             $html
         );
     }

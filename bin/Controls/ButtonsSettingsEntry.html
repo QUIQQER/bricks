@@ -161,6 +161,22 @@
         <tr>
             <td>
                 <label class="field-container">
+                    <span class="field-container-item">{{fieldOpenBrickPrepareContent}}</span>
+                    <span class="field-container-field"
+                          data-dependency="openBrickId"
+                          data-dependency-options="*"
+                    >
+                        <input type="checkbox" name="openBrickPrepareContent"/>
+                    </span>
+                </label>
+                <div class="field-container-item-desc">
+                    {{fieldOpenBrickPrepareContentDesc}}
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="field-container">
                     <span class="field-container-item">{{fieldOpenBrickSpacing}}</span>
                     <span class="field-container-field"
                           data-dependency="openBrickId"

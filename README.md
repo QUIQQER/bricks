@@ -109,6 +109,35 @@ question "can this system do X at all", by looking at the brick definitions
 of all installed packages rather than at the bricks of a project.
 
 
+### Popup loading behaviour
+
+Brick popups open immediately by default and show their loading state inside
+the window. The close button stays usable while content is loading. Closing
+the window discards late results; reopening creates a new window.
+
+The Button brick and each Buttons entry offer **Load content before opening**
+(`openBrickPrepareContent`, default `false`). Enable it only when the popup
+should remain hidden until its content and initial height are ready:
+
+```html
+<button type="button"
+        data-qui="package/quiqqer/components/bin/Controls/Button/OpenBrick"
+        data-open-brick-id="233"
+        data-win-prepare-content="1">Open</button>
+```
+
+Omit `data-win-prepare-content` to open immediately. In JavaScript, use
+`prepareContent: true` to opt in. `contentAutoHeight` controls sizing
+independently and does not delay opening. `ContactHubWindow` uses the same
+options; PCSG's `data-pcsg-open-ctaForm` buttons also read
+`data-win-prepare-content`.
+
+A configured popup height is retained for ContactHub's initial view, including
+asynchronous loading. Automatic content sizing resumes after the first actual
+view change. The configured height remains the ceiling unless natural content
+height was explicitly enabled. Viewport limits and mobile window modes still
+apply. Without a configured height, initial content sizing remains automatic.
+
 ### Passing parameters to a brick opened in a popup
 
 A button that opens a brick in a popup can hand values over to that brick,

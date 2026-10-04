@@ -711,6 +711,18 @@ Dieser Inhalt ersetzt den Baustein-Inhalt nicht. Du kannst weiterhin über dem S
         <locale name="pdfPreview.brick.frontend.loading.title">
             <de><![CDATA[Datei wird geladen...]]></de>
         </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.prepareContent">
+            <de><![CDATA[Inhalt vor dem Öffnen laden]]></de>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.prepareContentDesc">
+            <de><![CDATA[Aktivieren, wenn sich die Fensterhöhe nach dem Laden des Inhalts sichtbar ändern würde. Der Inhalt wird dann vor dem Öffnen geladen, sodass die Anfangshöhe vorab bestimmt werden kann. Standardmäßig öffnet das Fenster sofort und zeigt während des Ladens eine Ladeanzeige. Höhenanpassungen bei späteren Ansichtswechseln bleiben möglich.]]></de>
+        </locale>
+        <locale name="window.loadError">
+            <de><![CDATA[Der Inhalt konnte nicht geladen werden. Bitte schließen Sie das Fenster und versuchen Sie es erneut.]]></de>
+        </locale>
+        <locale name="window.title">
+            <de><![CDATA[Inhalt]]></de>
+        </locale>
     </groups>
     <groups name="quiqqer/bricks" datatype="php">
         <locale name="site.panel.bricks.category.title">

@@ -2,9 +2,10 @@ define('package/quiqqer/bricks/bin/Controls/BrickWindow', [
 
     'qui/QUI',
     'qui/controls/windows/SimpleWindow',
-    'Ajax'
+    'Ajax',
+    'package/quiqqer/bricks/bin/Controls/WindowContentReveal'
 
-], function (QUI, SimpleWindow, QUIAjax) {
+], function (QUI, SimpleWindow, QUIAjax, WindowContentReveal) {
     "use strict";
 
     return new Class({
@@ -12,13 +13,10 @@ define('package/quiqqer/bricks/bin/Controls/BrickWindow', [
         Type: 'package/quiqqer/bricks/bin/Controls/BrickWindow',
         Extends: SimpleWindow,
 
-        Binds: [
-            '$onOpen'
-        ],
-
         options: {
             brickId: false,
             prepareContent: false,
+            preserveInitialHeight: false,
             // Opt-in for content sizing controls: maxHeight is a working height,
             // not a ceiling for their natural content height.
             contentAutoHeight: false,
@@ -30,50 +28,27 @@ define('package/quiqqer/bricks/bin/Controls/BrickWindow', [
 
         initialize: function (options) {
             this.parent(options);
-            this.$contentPromise = null;
 
-            this.addEvents({
-                onOpen: this.$onOpen
-            });
+            if (options?.preserveInitialHeight === undefined) {
+                this.setAttribute('preserveInitialHeight', Number(options?.maxHeight) > 0);
+            }
+
+            this.$contentPromise = null;
         },
 
         open: function (callback) {
-            if (!this.$shouldPrepareContent()) {
-                return this.parent(callback);
-            }
-
-            return new Promise((resolve, reject) => {
-                require([
-                    'package/quiqqer/bricks/bin/Controls/WindowContentReveal'
-                ], resolve, reject);
-            }).then((WindowContentReveal) => {
-                return WindowContentReveal.prepare(this, () => this.$loadContent());
-            }).then(() => {
-                return SimpleWindow.prototype.open.call(this, callback);
-            }).catch((error) => {
-                console.error(error);
-                this.destroy();
-                throw error;
-            });
-        },
-
-        $shouldPrepareContent: function () {
-            return Boolean(this.getAttribute('prepareContent'))
-                || this.getAttribute('contentAutoHeight') === true;
-        },
-
-        $onOpen: function () {
-            if (this.$contentPromise) {
-                return;
-            }
-
-            this.$loadContent().catch((error) => {
-                console.error(error);
-                this.close();
-            });
+            return WindowContentReveal.open(
+                this,
+                () => this.$loadContent(),
+                () => SimpleWindow.prototype.open.call(this, callback)
+            );
         },
 
         $loadContent: function () {
+            if (this.getAttribute('contentCancelled')) {
+                return Promise.resolve();
+            }
+
             if (this.$contentPromise) {
                 return this.$contentPromise;
             }
@@ -95,9 +70,15 @@ define('package/quiqqer/bricks/bin/Controls/BrickWindow', [
                 params.onError = reject;
 
                 QUIAjax.get('package_quiqqer_bricks_ajax_brick_render', (html) => {
+                    if (this.getAttribute('contentCancelled')) {
+                        resolve();
+                        return;
+                    }
                     this.$Content.innerHTML = html;
                     QUI.parse(this.$Content).then(() => {
-                        this.Loader.hide();
+                        if (!this.getAttribute('contentCancelled')) {
+                            this.Loader.hide();
+                        }
                         resolve();
                     }).catch(reject);
                 }, params);
