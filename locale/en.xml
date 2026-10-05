@@ -709,6 +709,18 @@ This content does not replace the block content. You can still place the brick t
         <locale name="pdfPreview.brick.frontend.loading.title">
             <en><![CDATA[File is loading...]]></en>
         </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.prepareContent">
+            <en><![CDATA[Load content before opening]]></en>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.prepareContentDesc">
+            <en><![CDATA[Enable if the window height would visibly change after its content loads. The content is then loaded before opening, allowing the initial height to be determined in advance. By default, the window opens immediately and displays a loading indicator while loading. Switching views later can still change the window height.]]></en>
+        </locale>
+        <locale name="window.loadError">
+            <en><![CDATA[The content could not be loaded. Please close the window and try again.]]></en>
+        </locale>
+        <locale name="window.title">
+            <en><![CDATA[Content]]></en>
+        </locale>
     </groups>
     <groups name="quiqqer/bricks" datatype="php">
         <locale name="site.panel.bricks.category.title">
