@@ -696,6 +696,18 @@
         <locale name="pdfPreview.brick.frontend.loading.title">
             <es><![CDATA[Cargando archivo…]]></es>
         </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.prepareContent">
+            <es><![CDATA[Cargar el contenido antes de abrir]]></es>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.prepareContentDesc">
+            <es><![CDATA[Activar si la altura de la ventana cambiaría visiblemente después de cargar el contenido. El contenido se carga antes de abrir la ventana, lo que permite determinar la altura inicial de antemano. Por defecto, la ventana se abre inmediatamente y muestra un indicador de carga mientras se carga el contenido. Los cambios de vista posteriores pueden seguir modificando la altura de la ventana.]]></es>
+        </locale>
+        <locale name="window.loadError">
+            <es><![CDATA[No se pudo cargar el contenido. Cierre la ventana e inténtelo de nuevo.]]></es>
+        </locale>
+        <locale name="window.title">
+            <es><![CDATA[Contenido]]></es>
+        </locale>
     </groups>
     <groups name="quiqqer/bricks" datatype="php">
         <locale name="site.panel.bricks.category.title">

@@ -2577,6 +2577,17 @@
                     <defaultValue>fullScreen</defaultValue>
                 </setting>
 
+                <setting name="openBrickPrepareContent" type="checkbox"
+                         data-dependency="openBrickId"
+                         data-dependency-options="*"
+                >
+                    <locale group="quiqqer/bricks" var="quiqqer.bricks.buttons.settings.createPopup.openBrick.prepareContent"/>
+                    <description>
+                        <locale group="quiqqer/bricks" var="quiqqer.bricks.buttons.settings.createPopup.openBrick.prepareContentDesc"/>
+                    </description>
+                    <defaultValue>0</defaultValue>
+                </setting>
+
                 <setting name="openBrickSpacing" type="checkbox"
                          data-dependency="openBrickId"
                          data-dependency-options="*"

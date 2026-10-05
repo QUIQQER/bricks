@@ -189,6 +189,9 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                         dataIndex: 'openBrickMobileMode',
                         hidden: true
                     }, {
+                        dataIndex: 'openBrickPrepareContent',
+                        hidden: true
+                    }, {
                         dataIndex: 'openBrickSpacing',
                         hidden: true
                     }, {
@@ -354,6 +357,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                 insert.openBrickWinWidth = this.$normalizePopupDimension(entry.openBrickWinWidth);
                 insert.openBrickWinHeight = this.$normalizePopupDimension(entry.openBrickWinHeight);
                 insert.openBrickMobileMode = this.$normalizeOpenBrickMobileMode(entry.openBrickMobileMode);
+                insert.openBrickPrepareContent = this.$normalizeOpenBrickPrepareContent(entry.openBrickPrepareContent);
                 insert.openBrickSpacing = this.$normalizeOpenBrickSpacing(entry.openBrickSpacing);
 
                 insert.isDisabledDisplay = new QUISwitch({
@@ -524,6 +528,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                         openBrickWinWidth: Form.elements.openBrickWinWidth.value,
                         openBrickWinHeight: Form.elements.openBrickWinHeight.value,
                         openBrickMobileMode: Form.elements.openBrickMobileMode.value,
+                        openBrickPrepareContent: Form.elements.openBrickPrepareContent.checked ? 1 : 0,
                         openBrickSpacing: Form.elements.openBrickSpacing.checked ? 1 : 0,
                         href: Form.elements.href.value,
                         targetBlank: Dialog.TargetBlankSwitch.getStatus(),
@@ -600,6 +605,8 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                         Dialog.FullWidthSwitch.off();
                     }
 
+                    Form.elements.openBrickPrepareContent.checked =
+                        this.$normalizeOpenBrickPrepareContent(data.openBrickPrepareContent) === 1;
                     Form.elements.openBrickSpacing.checked =
                         this.$normalizeOpenBrickSpacing(data.openBrickSpacing) === 1;
 
@@ -635,6 +642,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                         openBrickWinWidth: Form.elements.openBrickWinWidth.value,
                         openBrickWinHeight: Form.elements.openBrickWinHeight.value,
                         openBrickMobileMode: Form.elements.openBrickMobileMode.value,
+                        openBrickPrepareContent: Form.elements.openBrickPrepareContent.checked ? 1 : 0,
                         openBrickSpacing: Form.elements.openBrickSpacing.checked ? 1 : 0,
                         href: Form.elements.href.value,
                         targetBlank: Dialog.TargetBlankSwitch.getStatus(),
@@ -705,6 +713,8 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                                         lg,
                                         prefix + 'openBrick.mobileMode.popup'
                                     ),
+                                    fieldOpenBrickPrepareContent: QUILocale.get(lg, prefix + 'openBrick.prepareContent'),
+                                    fieldOpenBrickPrepareContentDesc: QUILocale.get(lg, prefix + 'openBrick.prepareContentDesc'),
                                     fieldOpenBrickSpacing: QUILocale.get(lg, prefix + 'openBrick.spacing'),
                                     fieldOpenBrickSpacingDesc: QUILocale.get(lg, prefix + 'openBrick.spacingDesc'),
                                     fieldHref: QUILocale.get(lg, prefix + 'href'),
@@ -816,6 +826,7 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
                 openBrickWinWidth: this.$normalizePopupDimension(entry.openBrickWinWidth),
                 openBrickWinHeight: this.$normalizePopupDimension(entry.openBrickWinHeight),
                 openBrickMobileMode: this.$normalizeOpenBrickMobileMode(entry.openBrickMobileMode),
+                openBrickPrepareContent: this.$normalizeOpenBrickPrepareContent(entry.openBrickPrepareContent),
                 openBrickSpacing: this.$normalizeOpenBrickSpacing(entry.openBrickSpacing),
                 href: entry.href || '',
                 targetBlank: this.$normalizeFlag(entry.targetBlank),
@@ -1057,6 +1068,10 @@ define('package/quiqqer/bricks/bin/Controls/ButtonsSettings', [
 
         $normalizeOpenBrickMobileMode: function (value) {
             return value === 'popup' ? 'popup' : 'fullScreen';
+        },
+
+        $normalizeOpenBrickPrepareContent: function (value) {
+            return [true, 1, '1'].includes(value) ? 1 : 0;
         },
 
         $normalizeOpenBrickSpacing: function (value) {

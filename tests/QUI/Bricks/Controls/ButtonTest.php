@@ -79,6 +79,7 @@ class ButtonTest extends TestCase
             $html = (new Button([
                 'text' => 'Open',
                 'openBrickId' => 42,
+                'openBrickPrepareContent' => true,
                 'dataAttributes' => [
                     ['name' => 'data-track-id', 'value' => 'cta']
                 ]
@@ -88,6 +89,7 @@ class ButtonTest extends TestCase
         }
 
         $this->assertStringContainsString('data-window-auto-height="1"', $html);
+        $this->assertStringContainsString('data-win-prepare-content="1"', $html);
         $this->assertStringContainsString('data-track-id="cta"', $html);
         $this->assertSame(1, $Manager->typeLookups);
     }

@@ -699,6 +699,18 @@
         <locale name="pdfPreview.brick.frontend.loading.title">
             <pl><![CDATA[Wczytywanie pliku…]]></pl>
         </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.prepareContent">
+            <pl><![CDATA[Wczytaj treść przed otwarciem]]></pl>
+        </locale>
+        <locale name="quiqqer.bricks.buttons.settings.createPopup.openBrick.prepareContentDesc">
+            <pl><![CDATA[Włącz, jeśli wysokość okna miałaby się widocznie zmienić po wczytaniu treści. Treść jest wtedy wczytywana przed otwarciem, co pozwala wcześniej określić początkową wysokość. Domyślnie okno otwiera się od razu i wyświetla wskaźnik ładowania podczas wczytywania treści. Późniejsze przełączanie widoków nadal może zmieniać wysokość okna.]]></pl>
+        </locale>
+        <locale name="window.loadError">
+            <pl><![CDATA[Nie udało się wczytać treści. Zamknij okno i spróbuj ponownie.]]></pl>
+        </locale>
+        <locale name="window.title">
+            <pl><![CDATA[Treść]]></pl>
+        </locale>
     </groups>
     <groups name="quiqqer/bricks" datatype="php">
         <locale name="site.panel.bricks.category.title">
