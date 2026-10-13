@@ -513,6 +513,7 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
                 flippingTime: 450,
                 mobileScrollSupport: false,
                 disableFlipByClick: true,
+                showPageCorners: false,
                 clickEventForward: true,
                 startPage: startPage - 1
             });
@@ -775,7 +776,9 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             this.$tapTimer = setTimeout(() => {
                 this.$tapTimer = null;
 
-                if (this.$destroyed) {
+                // A click on a page corner is flipped by StPageFlip itself
+                // (after pointerup), so only turn when it did not.
+                if (this.$destroyed || this.$dragged) {
                     return;
                 }
 
