@@ -34,6 +34,8 @@
 
 .quiqqer-bricks-pdfViewer__frame {
     position: relative;
+    /* no native pinch zoom of the page, the viewer zooms itself */
+    touch-action: pan-x pan-y;
     display: grid;
     grid-template-rows: auto minmax(0, 1fr) auto;
     width: 100%;
@@ -126,6 +128,54 @@
 .quiqqer-bricks-pdfViewer__page {
     overflow: hidden;
     background: var(--_paper);
+}
+
+/* zoom layer: replaces the book while zoomed */
+.quiqqer-bricks-pdfViewer.is-zoomed .quiqqer-bricks-pdfViewer__bookHolder {
+    visibility: hidden;
+}
+
+.quiqqer-bricks-pdfViewer__zoom {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    overflow: auto;
+    overscroll-behavior: contain;
+    cursor: grab;
+}
+
+.quiqqer-bricks-pdfViewer__zoom[hidden] {
+    display: none;
+}
+
+.quiqqer-bricks-pdfViewer__zoom.is-panning {
+    cursor: grabbing;
+}
+
+/* margin: auto centers small content without cutting off overflowing parts */
+.quiqqer-bricks-pdfViewer__zoomPages {
+    display: flex;
+    margin: auto;
+    user-select: none;
+}
+
+.quiqqer-bricks-pdfViewer__zoomPage {
+    position: relative;
+    flex: none;
+    overflow: hidden;
+    background: var(--_paper);
+}
+
+.quiqqer-bricks-pdfViewer__zoomPage canvas,
+.quiqqer-bricks-pdfViewer__zoomPage img,
+.quiqqer-bricks-pdfViewer__zoomPage .skeleton-loader {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 .quiqqer-bricks-pdfViewer__page canvas {

@@ -36,6 +36,11 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
     const TAP_DELAY = 250;
     const TAP_DISTANCE = 10;
     const THUMB_WIDTH = 160;
+    const ZOOM_LEVELS = [1, 1.5, 2, 3, 4];
+    const MAX_ZOOM = 4;
+    const ZOOM_RENDER_DELAY = 200;
+    const WHEEL_STEP_DELAY = 200;
+    const DOUBLE_TAP_DELAY = 300;
 
     let pageFlipPromise = null;
 
@@ -86,7 +91,17 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             'close',
             'next',
             'prev',
-            'toggleFullscreen'
+            'toggleFullscreen',
+            'zoomIn',
+            'zoomOut',
+            'resetZoom',
+            '$onWheel',
+            '$onTouchStart',
+            '$onTouchMove',
+            '$onTouchEnd',
+            '$onZoomPointerDown',
+            '$onZoomPointerMove',
+            '$onZoomPointerUp'
         ],
 
         options: {
@@ -138,6 +153,14 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             this.$renderingThumbnails = false;
             this.$gridObserver = null;
             this.$fullscreenExitedAt = 0;
+            this.$zoom = 1;
+            this.$zoomGeneration = 0;
+            this.$zoomTasks = new Set();
+            this.$zoomRenderTimer = null;
+            this.$zoomPointer = null;
+            this.$lastZoomTap = 0;
+            this.$lastWheelStep = 0;
+            this.$pinch = null;
 
             this.addEvents({
                 onDestroy: () => this.$teardown()
@@ -203,6 +226,8 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
                 return;
             }
 
+            this.resetZoom();
+
             if (prefersReducedMotion()) {
                 this.$pageFlip.turnToNextPage();
                 return;
@@ -215,6 +240,8 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             if (!this.$pageFlipLoaded) {
                 return;
             }
+
+            this.resetZoom();
 
             if (prefersReducedMotion()) {
                 this.$pageFlip.turnToPrevPage();
@@ -235,6 +262,8 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             }
 
             const target = Math.min(Math.max(1, Math.round(page) || 1), this.$numPages);
+
+            this.resetZoom();
 
             // A jump shows the small thumbnail first, then the sharp page.
             this.$jumping = true;
@@ -258,6 +287,18 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             }
 
             frame.requestFullscreen().catch(error => console.error(error));
+        },
+
+        zoomIn: function () {
+            this.$zoomStep(1);
+        },
+
+        zoomOut: function () {
+            this.$zoomStep(-1);
+        },
+
+        resetZoom: function () {
+            this.$exitZoom();
         },
 
         $buildDialog: function () {
@@ -286,6 +327,9 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
                     <div class="quiqqer-bricks-pdfViewer__bookArea" data-name="bookArea">
                         <div class="quiqqer-bricks-pdfViewer__bookHolder" data-name="bookHolder">
                             <div class="quiqqer-bricks-pdfViewer__book" data-name="book"></div>
+                        </div>
+                        <div class="quiqqer-bricks-pdfViewer__zoom" data-name="zoom" hidden>
+                            <div class="quiqqer-bricks-pdfViewer__zoomPages" data-name="zoomPages"></div>
                         </div>
                         <p class="quiqqer-bricks-pdfViewer__message" data-name="message">
                             <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
@@ -362,6 +406,22 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             dialog.addEventListener('cancel', this.$onCancel);
             dialog.addEventListener('keydown', this.$onKeyDown);
 
+            const stage = dialog.querySelector('[data-name="stage"]');
+            const zoom = dialog.querySelector('[data-name="zoom"]');
+
+            stage.addEventListener('wheel', this.$onWheel, {passive: false});
+
+            // Capture phase: a pinch must not reach StPageFlip as a swipe.
+            stage.addEventListener('touchstart', this.$onTouchStart, {capture: true, passive: false});
+            stage.addEventListener('touchmove', this.$onTouchMove, {capture: true, passive: false});
+            stage.addEventListener('touchend', this.$onTouchEnd, {capture: true});
+            stage.addEventListener('touchcancel', this.$onTouchEnd, {capture: true});
+
+            zoom.addEventListener('pointerdown', this.$onZoomPointerDown);
+            zoom.addEventListener('pointermove', this.$onZoomPointerMove);
+            zoom.addEventListener('pointerup', this.$onZoomPointerUp);
+            zoom.addEventListener('pointercancel', this.$onZoomPointerUp);
+
             this.$dialog = dialog;
             this.$Elm = dialog;
             this.$book = dialog.querySelector('[data-name="book"]');
@@ -374,6 +434,21 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
          */
         $buildTools: function (tools) {
             const pdfUrl = this.getAttribute('pdf');
+
+            [
+                ['zoomOut', 'fa-magnifying-glass-minus', 'pdfPreview.viewer.zoomOut', this.zoomOut],
+                ['zoomIn', 'fa-magnifying-glass-plus', 'pdfPreview.viewer.zoomIn', this.zoomIn]
+            ].forEach(([name, icon, locale, handler]) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'btn btn-icon btn-rounded quiqqer-bricks-pdfViewer__btn';
+                button.disabled = true;
+                button.setAttribute('data-name', name);
+                button.setAttribute('aria-label', QUILocale.get(lg, locale));
+                button.innerHTML = '<i class="fa-solid ' + icon + '" aria-hidden="true"></i>';
+                button.addEventListener('click', handler);
+                tools.appendChild(button);
+            });
 
             if (this.getAttribute('download') && pdfUrl) {
                 const download = document.createElement('a');
@@ -527,6 +602,7 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
                 slider.max = this.$numPages;
                 slider.disabled = this.$numPages < 2;
                 this.$dialog.querySelector('[data-name="gridToggle"]').disabled = false;
+                this.$updateZoomButtons();
 
                 this.$dialog.querySelector('[data-name="message"]').hidden = true;
                 this.$fitBook();
@@ -623,6 +699,10 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
 
                     this.$fitBook();
                     this.$scheduleRender();
+
+                    if (this.$zoom > 1) {
+                        this.$setZoom(this.$zoom);
+                    }
                 }, 150);
             });
         },
@@ -680,6 +760,7 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
 
             if (this.$currentPage !== first) {
                 this.$currentPage = first;
+                this.resetZoom();
                 this.fireEvent('pageChange', [this, first]);
             }
 
@@ -724,6 +805,28 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
                     this.goToPage(this.$numPages);
                     break;
 
+                case '+':
+                case '=':
+                    this.zoomIn();
+                    break;
+
+                case '-':
+                    this.zoomOut();
+                    break;
+
+                case '0':
+                    this.resetZoom();
+                    break;
+
+                case 'Escape':
+                    // Reset the zoom first; also stops the dialog cancel.
+                    if (this.$zoom === 1) {
+                        return;
+                    }
+
+                    this.resetZoom();
+                    break;
+
                 default:
                     return;
             }
@@ -763,8 +866,13 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             }
 
             if (this.$tapTimer) {
+                // Double click / double tap zooms in at that point.
                 clearTimeout(this.$tapTimer);
                 this.$tapTimer = null;
+                this.$setZoom(2, {
+                    x: event.clientX,
+                    y: event.clientY
+                });
                 return;
             }
 
@@ -1399,7 +1507,464 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             if (this.$isGridOpen()) {
                 event.preventDefault();
                 this.$closeGrid();
+                return;
             }
+
+            if (this.$zoom > 1) {
+                event.preventDefault();
+                this.resetZoom();
+            }
+        },
+
+        $updateZoomButtons: function () {
+            const zoomIn = this.$dialog.querySelector('[data-name="zoomIn"]');
+            const zoomOut = this.$dialog.querySelector('[data-name="zoomOut"]');
+
+            zoomIn.disabled = !this.$pageFlipLoaded || this.$zoom >= MAX_ZOOM;
+            zoomOut.disabled = !this.$pageFlipLoaded || this.$zoom <= 1;
+        },
+
+        /**
+         * Next or previous zoom level, also from in-between pinch values.
+         */
+        $zoomStep: function (direction, point) {
+            const level = direction > 0
+                ? ZOOM_LEVELS.find(value => value > this.$zoom + 0.01)
+                : ZOOM_LEVELS.slice().reverse().find(value => value < this.$zoom - 0.01);
+
+            if (level !== undefined) {
+                this.$setZoom(level, point);
+            }
+        },
+
+        /**
+         * Zooms the visible pages and keeps the point under cursor or fingers.
+         *
+         * @param {Number} level - 1 to MAX_ZOOM
+         * @param {Object} [point] - {x, y} client coordinates, default center
+         */
+        $setZoom: function (level, point) {
+            if (!this.$pageFlipLoaded || this.$destroyed) {
+                return;
+            }
+
+            level = Math.min(MAX_ZOOM, Math.max(1, level));
+
+            if (level <= 1.001) {
+                this.$exitZoom();
+                return;
+            }
+
+            const layer = this.$dialog.querySelector('[data-name="zoom"]');
+            const content = this.$dialog.querySelector('[data-name="zoomPages"]');
+            let oldRect;
+
+            if (this.$zoom === 1) {
+                oldRect = this.$visibleBookRect();
+                this.$enterZoom();
+            } else {
+                oldRect = content.getBoundingClientRect();
+            }
+
+            const layerRect = layer.getBoundingClientRect();
+            const x = point ? point.x : layerRect.left + layerRect.width / 2;
+            const y = point ? point.y : layerRect.top + layerRect.height / 2;
+            const fractionX = Math.min(1, Math.max(0, (x - oldRect.left) / oldRect.width));
+            const fractionY = Math.min(1, Math.max(0, (y - oldRect.top) / oldRect.height));
+
+            this.$zoom = level;
+            this.$layoutZoom();
+
+            const newRect = content.getBoundingClientRect();
+            layer.scrollLeft += newRect.left + fractionX * newRect.width - x;
+            layer.scrollTop += newRect.top + fractionY * newRect.height - y;
+
+            this.$updateZoomButtons();
+            this.$scheduleZoomRender();
+        },
+
+        /**
+         * Screen area of the visible book pages.
+         */
+        $visibleBookRect: function () {
+            const rects = this.$visiblePages().map(page => this.$pageElements[page - 1].getBoundingClientRect());
+            const left = Math.min(...rects.map(rect => rect.left));
+            const top = Math.min(...rects.map(rect => rect.top));
+            const right = Math.max(...rects.map(rect => rect.right));
+            const bottom = Math.max(...rects.map(rect => rect.bottom));
+
+            return {
+                left: left,
+                top: top,
+                width: right - left,
+                height: bottom - top
+            };
+        },
+
+        /**
+         * Replaces the book by the zoom layer with the visible pages. The book
+         * canvases are copied as a blurred preview until the sharp render.
+         */
+        $enterZoom: function () {
+            const layer = this.$dialog.querySelector('[data-name="zoom"]');
+            const content = this.$dialog.querySelector('[data-name="zoomPages"]');
+
+            content.replaceChildren();
+
+            this.$visiblePages().forEach((page) => {
+                const element = document.createElement('div');
+                const rendered = this.$rendered.get(page);
+                const thumbnail = this.$thumbnails.get(page);
+
+                element.className = 'quiqqer-bricks-pdfViewer__zoomPage';
+                element.setAttribute('data-name', 'zoomPage');
+                element.setAttribute('data-page', page);
+
+                if (rendered) {
+                    const copy = document.createElement('canvas');
+                    copy.width = rendered.canvas.width;
+                    copy.height = rendered.canvas.height;
+                    copy.getContext('2d').drawImage(rendered.canvas, 0, 0);
+                    element.appendChild(copy);
+                } else if (thumbnail) {
+                    const image = document.createElement('img');
+                    image.setAttribute('alt', '');
+                    image.src = thumbnail;
+                    element.appendChild(image);
+                } else {
+                    element.appendChild(this.$createLoader());
+                }
+
+                content.appendChild(element);
+            });
+
+            layer.hidden = false;
+            layer.scrollLeft = 0;
+            layer.scrollTop = 0;
+            this.$dialog.classList.add('is-zoomed');
+            this.$resetFlipTouch();
+        },
+
+        $layoutZoom: function () {
+            const rect = this.$pageFlip.getBoundsRect();
+            const width = Math.round(rect.pageWidth * this.$zoom);
+            const height = Math.round(rect.height * this.$zoom);
+
+            this.$dialog.querySelectorAll('[data-name="zoomPage"]').forEach((element) => {
+                element.style.width = width + 'px';
+                element.style.height = height + 'px';
+            });
+        },
+
+        $exitZoom: function () {
+            if (this.$zoom === 1 || !this.$dialog) {
+                return;
+            }
+
+            const layer = this.$dialog.querySelector('[data-name="zoom"]');
+            const content = this.$dialog.querySelector('[data-name="zoomPages"]');
+
+            this.$zoom = 1;
+            this.$cancelZoomRender();
+
+            content.querySelectorAll('canvas').forEach((canvas) => {
+                canvas.width = 0;
+                canvas.height = 0;
+            });
+
+            content.replaceChildren();
+            layer.hidden = true;
+            this.$dialog.classList.remove('is-zoomed');
+            this.$updateZoomButtons();
+            this.$resetFlipTouch();
+        },
+
+        $cancelZoomRender: function () {
+            this.$zoomGeneration++;
+            clearTimeout(this.$zoomRenderTimer);
+            this.$zoomTasks.forEach(task => task.cancel());
+            this.$zoomTasks.clear();
+        },
+
+        $scheduleZoomRender: function () {
+            this.$cancelZoomRender();
+            this.$zoomRenderTimer = setTimeout(() => this.$renderZoom(), ZOOM_RENDER_DELAY);
+        },
+
+        /**
+         * Renders the zoomed pages sharply, below the canvas pixel limit
+         * (CSS scales up beyond it).
+         */
+        $renderZoom: async function () {
+            const generation = this.$zoomGeneration;
+            const elements = Array.from(this.$dialog.querySelectorAll('[data-name="zoomPage"]'));
+
+            for (const element of elements) {
+                let canvas = null;
+
+                try {
+                    const page = await this.$pdf.getPage(Number(element.getAttribute('data-page')));
+
+                    if (this.$destroyed || generation !== this.$zoomGeneration) {
+                        return;
+                    }
+
+                    const viewport = page.getViewport({scale: 1});
+                    let scale = Math.min(
+                        element.clientWidth / viewport.width,
+                        element.clientHeight / viewport.height
+                    ) * PdfRenderer.outputScale();
+
+                    if (viewport.width * viewport.height * scale * scale > MAX_CANVAS_PIXELS) {
+                        scale = Math.sqrt(MAX_CANVAS_PIXELS / (viewport.width * viewport.height));
+                    }
+
+                    canvas = PdfRenderer.createCanvas(page, scale);
+
+                    const task = PdfRenderer.render(page, canvas, scale);
+                    this.$zoomTasks.add(task);
+
+                    try {
+                        await task.promise;
+                    } finally {
+                        this.$zoomTasks.delete(task);
+                    }
+
+                    if (this.$destroyed || generation !== this.$zoomGeneration) {
+                        canvas.width = 0;
+                        canvas.height = 0;
+                        return;
+                    }
+
+                    element.querySelectorAll('canvas').forEach((previous) => {
+                        previous.width = 0;
+                        previous.height = 0;
+                    });
+
+                    element.replaceChildren(canvas);
+                } catch (error) {
+                    if (canvas) {
+                        canvas.width = 0;
+                        canvas.height = 0;
+                    }
+
+                    if (!this.$destroyed && error?.name !== 'RenderingCancelledException') {
+                        console.error('Unable to render zoomed PDF page:', error);
+                    }
+
+                    return;
+                }
+            }
+        },
+
+        /**
+         * Ends a touch StPageFlip may have started before a pinch took over.
+         */
+        $resetFlipTouch: function () {
+            try {
+                this.$pageFlip.userStop({x: 0, y: 0}, true);
+            } catch (error) {
+                // Nothing started yet.
+            }
+        },
+
+        /**
+         * Mouse wheel steps through the zoom levels, a trackpad pinch
+         * (ctrlKey) zooms continuously. Horizontal scrolling pans while zoomed.
+         */
+        $onWheel: function (event) {
+            if (!this.$pageFlipLoaded || this.$isGridOpen()) {
+                return;
+            }
+
+            if (!event.ctrlKey && this.$zoom > 1 && Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
+                return;
+            }
+
+            event.preventDefault();
+
+            const point = {
+                x: event.clientX,
+                y: event.clientY
+            };
+
+            if (event.ctrlKey) {
+                this.$setZoom(this.$zoom * Math.exp(-event.deltaY * 0.01), point);
+                return;
+            }
+
+            const now = performance.now();
+
+            if (now - this.$lastWheelStep < WHEEL_STEP_DELAY) {
+                return;
+            }
+
+            this.$lastWheelStep = now;
+            this.$zoomStep(event.deltaY < 0 ? 1 : -1, point);
+        },
+
+        $touchDistance: function (touches) {
+            return Math.hypot(
+                touches[0].clientX - touches[1].clientX,
+                touches[0].clientY - touches[1].clientY
+            );
+        },
+
+        $touchCenter: function (touches) {
+            return {
+                x: (touches[0].clientX + touches[1].clientX) / 2,
+                y: (touches[0].clientY + touches[1].clientY) / 2
+            };
+        },
+
+        $onTouchStart: function (event) {
+            if (event.touches.length !== 2 || !this.$pageFlipLoaded || this.$isGridOpen()) {
+                return;
+            }
+
+            event.preventDefault();
+            event.stopPropagation();
+            clearTimeout(this.$tapTimer);
+            this.$tapTimer = null;
+
+            this.$pinch = {
+                distance: this.$touchDistance(event.touches),
+                zoom: this.$zoom,
+                ended: false
+            };
+        },
+
+        $onTouchMove: function (event) {
+            if (!this.$pinch) {
+                return;
+            }
+
+            // Until all fingers are lifted StPageFlip sees nothing, a remaining
+            // finger would otherwise count as a swipe. Native panning stays.
+            event.stopPropagation();
+
+            if (event.touches.length < 2) {
+                return;
+            }
+
+            event.preventDefault();
+
+            const distance = this.$touchDistance(event.touches);
+
+            // Two fingers again after lifting one: continue from here.
+            if (this.$pinch.ended) {
+                this.$pinch = {
+                    distance: distance,
+                    zoom: this.$zoom,
+                    ended: false
+                };
+            }
+
+            this.$setZoom(
+                this.$pinch.zoom * distance / this.$pinch.distance,
+                this.$touchCenter(event.touches)
+            );
+        },
+
+        $onTouchEnd: function (event) {
+            if (!this.$pinch) {
+                return;
+            }
+
+            event.stopPropagation();
+
+            if (event.touches.length > 0) {
+                if (event.touches.length < 2 && !this.$pinch.ended) {
+                    this.$pinch.ended = true;
+
+                    if (this.$zoom < 1.1) {
+                        this.resetZoom();
+                    }
+                }
+
+                return;
+            }
+
+            this.$pinch = null;
+
+            if (this.$zoom < 1.1) {
+                this.resetZoom();
+            }
+
+            // StPageFlip may start its touch after 250 ms, end it afterwards too.
+            this.$resetFlipTouch();
+            setTimeout(() => {
+                if (!this.$destroyed) {
+                    this.$resetFlipTouch();
+                }
+            }, 300);
+        },
+
+        /**
+         * Zoom layer: mouse drag pans, a double tap/click resets the zoom.
+         * Touch panning is native scrolling.
+         */
+        $onZoomPointerDown: function (event) {
+            if (!event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0)) {
+                return;
+            }
+
+            const layer = event.currentTarget;
+
+            this.$zoomPointer = {
+                x: event.clientX,
+                y: event.clientY,
+                left: layer.scrollLeft,
+                top: layer.scrollTop,
+                moved: false,
+                mouse: event.pointerType === 'mouse'
+            };
+
+            if (this.$zoomPointer.mouse) {
+                layer.setPointerCapture(event.pointerId);
+                layer.classList.add('is-panning');
+            }
+        },
+
+        $onZoomPointerMove: function (event) {
+            const pointer = this.$zoomPointer;
+
+            if (!pointer || !event.isPrimary) {
+                return;
+            }
+
+            const deltaX = event.clientX - pointer.x;
+            const deltaY = event.clientY - pointer.y;
+
+            if (Math.hypot(deltaX, deltaY) > TAP_DISTANCE) {
+                pointer.moved = true;
+            }
+
+            if (pointer.mouse) {
+                event.currentTarget.scrollLeft = pointer.left - deltaX;
+                event.currentTarget.scrollTop = pointer.top - deltaY;
+            }
+        },
+
+        $onZoomPointerUp: function (event) {
+            const pointer = this.$zoomPointer;
+
+            this.$zoomPointer = null;
+            event.currentTarget.classList.remove('is-panning');
+
+            if (!pointer || pointer.moved || event.type === 'pointercancel') {
+                return;
+            }
+
+            const now = performance.now();
+
+            if (now - this.$lastZoomTap < DOUBLE_TAP_DELAY) {
+                this.$lastZoomTap = 0;
+                this.resetZoom();
+                return;
+            }
+
+            this.$lastZoomTap = now;
         },
 
         $showError: function (error) {
@@ -1444,6 +2009,11 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             this.$thumbnailTasks.forEach(task => task.cancel());
             this.$thumbnails.forEach(url => URL.revokeObjectURL(url));
             this.$thumbnails.clear();
+            this.$cancelZoomRender();
+            this.$dialog.querySelectorAll('[data-name="zoomPages"] canvas').forEach((canvas) => {
+                canvas.width = 0;
+                canvas.height = 0;
+            });
 
             Array.from(this.$rendered.keys()).forEach(page => this.$releasePage(page));
 
