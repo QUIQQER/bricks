@@ -35,6 +35,7 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
     const MAX_CANVAS_PIXELS = 16000000;
     const TAP_DELAY = 250;
     const TAP_DISTANCE = 10;
+    const THUMB_WIDTH = 160;
 
     let pageFlipPromise = null;
 
@@ -75,6 +76,8 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
 
         Binds: [
             '$onDialogClose',
+            '$onCancel',
+            '$onFullscreenChange',
             '$onKeyDown',
             '$onResize',
             '$onBookPointerDown',
@@ -82,7 +85,8 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             '$onMutation',
             'close',
             'next',
-            'prev'
+            'prev',
+            'toggleFullscreen'
         ],
 
         options: {
@@ -125,6 +129,15 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             this.$pointerStart = null;
             this.$dragged = false;
             this.$destroyed = false;
+            this.$jumping = false;
+            this.$thumbFirst = new Set();
+            this.$thumbnails = new Map();
+            this.$thumbnailPromises = new Map();
+            this.$thumbnailTasks = new Set();
+            this.$thumbnailQueue = [];
+            this.$renderingThumbnails = false;
+            this.$gridObserver = null;
+            this.$fullscreenExitedAt = 0;
 
             this.addEvents({
                 onDestroy: () => this.$teardown()
@@ -222,7 +235,29 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             }
 
             const target = Math.min(Math.max(1, Math.round(page) || 1), this.$numPages);
+
+            // A jump shows the small thumbnail first, then the sharp page.
+            this.$jumping = true;
             this.$pageFlip.turnToPage(target - 1);
+            this.$jumping = false;
+        },
+
+        /**
+         * Opens or closes the browser fullscreen for the viewer.
+         */
+        toggleFullscreen: function () {
+            if (!this.$dialog || !document.fullscreenEnabled) {
+                return;
+            }
+
+            const frame = this.$dialog.querySelector('[data-name="frame"]');
+
+            if (document.fullscreenElement === frame) {
+                document.exitFullscreen().catch(error => console.error(error));
+                return;
+            }
+
+            frame.requestFullscreen().catch(error => console.error(error));
         },
 
         $buildDialog: function () {
@@ -235,7 +270,9 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             dialog.setAttribute('data-name', 'pdf-viewer');
             dialog.setAttribute('aria-label', QUILocale.get(lg, 'pdfPreview.viewer.title', {title}));
 
+            // Dialogs cannot go fullscreen themselves, the inner frame does.
             dialog.innerHTML = `
+                <div class="quiqqer-bricks-pdfViewer__frame" data-name="frame">
                 <header class="quiqqer-bricks-pdfViewer__top">
                     <p class="quiqqer-bricks-pdfViewer__title" data-name="title"></p>
                     <button type="button" class="btn btn-icon btn-rounded quiqqer-bricks-pdfViewer__btn" data-name="close">
@@ -258,11 +295,28 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
                         <i class="fa-solid fa-angle-right" aria-hidden="true"></i>
                     </button>
                 </div>
+                <section class="quiqqer-bricks-pdfViewer__grid" data-name="grid" hidden>
+                    <div class="quiqqer-bricks-pdfViewer__gridHead">
+                        <p class="quiqqer-bricks-pdfViewer__gridTitle" data-name="gridTitle"></p>
+                        <button type="button" class="btn btn-icon btn-rounded quiqqer-bricks-pdfViewer__btn" data-name="gridClose">
+                            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <ul class="quiqqer-bricks-pdfViewer__gridList" data-name="gridList"></ul>
+                </section>
                 <footer class="quiqqer-bricks-pdfViewer__bar">
+                    <input type="range" class="quiqqer-bricks-pdfViewer__slider" data-name="slider"
+                           min="1" max="1" step="1" value="1" disabled>
                     <p class="quiqqer-bricks-pdfViewer__indicator" data-name="indicator" aria-hidden="true"></p>
-                    <div class="quiqqer-bricks-pdfViewer__tools" data-name="tools"></div>
+                    <div class="quiqqer-bricks-pdfViewer__tools" data-name="tools">
+                        <button type="button" class="btn btn-icon btn-rounded quiqqer-bricks-pdfViewer__btn" data-name="gridToggle"
+                                aria-expanded="false" disabled>
+                            <i class="fa-solid fa-table-cells-large" aria-hidden="true"></i>
+                        </button>
+                    </div>
                 </footer>
                 <p class="quiqqer-bricks-pdfViewer__status" data-name="status" role="status"></p>
+                </div>
             `;
 
             dialog.querySelector('[data-name="title"]').textContent = title;
@@ -274,10 +328,38 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
                 QUILocale.get(lg, 'pdfPreview.brick.frontend.loading.title')
             );
 
+            const grid = dialog.querySelector('[data-name="grid"]');
+            const gridToggle = dialog.querySelector('[data-name="gridToggle"]');
+            const slider = dialog.querySelector('[data-name="slider"]');
+
+            grid.id = 'quiqqer-bricks-pdfViewer-grid-' + this.getId();
+            grid.setAttribute('aria-label', QUILocale.get(lg, 'pdfPreview.viewer.grid'));
+            dialog.querySelector('[data-name="gridTitle"]').textContent = QUILocale.get(lg, 'pdfPreview.viewer.grid');
+            dialog.querySelector('[data-name="gridClose"]').setAttribute('aria-label', QUILocale.get(lg, 'pdfPreview.viewer.gridClose'));
+            gridToggle.setAttribute('aria-controls', grid.id);
+            gridToggle.setAttribute('aria-label', QUILocale.get(lg, 'pdfPreview.viewer.grid'));
+            slider.setAttribute('aria-label', QUILocale.get(lg, 'pdfPreview.viewer.slider'));
+
+            this.$buildTools(dialog.querySelector('[data-name="tools"]'));
+
             dialog.querySelector('[data-name="close"]').addEventListener('click', this.close);
             dialog.querySelector('[data-name="prev"]').addEventListener('click', this.prev);
             dialog.querySelector('[data-name="next"]').addEventListener('click', this.next);
+            dialog.querySelector('[data-name="gridClose"]').addEventListener('click', () => this.$closeGrid());
+            gridToggle.addEventListener('click', () => {
+                if (grid.hidden) {
+                    this.$openGrid();
+                } else {
+                    this.$closeGrid();
+                }
+            });
+
+            // input: preview the target page, change: jump there.
+            slider.addEventListener('input', () => this.$previewSlider());
+            slider.addEventListener('change', () => this.goToPage(Number(slider.value)));
+
             dialog.addEventListener('close', this.$onDialogClose);
+            dialog.addEventListener('cancel', this.$onCancel);
             dialog.addEventListener('keydown', this.$onKeyDown);
 
             this.$dialog = dialog;
@@ -285,6 +367,61 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             this.$book = dialog.querySelector('[data-name="book"]');
             this.$bookHolder = dialog.querySelector('[data-name="bookHolder"]');
             this.$status = dialog.querySelector('[data-name="status"]');
+        },
+
+        /**
+         * Download and fullscreen buttons, only when available.
+         */
+        $buildTools: function (tools) {
+            const pdfUrl = this.getAttribute('pdf');
+
+            if (this.getAttribute('download') && pdfUrl) {
+                const download = document.createElement('a');
+                download.className = 'btn btn-icon btn-rounded quiqqer-bricks-pdfViewer__btn';
+                download.setAttribute('data-name', 'download');
+                download.setAttribute('href', pdfUrl);
+                download.setAttribute('download', '');
+                download.setAttribute('aria-label', QUILocale.get(lg, 'pdfPreview.download'));
+                download.innerHTML = '<i class="fa-solid fa-download" aria-hidden="true"></i>';
+                tools.appendChild(download);
+            }
+
+            if (document.fullscreenEnabled) {
+                const fullscreen = document.createElement('button');
+                fullscreen.type = 'button';
+                fullscreen.className = 'btn btn-icon btn-rounded quiqqer-bricks-pdfViewer__btn';
+                fullscreen.setAttribute('data-name', 'fullscreen');
+                fullscreen.setAttribute('aria-pressed', 'false');
+                fullscreen.setAttribute('aria-label', QUILocale.get(lg, 'pdfPreview.viewer.fullscreen'));
+                fullscreen.setAttribute('title', QUILocale.get(lg, 'pdfPreview.viewer.fullscreen'));
+                fullscreen.innerHTML = '<i class="fa-solid fa-expand" aria-hidden="true"></i>';
+                fullscreen.addEventListener('click', this.toggleFullscreen);
+                tools.appendChild(fullscreen);
+
+                document.addEventListener('fullscreenchange', this.$onFullscreenChange);
+            }
+        },
+
+        $onFullscreenChange: function () {
+            const button = this.$dialog?.querySelector('[data-name="fullscreen"]');
+
+            if (!button) {
+                return;
+            }
+
+            const active = document.fullscreenElement === this.$dialog.querySelector('[data-name="frame"]');
+            const label = QUILocale.get(lg, active ? 'pdfPreview.viewer.fullscreenExit' : 'pdfPreview.viewer.fullscreen');
+
+            if (!active) {
+                this.$fullscreenExitedAt = performance.now();
+            }
+
+            // The accessible name stays, aria-pressed carries the state.
+            button.setAttribute('aria-pressed', active ? 'true' : 'false');
+            button.setAttribute('title', label);
+            button.querySelector('i').className = 'fa-solid ' + (active ? 'fa-compress' : 'fa-expand');
+
+            this.$onResize();
         },
 
         $load: async function () {
@@ -385,6 +522,11 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
                     return;
                 }
 
+                const slider = this.$dialog.querySelector('[data-name="slider"]');
+                slider.max = this.$numPages;
+                slider.disabled = this.$numPages < 2;
+                this.$dialog.querySelector('[data-name="gridToggle"]').disabled = false;
+
                 this.$dialog.querySelector('[data-name="message"]').hidden = true;
                 this.$fitBook();
                 this.$onPageChange();
@@ -449,7 +591,7 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             }
 
             const area = this.$dialog.querySelector('[data-name="bookArea"]');
-            const landscape = this.$dialog.clientWidth >= LANDSCAPE_MIN_WIDTH;
+            const landscape = this.$dialog.querySelector('[data-name="frame"]').clientWidth >= LANDSCAPE_MIN_WIDTH;
             const ratio = (landscape ? 2 : 1) * this.$pageWidth / this.$pageHeight;
             const bookWidth = Math.max(1, Math.floor(Math.min(area.clientWidth, area.clientHeight * ratio)));
 
@@ -531,6 +673,9 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
                 this.$status.textContent = text;
             }
 
+            this.$updateSlider(first, text);
+            this.$updateGridCurrent(pages);
+
             this.$dialog.querySelector('[data-name="prev"]').disabled = first <= 1;
             this.$dialog.querySelector('[data-name="next"]').disabled = last >= this.$numPages;
 
@@ -544,6 +689,16 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
 
         $onKeyDown: function (event) {
             if (!this.$pageFlipLoaded || event.altKey || event.ctrlKey || event.metaKey) {
+                return;
+            }
+
+            if (this.$isGridOpen()) {
+                if (event.key === 'Escape') {
+                    // Close only the overview; also stops the dialog cancel.
+                    event.preventDefault();
+                    this.$closeGrid();
+                }
+
                 return;
             }
 
@@ -675,6 +830,18 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
                 }
             });
 
+            target.forEach(page => this.$applyPageThumbnail(page));
+
+            this.$thumbFirst = new Set();
+
+            if (this.$jumping) {
+                this.$visiblePages().forEach((page) => {
+                    if (!this.$rendered.has(page) && !this.$thumbnails.has(page)) {
+                        this.$thumbFirst.add(page);
+                    }
+                });
+            }
+
             this.$renderQueue = target.filter(page => this.$needsRender(page));
             this.$processQueue();
         },
@@ -724,6 +891,15 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
 
         $renderPage: async function (pageNumber) {
             let canvas = null;
+
+            if (this.$thumbFirst.delete(pageNumber)) {
+                try {
+                    await this.$getThumbnail(pageNumber);
+                    this.$applyPageThumbnail(pageNumber);
+                } catch (error) {
+                    // The sharp render below still shows the page.
+                }
+            }
 
             try {
                 const page = await this.$pdf.getPage(pageNumber);
@@ -806,6 +982,7 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
                 }
 
                 element.querySelector('[data-name="loader"]')?.remove();
+                element.querySelector('[data-name="thumb"]')?.remove();
                 element.querySelectorAll('canvas').forEach((canvas) => {
                     if (canvas !== entry.canvas) {
                         canvas.remove();
@@ -872,6 +1049,319 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
 
             entry.canvas.width = 0;
             entry.canvas.height = 0;
+
+            this.$applyPageThumbnail(pageNumber);
+        },
+
+        /**
+         * Blurred preview: shows the cached thumbnail until the sharp canvas exists.
+         */
+        $applyPageThumbnail: function (pageNumber) {
+            const url = this.$thumbnails.get(pageNumber);
+
+            if (!url || this.$rendered.has(pageNumber)) {
+                return;
+            }
+
+            this.$book.querySelectorAll('[data-page="' + pageNumber + '"]').forEach((element) => {
+                if (element.querySelector('[data-name="thumb"]')) {
+                    return;
+                }
+
+                const image = document.createElement('img');
+                image.className = 'quiqqer-bricks-pdfViewer__pageThumb';
+                image.setAttribute('data-name', 'thumb');
+                image.setAttribute('alt', '');
+                image.src = url;
+
+                element.querySelector('[data-name="loader"]')?.remove();
+                element.prepend(image);
+            });
+        },
+
+        /**
+         * Renders a small JPEG of a page once and caches its object URL.
+         *
+         * @return {Promise<String>}
+         */
+        $getThumbnail: function (pageNumber) {
+            if (this.$thumbnails.has(pageNumber)) {
+                return Promise.resolve(this.$thumbnails.get(pageNumber));
+            }
+
+            if (this.$thumbnailPromises.has(pageNumber)) {
+                return this.$thumbnailPromises.get(pageNumber);
+            }
+
+            const promise = (async () => {
+                const page = await this.$pdf.getPage(pageNumber);
+
+                if (this.$destroyed) {
+                    return '';
+                }
+
+                const viewport = page.getViewport({scale: 1});
+                const scale = THUMB_WIDTH * PdfRenderer.outputScale() / viewport.width;
+                const canvas = PdfRenderer.createCanvas(page, scale);
+                const task = PdfRenderer.render(page, canvas, scale);
+
+                this.$thumbnailTasks.add(task);
+
+                try {
+                    await task.promise;
+                } finally {
+                    this.$thumbnailTasks.delete(task);
+                }
+
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.8));
+
+                canvas.width = 0;
+                canvas.height = 0;
+
+                if (this.$destroyed || !blob) {
+                    return '';
+                }
+
+                const url = URL.createObjectURL(blob);
+                this.$thumbnails.set(pageNumber, url);
+
+                return url;
+            })().finally(() => {
+                this.$thumbnailPromises.delete(pageNumber);
+            });
+
+            this.$thumbnailPromises.set(pageNumber, promise);
+
+            return promise;
+        },
+
+        $updateSlider: function (page, text) {
+            const slider = this.$dialog.querySelector('[data-name="slider"]');
+
+            slider.value = page;
+            slider.setAttribute('aria-valuetext', text);
+            this.$setSliderProgress(slider);
+        },
+
+        $setSliderProgress: function (slider) {
+            const max = Number(slider.max) || 1;
+            const progress = max > 1 ? (Number(slider.value) - 1) / (max - 1) * 100 : 0;
+
+            slider.style.setProperty('--_progress', progress + '%');
+        },
+
+        /**
+         * While dragging the slider only the indicator changes.
+         */
+        $previewSlider: function () {
+            const slider = this.$dialog.querySelector('[data-name="slider"]');
+            const text = QUILocale.get(lg, 'pdfPreview.page', {
+                page: Number(slider.value),
+                total: this.$numPages
+            });
+
+            this.$dialog.querySelector('[data-name="indicator"]').textContent = text;
+            slider.setAttribute('aria-valuetext', text);
+            this.$setSliderProgress(slider);
+        },
+
+        $isGridOpen: function () {
+            return !!this.$dialog && !this.$dialog.querySelector('[data-name="grid"]').hidden;
+        },
+
+        $openGrid: function () {
+            if (!this.$pageFlipLoaded) {
+                return;
+            }
+
+            const grid = this.$dialog.querySelector('[data-name="grid"]');
+
+            if (!this.$gridObserver) {
+                this.$buildGrid();
+            }
+
+            grid.hidden = false;
+            this.$dialog.querySelector('[data-name="gridToggle"]').setAttribute('aria-expanded', 'true');
+            this.$updateGridCurrent(this.$visiblePages());
+
+            const current = grid.querySelector('[aria-current="page"]');
+
+            if (current) {
+                current.scrollIntoView({block: 'center'});
+                current.focus();
+            }
+        },
+
+        $closeGrid: function () {
+            const grid = this.$dialog.querySelector('[data-name="grid"]');
+            const toggle = this.$dialog.querySelector('[data-name="gridToggle"]');
+
+            grid.hidden = true;
+            toggle.setAttribute('aria-expanded', 'false');
+            this.$thumbnailQueue = [];
+            toggle.focus();
+        },
+
+        $buildGrid: function () {
+            const list = this.$dialog.querySelector('[data-name="gridList"]');
+            const fragment = document.createDocumentFragment();
+            const ratio = this.$pageWidth + ' / ' + this.$pageHeight;
+
+            for (let page = 1; page <= this.$numPages; page++) {
+                const item = document.createElement('li');
+                const button = document.createElement('button');
+                const thumb = document.createElement('span');
+                const label = document.createElement('span');
+
+                button.type = 'button';
+                button.className = 'quiqqer-bricks-pdfViewer__gridPage';
+                button.setAttribute('data-name', 'gridPage');
+                button.setAttribute('data-page', page);
+                button.setAttribute('aria-label', QUILocale.get(lg, 'pdfPreview.page', {
+                    page: page,
+                    total: this.$numPages
+                }));
+
+                thumb.className = 'quiqqer-bricks-pdfViewer__gridThumb';
+                thumb.setAttribute('data-name', 'gridThumb');
+                thumb.style.aspectRatio = ratio;
+                thumb.appendChild(this.$createLoader());
+
+                label.className = 'quiqqer-bricks-pdfViewer__gridLabel';
+                label.setAttribute('aria-hidden', 'true');
+                label.textContent = page;
+
+                button.appendChild(thumb);
+                button.appendChild(label);
+                button.addEventListener('click', () => {
+                    this.$closeGrid();
+                    this.goToPage(page);
+                });
+
+                item.appendChild(button);
+                fragment.appendChild(item);
+
+                if (this.$thumbnails.has(page)) {
+                    this.$applyGridThumbnail(page, button);
+                }
+            }
+
+            list.appendChild(fragment);
+
+            this.$gridObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting) {
+                        return;
+                    }
+
+                    const page = Number(entry.target.getAttribute('data-page'));
+                    this.$gridObserver.unobserve(entry.target);
+
+                    if (this.$thumbnails.has(page)) {
+                        this.$applyGridThumbnail(page, entry.target);
+                    } else {
+                        this.$thumbnailQueue.push(page);
+                    }
+                });
+
+                this.$renderThumbnails();
+            }, {
+                root: this.$dialog.querySelector('[data-name="grid"]'),
+                rootMargin: '200px'
+            });
+
+            list.querySelectorAll('[data-name="gridPage"]').forEach((button) => {
+                if (!this.$thumbnails.has(Number(button.getAttribute('data-page')))) {
+                    this.$gridObserver.observe(button);
+                }
+            });
+        },
+
+        $renderThumbnails: async function () {
+            if (this.$renderingThumbnails) {
+                return;
+            }
+
+            this.$renderingThumbnails = true;
+
+            try {
+                while (this.$thumbnailQueue.length && !this.$destroyed) {
+                    const page = this.$thumbnailQueue.shift();
+
+                    try {
+                        await this.$getThumbnail(page);
+                    } catch (error) {
+                        if (!this.$destroyed && error?.name !== 'RenderingCancelledException') {
+                            console.error('Unable to render PDF thumbnail:', error);
+                        }
+
+                        continue;
+                    }
+
+                    if (this.$destroyed) {
+                        break;
+                    }
+
+                    this.$applyGridThumbnail(page);
+                    this.$applyPageThumbnail(page);
+                }
+            } finally {
+                this.$renderingThumbnails = false;
+            }
+        },
+
+        $applyGridThumbnail: function (pageNumber, button) {
+            const url = this.$thumbnails.get(pageNumber);
+            const target = button || this.$dialog.querySelector('[data-name="gridPage"][data-page="' + pageNumber + '"]');
+            const thumb = target?.querySelector('[data-name="gridThumb"]');
+
+            if (!url || !thumb || thumb.querySelector('img')) {
+                return;
+            }
+
+            const image = document.createElement('img');
+            image.setAttribute('alt', '');
+            image.src = url;
+
+            thumb.replaceChildren(image);
+        },
+
+        $updateGridCurrent: function (pages) {
+            if (!this.$gridObserver) {
+                return;
+            }
+
+            this.$dialog.querySelectorAll('[data-name="gridPage"]').forEach((button) => {
+                if (pages.includes(Number(button.getAttribute('data-page')))) {
+                    button.setAttribute('aria-current', 'page');
+                } else {
+                    button.removeAttribute('aria-current');
+                }
+            });
+        },
+
+        /**
+         * ESC leaves fullscreen first, then closes the overview, then the viewer.
+         */
+        $onCancel: function (event) {
+            // ESC in fullscreen only leaves fullscreen. The browser may fire
+            // cancel before or right after fullscreenchange.
+            const inFullscreen = document.fullscreenElement && this.$dialog.contains(document.fullscreenElement);
+
+            if (inFullscreen || performance.now() - this.$fullscreenExitedAt < 500) {
+                event.preventDefault();
+
+                if (inFullscreen) {
+                    document.exitFullscreen().catch(() => {});
+                }
+
+                return;
+            }
+
+            if (this.$isGridOpen()) {
+                event.preventDefault();
+                this.$closeGrid();
+            }
         },
 
         $showError: function (error) {
@@ -895,6 +1385,11 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             this.$destroyed = true;
 
             window.removeEventListener('resize', this.$onResize);
+            document.removeEventListener('fullscreenchange', this.$onFullscreenChange);
+
+            if (document.fullscreenElement && this.$dialog.contains(document.fullscreenElement)) {
+                document.exitFullscreen().catch(() => {});
+            }
 
             if (this.$resizeFrame) {
                 cancelAnimationFrame(this.$resizeFrame);
@@ -904,8 +1399,13 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             clearTimeout(this.$tapTimer);
 
             this.$observer?.disconnect();
+            this.$gridObserver?.disconnect();
             this.$renderQueue = [];
+            this.$thumbnailQueue = [];
             this.$renderTask?.cancel();
+            this.$thumbnailTasks.forEach(task => task.cancel());
+            this.$thumbnails.forEach(url => URL.revokeObjectURL(url));
+            this.$thumbnails.clear();
 
             Array.from(this.$rendered.keys()).forEach(page => this.$releasePage(page));
 

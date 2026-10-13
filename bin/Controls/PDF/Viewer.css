@@ -6,6 +6,8 @@
     --_btnBg: var(--quiqqer-bricks-pdfViewer-btnBg, rgb(255 255 255 / 0.12));
     --_btnBg--hover: var(--quiqqer-bricks-pdfViewer-btnBg--hover, rgb(255 255 255 / 0.24));
     --_focus: var(--quiqqer-bricks-pdfViewer-focus, var(--qui-colors-primary, Highlight));
+    --_accent: var(--quiqqer-bricks-pdfViewer-accent, var(--qui-colors-primary, currentColor));
+    --_track: color-mix(in srgb, var(--_fg) 30%, transparent);
     --_spacing: var(--qui-spacing, 1rem);
     --_spacing-sm: var(--qui-spacing-sm, 0.5rem);
     --_touchSize: max(2.75rem, 44px);
@@ -27,8 +29,17 @@
 }
 
 .quiqqer-bricks-pdfViewer[open] {
+    display: block;
+}
+
+.quiqqer-bricks-pdfViewer__frame {
+    position: relative;
     display: grid;
     grid-template-rows: auto minmax(0, 1fr) auto;
+    width: 100%;
+    height: 100%;
+    background: var(--_bg);
+    color: var(--_fg);
 }
 
 .quiqqer-bricks-pdfViewer::backdrop {
@@ -84,6 +95,8 @@
 
 /* stage */
 .quiqqer-bricks-pdfViewer__stage {
+    grid-row: 2;
+    grid-column: 1;
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
@@ -124,9 +137,18 @@
     object-fit: contain;
 }
 
-.quiqqer-bricks-pdfViewer__page .skeleton-loader {
+.quiqqer-bricks-pdfViewer__page .skeleton-loader,
+.quiqqer-bricks-pdfViewer__pageThumb {
     position: absolute;
     inset: 0;
+}
+
+/* blurred preview until the sharp page is rendered */
+.quiqqer-bricks-pdfViewer__pageThumb {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: blur(2px);
 }
 
 .quiqqer-bricks-pdfViewer__message {
@@ -144,29 +166,180 @@
     display: none;
 }
 
+/* page overview */
+.quiqqer-bricks-pdfViewer__grid {
+    grid-row: 2;
+    grid-column: 1;
+    z-index: 2;
+    min-height: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+    padding: 0 var(--_spacing) var(--_spacing);
+    background: var(--_bg);
+}
+
+.quiqqer-bricks-pdfViewer__grid[hidden] {
+    display: none;
+}
+
+.quiqqer-bricks-pdfViewer__gridHead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--_spacing);
+    padding-block: var(--_spacing-sm);
+    background: var(--_bg);
+}
+
+.quiqqer-bricks-pdfViewer__gridTitle {
+    margin: 0;
+    font-weight: 600;
+}
+
+.quiqqer-bricks-pdfViewer__gridList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: var(--_spacing);
+    margin: 0;
+    padding: 2px; /* room for the current page outline */
+    list-style: none;
+}
+
+.quiqqer-bricks-pdfViewer__gridPage {
+    display: grid;
+    gap: var(--_spacing-sm);
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+}
+
+.quiqqer-bricks-pdfViewer__gridThumb {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    background: var(--_paper);
+    outline: 3px solid transparent;
+    outline-offset: 2px;
+}
+
+.quiqqer-bricks-pdfViewer__gridThumb .skeleton-loader {
+    position: absolute;
+    inset: 0;
+}
+
+.quiqqer-bricks-pdfViewer__gridThumb img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.quiqqer-bricks-pdfViewer__gridPage:hover .quiqqer-bricks-pdfViewer__gridThumb {
+    outline-color: var(--_track);
+}
+
+.quiqqer-bricks-pdfViewer__gridPage[aria-current="page"] .quiqqer-bricks-pdfViewer__gridThumb {
+    outline-color: var(--_accent);
+}
+
+.quiqqer-bricks-pdfViewer__gridPage[aria-current="page"] .quiqqer-bricks-pdfViewer__gridLabel {
+    font-weight: 700;
+}
+
+.quiqqer-bricks-pdfViewer__gridLabel {
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+}
+
 /* bottom bar */
 .quiqqer-bricks-pdfViewer__bar {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-areas: "slider indicator tools";
     align-items: center;
-    justify-content: center;
     gap: var(--_spacing-sm) var(--_spacing);
     min-height: var(--_touchSize);
     padding: var(--_spacing-sm) var(--_spacing);
 }
 
-.quiqqer-bricks-pdfViewer__indicator {
+/* page slider: track in the foreground color, progress and thumb in the accent */
+.quiqqer-bricks-pdfViewer__slider {
+    --_progress: 0%;
+
+    grid-area: slider;
+    width: 100%;
+    height: var(--_touchSize);
     margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.quiqqer-bricks-pdfViewer__slider:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+.quiqqer-bricks-pdfViewer__slider::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(to right, var(--_accent) var(--_progress), var(--_track) var(--_progress));
+}
+
+.quiqqer-bricks-pdfViewer__slider::-webkit-slider-thumb {
+    width: 18px;
+    height: 18px;
+    margin-top: -7px;
+    border: 2px solid var(--_fg);
+    border-radius: 50%;
+    background: var(--_accent);
+    -webkit-appearance: none;
+}
+
+.quiqqer-bricks-pdfViewer__slider::-moz-range-track {
+    height: 4px;
+    border-radius: 2px;
+    background: var(--_track);
+}
+
+.quiqqer-bricks-pdfViewer__slider::-moz-range-progress {
+    height: 4px;
+    border-radius: 2px;
+    background: var(--_accent);
+}
+
+.quiqqer-bricks-pdfViewer__slider::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--_fg);
+    border-radius: 50%;
+    background: var(--_accent);
+}
+
+.quiqqer-bricks-pdfViewer__indicator {
+    grid-area: indicator;
+    margin: 0;
+    white-space: nowrap;
     font-variant-numeric: tabular-nums;
 }
 
 .quiqqer-bricks-pdfViewer__tools {
+    grid-area: tools;
     display: flex;
+    justify-content: flex-end;
     gap: var(--_spacing-sm);
-}
-
-.quiqqer-bricks-pdfViewer__tools:empty {
-    display: none;
 }
 
 .quiqqer-bricks-pdfViewer__status {
@@ -183,6 +356,13 @@
 
 /* single page: turn by swipe or tap, arrows stay for keyboard and screen readers */
 @media (max-width: 767px) {
+    .quiqqer-bricks-pdfViewer__bar {
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-areas:
+            "slider slider"
+            "indicator tools";
+    }
+
     .quiqqer-bricks-pdfViewer__stage {
         grid-template-columns: minmax(0, 1fr);
         padding-inline: var(--qui-spacing-xs, 0.25rem);
