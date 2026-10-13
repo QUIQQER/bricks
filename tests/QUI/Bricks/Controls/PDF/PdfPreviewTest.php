@@ -95,6 +95,37 @@ class PdfPreviewTest extends TestCase
         $this->assertSame(2, $XPath->query('//button[@aria-label][@data-name="prev" or @data-name="next"]')->length);
     }
 
+    public function testPageAnimationDefaultsToFade(): void
+    {
+        $Control = $this->createPreview();
+
+        $this->assertSame('fade', $Control->getAttribute('pageAnimation'));
+        $this->assertStringContainsString('data-qui-options-pageanimation="fade"', $Control->getBody());
+    }
+
+    public function testPageAnimationSupportsAllModes(): void
+    {
+        foreach (['none', 'fade', 'zoom'] as $animation) {
+            $Control = $this->createPreview(['pageAnimation' => $animation]);
+
+            $this->assertStringContainsString(
+                'data-qui-options-pageanimation="' . $animation . '"',
+                $Control->getBody()
+            );
+        }
+    }
+
+    public function testInvalidPageAnimationFallsBackToFade(): void
+    {
+        foreach (['', 'invalid', '"><script>alert(1)</script>'] as $animation) {
+            $Control = $this->createPreview(['pageAnimation' => $animation]);
+            $body = $Control->getBody();
+
+            $this->assertStringContainsString('data-qui-options-pageanimation="fade"', $body);
+            $this->assertStringNotContainsString('<script>', $body);
+        }
+    }
+
     /**
      * Use a resolved media URL without depending on installation-specific media IDs.
      *

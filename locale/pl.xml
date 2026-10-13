@@ -747,6 +747,21 @@
         <locale name="pdfPreview.error">
             <pl><![CDATA[Nie można załadować podglądu PDF. Spróbuj ponownie.]]></pl>
         </locale>
+        <locale name="pdfPreview.settings.pageAnimation">
+            <pl><![CDATA[Animacja zmiany strony]]></pl>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.description">
+            <pl><![CDATA[Przejście między w pełni wyrenderowanymi stronami. Animacje są wyłączone, gdy w systemie włączono ograniczenie ruchu.]]></pl>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.none">
+            <pl><![CDATA[Brak]]></pl>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.fade">
+            <pl><![CDATA[Przenikanie (150 ms)]]></pl>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.zoom">
+            <pl><![CDATA[Zoom (250 ms)]]></pl>
+        </locale>
     </groups>
     <groups name="quiqqer/bricks" datatype="php">
         <locale name="site.panel.bricks.category.title">

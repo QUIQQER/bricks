@@ -21,6 +21,7 @@
          data-name="pdf-preview-container"
          data-qui-options-pdffile="{$pdfFile|escape:'html'}"
          data-qui-options-pagenum="{$sheetsNumber|escape:'html'}"
+         data-qui-options-pageanimation="{$pageAnimation|escape:'html'}"
          data-qui="package/quiqqer/bricks/bin/Controls/PDF/PdfPreview"
          {if $aspectRatio}style="--_aspectRatio: var(--aspectRatio, {$aspectRatio|escape:'html'});"{/if}
     >

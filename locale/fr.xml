@@ -744,6 +744,21 @@
         <locale name="pdfPreview.error">
             <fr><![CDATA[Impossible de charger l’aperçu du PDF. Veuillez réessayer.]]></fr>
         </locale>
+        <locale name="pdfPreview.settings.pageAnimation">
+            <fr><![CDATA[Animation du changement de page]]></fr>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.description">
+            <fr><![CDATA[Transition entre les pages dont le rendu est terminé. Les animations sont désactivées si la réduction des animations est activée dans le système.]]></fr>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.none">
+            <fr><![CDATA[Aucune]]></fr>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.fade">
+            <fr><![CDATA[Fondu (150 ms)]]></fr>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.zoom">
+            <fr><![CDATA[Zoom (250 ms)]]></fr>
+        </locale>
     </groups>
     <groups name="quiqqer/bricks" datatype="php">
         <locale name="site.panel.bricks.category.title">

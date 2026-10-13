@@ -2792,6 +2792,22 @@
                         <locale group="quiqqer/bricks" var="brick.control.pdfView.aspectRatio.description"/>
                     </description>
                 </setting>
+                <setting name="pageAnimation" type="select">
+                    <locale group="quiqqer/bricks" var="pdfPreview.settings.pageAnimation"/>
+                    <description>
+                        <locale group="quiqqer/bricks" var="pdfPreview.settings.pageAnimation.description"/>
+                    </description>
+                    <option value="none">
+                        <locale group="quiqqer/bricks" var="pdfPreview.settings.pageAnimation.none"/>
+                    </option>
+                    <option value="fade">
+                        <locale group="quiqqer/bricks" var="pdfPreview.settings.pageAnimation.fade"/>
+                    </option>
+                    <option value="zoom">
+                        <locale group="quiqqer/bricks" var="pdfPreview.settings.pageAnimation.zoom"/>
+                    </option>
+                    <defaultValue>fade</defaultValue>
+                </setting>
                 <setting name="showDownload" type="checkbox">
                     <locale group="quiqqer/bricks" var="pdfPreview.settings.showDownload"/>
                     <defaultValue>0</defaultValue>

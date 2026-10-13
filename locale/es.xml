@@ -744,6 +744,21 @@
         <locale name="pdfPreview.error">
             <es><![CDATA[No se pudo cargar la vista previa del PDF. Inténtelo de nuevo.]]></es>
         </locale>
+        <locale name="pdfPreview.settings.pageAnimation">
+            <es><![CDATA[Animación al cambiar de página]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.description">
+            <es><![CDATA[Transición entre páginas ya renderizadas. Las animaciones se desactivan si está habilitada la opción del sistema para reducir el movimiento.]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.none">
+            <es><![CDATA[Ninguna]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.fade">
+            <es><![CDATA[Fundido (150 ms)]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.zoom">
+            <es><![CDATA[Zoom (250 ms)]]></es>
+        </locale>
     </groups>
     <groups name="quiqqer/bricks" datatype="php">
         <locale name="site.panel.bricks.category.title">

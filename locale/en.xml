@@ -757,6 +757,21 @@ This content does not replace the block content. You can still place the brick t
         <locale name="pdfPreview.error">
             <en><![CDATA[The PDF preview could not be loaded. Please try again.]]></en>
         </locale>
+        <locale name="pdfPreview.settings.pageAnimation">
+            <en><![CDATA[Page transition animation]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.description">
+            <en><![CDATA[Transition between fully rendered pages. Animations are disabled when the system setting for reduced motion is enabled.]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.none">
+            <en><![CDATA[None]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.fade">
+            <en><![CDATA[Fade (150 ms)]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.zoom">
+            <en><![CDATA[Zoom (250 ms)]]></en>
+        </locale>
     </groups>
     <groups name="quiqqer/bricks" datatype="php">
         <locale name="site.panel.bricks.category.title">

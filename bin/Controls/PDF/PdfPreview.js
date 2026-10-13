@@ -25,7 +25,8 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
 
         options: {
             pdf: false,
-            pageNum: 0
+            pageNum: 0,
+            pageAnimation: 'fade'
         },
 
         initialize: function (options) {
@@ -122,6 +123,7 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
 
             const container = this.getElm();
             this.pdfFile = container.getAttribute('data-qui-options-pdffile');
+            this.setAttribute('pageAnimation', container.getAttribute('data-qui-options-pageanimation') || 'fade');
 
             this.NextBtn = container.querySelector('[data-name="next"]');
             this.PrevBtn = container.querySelector('[data-name="prev"]');
@@ -407,9 +409,10 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
             }
 
             const previous = preview.querySelector('[data-name="page"]');
+            const animation = this.$getPageAnimation();
 
-            if (previous) {
-                await this.hidePage(previous);
+            if (previous && animation === 'zoom') {
+                await this.hidePage(previous, animation);
             }
 
             if (this.$destroyed || pageNumber !== this.$requestedPage) {
@@ -421,7 +424,14 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
             }
 
             if (previous) {
-                previous.remove();
+                if (animation === 'fade') {
+                    // Overlay the old page so both fades share the same 150 ms.
+                    previous.style.position = 'absolute';
+                    previous.style.inset = '0';
+                    previous.setAttribute('aria-hidden', 'true');
+                } else {
+                    previous.remove();
+                }
             }
 
             const skeleton = preview.querySelector('[data-name="loader"]');
@@ -434,7 +444,18 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
             this.currentPage = pageNumber;
             this.setActiveSheet();
             this.enableButtons();
-            await this.showPage(canvas);
+            try {
+                if (previous && animation === 'fade') {
+                    await Promise.all([
+                        this.hidePage(previous, animation),
+                        this.showPage(canvas, animation)
+                    ]);
+                } else {
+                    await this.showPage(canvas, animation);
+                }
+            } finally {
+                previous?.remove();
+            }
         },
 
         $showError: function (error) {
@@ -471,23 +492,48 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
             this.$pdf = null;
         },
 
-        hidePage: function (page) {
+        $getPageAnimation: function () {
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                return 'none';
+            }
+
+            const animation = this.getAttribute('pageAnimation');
+            return ['none', 'fade', 'zoom'].includes(animation) ? animation : 'fade';
+        },
+
+        hidePage: function (page, animation = this.$getPageAnimation()) {
+            if (animation === 'none') {
+                return Promise.resolve();
+            }
+
+            if (animation === 'fade') {
+                return this.$animatePage(page, [{opacity: 1}, {opacity: 0}], 150);
+            }
+
             return this.$animatePage(page, [
                 {transform: 'scale(1)', opacity: 1},
-                {transform: 'scale(0.95)', opacity: 0}
-            ]);
+                {transform: 'scale(0.98)', opacity: 0}
+            ], 125);
         },
 
-        showPage: function (page) {
+        showPage: function (page, animation = this.$getPageAnimation()) {
+            if (animation === 'none') {
+                return Promise.resolve();
+            }
+
+            if (animation === 'fade') {
+                return this.$animatePage(page, [{opacity: 0}, {opacity: 1}], 150);
+            }
+
             return this.$animatePage(page, [
-                {transform: 'scale(1.1)', opacity: 0},
+                {transform: 'scale(1.02)', opacity: 0},
                 {transform: 'scale(1)', opacity: 1}
-            ]);
+            ], 125);
         },
 
-        $animatePage: async function (page, frames) {
+        $animatePage: async function (page, frames, duration) {
             if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                const animation = page.animate(frames, {duration: 300, easing: 'ease-in-out'});
+                const animation = page.animate(frames, {duration, easing: 'ease-in-out'});
                 this.$animations.add(animation);
 
                 try {

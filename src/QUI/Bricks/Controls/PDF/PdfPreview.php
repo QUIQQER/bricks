@@ -18,7 +18,8 @@ class PdfPreview extends QUI\Control
             'aspectRatio' => '210/297',
             'showDownload' => false,
             'downloadLabel' => '',
-            'downloadAlignment' => 'left'
+            'downloadAlignment' => 'left',
+            'pageAnimation' => 'fade'
         ]);
 
         $this->addCSSFile(OPT_DIR . 'quiqqer/bricks/bin/Controls/PDF/PdfPreview.css');
@@ -45,13 +46,20 @@ class PdfPreview extends QUI\Control
             $downloadLabel = QUI::getLocale()->get('quiqqer/bricks', 'pdfPreview.download');
         }
 
+        $pageAnimation = (string)$this->getAttribute('pageAnimation');
+
+        if (!in_array($pageAnimation, ['none', 'fade', 'zoom'], true)) {
+            $pageAnimation = 'fade';
+        }
+
         $Engine->assign([
             'this' => $this,
             'pdfFile' => $pdfFile,
             'sheetsNumber' => $this->getAttribute('sheetsNumber'),
             'aspectRatio' => $this->getAttribute('aspectRatio'),
             'showDownload' => filter_var($this->getAttribute('showDownload'), FILTER_VALIDATE_BOOLEAN),
-            'downloadLabel' => $downloadLabel
+            'downloadLabel' => $downloadLabel,
+            'pageAnimation' => $pageAnimation
         ]);
 
         return $Engine->fetch(dirname(__FILE__) . '/PdfPreview.html');

@@ -759,6 +759,21 @@ Dieser Inhalt ersetzt den Baustein-Inhalt nicht. Du kannst weiterhin über dem S
         <locale name="pdfPreview.error">
             <de><![CDATA[Die PDF-Vorschau konnte nicht geladen werden. Bitte versuchen Sie es erneut.]]></de>
         </locale>
+        <locale name="pdfPreview.settings.pageAnimation">
+            <de><![CDATA[Seitenwechsel-Animation]]></de>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.description">
+            <de><![CDATA[Übergang zwischen fertig geladenen Seiten. Bei aktivierter Systemeinstellung für reduzierte Bewegung wird keine Animation verwendet.]]></de>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.none">
+            <de><![CDATA[Keine]]></de>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.fade">
+            <de><![CDATA[Überblenden (150 ms)]]></de>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.zoom">
+            <de><![CDATA[Zoom (250 ms)]]></de>
+        </locale>
     </groups>
     <groups name="quiqqer/bricks" datatype="php">
         <locale name="site.panel.bricks.category.title">
