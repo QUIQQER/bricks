@@ -287,6 +287,19 @@
     -webkit-appearance: none;
 }
 
+/* focus ring on the thumb instead of around the whole bar */
+.quiqqer-bricks-pdfViewer__slider:focus-visible {
+    outline: none;
+}
+
+.quiqqer-bricks-pdfViewer__slider:focus-visible::-webkit-slider-thumb {
+    box-shadow: 0 0 0 3px var(--_focus);
+}
+
+.quiqqer-bricks-pdfViewer__slider:focus-visible::-moz-range-thumb {
+    box-shadow: 0 0 0 3px var(--_focus);
+}
+
 .quiqqer-bricks-pdfViewer__slider:disabled {
     opacity: 0.35;
     cursor: default;

@@ -663,9 +663,7 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
 
             const first = pages[0];
             const last = pages[pages.length - 1];
-            const text = pages.length > 1
-                ? QUILocale.get(lg, 'pdfPreview.viewer.pages', {from: first, to: last, total: this.$numPages})
-                : QUILocale.get(lg, 'pdfPreview.page', {page: first, total: this.$numPages});
+            const text = this.$pagesText(pages);
 
             const indicator = this.$dialog.querySelector('[data-name="indicator"]');
 
@@ -674,7 +672,7 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
                 this.$status.textContent = text;
             }
 
-            this.$updateSlider(first, text);
+            this.$updateSlider(pages, text);
             this.$updateGridCurrent(pages);
 
             this.$dialog.querySelector('[data-name="prev"]').disabled = first <= 1;
@@ -1138,10 +1136,50 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             return promise;
         },
 
-        $updateSlider: function (page, text) {
+        /**
+         * @param {Number[]} pages - visible pages, 1-based
+         * @return {String}
+         */
+        $pagesText: function (pages) {
+            if (pages.length > 1) {
+                return QUILocale.get(lg, 'pdfPreview.viewer.pages', {
+                    from: pages[0],
+                    to: pages[pages.length - 1],
+                    total: this.$numPages
+                });
+            }
+
+            return QUILocale.get(lg, 'pdfPreview.page', {
+                page: pages[0],
+                total: this.$numPages
+            });
+        },
+
+        /**
+         * Pages shown together with a page in the current orientation.
+         *
+         * @param {Number} page - 1-based
+         * @return {Number[]}
+         */
+        $spreadFor: function (page) {
+            if (!this.$isLandscape() || page === 1) {
+                return [page];
+            }
+
+            const start = page % 2 === 0 ? page : page - 1;
+
+            return [start, start + 1].filter(number => number <= this.$numPages);
+        },
+
+        $updateSlider: function (pages, text) {
             const slider = this.$dialog.querySelector('[data-name="slider"]');
 
-            slider.value = page;
+            // Keep the chosen page when it is part of the shown double page,
+            // otherwise the thumb would jump back to the left page.
+            if (!pages.includes(Number(slider.value))) {
+                slider.value = pages[0];
+            }
+
             slider.setAttribute('aria-valuetext', text);
             this.$setSliderProgress(slider);
         },
@@ -1158,10 +1196,7 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
          */
         $previewSlider: function () {
             const slider = this.$dialog.querySelector('[data-name="slider"]');
-            const text = QUILocale.get(lg, 'pdfPreview.page', {
-                page: Number(slider.value),
-                total: this.$numPages
-            });
+            const text = this.$pagesText(this.$spreadFor(Number(slider.value)));
 
             this.$dialog.querySelector('[data-name="indicator"]').textContent = text;
             slider.setAttribute('aria-valuetext', text);
