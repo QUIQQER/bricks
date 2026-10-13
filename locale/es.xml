@@ -673,7 +673,19 @@
             <es><![CDATA[Vista previa de PDF]]></es>
         </locale>
         <locale name="pdfPreview.brick.description">
-            <es><![CDATA[Muestra un PDF en un bloque con vista por páginas.]]></es>
+            <es><![CDATA[<p>Con este bloque, un PDF se convierte en una experiencia directamente en tu sitio web. Catálogos, folletos, listas de precios o revistas se pueden ver y hojear sin que los visitantes tengan que descargar antes el archivo.</p>
+<p>Elige entre la vista clásica con una página grande y miniaturas o un avance compacto con texto junto a la portada. Un clic abre el PDF como libro hojeable a pantalla completa, con un paso de página como el de una revista impresa.</p>
+<ul>
+    <li><strong>Dos diseños:</strong> Clásico con página grande y miniaturas, o como avance con texto, portada y botones, con el PDF a la izquierda o a la derecha.</li>
+    <li><strong>Libro hojeable a pantalla completa:</strong> Páginas dobles en pantallas grandes y páginas sueltas en el smartphone. Se pasa de página arrastrando, deslizando, con un clic o con el teclado.</li>
+    <li><strong>Zoom hasta el 400 %:</strong> Amplía con la rueda del ratón, con doble clic o con dos dedos y lee cada detalle con total nitidez.</li>
+    <li><strong>Directo a la página correcta:</strong> Un control deslizante y una vista general con miniaturas llevan directamente al contenido deseado.</li>
+    <li><strong>Compartir páginas:</strong> Cada página tiene su propio enlace, que se puede enviar desde el menú para compartir del dispositivo o copiar con un clic.</li>
+    <li><strong>Descarga opcional:</strong> Botón de descarga opcional con texto propio, también disponible dentro del libro hojeable.</li>
+    <li><strong>Rápido y ligero:</strong> El PDF solo se carga cuando el bloque se hace visible, e incluso los documentos extensos funcionan con fluidez.</li>
+    <li><strong>Accesible para todos:</strong> Se puede manejar por completo con el teclado, es compatible con lectores de pantalla y respeta la preferencia de movimiento reducido.</li>
+</ul>
+<p>Así presentas tus documentos de forma tan atractiva como en papel y mantienes a los visitantes más tiempo en tu página. Elige el PDF, define el diseño y listo.</p>]]></es>
         </locale>
         <locale name="brick.control.pdfView.file">
             <es><![CDATA[Archivo PDF]]></es>

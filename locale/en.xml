@@ -686,7 +686,19 @@ This content does not replace the block content. You can still place the brick t
             <en><![CDATA[PDF Preview]]></en>
         </locale>
         <locale name="pdfPreview.brick.description">
-            <en><![CDATA[PDF Preview - Display a PDF in a block with sheet view]]></en>
+            <en><![CDATA[<p>This brick turns a PDF into an experience right on your website. Catalogues, brochures, price lists or magazines can be viewed and browsed without visitors having to download the file first.</p>
+<p>Choose between the classic view with a large page and page thumbnails or a compact teaser with text next to the cover. One click opens the PDF as a fullscreen flipbook that turns its pages just like a printed booklet.</p>
+<ul>
+    <li><strong>Two layouts:</strong> Classic with a large page and page thumbnails, or a teaser with text, cover page and buttons, with the PDF on the left or right.</li>
+    <li><strong>Fullscreen flipbook:</strong> Double pages on large screens, single pages on smartphones. Turn pages by dragging, swiping, clicking or with the keyboard.</li>
+    <li><strong>Zoom up to 400%:</strong> Zoom in with the mouse wheel, a double click or two fingers and read every detail in sharp quality.</li>
+    <li><strong>Find the right page fast:</strong> A page slider and a page overview with thumbnails take readers straight to the content they need.</li>
+    <li><strong>Share pages:</strong> Every page has its own link that can be sent via the device's share menu or copied with one click.</li>
+    <li><strong>Download on request:</strong> Optional download button with your own label, also available inside the flipbook.</li>
+    <li><strong>Fast and lightweight:</strong> The PDF only loads once the brick becomes visible, and even large documents stay smooth.</li>
+    <li><strong>Accessible to everyone:</strong> Fully keyboard operable, with screen reader support and respect for reduced motion settings.</li>
+</ul>
+<p>Present your documents as appealingly as in print and keep visitors on your page longer. Select a PDF, choose a layout, done.</p>]]></en>
         </locale>
         <locale name="brick.control.pdfView.file">
             <en><![CDATA[PDF File]]></en>

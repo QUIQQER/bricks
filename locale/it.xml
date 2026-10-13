@@ -673,7 +673,19 @@
             <it><![CDATA[Anteprima PDF]]></it>
         </locale>
         <locale name="pdfPreview.brick.description">
-            <it><![CDATA[Mostra un PDF in un blocco con visualizzazione per pagine.]]></it>
+            <it><![CDATA[<p>Con questo blocco un PDF diventa un’esperienza direttamente sul tuo sito web. Cataloghi, brochure, listini prezzi o riviste si possono visualizzare e sfogliare senza che i visitatori debbano prima scaricare il file.</p>
+<p>Scegli tra la vista classica con una pagina grande e le miniature oppure un’anteprima compatta con testo accanto alla copertina. Un clic apre il PDF come sfogliabile a schermo intero, con le pagine che si girano come in una rivista stampata.</p>
+<ul>
+    <li><strong>Due layout:</strong> classico con pagina grande e miniature, oppure anteprima con testo, copertina e pulsanti, con il PDF a sinistra o a destra.</li>
+    <li><strong>Sfogliabile a schermo intero:</strong> pagine doppie sugli schermi grandi, pagine singole sullo smartphone. Si sfoglia trascinando, scorrendo, con un clic o con la tastiera.</li>
+    <li><strong>Zoom fino al 400%:</strong> ingrandisci con la rotella del mouse, con un doppio clic o con due dita e leggi ogni dettaglio in modo nitido.</li>
+    <li><strong>Subito alla pagina giusta:</strong> un cursore delle pagine e una panoramica con miniature portano direttamente al contenuto desiderato.</li>
+    <li><strong>Condividere le pagine:</strong> ogni pagina ha il proprio link, da inviare tramite il menu di condivisione del dispositivo o da copiare con un clic.</li>
+    <li><strong>Download su richiesta:</strong> pulsante di download opzionale con testo personalizzato, disponibile anche nello sfogliabile.</li>
+    <li><strong>Veloce e leggero:</strong> il PDF viene caricato solo quando il blocco diventa visibile e anche i documenti più corposi restano fluidi.</li>
+    <li><strong>Accessibile a tutti:</strong> completamente utilizzabile da tastiera, compatibile con gli screen reader e rispettoso dell’impostazione per il movimento ridotto.</li>
+</ul>
+<p>Così presenti i tuoi documenti in modo accattivante come su carta e trattieni più a lungo i visitatori sulla tua pagina. Scegli il PDF, imposta il layout, fatto.</p>]]></it>
         </locale>
         <locale name="brick.control.pdfView.file">
             <it><![CDATA[File PDF]]></it>

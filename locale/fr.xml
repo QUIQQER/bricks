@@ -673,7 +673,19 @@
             <fr><![CDATA[Aperçu PDF]]></fr>
         </locale>
         <locale name="pdfPreview.brick.description">
-            <fr><![CDATA[Affiche un PDF dans un bloc avec une vue page par page.]]></fr>
+            <fr><![CDATA[<p>Ce bloc transforme un PDF en véritable expérience directement sur votre site web. Catalogues, brochures, listes de prix ou magazines peuvent être consultés et feuilletés sans que les visiteurs aient à télécharger le fichier au préalable.</p>
+<p>Choisissez entre la vue classique avec une grande page et des miniatures ou un teaser compact avec du texte à côté de la couverture. Un clic ouvre le PDF sous forme de livre feuilletable en plein écran, avec un effet de page tournée comme dans un magazine imprimé.</p>
+<ul>
+    <li><strong>Deux mises en page :</strong> classique avec grande page et miniatures, ou teaser avec texte, couverture et boutons, le PDF à gauche ou à droite.</li>
+    <li><strong>Livre feuilletable en plein écran :</strong> doubles pages sur les grands écrans, pages simples sur smartphone. On tourne les pages en faisant glisser, en balayant, d’un clic ou au clavier.</li>
+    <li><strong>Zoom jusqu’à 400 % :</strong> zoomez avec la molette, d’un double clic ou à deux doigts et lisez chaque détail avec netteté.</li>
+    <li><strong>Accès rapide à la bonne page :</strong> un curseur de pages et un aperçu avec miniatures mènent directement au contenu souhaité.</li>
+    <li><strong>Partager des pages :</strong> chaque page possède son propre lien, à envoyer via le menu de partage de l’appareil ou à copier en un clic.</li>
+    <li><strong>Téléchargement à la demande :</strong> bouton de téléchargement optionnel avec libellé personnalisé, également disponible dans le livre feuilletable.</li>
+    <li><strong>Rapide et léger :</strong> le PDF ne se charge que lorsque le bloc devient visible, et même les documents volumineux restent fluides.</li>
+    <li><strong>Accessible à tous :</strong> entièrement utilisable au clavier, compatible avec les lecteurs d’écran et respectueux du réglage de mouvement réduit.</li>
+</ul>
+<p>Présentez vos documents de manière aussi attrayante qu’en version imprimée et retenez vos visiteurs plus longtemps. Choisissez le PDF, définissez la mise en page, c’est prêt.</p>]]></fr>
         </locale>
         <locale name="brick.control.pdfView.file">
             <fr><![CDATA[Fichier PDF]]></fr>

@@ -673,7 +673,19 @@
             <pt><![CDATA[Pré-visualização de PDF]]></pt>
         </locale>
         <locale name="pdfPreview.brick.description">
-            <pt><![CDATA[Apresenta um PDF num bloco com vista por páginas.]]></pt>
+            <pt><![CDATA[<p>Com este bloco, um PDF torna-se uma experiência diretamente no teu site. Catálogos, brochuras, tabelas de preços ou revistas podem ser vistos e folheados sem que os visitantes tenham de descarregar primeiro o ficheiro.</p>
+<p>Escolhe entre a vista clássica com uma página grande e miniaturas ou um destaque compacto com texto ao lado da capa. Um clique abre o PDF como livro folheável em ecrã inteiro, com as páginas a virar como numa revista impressa.</p>
+<ul>
+    <li><strong>Dois esquemas:</strong> clássico com página grande e miniaturas, ou destaque com texto, capa e botões, com o PDF à esquerda ou à direita.</li>
+    <li><strong>Livro folheável em ecrã inteiro:</strong> páginas duplas em ecrãs grandes, páginas simples no smartphone. Folheia-se arrastando, deslizando, com um clique ou com o teclado.</li>
+    <li><strong>Zoom até 400%:</strong> amplia com a roda do rato, com duplo clique ou com dois dedos e lê cada detalhe com nitidez.</li>
+    <li><strong>Direto à página certa:</strong> um seletor de páginas e uma vista geral com miniaturas levam diretamente ao conteúdo pretendido.</li>
+    <li><strong>Partilhar páginas:</strong> cada página tem a sua própria ligação, que pode ser enviada pelo menu de partilha do dispositivo ou copiada com um clique.</li>
+    <li><strong>Download opcional:</strong> botão de download opcional com texto próprio, também disponível no livro folheável.</li>
+    <li><strong>Rápido e leve:</strong> o PDF só é carregado quando o bloco fica visível, e mesmo documentos extensos continuam fluidos.</li>
+    <li><strong>Acessível a todos:</strong> totalmente utilizável com o teclado, compatível com leitores de ecrã e atento à preferência de movimento reduzido.</li>
+</ul>
+<p>Assim apresentas os teus documentos de forma tão apelativa como em papel e manténs os visitantes mais tempo na tua página. Escolhe o PDF, define o esquema e pronto.</p>]]></pt>
         </locale>
         <locale name="brick.control.pdfView.file">
             <pt><![CDATA[Ficheiro PDF]]></pt>

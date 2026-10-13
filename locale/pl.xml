@@ -676,7 +676,19 @@
             <pl><![CDATA[Podgląd PDF]]></pl>
         </locale>
         <locale name="pdfPreview.brick.description">
-            <pl><![CDATA[Wyświetla plik PDF w bloku z widokiem poszczególnych stron.]]></pl>
+            <pl><![CDATA[<p>Ten blok zamienia plik PDF w atrakcyjną prezentację bezpośrednio na Twojej stronie. Katalogi, broszury, cenniki czy magazyny można oglądać i przeglądać bez wcześniejszego pobierania pliku.</p>
+<p>Wybierz klasyczny widok z dużą stroną i miniaturami albo kompaktowy teaser z tekstem obok okładki. Jedno kliknięcie otwiera PDF jako książkę na pełnym ekranie, w której strony przewracają się jak w drukowanym czasopiśmie.</p>
+<ul>
+    <li><strong>Dwa układy:</strong> klasyczny z dużą stroną i miniaturami albo teaser z tekstem, okładką i przyciskami, z plikiem PDF po lewej lub po prawej stronie.</li>
+    <li><strong>Książka na pełnym ekranie:</strong> rozkładówki na dużych ekranach, pojedyncze strony na smartfonie. Strony przewraca się przeciągnięciem, przesunięciem palca, kliknięciem lub klawiaturą.</li>
+    <li><strong>Powiększenie do 400%:</strong> przybliżaj kółkiem myszy, podwójnym kliknięciem lub dwoma palcami i czytaj każdy szczegół w pełnej ostrości.</li>
+    <li><strong>Szybko do właściwej strony:</strong> suwak stron i przegląd stron z miniaturami prowadzą prosto do potrzebnej treści.</li>
+    <li><strong>Udostępnianie stron:</strong> każda strona ma własny link, który można wysłać przez menu udostępniania urządzenia lub skopiować jednym kliknięciem.</li>
+    <li><strong>Pobieranie na życzenie:</strong> opcjonalny przycisk pobierania z własną etykietą, dostępny także w widoku książki.</li>
+    <li><strong>Szybko i oszczędnie:</strong> PDF wczytuje się dopiero wtedy, gdy blok staje się widoczny, a nawet obszerne dokumenty działają płynnie.</li>
+    <li><strong>Dostępny dla wszystkich:</strong> w pełni obsługiwany klawiaturą, ze wsparciem czytników ekranu i z uwzględnieniem ustawienia ograniczonego ruchu.</li>
+</ul>
+<p>Dzięki temu prezentujesz dokumenty równie atrakcyjnie jak w druku i dłużej zatrzymujesz odwiedzających na swojej stronie. Wybierz PDF, ustaw układ i gotowe.</p>]]></pl>
         </locale>
         <locale name="brick.control.pdfView.file">
             <pl><![CDATA[Plik PDF]]></pl>

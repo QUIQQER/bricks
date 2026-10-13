@@ -688,7 +688,19 @@ Dieser Inhalt ersetzt den Baustein-Inhalt nicht. Du kannst weiterhin über dem S
             <de><![CDATA[PDF Vorschau]]></de>
         </locale>
         <locale name="pdfPreview.brick.description">
-            <de><![CDATA[PDF Vorschau - PDF in einem Baustein mit Blattansicht anzeigen]]></de>
+            <de><![CDATA[<p>Mit diesem Baustein wird aus einer PDF ein Erlebnis direkt auf deiner Website. Kataloge, Broschüren, Preislisten oder Magazine lassen sich ansehen und durchblättern, ohne dass Besucher die Datei erst herunterladen müssen.</p>
+<p>Wähle zwischen der klassischen Ansicht mit großer Seite und Seitenvorschauen oder einem kompakten Teaser mit Text neben der Titelseite. Ein Klick öffnet die PDF als Blätterbuch im Vollbild, mit Umblättern wie bei einem gedruckten Heft.</p>
+<ul>
+    <li><strong>Zwei Darstellungen:</strong> Klassisch mit großer Seite und Seitenvorschauen oder als Teaser mit Text, Titelseite und Buttons, die PDF wahlweise links oder rechts.</li>
+    <li><strong>Blätterbuch im Vollbild:</strong> Doppelseiten auf großen Bildschirmen, Einzelseiten auf dem Smartphone. Geblättert wird per Ziehen, Wischen, Klick oder Tastatur.</li>
+    <li><strong>Zoom bis 400 %:</strong> Per Mausrad, Doppelklick oder mit zwei Fingern hineinzoomen und Details gestochen scharf lesen.</li>
+    <li><strong>Schnell zur richtigen Seite:</strong> Seitenregler und Seitenübersicht mit Vorschaubildern führen direkt zum gewünschten Inhalt.</li>
+    <li><strong>Seiten teilen:</strong> Jede Seite hat einen eigenen Link, der sich über das Teilen-Menü des Geräts verschicken oder mit einem Klick kopieren lässt.</li>
+    <li><strong>Download auf Wunsch:</strong> Optionaler Download-Button mit eigener Beschriftung, auch direkt im Blätterbuch.</li>
+    <li><strong>Schnell und sparsam:</strong> Die PDF lädt erst, wenn der Baustein sichtbar wird, und auch umfangreiche Dokumente bleiben flüssig.</li>
+    <li><strong>Für alle bedienbar:</strong> Vollständig per Tastatur nutzbar, mit Screenreader-Unterstützung und Rücksicht auf reduzierte Bewegung.</li>
+</ul>
+<p>So präsentierst du Dokumente so ansprechend wie gedruckt und hältst Besucher länger auf deiner Seite. PDF auswählen, Darstellung festlegen, fertig.</p>]]></de>
         </locale>
         <locale name="brick.control.pdfView.file">
             <de><![CDATA[PDF Datei]]></de>
