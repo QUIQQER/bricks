@@ -3,10 +3,11 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
     'qui/QUI',
     'qui/controls/Control',
     'Locale',
+    'package/quiqqer/bricks/bin/Controls/PDF/PdfRenderer',
 
     'css!package/quiqqer/bricks/bin/Controls/PDF/PdfPreview.css'
 
-], function (QUI, QUIControl, QUILocale) {
+], function (QUI, QUIControl, QUILocale, PdfRenderer) {
     "use strict";
 
     return new Class({
@@ -26,7 +27,9 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
         options: {
             pdf: false,
             pageNum: 0,
-            pageAnimation: 'fade'
+            pageAnimation: 'fade',
+            layout: 'classic',
+            openViewer: false
         },
 
         initialize: function (options) {
@@ -40,7 +43,7 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
             this.isLoading = false;
             this.$requestedPage = 0;
             this.$pdf = null;
-            this.$loadingTask = null;
+            this.$acquiredFile = '';
             this.$loadPromise = null;
             this.$pagePromise = null;
             this.$renderTask = null;
@@ -124,6 +127,8 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
             const container = this.getElm();
             this.pdfFile = container.getAttribute('data-qui-options-pdffile');
             this.setAttribute('pageAnimation', container.getAttribute('data-qui-options-pageanimation') || 'fade');
+            this.setAttribute('layout', container.getAttribute('data-qui-options-layout') || 'classic');
+            this.setAttribute('openViewer', container.getAttribute('data-qui-options-openviewer') === '1');
 
             this.NextBtn = container.querySelector('[data-name="next"]');
             this.PrevBtn = container.querySelector('[data-name="prev"]');
@@ -147,11 +152,13 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
          * Keep loading lazy, but share one document between all canvases.
          */
         initPdfLazyLoad: function (container) {
-            this.PrevBtn.type = 'button';
-            this.NextBtn.type = 'button';
-            this.PrevBtn.setAttribute('aria-label', QUILocale.get('quiqqer/bricks', 'pdfPreview.previous'));
-            this.NextBtn.setAttribute('aria-label', QUILocale.get('quiqqer/bricks', 'pdfPreview.next'));
-            this.disableButtons();
+            if (this.PrevBtn && this.NextBtn) {
+                this.PrevBtn.type = 'button';
+                this.NextBtn.type = 'button';
+                this.PrevBtn.setAttribute('aria-label', QUILocale.get('quiqqer/bricks', 'pdfPreview.previous'));
+                this.NextBtn.setAttribute('aria-label', QUILocale.get('quiqqer/bricks', 'pdfPreview.next'));
+                this.disableButtons();
+            }
 
             this.$status = container.querySelector('[data-name="status"]');
 
@@ -190,21 +197,23 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
                 throw new Error('No PDF file provided.');
             }
 
-            const module = await import(URL_OPT_DIR + 'bin/quiqqer-asset/pdfjs-dist/pdfjs-dist/build/pdf.mjs');
-
             if (this.$destroyed) {
                 return;
             }
 
-            module.GlobalWorkerOptions.workerSrc = URL_OPT_DIR + 'bin/quiqqer-asset/pdfjs-dist/pdfjs-dist/build/pdf.worker.min.mjs';
-            this.$loadingTask = module.getDocument(this.pdfFile);
-            this.$pdf = await this.$loadingTask.promise;
+            this.$acquiredFile = this.pdfFile;
+            this.$pdf = await PdfRenderer.acquire(this.pdfFile);
 
             if (this.$destroyed) {
                 return;
             }
 
             this.maxPage = this.$pdf.numPages;
+
+            if (this.$isTeaser()) {
+                await this.$renderCover();
+                return;
+            }
             const sheetsContainer = this.getElm().querySelector('[data-name="sheets"]');
             const placeholders = Array.from(sheetsContainer.querySelectorAll('[data-name="sheet"]'));
             this.sheets = [];
@@ -277,12 +286,9 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
                             break;
                         }
 
-                        const canvas = this.$createCanvas(page, 0.2);
+                        const canvas = PdfRenderer.createCanvas(page, 0.2);
                         canvas.setAttribute('aria-hidden', 'true');
-                        this.$thumbnailTask = page.render({
-                            canvasContext: canvas.getContext('2d'),
-                            viewport: page.getViewport({scale: 0.2})
-                        });
+                        this.$thumbnailTask = PdfRenderer.render(page, canvas, 0.2);
                         await this.$thumbnailTask.promise;
 
                         if (!this.$destroyed) {
@@ -303,12 +309,45 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
             }
         },
 
-        $createCanvas: function (page, scale) {
-            const viewport = page.getViewport({scale});
-            const canvas = document.createElement('canvas');
-            canvas.width = viewport.width;
-            canvas.height = viewport.height;
-            return canvas;
+        $isTeaser: function () {
+            return this.getAttribute('layout') === 'teaser';
+        },
+
+        /**
+         * Teaser layout: render only the first page into the cover.
+         */
+        $renderCover: async function () {
+            const container = this.getElm();
+            const cover = container.querySelector('[data-name="cover"]');
+            const page = await this.$pdf.getPage(1);
+
+            if (this.$destroyed || !cover) {
+                return;
+            }
+
+            const viewport = page.getViewport({scale: 1});
+            const scale = (cover.clientWidth / viewport.width) * PdfRenderer.outputScale();
+            const canvas = PdfRenderer.createCanvas(page, scale);
+            const task = PdfRenderer.render(page, canvas, scale);
+
+            this.$renderTask = task;
+
+            try {
+                await task.promise;
+            } finally {
+                if (this.$renderTask === task) {
+                    this.$renderTask = null;
+                }
+            }
+
+            if (this.$destroyed) {
+                return;
+            }
+
+            canvas.setAttribute('role', 'img');
+            canvas.setAttribute('aria-label', this.$pageLabel(1));
+            cover.querySelector('[data-name="loader"]')?.remove();
+            cover.prepend(canvas);
         },
 
         $pageLabel: function (pageNumber) {
@@ -386,14 +425,11 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
                 return;
             }
 
-            const canvas = this.$createCanvas(page, 1.5);
+            const canvas = PdfRenderer.createCanvas(page, 1.5);
             canvas.setAttribute('data-name', 'page');
             canvas.setAttribute('role', 'img');
             canvas.setAttribute('aria-label', this.$pageLabel(pageNumber));
-            const task = page.render({
-                canvasContext: canvas.getContext('2d'),
-                viewport: page.getViewport({scale: 1.5})
-            });
+            const task = PdfRenderer.render(page, canvas, 1.5);
             this.$renderTask = task;
 
             try {
@@ -485,8 +521,9 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
             this.$animations.forEach(animation => animation.cancel());
             this.$animations.clear();
 
-            if (this.$loadingTask) {
-                this.$loadingTask.destroy().catch(error => console.error('Unable to release PDF:', error));
+            if (this.$acquiredFile) {
+                PdfRenderer.release(this.$acquiredFile);
+                this.$acquiredFile = '';
             }
 
             this.$pdf = null;

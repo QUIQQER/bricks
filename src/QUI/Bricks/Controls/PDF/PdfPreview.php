@@ -19,7 +19,11 @@ class PdfPreview extends QUI\Control
             'showDownload' => false,
             'downloadLabel' => '',
             'downloadAlignment' => 'left',
-            'pageAnimation' => 'fade'
+            'pageAnimation' => 'fade',
+            'layout' => 'classic',
+            'pdfPosition' => 'right',
+            'openLabel' => '',
+            'openViewer' => true
         ]);
 
         $this->addCSSFile(OPT_DIR . 'quiqqer/bricks/bin/Controls/PDF/PdfPreview.css');
@@ -52,6 +56,26 @@ class PdfPreview extends QUI\Control
             $pageAnimation = 'fade';
         }
 
+        $layout = (string)$this->getAttribute('layout');
+
+        if (!in_array($layout, ['classic', 'teaser'], true)) {
+            $layout = 'classic';
+        }
+
+        $this->addCSSClass('quiqqer-bricks-controls-pdf-pdfPreview--' . $layout);
+
+        $pdfPosition = (string)$this->getAttribute('pdfPosition');
+
+        if (!in_array($pdfPosition, ['left', 'right'], true)) {
+            $pdfPosition = 'right';
+        }
+
+        $openLabel = trim((string)$this->getAttribute('openLabel'));
+
+        if ($openLabel === '') {
+            $openLabel = QUI::getLocale()->get('quiqqer/bricks', 'pdfPreview.open');
+        }
+
         $Engine->assign([
             'this' => $this,
             'pdfFile' => $pdfFile,
@@ -59,7 +83,11 @@ class PdfPreview extends QUI\Control
             'aspectRatio' => $this->getAttribute('aspectRatio'),
             'showDownload' => filter_var($this->getAttribute('showDownload'), FILTER_VALIDATE_BOOLEAN),
             'downloadLabel' => $downloadLabel,
-            'pageAnimation' => $pageAnimation
+            'pageAnimation' => $pageAnimation,
+            'layout' => $layout,
+            'pdfPosition' => $pdfPosition,
+            'openLabel' => $openLabel,
+            'openViewer' => filter_var($this->getAttribute('openViewer'), FILTER_VALIDATE_BOOLEAN)
         ]);
 
         return $Engine->fetch(dirname(__FILE__) . '/PdfPreview.html');

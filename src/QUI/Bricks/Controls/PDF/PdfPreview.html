@@ -1,3 +1,52 @@
+{if $layout === 'teaser'}
+<div class="quiqqer-bricks-pdfPreview-teaser" data-name="pdf-teaser"
+     data-pdf-position="{$pdfPosition|escape:'html'}">
+    <div class="quiqqer-bricks-pdfPreview-teaser__text">
+        {if $this->getAttribute('frontendTitle')}
+            <h2 class="control-header">{$this->getAttribute('frontendTitle')|escape:'html'}</h2>
+        {/if}
+
+        {if $this->getAttribute('content')}
+            <div class="control-content">
+                {$this->getAttribute('content')}
+            </div>
+        {/if}
+
+        {if $showDownload && $pdfFile}
+        <div class="quiqqer-bricks-controls-pdf-pdfPreview__download">
+            <a href="{$pdfFile|escape:'html'}" download class="btn btn-primary" data-name="pdf-download">
+                <i class="fa-solid fa-download" aria-hidden="true"></i>
+                <span>{$downloadLabel|escape:'html'}</span>
+            </a>
+        </div>
+        {/if}
+    </div>
+
+    {if $pdfFile}
+    <div class="quiqqer-bricks-pdfPreview-teaser__media">
+        <div class="quiqqer-bricks-pdfPreview quiqqer-bricks-pdfPreview--teaser"
+             data-name="pdf-preview-container"
+             data-qui="package/quiqqer/bricks/bin/Controls/PDF/PdfPreview"
+             data-qui-options-layout="teaser"
+             data-qui-options-pdffile="{$pdfFile|escape:'html'}"
+             {if $aspectRatio}style="--_aspectRatio: var(--aspectRatio, {$aspectRatio|escape:'html'});"{/if}
+        >
+            <div class="quiqqer-bricks-pdfPreview__cover" data-name="cover" aria-hidden="true">
+                <span data-name="loader" class="skeleton-loader"></span>
+                <span class="quiqqer-bricks-pdfPreview__coverHint">
+                    <i class="fa-solid fa-book-open" aria-hidden="true"></i>
+                </span>
+            </div>
+            <button type="button" class="btn btn-secondary" data-name="open" disabled>
+                <i class="fa-solid fa-expand" aria-hidden="true"></i>
+                <span>{$openLabel|escape:'html'}</span>
+            </button>
+            <p class="quiqqer-bricks-pdfPreview__status" data-name="status" role="status"></p>
+        </div>
+    </div>
+    {/if}
+</div>
+{else}
 {if $this->getAttribute('frontendTitle')}
     <h2 class="control-header">{$this->getAttribute('frontendTitle')|escape:'html'}</h2>
 {/if}
@@ -19,6 +68,8 @@
     {/if}
     <div class="quiqqer-bricks-pdfPreview"
          data-name="pdf-preview-container"
+         data-qui-options-layout="classic"
+         data-qui-options-openviewer="{if $openViewer}1{else}0{/if}"
          data-qui-options-pdffile="{$pdfFile|escape:'html'}"
          data-qui-options-pagenum="{$sheetsNumber|escape:'html'}"
          data-qui-options-pageanimation="{$pageAnimation|escape:'html'}"
@@ -55,4 +106,4 @@
         </div>
     </div>
 </div>
-
+{/if}

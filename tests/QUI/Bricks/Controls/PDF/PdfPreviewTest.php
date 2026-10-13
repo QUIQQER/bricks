@@ -126,6 +126,155 @@ class PdfPreviewTest extends TestCase
         }
     }
 
+    public function testLayoutDefaultsToClassic(): void
+    {
+        $Control = $this->createPreview(['sheetsNumber' => 2]);
+        $XPath = $this->createXPath($Control->getBody());
+
+        $this->assertSame('classic', $Control->getAttribute('layout'));
+        $this->assertSame(1, $XPath->query('//*[@data-name="pdf-preview-container"][@data-qui-options-layout="classic"]')->length);
+        $this->assertSame(2, $XPath->query('//*[@data-name="sheet"]')->length);
+        $this->assertSame(0, $XPath->query('//*[@data-name="pdf-teaser"]')->length);
+    }
+
+    public function testInvalidLayoutFallsBackToClassic(): void
+    {
+        foreach (['', 'invalid', '"><script>alert(1)</script>'] as $layout) {
+            $Control = $this->createPreview(['layout' => $layout]);
+            $body = $Control->getBody();
+
+            $this->assertStringContainsString('data-qui-options-layout="classic"', $body);
+            $this->assertStringNotContainsString('<script>', $body);
+            $this->assertStringContainsString('quiqqer-bricks-controls-pdf-pdfPreview--classic', $Control->create());
+        }
+    }
+
+    public function testTeaserRendersTextAndCoverWithoutSheets(): void
+    {
+        $Control = $this->createPreview([
+            'layout' => 'teaser',
+            'sheetsNumber' => 3
+        ]);
+        $XPath = $this->createXPath($Control->getBody());
+
+        $this->assertSame(1, $XPath->query('//*[@data-name="pdf-teaser"]')->length);
+        $this->assertSame(0, $XPath->query('//*[@data-name="sheet"]')->length);
+        $this->assertSame(1, $XPath->query('//button[@type="button"][@data-name="open"]')->length);
+        $this->assertSame(1, $XPath->query('//*[@data-name="cover"][@aria-hidden="true"]')->length);
+        $this->assertSame(
+            1,
+            $XPath->query('//*[@data-name="pdf-preview-container"][@data-qui-options-layout="teaser"]')->length
+        );
+        $this->assertStringContainsString('quiqqer-bricks-controls-pdf-pdfPreview--teaser', $Control->create());
+    }
+
+    public function testTeaserPdfPositionIsValidated(): void
+    {
+        $positions = [
+            'left' => 'left',
+            'right' => 'right',
+            'invalid' => 'right',
+            '"><script>alert(1)</script>' => 'right'
+        ];
+
+        foreach ($positions as $position => $expected) {
+            $Control = $this->createPreview([
+                'layout' => 'teaser',
+                'pdfPosition' => $position
+            ]);
+            $body = $Control->getBody();
+
+            $this->assertStringContainsString('data-pdf-position="' . $expected . '"', $body);
+            $this->assertStringNotContainsString('<script>', $body);
+        }
+    }
+
+    public function testTeaserTitleAndContentNotDuplicated(): void
+    {
+        $Control = $this->createPreview([
+            'layout' => 'teaser',
+            'frontendTitle' => 'Catalog',
+            'content' => '<p>Introduction</p>'
+        ]);
+        $XPath = $this->createXPath($Control->getBody());
+
+        $this->assertSame(1, $XPath->query('//*[contains(@class, "control-content")]')->length);
+        $this->assertSame(1, $XPath->query('//*[contains(@class, "control-header")]')->length);
+        $this->assertSame(
+            1,
+            $XPath->query('//*[contains(@class, "quiqqer-bricks-pdfPreview-teaser__text")]//*[contains(@class, "control-content")]')->length
+        );
+    }
+
+    public function testTeaserDownloadIsInTextColumn(): void
+    {
+        $Control = $this->createPreview([
+            'layout' => 'teaser',
+            'showDownload' => true
+        ]);
+        $XPath = $this->createXPath($Control->getBody());
+
+        $this->assertSame(
+            1,
+            $XPath->query('//*[contains(@class, "quiqqer-bricks-pdfPreview-teaser__text")]//a[@data-name="pdf-download"]')->length
+        );
+        $this->assertSame(1, $XPath->query('//a[@data-name="pdf-download"]')->length);
+    }
+
+    public function testOpenLabelEscapedAndDefault(): void
+    {
+        $Control = $this->createPreview([
+            'layout' => 'teaser',
+            'openLabel' => '<b>Open & read</b>'
+        ]);
+
+        $this->assertStringContainsString('&lt;b&gt;Open &amp; read&lt;/b&gt;', $Control->getBody());
+
+        $Control = $this->createPreview([
+            'layout' => 'teaser',
+            'openLabel' => '  '
+        ]);
+        $label = \QUI::getLocale()->get('quiqqer/bricks', 'pdfPreview.open');
+
+        $this->assertStringContainsString(htmlspecialchars($label, ENT_QUOTES), $Control->getBody());
+    }
+
+    public function testOpenViewerOptionClassic(): void
+    {
+        $Control = $this->createPreview();
+
+        $this->assertStringContainsString('data-qui-options-openviewer="1"', $Control->getBody());
+
+        foreach (['0', false, 'false'] as $value) {
+            $Control = $this->createPreview(['openViewer' => $value]);
+
+            $this->assertStringContainsString('data-qui-options-openviewer="0"', $Control->getBody());
+        }
+    }
+
+    public function testTeaserWithoutPdfRendersOnlyText(): void
+    {
+        $Control = new PdfPreview([
+            'layout' => 'teaser',
+            'pdfFile' => 'not-a-media-url',
+            'content' => '<p>Introduction</p>'
+        ]);
+        $XPath = $this->createXPath($Control->getBody());
+
+        $this->assertSame(1, $XPath->query('//*[@data-name="pdf-teaser"]')->length);
+        $this->assertSame(0, $XPath->query('//*[@data-name="pdf-preview-container"]')->length);
+        $this->assertSame(0, $XPath->query('//*[@data-name="open"]')->length);
+        $this->assertSame(1, $XPath->query('//*[contains(@class, "control-content")]')->length);
+    }
+
+    private function createXPath(string $body): \DOMXPath
+    {
+        $Document = new \DOMDocument();
+        $Document->loadHTML($body, LIBXML_NOERROR | LIBXML_NOWARNING);
+
+        return new \DOMXPath($Document);
+    }
+
     /**
      * Use a resolved media URL without depending on installation-specific media IDs.
      *

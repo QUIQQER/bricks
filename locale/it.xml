@@ -759,6 +759,72 @@
         <locale name="pdfPreview.settings.pageAnimation.zoom">
             <it><![CDATA[Zoom (250 ms)]]></it>
         </locale>
+        <locale name="pdfPreview.settings.layout">
+            <it><![CDATA[Layout]]></it>
+        </locale>
+        <locale name="pdfPreview.settings.layout.description">
+            <it><![CDATA[Classico: pagina grande con miniature delle pagine. Teaser: testo accanto alla prima pagina, un clic apre il PDF nel visualizzatore a schermo intero.]]></it>
+        </locale>
+        <locale name="pdfPreview.settings.layout.classic">
+            <it><![CDATA[Classico]]></it>
+        </locale>
+        <locale name="pdfPreview.settings.layout.teaser">
+            <it><![CDATA[Teaser (testo + prima pagina)]]></it>
+        </locale>
+        <locale name="pdfPreview.settings.pdfPosition">
+            <it><![CDATA[Posizione del PDF]]></it>
+        </locale>
+        <locale name="pdfPreview.settings.openLabel">
+            <it><![CDATA[Testo del pulsante «Apri»]]></it>
+        </locale>
+        <locale name="pdfPreview.settings.openLabel.description">
+            <it><![CDATA[Lascia vuoto per usare il testo predefinito «Visualizza PDF».]]></it>
+        </locale>
+        <locale name="pdfPreview.settings.openViewer">
+            <it><![CDATA[Il clic sulla pagina apre il visualizzatore]]></it>
+        </locale>
+        <locale name="pdfPreview.settings.openViewer.description">
+            <it><![CDATA[Apre il PDF a schermo intero con sfogliatura, zoom e panoramica delle pagine.]]></it>
+        </locale>
+        <locale name="pdfPreview.open">
+            <it><![CDATA[Visualizza PDF]]></it>
+        </locale>
+        <locale name="pdfPreview.viewer.title">
+            <it><![CDATA[Vista PDF: [title]]]></it>
+        </locale>
+        <locale name="pdfPreview.viewer.close">
+            <it><![CDATA[Chiudi]]></it>
+        </locale>
+        <locale name="pdfPreview.viewer.grid">
+            <it><![CDATA[Panoramica delle pagine]]></it>
+        </locale>
+        <locale name="pdfPreview.viewer.gridClose">
+            <it><![CDATA[Chiudi panoramica delle pagine]]></it>
+        </locale>
+        <locale name="pdfPreview.viewer.zoomIn">
+            <it><![CDATA[Ingrandisci]]></it>
+        </locale>
+        <locale name="pdfPreview.viewer.zoomOut">
+            <it><![CDATA[Riduci]]></it>
+        </locale>
+        <locale name="pdfPreview.viewer.share">
+            <it><![CDATA[Condividi pagina]]></it>
+        </locale>
+        <locale name="pdfPreview.viewer.shareCopied">
+            <it><![CDATA[Link copiato.]]></it>
+        </locale>
+        <locale name="pdfPreview.viewer.fullscreen">
+            <it><![CDATA[Schermo intero]]></it>
+        </locale>
+        <locale name="pdfPreview.viewer.fullscreenExit">
+            <it><![CDATA[Esci da schermo intero]]></it>
+        </locale>
+        <locale name="pdfPreview.viewer.slider">
+            <it><![CDATA[Scegli pagina]]></it>
+        </locale>
+        <locale name="pdfPreview.viewer.pages">
+            <it><![CDATA[Pagine [from]–[to] di [total]]]></it>
+        </locale>
     </groups>
     <groups name="quiqqer/bricks" datatype="php">
         <locale name="site.panel.bricks.category.title">
