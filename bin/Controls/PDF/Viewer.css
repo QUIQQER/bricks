@@ -72,6 +72,20 @@
     color: inherit;
 }
 
+.quiqqer-bricks-pdfViewer__btn--text {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--_spacing-sm);
+    padding-inline: var(--_spacing);
+}
+
+/* open state of the page overview toggle */
+.quiqqer-bricks-pdfViewer__btn[aria-expanded="true"],
+.quiqqer-bricks-pdfViewer__btn[aria-expanded="true"]:hover {
+    background: var(--_fg);
+    color: var(--_bg);
+}
+
 .quiqqer-bricks-pdfViewer__btn:disabled {
     opacity: 0.35;
     cursor: default;
@@ -238,15 +252,9 @@
     z-index: 1;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: var(--_spacing);
     padding-block: var(--_spacing-sm);
     background: var(--_bg);
-}
-
-.quiqqer-bricks-pdfViewer__gridTitle {
-    margin: 0;
-    font-weight: 600;
 }
 
 .quiqqer-bricks-pdfViewer__gridList {
@@ -259,7 +267,12 @@
 }
 
 .quiqqer-bricks-pdfViewer__gridPage {
+    /* full width column: placeholders have the page size before the image loads */
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    align-items: start;
+    justify-content: stretch;
     gap: var(--_spacing-sm);
     width: 100%;
     padding: 0;
@@ -273,6 +286,7 @@
 .quiqqer-bricks-pdfViewer__gridThumb {
     position: relative;
     display: block;
+    width: 100%;
     overflow: hidden;
     background: var(--_paper);
     outline: 3px solid transparent;

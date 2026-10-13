@@ -500,9 +500,9 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
                 </div>
                 <section class="quiqqer-bricks-pdfViewer__grid" data-name="grid" hidden>
                     <div class="quiqqer-bricks-pdfViewer__gridHead">
-                        <p class="quiqqer-bricks-pdfViewer__gridTitle" data-name="gridTitle"></p>
-                        <button type="button" class="btn btn-icon btn-rounded quiqqer-bricks-pdfViewer__btn" data-name="gridClose">
-                            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                        <button type="button" class="btn quiqqer-bricks-pdfViewer__btn quiqqer-bricks-pdfViewer__btn--text" data-name="gridClose">
+                            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+                            <span data-name="gridCloseLabel"></span>
                         </button>
                     </div>
                     <ul class="quiqqer-bricks-pdfViewer__gridList" data-name="gridList"></ul>
@@ -537,8 +537,8 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
 
             grid.id = 'quiqqer-bricks-pdfViewer-grid-' + this.getId();
             grid.setAttribute('aria-label', QUILocale.get(lg, 'pdfPreview.viewer.grid'));
-            dialog.querySelector('[data-name="gridTitle"]').textContent = QUILocale.get(lg, 'pdfPreview.viewer.grid');
-            dialog.querySelector('[data-name="gridClose"]').setAttribute('aria-label', QUILocale.get(lg, 'pdfPreview.viewer.gridClose'));
+            // A labelled back button, so it is not mistaken for closing the viewer.
+            dialog.querySelector('[data-name="gridCloseLabel"]').textContent = QUILocale.get(lg, 'pdfPreview.viewer.gridClose');
             gridToggle.setAttribute('aria-controls', grid.id);
             gridToggle.setAttribute('aria-label', QUILocale.get(lg, 'pdfPreview.viewer.grid'));
             slider.setAttribute('aria-label', QUILocale.get(lg, 'pdfPreview.viewer.slider'));
