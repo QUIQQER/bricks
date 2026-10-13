@@ -206,19 +206,36 @@ class PdfPreviewTest extends TestCase
         );
     }
 
-    public function testTeaserDownloadIsInTextColumn(): void
+    public function testTeaserButtonsAreBelowTheCover(): void
     {
         $Control = $this->createPreview([
             'layout' => 'teaser',
             'showDownload' => true
         ]);
         $XPath = $this->createXPath($Control->getBody());
+        $Actions = $XPath->query('//*[@data-name="actions"]')->item(0);
 
+        $this->assertInstanceOf(\DOMElement::class, $Actions);
+        $this->assertSame(1, $XPath->query('//a[@data-name="pdf-download"]')->length);
         $this->assertSame(
-            1,
+            ['pdf-download', 'open'],
+            array_map(
+                fn(\DOMElement $Button): string => $Button->getAttribute('data-name'),
+                iterator_to_array($XPath->query('./a | ./button', $Actions))
+            )
+        );
+        $this->assertSame(
+            0,
             $XPath->query('//*[contains(@class, "quiqqer-bricks-pdfPreview-teaser__text")]//a[@data-name="pdf-download"]')->length
         );
-        $this->assertSame(1, $XPath->query('//a[@data-name="pdf-download"]')->length);
+    }
+
+    public function testTeaserWithoutDownloadShowsOnlyOpenButton(): void
+    {
+        $XPath = $this->createXPath($this->createPreview(['layout' => 'teaser'])->getBody());
+
+        $this->assertSame(0, $XPath->query('//a[@data-name="pdf-download"]')->length);
+        $this->assertSame(1, $XPath->query('//*[@data-name="actions"]/button[@data-name="open"]')->length);
     }
 
     public function testOpenLabelEscapedAndDefault(): void

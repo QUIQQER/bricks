@@ -2865,7 +2865,9 @@
                         <locale group="quiqqer/bricks" var="pdfPreview.settings.downloadLabel.description"/>
                     </description>
                 </setting>
-                <setting name="downloadAlignment" type="select">
+                <setting name="downloadAlignment" type="select"
+                         data-dependency="layout"
+                         data-dependency-options="classic">
                     <locale group="quiqqer/bricks" var="pdfPreview.settings.downloadAlignment"/>
                     <option value="left">
                         <locale group="quiqqer/bricks" var="pdfPreview.settings.alignLeft"/>

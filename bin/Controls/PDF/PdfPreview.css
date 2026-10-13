@@ -14,6 +14,7 @@
 }
 
 .quiqqer-bricks-controls-pdf-pdfPreview__download a:focus-visible,
+.quiqqer-bricks-pdfPreview a:focus-visible,
 .quiqqer-bricks-pdfPreview button:focus-visible {
     outline: 2px solid Highlight;
     outline-offset: 4px;
@@ -167,19 +168,21 @@
     order: -1;
 }
 
-.quiqqer-bricks-pdfPreview-teaser__text > :last-child,
-.quiqqer-bricks-pdfPreview-teaser__text .quiqqer-bricks-controls-pdf-pdfPreview__download {
+.quiqqer-bricks-pdfPreview-teaser__text > :last-child {
     margin-block-end: 0;
-}
-
-.quiqqer-bricks-pdfPreview-teaser__text .quiqqer-bricks-controls-pdf-pdfPreview__download {
-    margin-block-start: var(--qui-spacing-lg, 1.5rem);
 }
 
 .quiqqer-bricks-pdfPreview--teaser {
     display: grid;
     justify-items: center;
     gap: var(--qui-spacing, 1rem);
+}
+
+.quiqqer-bricks-pdfPreview__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--qui-spacing-sm, 0.5rem);
 }
 
 .quiqqer-bricks-pdfPreview__cover {
@@ -243,5 +246,15 @@
 
     .quiqqer-bricks-pdfPreview-teaser[data-pdf-position="left"] .quiqqer-bricks-pdfPreview-teaser__media {
         order: 0;
+    }
+
+    .quiqqer-bricks-pdfPreview__actions {
+        flex-direction: column;
+        justify-self: stretch;
+    }
+
+    .quiqqer-bricks-pdfPreview__actions .btn {
+        width: 100%;
+        justify-content: center;
     }
 }
