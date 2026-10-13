@@ -708,6 +708,42 @@
         <locale name="window.title">
             <pt><![CDATA[Conteúdo]]></pt>
         </locale>
+        <locale name="pdfPreview.download">
+            <pt><![CDATA[Descarregar documento PDF]]></pt>
+        </locale>
+        <locale name="pdfPreview.settings.showDownload">
+            <pt><![CDATA[Mostrar transferência]]></pt>
+        </locale>
+        <locale name="pdfPreview.settings.downloadLabel">
+            <pt><![CDATA[Texto do botão]]></pt>
+        </locale>
+        <locale name="pdfPreview.settings.downloadLabel.description">
+            <pt><![CDATA[Deixe vazio para usar o texto padrão traduzido «Descarregar documento PDF».]]></pt>
+        </locale>
+        <locale name="pdfPreview.settings.downloadAlignment">
+            <pt><![CDATA[Alinhamento do botão de transferência]]></pt>
+        </locale>
+        <locale name="pdfPreview.settings.alignLeft">
+            <pt><![CDATA[Esquerda]]></pt>
+        </locale>
+        <locale name="pdfPreview.settings.alignCenter">
+            <pt><![CDATA[Centro]]></pt>
+        </locale>
+        <locale name="pdfPreview.settings.alignRight">
+            <pt><![CDATA[Direita]]></pt>
+        </locale>
+        <locale name="pdfPreview.previous">
+            <pt><![CDATA[Página anterior]]></pt>
+        </locale>
+        <locale name="pdfPreview.next">
+            <pt><![CDATA[Página seguinte]]></pt>
+        </locale>
+        <locale name="pdfPreview.page">
+            <pt><![CDATA[Página [page] de [total]]]></pt>
+        </locale>
+        <locale name="pdfPreview.error">
+            <pt><![CDATA[Não foi possível carregar a pré-visualização do PDF. Tente novamente.]]></pt>
+        </locale>
     </groups>
     <groups name="quiqqer/bricks" datatype="php">
         <locale name="site.panel.bricks.category.title">

@@ -708,6 +708,42 @@
         <locale name="window.title">
             <es><![CDATA[Contenido]]></es>
         </locale>
+        <locale name="pdfPreview.download">
+            <es><![CDATA[Descargar documento PDF]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.showDownload">
+            <es><![CDATA[Mostrar descarga]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.downloadLabel">
+            <es><![CDATA[Texto del botón]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.downloadLabel.description">
+            <es><![CDATA[Dejar vacío para usar el texto predeterminado traducido «Descargar documento PDF».]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.downloadAlignment">
+            <es><![CDATA[Alineación del botón de descarga]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.alignLeft">
+            <es><![CDATA[Izquierda]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.alignCenter">
+            <es><![CDATA[Centrado]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.alignRight">
+            <es><![CDATA[Derecha]]></es>
+        </locale>
+        <locale name="pdfPreview.previous">
+            <es><![CDATA[Página anterior]]></es>
+        </locale>
+        <locale name="pdfPreview.next">
+            <es><![CDATA[Página siguiente]]></es>
+        </locale>
+        <locale name="pdfPreview.page">
+            <es><![CDATA[Página [page] de [total]]]></es>
+        </locale>
+        <locale name="pdfPreview.error">
+            <es><![CDATA[No se pudo cargar la vista previa del PDF. Inténtelo de nuevo.]]></es>
+        </locale>
     </groups>
     <groups name="quiqqer/bricks" datatype="php">
         <locale name="site.panel.bricks.category.title">

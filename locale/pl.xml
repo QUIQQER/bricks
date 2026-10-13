@@ -711,6 +711,42 @@
         <locale name="window.title">
             <pl><![CDATA[Treść]]></pl>
         </locale>
+        <locale name="pdfPreview.download">
+            <pl><![CDATA[Pobierz dokument PDF]]></pl>
+        </locale>
+        <locale name="pdfPreview.settings.showDownload">
+            <pl><![CDATA[Pokaż pobieranie]]></pl>
+        </locale>
+        <locale name="pdfPreview.settings.downloadLabel">
+            <pl><![CDATA[Etykieta przycisku]]></pl>
+        </locale>
+        <locale name="pdfPreview.settings.downloadLabel.description">
+            <pl><![CDATA[Pozostaw puste, aby użyć przetłumaczonego tekstu domyślnego „Pobierz dokument PDF”.]]></pl>
+        </locale>
+        <locale name="pdfPreview.settings.downloadAlignment">
+            <pl><![CDATA[Wyrównanie przycisku pobierania]]></pl>
+        </locale>
+        <locale name="pdfPreview.settings.alignLeft">
+            <pl><![CDATA[Do lewej]]></pl>
+        </locale>
+        <locale name="pdfPreview.settings.alignCenter">
+            <pl><![CDATA[Do środka]]></pl>
+        </locale>
+        <locale name="pdfPreview.settings.alignRight">
+            <pl><![CDATA[Do prawej]]></pl>
+        </locale>
+        <locale name="pdfPreview.previous">
+            <pl><![CDATA[Poprzednia strona]]></pl>
+        </locale>
+        <locale name="pdfPreview.next">
+            <pl><![CDATA[Następna strona]]></pl>
+        </locale>
+        <locale name="pdfPreview.page">
+            <pl><![CDATA[Strona [page] z [total]]]></pl>
+        </locale>
+        <locale name="pdfPreview.error">
+            <pl><![CDATA[Nie można załadować podglądu PDF. Spróbuj ponownie.]]></pl>
+        </locale>
     </groups>
     <groups name="quiqqer/bricks" datatype="php">
         <locale name="site.panel.bricks.category.title">

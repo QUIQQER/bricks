@@ -7,7 +7,7 @@ use QUI;
 class PdfPreview extends QUI\Control
 {
     /**
-     * @param array<array<string, mixed>> $attributes
+     * @param array<string, mixed> $attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -15,7 +15,10 @@ class PdfPreview extends QUI\Control
             'class' => 'quiqqer-bricks-controls-pdf-pdfPreview',
 //            'qui-class' => 'package/quiqqer/bricks/bin/Controls/PDF/PdfPreviewBrick',
             'pdfFile' => '',
-            'aspectRatio' => '210/297'
+            'aspectRatio' => '210/297',
+            'showDownload' => false,
+            'downloadLabel' => '',
+            'downloadAlignment' => 'left'
         ]);
 
         $this->addCSSFile(OPT_DIR . 'quiqqer/bricks/bin/Controls/PDF/PdfPreview.css');
@@ -26,14 +29,20 @@ class PdfPreview extends QUI\Control
     public function getBody(): string
     {
         $Engine = QUI::getTemplateManager()->getEngine();
-        $pdfFile = '';
+        $pdfFile = $this->getPdfFileUrl();
 
-        if ($this->getAttribute('pdfFile')) {
-            try {
-                $file = QUI\Projects\Media\Utils::getMediaItemByUrl($this->getAttribute('pdfFile'));
-                $pdfFile = $file->getUrl(true);
-            } catch (\Exception) {
-            }
+        $downloadAlignment = (string)$this->getAttribute('downloadAlignment');
+
+        if (!in_array($downloadAlignment, ['left', 'center', 'right'], true)) {
+            $downloadAlignment = 'left';
+        }
+
+        $this->setStyle('--_q-controlConf-downloadAlignment', $downloadAlignment);
+
+        $downloadLabel = trim((string)$this->getAttribute('downloadLabel'));
+
+        if ($downloadLabel === '') {
+            $downloadLabel = QUI::getLocale()->get('quiqqer/bricks', 'pdfPreview.download');
         }
 
         $Engine->assign([
@@ -41,8 +50,23 @@ class PdfPreview extends QUI\Control
             'pdfFile' => $pdfFile,
             'sheetsNumber' => $this->getAttribute('sheetsNumber'),
             'aspectRatio' => $this->getAttribute('aspectRatio'),
+            'showDownload' => filter_var($this->getAttribute('showDownload'), FILTER_VALIDATE_BOOLEAN),
+            'downloadLabel' => $downloadLabel
         ]);
 
         return $Engine->fetch(dirname(__FILE__) . '/PdfPreview.html');
+    }
+
+    protected function getPdfFileUrl(): string
+    {
+        if ($this->getAttribute('pdfFile')) {
+            try {
+                $file = QUI\Projects\Media\Utils::getMediaItemByUrl($this->getAttribute('pdfFile'));
+                return $file->getUrl(true);
+            } catch (\Exception) {
+            }
+        }
+
+        return '';
     }
 }

@@ -708,6 +708,42 @@
         <locale name="window.title">
             <fr><![CDATA[Contenu]]></fr>
         </locale>
+        <locale name="pdfPreview.download">
+            <fr><![CDATA[Télécharger le document PDF]]></fr>
+        </locale>
+        <locale name="pdfPreview.settings.showDownload">
+            <fr><![CDATA[Afficher le téléchargement]]></fr>
+        </locale>
+        <locale name="pdfPreview.settings.downloadLabel">
+            <fr><![CDATA[Libellé du bouton]]></fr>
+        </locale>
+        <locale name="pdfPreview.settings.downloadLabel.description">
+            <fr><![CDATA[Laisser vide pour utiliser le texte traduit par défaut « Télécharger le document PDF ».]]></fr>
+        </locale>
+        <locale name="pdfPreview.settings.downloadAlignment">
+            <fr><![CDATA[Alignement du bouton de téléchargement]]></fr>
+        </locale>
+        <locale name="pdfPreview.settings.alignLeft">
+            <fr><![CDATA[À gauche]]></fr>
+        </locale>
+        <locale name="pdfPreview.settings.alignCenter">
+            <fr><![CDATA[Centré]]></fr>
+        </locale>
+        <locale name="pdfPreview.settings.alignRight">
+            <fr><![CDATA[À droite]]></fr>
+        </locale>
+        <locale name="pdfPreview.previous">
+            <fr><![CDATA[Page précédente]]></fr>
+        </locale>
+        <locale name="pdfPreview.next">
+            <fr><![CDATA[Page suivante]]></fr>
+        </locale>
+        <locale name="pdfPreview.page">
+            <fr><![CDATA[Page [page] sur [total]]]></fr>
+        </locale>
+        <locale name="pdfPreview.error">
+            <fr><![CDATA[Impossible de charger l’aperçu du PDF. Veuillez réessayer.]]></fr>
+        </locale>
     </groups>
     <groups name="quiqqer/bricks" datatype="php">
         <locale name="site.panel.bricks.category.title">

@@ -3,64 +3,111 @@
 namespace QUITests\Bricks\Controls\PDF;
 
 use PHPUnit\Framework\TestCase;
+use QUI\Bricks\Controls\PDF\PdfPreview;
 
 class PdfPreviewTest extends TestCase
 {
-    public function testControlBehaviorSmoke(): void
+    public function testDownloadIsHiddenByDefault(): void
     {
-        $class = 'QUI\Bricks\Controls\PDF\PdfPreview';
-        $this->assertTrue(class_exists($class));
+        $Control = $this->createPreview();
 
-        try {
-            $Control = new $class([]);
-            $this->assertInstanceOf($class, $Control);
-        } catch (\Throwable) {
-            $this->addToAssertionCount(1);
-            return;
+        $this->assertStringNotContainsString('data-name="pdf-download"', $Control->getBody());
+        $this->assertFalse($Control->getAttribute('showDownload'));
+    }
+
+    public function testDownloadRequiresAResolvedFile(): void
+    {
+        $Control = new PdfPreview([
+            'showDownload' => true,
+            'pdfFile' => 'not-a-media-url'
+        ]);
+
+        $this->assertStringNotContainsString('data-name="pdf-download"', $Control->getBody());
+    }
+
+    public function testDownloadUsesSameFileAndEscapesLabel(): void
+    {
+        $Control = $this->createPreview([
+            'showDownload' => '1',
+            'downloadLabel' => '<b>Report & details</b>',
+            'content' => '<p>Introduction</p>'
+        ]);
+        $body = $Control->getBody();
+        $Document = new \DOMDocument();
+        $Document->loadHTML($body, LIBXML_NOERROR | LIBXML_NOWARNING);
+        $XPath = new \DOMXPath($Document);
+        $Download = $XPath->query('//a[@data-name="pdf-download"]')->item(0);
+        $Preview = $XPath->query('//*[@data-name="pdf-preview-container"]')->item(0);
+
+        $this->assertInstanceOf(\DOMElement::class, $Download);
+        $this->assertInstanceOf(\DOMElement::class, $Preview);
+        $this->assertSame($Preview->getAttribute('data-qui-options-pdffile'), $Download->getAttribute('href'));
+        $this->assertTrue($Download->hasAttribute('download'));
+        $this->assertStringContainsString('&lt;b&gt;Report &amp; details&lt;/b&gt;', $body);
+        $this->assertSame(1, $XPath->query('//a[@data-name="pdf-download"]/i[@aria-hidden="true"]')->length);
+        $this->assertLessThan(strpos($body, 'data-name="pdf-download"'), strpos($body, '<p>Introduction</p>'));
+        $this->assertLessThan(strpos($body, 'data-name="pdf-preview-container"'), strpos($body, 'data-name="pdf-download"'));
+    }
+
+    public function testEmptyLabelUsesTranslatedDefault(): void
+    {
+        $Control = $this->createPreview([
+            'showDownload' => true,
+            'downloadLabel' => '  '
+        ]);
+        $label = \QUI::getLocale()->get('quiqqer/bricks', 'pdfPreview.download');
+
+        $this->assertStringContainsString(htmlspecialchars($label, ENT_QUOTES), $Control->getBody());
+    }
+
+    public function testInvalidAlignmentFallsBackToLeft(): void
+    {
+        $Control = $this->createPreview(['downloadAlignment' => 'invalid']);
+        $Control->getBody();
+
+        $this->assertStringContainsString('--_q-controlConf-downloadAlignment:left', $Control->create());
+    }
+
+    public function testSupportedAlignmentsAreApplied(): void
+    {
+        foreach (['left', 'center', 'right'] as $alignment) {
+            $Control = $this->createPreview(['downloadAlignment' => $alignment]);
+            $Control->getBody();
+            $this->assertStringContainsString('--_q-controlConf-downloadAlignment:' . $alignment, $Control->create());
         }
+    }
 
-        $methods = [
-            'addSlide',
-            'addMobileSlide',
-            'getRow',
-            'getTemplate',
-            'getRowTemplate',
-            'createJSONLDFAQSchemaCode',
-            'create',
-            'getBody'
-        ];
+    public function testStringFalseDoesNotEnableDownload(): void
+    {
+        $Control = $this->createPreview(['showDownload' => 'false']);
 
-        foreach ($methods as $method) {
-            if (!method_exists($Control, $method)) {
-                continue;
-            }
+        $this->assertStringNotContainsString('data-name="pdf-download"', $Control->getBody());
+    }
 
-            try {
-                switch ($method) {
-                    case 'addSlide':
-                        $Control->addSlide('not-a-media-url', 'Title', 'Text');
-                        break;
+    public function testNavigationAndPlaceholdersUseNativeButtons(): void
+    {
+        $Control = $this->createPreview(['sheetsNumber' => 2]);
+        $Document = new \DOMDocument();
+        $Document->loadHTML($Control->getBody(), LIBXML_NOERROR | LIBXML_NOWARNING);
+        $XPath = new \DOMXPath($Document);
 
-                    case 'addMobileSlide':
-                        $Control->addMobileSlide('not-a-media-url', 'Title', 'Text');
-                        break;
+        $this->assertSame(2, $XPath->query('//button[@type="button"][@data-name="sheet"]')->length);
+        $this->assertSame(2, $XPath->query('//button[@aria-label][@data-name="prev" or @data-name="next"]')->length);
+    }
 
-                    case 'getRow':
-                        $result = $Control->getRow(0);
-                        $this->assertIsArray($result);
-                        break;
+    /**
+     * Use a resolved media URL without depending on installation-specific media IDs.
+     *
+     * @param array<string, mixed> $attributes
+     */
+    private function createPreview(array $attributes = []): PdfPreview
+    {
+        $Control = $this->getMockBuilder(PdfPreview::class)
+            ->setConstructorArgs([$attributes])
+            ->onlyMethods(['getPdfFileUrl'])
+            ->getMock();
+        $Control->method('getPdfFileUrl')->willReturn('/media/report.pdf?version=1&language=en');
 
-                    default:
-                        $result = $Control->{$method}();
-
-                        if (in_array($method, ['getTemplate', 'getRowTemplate', 'createJSONLDFAQSchemaCode', 'create', 'getBody'], true)) {
-                            $this->assertIsString((string)$result);
-                        }
-                        break;
-                }
-            } catch (\Throwable) {
-                $this->addToAssertionCount(1);
-            }
-        }
+        return $Control;
     }
 }

@@ -708,6 +708,42 @@
         <locale name="window.title">
             <it><![CDATA[Contenuto]]></it>
         </locale>
+        <locale name="pdfPreview.download">
+            <it><![CDATA[Scarica il documento PDF]]></it>
+        </locale>
+        <locale name="pdfPreview.settings.showDownload">
+            <it><![CDATA[Mostra download]]></it>
+        </locale>
+        <locale name="pdfPreview.settings.downloadLabel">
+            <it><![CDATA[Testo del pulsante]]></it>
+        </locale>
+        <locale name="pdfPreview.settings.downloadLabel.description">
+            <it><![CDATA[Lasciare vuoto per usare il testo predefinito tradotto «Scarica il documento PDF».]]></it>
+        </locale>
+        <locale name="pdfPreview.settings.downloadAlignment">
+            <it><![CDATA[Allineamento del pulsante di download]]></it>
+        </locale>
+        <locale name="pdfPreview.settings.alignLeft">
+            <it><![CDATA[Sinistra]]></it>
+        </locale>
+        <locale name="pdfPreview.settings.alignCenter">
+            <it><![CDATA[Centro]]></it>
+        </locale>
+        <locale name="pdfPreview.settings.alignRight">
+            <it><![CDATA[Destra]]></it>
+        </locale>
+        <locale name="pdfPreview.previous">
+            <it><![CDATA[Pagina precedente]]></it>
+        </locale>
+        <locale name="pdfPreview.next">
+            <it><![CDATA[Pagina successiva]]></it>
+        </locale>
+        <locale name="pdfPreview.page">
+            <it><![CDATA[Pagina [page] di [total]]]></it>
+        </locale>
+        <locale name="pdfPreview.error">
+            <it><![CDATA[Impossibile caricare l’anteprima del PDF. Riprovare.]]></it>
+        </locale>
     </groups>
     <groups name="quiqqer/bricks" datatype="php">
         <locale name="site.panel.bricks.category.title">

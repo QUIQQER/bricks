@@ -723,6 +723,42 @@ Dieser Inhalt ersetzt den Baustein-Inhalt nicht. Du kannst weiterhin über dem S
         <locale name="window.title">
             <de><![CDATA[Inhalt]]></de>
         </locale>
+        <locale name="pdfPreview.download">
+            <de><![CDATA[PDF Dokument herunterladen]]></de>
+        </locale>
+        <locale name="pdfPreview.settings.showDownload">
+            <de><![CDATA[Download anzeigen]]></de>
+        </locale>
+        <locale name="pdfPreview.settings.downloadLabel">
+            <de><![CDATA[Button-Beschriftung]]></de>
+        </locale>
+        <locale name="pdfPreview.settings.downloadLabel.description">
+            <de><![CDATA[Leer lassen, um den übersetzten Standardtext „PDF Dokument herunterladen“ zu verwenden.]]></de>
+        </locale>
+        <locale name="pdfPreview.settings.downloadAlignment">
+            <de><![CDATA[Download-Button ausrichten]]></de>
+        </locale>
+        <locale name="pdfPreview.settings.alignLeft">
+            <de><![CDATA[Links]]></de>
+        </locale>
+        <locale name="pdfPreview.settings.alignCenter">
+            <de><![CDATA[Zentriert]]></de>
+        </locale>
+        <locale name="pdfPreview.settings.alignRight">
+            <de><![CDATA[Rechts]]></de>
+        </locale>
+        <locale name="pdfPreview.previous">
+            <de><![CDATA[Vorherige Seite]]></de>
+        </locale>
+        <locale name="pdfPreview.next">
+            <de><![CDATA[Nächste Seite]]></de>
+        </locale>
+        <locale name="pdfPreview.page">
+            <de><![CDATA[Seite [page] von [total]]]></de>
+        </locale>
+        <locale name="pdfPreview.error">
+            <de><![CDATA[Die PDF-Vorschau konnte nicht geladen werden. Bitte versuchen Sie es erneut.]]></de>
+        </locale>
     </groups>
     <groups name="quiqqer/bricks" datatype="php">
         <locale name="site.panel.bricks.category.title">

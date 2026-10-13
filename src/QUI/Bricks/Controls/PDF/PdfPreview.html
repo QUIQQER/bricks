@@ -1,5 +1,5 @@
 {if $this->getAttribute('frontendTitle')}
-    <h2 class="control-header">{$this->getAttribute('frontendTitle')}</h2>
+    <h2 class="control-header">{$this->getAttribute('frontendTitle')|escape:'html'}</h2>
 {/if}
 
 {if $this->getAttribute('content')}
@@ -9,12 +9,20 @@
 {/if}
 
 <div class="control-template">
+    {if $showDownload && $pdfFile}
+    <div class="quiqqer-bricks-controls-pdf-pdfPreview__download">
+        <a href="{$pdfFile|escape:'html'}" download class="btn btn-primary" data-name="pdf-download">
+            <i class="fa-solid fa-download" aria-hidden="true"></i>
+            <span>{$downloadLabel|escape:'html'}</span>
+        </a>
+    </div>
+    {/if}
     <div class="quiqqer-bricks-pdfPreview"
          data-name="pdf-preview-container"
-         data-qui-options-pdffile="{$pdfFile}"
-         data-qui-options-pagenum="{$sheetsNumber}"
+         data-qui-options-pdffile="{$pdfFile|escape:'html'}"
+         data-qui-options-pagenum="{$sheetsNumber|escape:'html'}"
          data-qui="package/quiqqer/bricks/bin/Controls/PDF/PdfPreview"
-         {if $aspectRatio}style="--_aspectRatio: var(--aspectRatio, {$aspectRatio});"{/if}
+         {if $aspectRatio}style="--_aspectRatio: var(--aspectRatio, {$aspectRatio|escape:'html'});"{/if}
     >
         <div class="container">
         <div class="preview" data-name="preview">
@@ -25,20 +33,24 @@
                 </div>
             </div>
 
-            <button class="btn btn-icon btn-rounded btn--prev" data-name="prev">
+            <button type="button" class="btn btn-icon btn-rounded btn--prev" data-name="prev" disabled
+                    aria-label="{locale group='quiqqer/bricks' var='pdfPreview.previous'}">
                 <i class="fa-solid fa-angle-left" aria-hidden="true"></i>
             </button>
-            <button class="btn btn-icon btn-rounded btn--next" data-name="next">
+            <button type="button" class="btn btn-icon btn-rounded btn--next" data-name="next" disabled
+                    aria-label="{locale group='quiqqer/bricks' var='pdfPreview.next'}">
                 <i class="fa-solid fa-angle-right" aria-hidden="true"></i>
             </button>
         </div>
         <div class="sheets" data-name="sheets">
             {section name=idx start=0 loop=$sheetsNumber}
-            <div class="sheet" data-name="sheet">
-                <div data-name="loader" class="skeleton-loader" style="width: 100%; height: 100%;"></div>
-            </div>
+            <button type="button" class="sheet" data-name="sheet" disabled
+                    aria-label="{locale group='quiqqer/bricks' var='pdfPreview.brick.frontend.loading.title'}">
+                <span data-name="loader" class="skeleton-loader" aria-hidden="true" style="width: 100%; height: 100%;"></span>
+            </button>
             {/section}
         </div>
+        <p class="quiqqer-bricks-pdfPreview__status" data-name="status" role="status"></p>
         </div>
     </div>
 </div>

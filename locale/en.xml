@@ -721,6 +721,42 @@ This content does not replace the block content. You can still place the brick t
         <locale name="window.title">
             <en><![CDATA[Content]]></en>
         </locale>
+        <locale name="pdfPreview.download">
+            <en><![CDATA[Download PDF document]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.showDownload">
+            <en><![CDATA[Show download]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.downloadLabel">
+            <en><![CDATA[Button label]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.downloadLabel.description">
+            <en><![CDATA[Leave empty to use the translated default text “Download PDF document”.]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.downloadAlignment">
+            <en><![CDATA[Download button alignment]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.alignLeft">
+            <en><![CDATA[Left]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.alignCenter">
+            <en><![CDATA[Center]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.alignRight">
+            <en><![CDATA[Right]]></en>
+        </locale>
+        <locale name="pdfPreview.previous">
+            <en><![CDATA[Previous page]]></en>
+        </locale>
+        <locale name="pdfPreview.next">
+            <en><![CDATA[Next page]]></en>
+        </locale>
+        <locale name="pdfPreview.page">
+            <en><![CDATA[Page [page] of [total]]]></en>
+        </locale>
+        <locale name="pdfPreview.error">
+            <en><![CDATA[The PDF preview could not be loaded. Please try again.]]></en>
+        </locale>
     </groups>
     <groups name="quiqqer/bricks" datatype="php">
         <locale name="site.panel.bricks.category.title">

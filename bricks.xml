@@ -2792,6 +2792,29 @@
                         <locale group="quiqqer/bricks" var="brick.control.pdfView.aspectRatio.description"/>
                     </description>
                 </setting>
+                <setting name="showDownload" type="checkbox">
+                    <locale group="quiqqer/bricks" var="pdfPreview.settings.showDownload"/>
+                    <defaultValue>0</defaultValue>
+                </setting>
+                <setting name="downloadLabel" type="text">
+                    <locale group="quiqqer/bricks" var="pdfPreview.settings.downloadLabel"/>
+                    <description>
+                        <locale group="quiqqer/bricks" var="pdfPreview.settings.downloadLabel.description"/>
+                    </description>
+                </setting>
+                <setting name="downloadAlignment" type="select">
+                    <locale group="quiqqer/bricks" var="pdfPreview.settings.downloadAlignment"/>
+                    <option value="left">
+                        <locale group="quiqqer/bricks" var="pdfPreview.settings.alignLeft"/>
+                    </option>
+                    <option value="center">
+                        <locale group="quiqqer/bricks" var="pdfPreview.settings.alignCenter"/>
+                    </option>
+                    <option value="right">
+                        <locale group="quiqqer/bricks" var="pdfPreview.settings.alignRight"/>
+                    </option>
+                    <defaultValue>left</defaultValue>
+                </setting>
             </settings>
         </brick>
     </bricks>
