@@ -11,6 +11,10 @@
  * require(['package/quiqqer/bricks/bin/Controls/PDF/Viewer'], (Viewer) => {
  *     new Viewer({pdf: url, page: 1, id: '', title: '', download: false}).open();
  * });
+ *
+ * With an id the viewer keeps the page in the URL hash (#<id>-<page>), the
+ * back button closes it and a share button appears. Viewer.matchHash(id)
+ * returns the page of such a link for the current URL.
  */
 define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
 
@@ -63,6 +67,32 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
         return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     }
 
+    /**
+     * Page of a deep link #<id>-<page> in the current URL, or null. An element
+     * with the full hash as id is a normal anchor and wins.
+     */
+    function matchHash(id) {
+        if (!id) {
+            return null;
+        }
+
+        let hash;
+
+        try {
+            hash = decodeURIComponent(window.location.hash.slice(1));
+        } catch (error) {
+            return null;
+        }
+
+        if (!hash || document.getElementById(hash)) {
+            return null;
+        }
+
+        const match = hash.match(/^(.+)-(\d+)$/);
+
+        return match && match[1] === id ? parseInt(match[2], 10) : null;
+    }
+
     function fileNameFromUrl(url) {
         try {
             const pathname = new URL(url, window.location.href).pathname;
@@ -74,7 +104,7 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
         }
     }
 
-    return new Class({
+    const Viewer = new Class({
 
         Extends: QUIControl,
         Type: 'package/quiqqer/bricks/bin/Controls/PDF/Viewer',
@@ -101,7 +131,9 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             '$onTouchEnd',
             '$onZoomPointerDown',
             '$onZoomPointerMove',
-            '$onZoomPointerUp'
+            '$onZoomPointerUp',
+            '$onPopState',
+            'share'
         ],
 
         options: {
@@ -109,7 +141,8 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             page: 1,
             id: '',
             title: '',
-            download: false
+            download: false,
+            deepLink: false // opened from a #<id>-<page> link
         },
 
         initialize: function (options) {
@@ -161,6 +194,11 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             this.$lastZoomTap = 0;
             this.$lastWheelStep = 0;
             this.$pinch = null;
+            this.$title = '';
+            this.$hashPage = 1;
+            this.$historyPushed = false;
+            this.$closedByHistory = false;
+            this.$announceTimer = null;
 
             this.addEvents({
                 onDestroy: () => this.$teardown()
@@ -187,6 +225,9 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
 
             this.$dialog.showModal();
             window.addEventListener('resize', this.$onResize);
+
+            this.$hashPage = Math.max(1, parseInt(this.getAttribute('page'), 10) || 1);
+            this.$initHistory();
 
             this.fireEvent('open', [this]);
 
@@ -301,10 +342,128 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             this.$exitZoom();
         },
 
+        /**
+         * Shares a link to the current page (Web Share API, else clipboard).
+         */
+        share: function () {
+            const url = window.location.origin + this.$baseUrl() + this.$hash();
+
+            if (navigator.share) {
+                navigator.share({
+                    title: this.$title,
+                    url: url
+                }).catch((error) => {
+                    if (error.name !== 'AbortError') {
+                        console.error('Unable to share the PDF page:', error);
+                    }
+                });
+
+                return;
+            }
+
+            navigator.clipboard.writeText(url).then(() => {
+                this.$announce(QUILocale.get(lg, 'pdfPreview.viewer.shareCopied'));
+            }).catch((error) => {
+                console.error('Unable to copy the PDF link:', error);
+            });
+        },
+
+        $baseUrl: function () {
+            return window.location.pathname + window.location.search;
+        },
+
+        $hash: function () {
+            return '#' + encodeURIComponent(this.getAttribute('id')) + '-' + this.$hashPage;
+        },
+
+        $isOwnHistoryEntry: function () {
+            return !!window.history.state && window.history.state.quiqqerPdfViewer === this.getAttribute('id');
+        },
+
+        /**
+         * Adds a history entry with the page hash, so the back button closes
+         * the viewer. A deep link first drops its hash from the current entry,
+         * so back stays on the page.
+         */
+        $initHistory: function () {
+            if (!this.getAttribute('id')) {
+                return;
+            }
+
+            // Forward navigation onto our own entry: reuse it.
+            if (!this.$isOwnHistoryEntry()) {
+                if (this.getAttribute('deepLink')) {
+                    window.history.replaceState(window.history.state, '', this.$baseUrl());
+                }
+
+                window.history.pushState({quiqqerPdfViewer: this.getAttribute('id')}, '', this.$baseUrl() + this.$hash());
+            }
+
+            this.$historyPushed = true;
+            window.addEventListener('popstate', this.$onPopState);
+        },
+
+        $updateHistory: function () {
+            if (!this.$historyPushed || !this.$isOwnHistoryEntry() || window.location.hash === this.$hash()) {
+                return;
+            }
+
+            window.history.replaceState(window.history.state, '', this.$baseUrl() + this.$hash());
+        },
+
+        $onPopState: function () {
+            if (this.$isOwnHistoryEntry()) {
+                return;
+            }
+
+            this.$closedByHistory = true;
+            this.close();
+        },
+
+        $cleanupHistory: function () {
+            if (!this.$historyPushed) {
+                return;
+            }
+
+            window.removeEventListener('popstate', this.$onPopState);
+
+            if (this.$closedByHistory) {
+                return;
+            }
+
+            if (this.$isOwnHistoryEntry()) {
+                window.history.back();
+                return;
+            }
+
+            if (window.location.hash === this.$hash()) {
+                window.history.replaceState(window.history.state, '', this.$baseUrl());
+            }
+        },
+
+        /**
+         * Shows a short message in the indicator and the live region.
+         */
+        $announce: function (text) {
+            const indicator = this.$dialog.querySelector('[data-name="indicator"]');
+
+            clearTimeout(this.$announceTimer);
+            indicator.textContent = text;
+            this.$status.textContent = text;
+
+            this.$announceTimer = setTimeout(() => {
+                if (!this.$destroyed) {
+                    indicator.textContent = this.$pagesText(this.$visiblePages());
+                }
+            }, 2000);
+        },
+
         $buildDialog: function () {
             const title = this.getAttribute('title')
                 || fileNameFromUrl(this.getAttribute('pdf'))
                 || QUILocale.get(lg, 'pdfPreview.open');
+
+            this.$title = title;
 
             const dialog = document.createElement('dialog');
             dialog.className = 'quiqqer-bricks-pdfViewer';
@@ -438,11 +597,13 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             [
                 ['zoomOut', 'fa-magnifying-glass-minus', 'pdfPreview.viewer.zoomOut', this.zoomOut],
                 ['zoomIn', 'fa-magnifying-glass-plus', 'pdfPreview.viewer.zoomIn', this.zoomIn]
-            ].forEach(([name, icon, locale, handler]) => {
+            ].concat(this.getAttribute('id') ? [
+                ['share', 'fa-share-nodes', 'pdfPreview.viewer.share', this.share]
+            ] : []).forEach(([name, icon, locale, handler]) => {
                 const button = document.createElement('button');
                 button.type = 'button';
                 button.className = 'btn btn-icon btn-rounded quiqqer-bricks-pdfViewer__btn';
-                button.disabled = true;
+                button.disabled = name !== 'share'; // zoom waits for the loaded book
                 button.setAttribute('data-name', name);
                 button.setAttribute('aria-label', QUILocale.get(lg, locale));
                 button.innerHTML = '<i class="fa-solid ' + icon + '" aria-hidden="true"></i>';
@@ -600,6 +761,7 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
 
                 const slider = this.$dialog.querySelector('[data-name="slider"]');
                 slider.max = this.$numPages;
+                slider.value = Math.min(this.$hashPage, this.$numPages);
                 slider.disabled = this.$numPages < 2;
                 this.$dialog.querySelector('[data-name="gridToggle"]').disabled = false;
                 this.$updateZoomButtons();
@@ -763,6 +925,13 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
                 this.resetZoom();
                 this.fireEvent('pageChange', [this, first]);
             }
+
+            // Like the slider: keep a linked page while it is part of the view.
+            if (!pages.includes(this.$hashPage)) {
+                this.$hashPage = first;
+            }
+
+            this.$updateHistory();
 
             this.$scheduleRender();
         },
@@ -2030,6 +2199,9 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
                 this.$acquiredFile = '';
             }
 
+            clearTimeout(this.$announceTimer);
+            this.$cleanupHistory();
+
             this.$pdf = null;
             this.$dialog.remove();
             document.documentElement.style.overflow = this.$scrollOverflow;
@@ -2042,4 +2214,12 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             this.fireEvent('close', [this]);
         }
     });
+
+    /**
+     * @param {String} id - viewer id
+     * @return {Number|null} page of a #<id>-<page> link in the current URL
+     */
+    Viewer.matchHash = matchHash;
+
+    return Viewer;
 });

@@ -10,6 +10,32 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
 ], function (QUI, QUIControl, QUILocale, PdfRenderer) {
     "use strict";
 
+    /**
+     * Page of a viewer deep link #<id>-<page>, or null. Same rule as
+     * Viewer.matchHash(), kept here so the viewer module stays lazy.
+     */
+    function matchViewerHash(id) {
+        if (!id) {
+            return null;
+        }
+
+        let hash;
+
+        try {
+            hash = decodeURIComponent(window.location.hash.slice(1));
+        } catch (error) {
+            return null;
+        }
+
+        if (!hash || document.getElementById(hash)) {
+            return null;
+        }
+
+        const match = hash.match(/^(.+)-(\d+)$/);
+
+        return match && match[1] === id ? parseInt(match[2], 10) : null;
+    }
+
     return new Class({
 
         Extends: QUIControl,
@@ -22,7 +48,8 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
             'handleOpenPageClick',
             'openNextPage',
             'openPrevPage',
-            'openViewer'
+            'openViewer',
+            '$openFromHash'
         ],
 
         options: {
@@ -161,15 +188,40 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
             }
 
             this.initPdfLazyLoad(container);
+
+            this.$openFromHash();
+            window.addEventListener('hashchange', this.$openFromHash);
+        },
+
+        /**
+         * Opens the viewer for a deep link #<id>-<page> to this brick.
+         */
+        $openFromHash: function () {
+            const page = matchViewerHash(this.$viewerId());
+
+            if (page === null || this.$viewer || this.$destroyed) {
+                return;
+            }
+
+            this.$wrapper().scrollIntoView({block: 'center'});
+
+            this.loadPdf().then(() => {
+                if (this.$destroyed || !this.$pdf) {
+                    return;
+                }
+
+                this.openViewer(Math.min(Math.max(1, page), this.maxPage), true);
+            });
         },
 
         /**
          * Opens the PDF in the fullscreen flipbook viewer.
          *
          * @param {Number} [page] - 1-based page number
+         * @param {Boolean} [deepLink] - opened from a #<id>-<page> link
          * @return {Promise}
          */
-        openViewer: function (page = 1) {
+        openViewer: function (page = 1, deepLink = false) {
             if (!this.pdfFile || this.$viewer) {
                 return Promise.resolve(this.$viewer);
             }
@@ -187,6 +239,7 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
                         id: this.$viewerId(),
                         title: this.$viewerTitle(),
                         download: this.$hasDownload(),
+                        deepLink: deepLink,
                         events: {
                             onClose: () => {
                                 this.$viewer = null;
@@ -591,6 +644,7 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
 
         $onDestroy: function () {
             this.$destroyed = true;
+            window.removeEventListener('hashchange', this.$openFromHash);
             this.$observer?.disconnect();
             this.$thumbnailObserver?.disconnect();
             this.$renderTask?.cancel();
