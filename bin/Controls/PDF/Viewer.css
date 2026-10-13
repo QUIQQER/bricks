@@ -87,6 +87,10 @@
 }
 
 .quiqqer-bricks-pdfViewer__btn:disabled {
+    /* templates may color disabled buttons (e.g. button:disabled) */
+    border-color: transparent;
+    background: var(--_btnBg);
+    color: inherit;
     opacity: 0.35;
     cursor: default;
 }
@@ -433,11 +437,16 @@
 
 /* single page: turn by swipe or tap, arrows stay for keyboard and screen readers */
 @media (max-width: 767px) {
+    /* slider and page indicator share a row, the tools get their own */
     .quiqqer-bricks-pdfViewer__bar {
         grid-template-columns: minmax(0, 1fr) auto;
         grid-template-areas:
-            "slider slider"
-            "indicator tools";
+            "slider indicator"
+            "tools tools";
+    }
+
+    .quiqqer-bricks-pdfViewer__tools {
+        justify-content: space-between;
     }
 
     .quiqqer-bricks-pdfViewer__stage {
