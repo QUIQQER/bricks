@@ -76,6 +76,12 @@
     right: var(--pos);
 }
 
+.quiqqer-bricks-pdfPreview :where(.preview .btn--open) {
+    top: var(--qui-spacing, 1rem);
+    right: var(--qui-spacing, 1rem);
+    transform: none;
+}
+
 @media screen and (hover: hover) {
     .quiqqer-bricks-pdfPreview :where(.container:not(:hover)) .btn:not(:focus-visible) {
         --pos: -1rem;

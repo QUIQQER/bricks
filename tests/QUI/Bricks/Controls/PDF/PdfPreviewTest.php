@@ -252,6 +252,34 @@ class PdfPreviewTest extends TestCase
         }
     }
 
+    public function testClassicOpenButtonFollowsOpenViewer(): void
+    {
+        $XPath = $this->createXPath($this->createPreview()->getBody());
+
+        $this->assertSame(
+            1,
+            $XPath->query('//*[@data-name="preview"]/button[@type="button"][@data-name="open"][@aria-label]')->length
+        );
+        $this->assertSame(1, $XPath->query('//button[@data-name="open"]/i[@aria-hidden="true"]')->length);
+
+        $XPath = $this->createXPath($this->createPreview(['openViewer' => false])->getBody());
+
+        $this->assertSame(0, $XPath->query('//button[@data-name="open"]')->length);
+    }
+
+    public function testTitleIsMarkedForTheViewer(): void
+    {
+        foreach (['classic', 'teaser'] as $layout) {
+            $Control = $this->createPreview([
+                'layout' => $layout,
+                'frontendTitle' => 'Catalog'
+            ]);
+            $XPath = $this->createXPath($Control->getBody());
+
+            $this->assertSame(1, $XPath->query('//h2[@data-name="pdf-title"]')->length);
+        }
+    }
+
     public function testTeaserWithoutPdfRendersOnlyText(): void
     {
         $Control = new PdfPreview([

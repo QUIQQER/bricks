@@ -3,7 +3,7 @@
      data-pdf-position="{$pdfPosition|escape:'html'}">
     <div class="quiqqer-bricks-pdfPreview-teaser__text">
         {if $this->getAttribute('frontendTitle')}
-            <h2 class="control-header">{$this->getAttribute('frontendTitle')|escape:'html'}</h2>
+            <h2 class="control-header" data-name="pdf-title">{$this->getAttribute('frontendTitle')|escape:'html'}</h2>
         {/if}
 
         {if $this->getAttribute('content')}
@@ -48,7 +48,7 @@
 </div>
 {else}
 {if $this->getAttribute('frontendTitle')}
-    <h2 class="control-header">{$this->getAttribute('frontendTitle')|escape:'html'}</h2>
+    <h2 class="control-header" data-name="pdf-title">{$this->getAttribute('frontendTitle')|escape:'html'}</h2>
 {/if}
 
 {if $this->getAttribute('content')}
@@ -93,6 +93,12 @@
                     aria-label="{locale group='quiqqer/bricks' var='pdfPreview.next'}">
                 <i class="fa-solid fa-angle-right" aria-hidden="true"></i>
             </button>
+            {if $openViewer}
+            <button type="button" class="btn btn-icon btn-rounded btn--open" data-name="open"
+                    aria-label="{locale group='quiqqer/bricks' var='pdfPreview.open'}">
+                <i class="fa-solid fa-expand" aria-hidden="true"></i>
+            </button>
+            {/if}
         </div>
         <div class="sheets" data-name="sheets">
             {section name=idx start=0 loop=$sheetsNumber}

@@ -21,7 +21,8 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
             '$onDestroy',
             'handleOpenPageClick',
             'openNextPage',
-            'openPrevPage'
+            'openPrevPage',
+            'openViewer'
         ],
 
         options: {
@@ -54,6 +55,7 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
             this.$renderingThumbnails = false;
             this.$destroyed = false;
             this.$animations = new Set();
+            this.$viewer = null;
 
             this.addEvents({
                 onInject: this.$onInject,
@@ -145,7 +147,75 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
                 });
             }
 
+            const preview = container.querySelector('[data-name="preview"]');
+
+            if (preview && this.getAttribute('openViewer')) {
+                preview.classList.add('is-openable');
+                preview.addEventListener('click', (event) => {
+                    if (event.target.closest('[data-name="prev"], [data-name="next"]')) {
+                        return;
+                    }
+
+                    this.openViewer(this.currentPage || 1);
+                });
+            }
+
             this.initPdfLazyLoad(container);
+        },
+
+        /**
+         * Opens the PDF in the fullscreen flipbook viewer.
+         *
+         * @param {Number} [page] - 1-based page number
+         * @return {Promise}
+         */
+        openViewer: function (page = 1) {
+            if (!this.pdfFile || this.$viewer) {
+                return Promise.resolve(this.$viewer);
+            }
+
+            return new Promise((resolve, reject) => {
+                require(['package/quiqqer/bricks/bin/Controls/PDF/Viewer'], (Viewer) => {
+                    if (this.$viewer) {
+                        resolve(this.$viewer);
+                        return;
+                    }
+
+                    this.$viewer = new Viewer({
+                        pdf: this.pdfFile,
+                        page: page,
+                        id: this.$viewerId(),
+                        title: this.$viewerTitle(),
+                        download: this.$hasDownload(),
+                        events: {
+                            onClose: () => {
+                                this.$viewer = null;
+                            }
+                        }
+                    });
+
+                    this.$viewer.open();
+                    resolve(this.$viewer);
+                }, reject);
+            });
+        },
+
+        $wrapper: function () {
+            return this.getElm().closest('.quiqqer-bricks-controls-pdf-pdfPreview') || this.getElm();
+        },
+
+        $viewerId: function () {
+            return this.getElm().closest('.quiqqer-bricks-controls-pdf-pdfPreview')?.id || '';
+        },
+
+        $viewerTitle: function () {
+            const title = this.$wrapper().querySelector('[data-name="pdf-title"]');
+
+            return title ? title.textContent.trim() : '';
+        },
+
+        $hasDownload: function () {
+            return !!this.$wrapper().querySelector('[data-name="pdf-download"]');
         },
 
         /**
@@ -348,6 +418,14 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
             canvas.setAttribute('aria-label', this.$pageLabel(1));
             cover.querySelector('[data-name="loader"]')?.remove();
             cover.prepend(canvas);
+
+            const openButton = container.querySelector('[data-name="open"]');
+
+            if (openButton) {
+                openButton.disabled = false;
+                openButton.addEventListener('click', () => this.openViewer(1));
+                cover.addEventListener('click', () => this.openViewer(1));
+            }
         },
 
         $pageLabel: function (pageNumber) {
