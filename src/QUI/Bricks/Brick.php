@@ -702,11 +702,16 @@ class Brick extends QUI\QDOM
      */
     protected function getCacheName(array $settings): string
     {
+        // Rendered images can depend on the request, even with identical brick settings.
+        $context = [];
+        QUI::getEvents()->fireEvent('quiqqerBricksHtmlCacheContext', [&$context]);
+
         return Manager::getBrickCacheNamespace()
             . md5($this->getType())
             . '/'
             . $this->hash
-            . '/' . md5(serialize($settings));
+            . '/' . md5(serialize($settings))
+            . '/html-v2/' . md5(serialize($context));
     }
 
     protected function extendCustomCSS(string $result = ''): string
