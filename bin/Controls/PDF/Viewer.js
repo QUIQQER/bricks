@@ -22,16 +22,14 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
     'qui/controls/Control',
     'Locale',
     'package/quiqqer/bricks/bin/Controls/PDF/PdfRenderer',
+    URL_OPT_DIR + 'bin/quiqqer-asset/page-flip/page-flip/dist/js/page-flip.browser.js',
 
     'css!package/quiqqer/bricks/bin/Controls/PDF/Viewer.css'
 
-], function (QUI, QUIControl, QUILocale, PdfRenderer) {
+], function (QUI, QUIControl, QUILocale, PdfRenderer, St) {
     "use strict";
 
     const lg = 'quiqqer/bricks';
-
-    // The only place that knows the flipbook library path.
-    const PAGE_FLIP_URL = URL_OPT_DIR + 'bin/quiqqer-asset/page-flip/page-flip/dist/js/page-flip.browser.js';
 
     const LANDSCAPE_MIN_WIDTH = 768;
     const RENDER_RANGE = 2;
@@ -45,23 +43,6 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
     const ZOOM_RENDER_DELAY = 200;
     const WHEEL_STEP_DELAY = 200;
     const DOUBLE_TAP_DELAY = 300;
-
-    let pageFlipPromise = null;
-
-    function loadPageFlip() {
-        if (!pageFlipPromise) {
-            pageFlipPromise = new Promise((resolve, reject) => {
-                require([PAGE_FLIP_URL], (module) => {
-                    resolve(module && module.PageFlip ? module : window.St);
-                }, (error) => {
-                    pageFlipPromise = null;
-                    reject(error);
-                });
-            });
-        }
-
-        return pageFlipPromise;
-    }
 
     function prefersReducedMotion() {
         return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -669,17 +650,10 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
 
             this.$acquiredFile = pdfUrl;
 
-            const [PageFlipLibrary, pdf] = await Promise.all([
-                loadPageFlip(),
-                PdfRenderer.acquire(pdfUrl)
-            ]);
+            const pdf = await PdfRenderer.acquire(pdfUrl);
 
             if (this.$destroyed) {
                 return;
-            }
-
-            if (!PageFlipLibrary || !PageFlipLibrary.PageFlip) {
-                throw new Error('StPageFlip could not be loaded.');
             }
 
             this.$pdf = pdf;
@@ -696,7 +670,7 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             this.$pageHeight = viewport.height;
 
             this.$buildPages();
-            this.$initPageFlip(PageFlipLibrary);
+            this.$initPageFlip();
         },
 
         $buildPages: function () {
@@ -725,7 +699,7 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
             return loader;
         },
 
-        $initPageFlip: function (PageFlipLibrary) {
+        $initPageFlip: function () {
             const width = this.$pageWidth;
             const height = this.$pageHeight;
             const requestedPage = parseInt(this.getAttribute('page'), 10) || 1;
@@ -733,7 +707,7 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
 
             this.$fitBook();
 
-            this.$pageFlip = new PageFlipLibrary.PageFlip(this.$book, {
+            this.$pageFlip = new St.PageFlip(this.$book, {
                 width: width,
                 height: height,
                 size: 'stretch',
