@@ -1,6 +1,6 @@
 .quiqqer-bricks-pdfViewer {
     /* The stage stays dark in both modes, light-dark() only adjusts the shade. */
-    --_bg: var(--quiqqer-bricks-pdfViewer-bg, light-dark(#3b4250, #15181d));
+    --_bg: var(--quiqqer-bricks-pdfViewer-bg, light-dark(#383838, #161616));
     --_fg: var(--quiqqer-bricks-pdfViewer-fg, light-dark(#fff, #f2f2f2));
     --_paper: var(--quiqqer-bricks-pdfViewer-paper, var(--qui-colors-surface, #fff));
     --_btnBg: var(--quiqqer-bricks-pdfViewer-btnBg, rgb(255 255 255 / 0.12));
