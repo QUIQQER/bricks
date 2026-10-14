@@ -31,7 +31,7 @@ define('package/quiqqer/bricks/bin/Controls/PDF/Viewer', [
     const lg = 'quiqqer/bricks';
 
     // The only place that knows the flipbook library path.
-    const PAGE_FLIP_URL = URL_OPT_DIR + 'bin/page-flip/dist/js/page-flip.browser.js';
+    const PAGE_FLIP_URL = URL_OPT_DIR + 'bin/quiqqer-asset/page-flip/page-flip/dist/js/page-flip.browser.js';
 
     const LANDSCAPE_MIN_WIDTH = 768;
     const RENDER_RANGE = 2;
