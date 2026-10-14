@@ -1,5 +1,4 @@
 .quiqqer-bricks-controls-pdf-pdfPreview {
-    --_downloadAlignment: var(--quiqqer-bricks-pdfPreview-downloadAlignment, var(--_q-controlConf-downloadAlignment, left));
     --_teaserColumns: var(--quiqqer-bricks-pdfPreview-teaserColumns, 1fr 1fr);
     --_teaserGap: var(--quiqqer-bricks-pdfPreview-teaserGap, var(--qui-layout-gap, clamp(1rem, 0.5rem + 3cqi, 3rem)));
     --_paper: var(--quiqqer-bricks-pdfPreview-paper, var(--qui-colors-surface, #fff));
@@ -8,12 +7,6 @@
     container-type: inline-size;
 }
 
-.quiqqer-bricks-controls-pdf-pdfPreview__download {
-    text-align: var(--_downloadAlignment);
-    margin-block-end: 2rem;
-}
-
-.quiqqer-bricks-controls-pdf-pdfPreview__download a:focus-visible,
 .quiqqer-bricks-pdfPreview a:focus-visible,
 .quiqqer-bricks-pdfPreview button:focus-visible {
     outline: 2px solid Highlight;
@@ -57,6 +50,12 @@
     border-radius: 8px;
     box-shadow: 0 4px 24px rgba(0,0,0,0.08);
     position: relative;
+    /* Horizontal swipes flip the page, vertical ones still scroll. */
+    touch-action: pan-y pinch-zoom;
+}
+
+.quiqqer-bricks-pdfPreview :where(.preview:has([data-name="page"])) {
+    cursor: pointer;
 }
 
 .quiqqer-bricks-pdfPreview :where(.preview .btn) {
@@ -75,12 +74,6 @@
 
 .quiqqer-bricks-pdfPreview :where(.preview .btn--next) {
     right: var(--pos);
-}
-
-.quiqqer-bricks-pdfPreview :where(.preview .btn--open) {
-    top: var(--qui-spacing, 1rem);
-    right: var(--qui-spacing, 1rem);
-    transform: none;
 }
 
 @media screen and (hover: hover) {
@@ -151,11 +144,6 @@
     }
 }
 
-/* openable classic preview */
-.quiqqer-bricks-pdfPreview :where(.preview.is-openable) {
-    cursor: zoom-in;
-}
-
 /* teaser layout */
 .quiqqer-bricks-pdfPreview-teaser {
     display: grid;
@@ -183,6 +171,11 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: var(--qui-spacing-sm, 0.5rem);
+}
+
+.quiqqer-bricks-pdfPreview--classic .quiqqer-bricks-pdfPreview__actions {
+    justify-content: flex-start;
+    margin-block-start: 2rem;
 }
 
 .quiqqer-bricks-pdfPreview__cover {

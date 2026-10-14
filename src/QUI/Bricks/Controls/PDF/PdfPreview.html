@@ -57,18 +57,9 @@
 {/if}
 
 <div class="control-template">
-    {if $showDownload && $pdfFile}
-    <div class="quiqqer-bricks-controls-pdf-pdfPreview__download">
-        <a href="{$pdfFile|escape:'html'}" download class="btn btn-primary" data-name="pdf-download">
-            <i class="fa-solid fa-download" aria-hidden="true"></i>
-            <span>{$downloadLabel|escape:'html'}</span>
-        </a>
-    </div>
-    {/if}
-    <div class="quiqqer-bricks-pdfPreview"
+    <div class="quiqqer-bricks-pdfPreview quiqqer-bricks-pdfPreview--classic"
          data-name="pdf-preview-container"
          data-qui-options-layout="classic"
-         data-qui-options-openviewer="{if $openViewer}1{else}0{/if}"
          data-qui-options-pdffile="{$pdfFile|escape:'html'}"
          data-qui-options-pagenum="{$sheetsNumber|escape:'html'}"
          data-qui-options-pageanimation="{$pageAnimation|escape:'html'}"
@@ -92,12 +83,6 @@
                     aria-label="{locale group='quiqqer/bricks' var='pdfPreview.next'}">
                 <i class="fa-solid fa-angle-right" aria-hidden="true"></i>
             </button>
-            {if $openViewer}
-            <button type="button" class="btn btn-icon btn-rounded btn--open" data-name="open"
-                    aria-label="{locale group='quiqqer/bricks' var='pdfPreview.open'}">
-                <i class="fa-solid fa-expand" aria-hidden="true"></i>
-            </button>
-            {/if}
         </div>
         <div class="sheets" data-name="sheets">
             {section name=idx start=0 loop=$sheetsNumber}
@@ -109,6 +94,23 @@
         </div>
         <p class="quiqqer-bricks-pdfPreview__status" data-name="status" role="status"></p>
         </div>
+        {if $pdfFile && ($showDownload || $openViewer)}
+        <div class="quiqqer-bricks-pdfPreview__actions" data-name="actions">
+            {if $showDownload}
+            <a href="{$pdfFile|escape:'html'}" download
+               class="btn {if $openViewer}btn-secondary{else}btn-primary{/if}" data-name="pdf-download">
+                <i class="fa-solid fa-download" aria-hidden="true"></i>
+                <span>{$downloadLabel|escape:'html'}</span>
+            </a>
+            {/if}
+            {if $openViewer}
+            <button type="button" class="btn btn-primary" data-name="open" disabled>
+                <i class="fa-solid fa-expand" aria-hidden="true"></i>
+                <span>{$openLabel|escape:'html'}</span>
+            </button>
+            {/if}
+        </div>
+        {/if}
     </div>
 </div>
 {/if}

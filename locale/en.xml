@@ -745,14 +745,8 @@ This content does not replace the block content. You can still place the brick t
         <locale name="pdfPreview.settings.downloadLabel.description">
             <en><![CDATA[Leave empty to use the translated default text “Download PDF document”.]]></en>
         </locale>
-        <locale name="pdfPreview.settings.downloadAlignment">
-            <en><![CDATA[Download button alignment]]></en>
-        </locale>
         <locale name="pdfPreview.settings.alignLeft">
             <en><![CDATA[Left]]></en>
-        </locale>
-        <locale name="pdfPreview.settings.alignCenter">
-            <en><![CDATA[Center]]></en>
         </locale>
         <locale name="pdfPreview.settings.alignRight">
             <en><![CDATA[Right]]></en>
@@ -806,7 +800,7 @@ This content does not replace the block content. You can still place the brick t
             <en><![CDATA[Leave empty to use the default text "View PDF".]]></en>
         </locale>
         <locale name="pdfPreview.settings.openViewer">
-            <en><![CDATA[Clicking the page opens the viewer]]></en>
+            <en><![CDATA[Show button to open the fullscreen viewer]]></en>
         </locale>
         <locale name="pdfPreview.settings.openViewer.description">
             <en><![CDATA[Opens the PDF fullscreen with page flipping, zoom and page overview.]]></en>

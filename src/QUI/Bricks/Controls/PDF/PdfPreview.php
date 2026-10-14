@@ -18,7 +18,6 @@ class PdfPreview extends QUI\Control
             'aspectRatio' => '210/297',
             'showDownload' => false,
             'downloadLabel' => '',
-            'downloadAlignment' => 'left',
             'pageAnimation' => 'fade',
             'layout' => 'classic',
             'pdfPosition' => 'right',
@@ -35,14 +34,6 @@ class PdfPreview extends QUI\Control
     {
         $Engine = QUI::getTemplateManager()->getEngine();
         $pdfFile = $this->getPdfFileUrl();
-
-        $downloadAlignment = (string)$this->getAttribute('downloadAlignment');
-
-        if (!in_array($downloadAlignment, ['left', 'center', 'right'], true)) {
-            $downloadAlignment = 'left';
-        }
-
-        $this->setStyle('--_q-controlConf-downloadAlignment', $downloadAlignment);
 
         $downloadLabel = trim((string)$this->getAttribute('downloadLabel'));
 

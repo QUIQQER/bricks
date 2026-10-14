@@ -747,14 +747,8 @@ Dieser Inhalt ersetzt den Baustein-Inhalt nicht. Du kannst weiterhin über dem S
         <locale name="pdfPreview.settings.downloadLabel.description">
             <de><![CDATA[Leer lassen, um den übersetzten Standardtext „PDF Dokument herunterladen“ zu verwenden.]]></de>
         </locale>
-        <locale name="pdfPreview.settings.downloadAlignment">
-            <de><![CDATA[Download-Button ausrichten]]></de>
-        </locale>
         <locale name="pdfPreview.settings.alignLeft">
             <de><![CDATA[Links]]></de>
-        </locale>
-        <locale name="pdfPreview.settings.alignCenter">
-            <de><![CDATA[Zentriert]]></de>
         </locale>
         <locale name="pdfPreview.settings.alignRight">
             <de><![CDATA[Rechts]]></de>
@@ -808,7 +802,7 @@ Dieser Inhalt ersetzt den Baustein-Inhalt nicht. Du kannst weiterhin über dem S
             <de><![CDATA[Leer lassen, um den Standardtext „PDF ansehen“ zu verwenden.]]></de>
         </locale>
         <locale name="pdfPreview.settings.openViewer">
-            <de><![CDATA[Klick auf die Seite öffnet den Viewer]]></de>
+            <de><![CDATA[Button zum Öffnen im Vollbild anzeigen]]></de>
         </locale>
         <locale name="pdfPreview.settings.openViewer.description">
             <de><![CDATA[Öffnet die PDF im Vollbild mit Blättern, Zoom und Seitenübersicht.]]></de>

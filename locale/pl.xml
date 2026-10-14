@@ -735,14 +735,8 @@
         <locale name="pdfPreview.settings.downloadLabel.description">
             <pl><![CDATA[Pozostaw puste, aby użyć przetłumaczonego tekstu domyślnego „Pobierz dokument PDF”.]]></pl>
         </locale>
-        <locale name="pdfPreview.settings.downloadAlignment">
-            <pl><![CDATA[Wyrównanie przycisku pobierania]]></pl>
-        </locale>
         <locale name="pdfPreview.settings.alignLeft">
             <pl><![CDATA[Do lewej]]></pl>
-        </locale>
-        <locale name="pdfPreview.settings.alignCenter">
-            <pl><![CDATA[Do środka]]></pl>
         </locale>
         <locale name="pdfPreview.settings.alignRight">
             <pl><![CDATA[Do prawej]]></pl>
@@ -796,7 +790,7 @@
             <pl><![CDATA[Pozostaw puste, aby użyć domyślnego tekstu „Wyświetl PDF”.]]></pl>
         </locale>
         <locale name="pdfPreview.settings.openViewer">
-            <pl><![CDATA[Kliknięcie strony otwiera przeglądarkę]]></pl>
+            <pl><![CDATA[Pokaż przycisk otwierający przeglądarkę na pełnym ekranie]]></pl>
         </locale>
         <locale name="pdfPreview.settings.openViewer.description">
             <pl><![CDATA[Otwiera PDF na pełnym ekranie z przewracaniem stron, powiększeniem i przeglądem stron.]]></pl>

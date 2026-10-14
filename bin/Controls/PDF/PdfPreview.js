@@ -10,6 +10,8 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
 ], function (QUI, QUIControl, QUILocale, PdfRenderer) {
     "use strict";
 
+    const SWIPE_DISTANCE = 40;
+
     /**
      * Page of a viewer deep link #<id>-<page>, or null. Same rule as
      * Viewer.matchHash(), kept here so the viewer module stays lazy.
@@ -56,8 +58,7 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
             pdf: false,
             pageNum: 0,
             pageAnimation: 'fade',
-            layout: 'classic',
-            openViewer: false
+            layout: 'classic'
         },
 
         initialize: function (options) {
@@ -157,7 +158,6 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
             this.pdfFile = container.getAttribute('data-qui-options-pdffile');
             this.setAttribute('pageAnimation', container.getAttribute('data-qui-options-pageanimation') || 'fade');
             this.setAttribute('layout', container.getAttribute('data-qui-options-layout') || 'classic');
-            this.setAttribute('openViewer', container.getAttribute('data-qui-options-openviewer') === '1');
 
             this.NextBtn = container.querySelector('[data-name="next"]');
             this.PrevBtn = container.querySelector('[data-name="prev"]');
@@ -176,21 +176,58 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
 
             const preview = container.querySelector('[data-name="preview"]');
 
-            if (preview && this.getAttribute('openViewer')) {
-                preview.classList.add('is-openable');
-                preview.addEventListener('click', (event) => {
-                    if (event.target.closest('[data-name="prev"], [data-name="next"]')) {
-                        return;
-                    }
-
-                    this.openViewer(this.currentPage || 1);
-                });
+            if (preview) {
+                this.$initPageGestures(preview);
             }
 
             this.initPdfLazyLoad(container);
 
             this.$openFromHash();
             window.addEventListener('hashchange', this.$openFromHash);
+        },
+
+        /**
+         * Classic preview: a click on the left or right half of the page flips
+         * back or forward, a horizontal swipe does the same on touch devices.
+         */
+        $initPageGestures: function (preview) {
+            let start = null;
+            let swiped = false;
+
+            preview.addEventListener('pointerdown', (event) => {
+                swiped = false;
+                start = event.pointerType === 'mouse' ? null : {x: event.clientX, y: event.clientY};
+            });
+
+            preview.addEventListener('pointercancel', () => {
+                start = null;
+            });
+
+            preview.addEventListener('pointerup', (event) => {
+                if (!start) {
+                    return;
+                }
+
+                const distanceX = event.clientX - start.x;
+                const distanceY = event.clientY - start.y;
+                start = null;
+
+                if (Math.abs(distanceX) < SWIPE_DISTANCE || Math.abs(distanceX) < Math.abs(distanceY)) {
+                    return;
+                }
+
+                swiped = true;
+                this.handleOpenPageClick(distanceX < 0 ? 'next' : 'prev');
+            });
+
+            preview.addEventListener('click', (event) => {
+                if (swiped || !this.$pdf || event.target.closest('button')) {
+                    return;
+                }
+
+                const rect = preview.getBoundingClientRect();
+                this.handleOpenPageClick(event.clientX - rect.left < rect.width / 2 ? 'prev' : 'next');
+            });
         },
 
         /**
@@ -362,6 +399,14 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfPreview', [
             }
 
             this.enableButtons();
+
+            const openButton = this.getElm().querySelector('[data-name="open"]');
+
+            if (openButton) {
+                openButton.disabled = false;
+                openButton.addEventListener('click', () => this.openViewer(this.currentPage || 1));
+            }
+
             await this.showPageNumber(1);
 
             if (this.$destroyed) {

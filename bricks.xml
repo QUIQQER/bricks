@@ -2800,9 +2800,7 @@
                     </option>
                     <defaultValue>right</defaultValue>
                 </setting>
-                <setting name="openLabel" type="text"
-                         data-dependency="layout"
-                         data-dependency-options="teaser">
+                <setting name="openLabel" type="text">
                     <locale group="quiqqer/bricks" var="pdfPreview.settings.openLabel"/>
                     <description>
                         <locale group="quiqqer/bricks" var="pdfPreview.settings.openLabel.description"/>
@@ -2864,21 +2862,6 @@
                     <description>
                         <locale group="quiqqer/bricks" var="pdfPreview.settings.downloadLabel.description"/>
                     </description>
-                </setting>
-                <setting name="downloadAlignment" type="select"
-                         data-dependency="layout"
-                         data-dependency-options="classic">
-                    <locale group="quiqqer/bricks" var="pdfPreview.settings.downloadAlignment"/>
-                    <option value="left">
-                        <locale group="quiqqer/bricks" var="pdfPreview.settings.alignLeft"/>
-                    </option>
-                    <option value="center">
-                        <locale group="quiqqer/bricks" var="pdfPreview.settings.alignCenter"/>
-                    </option>
-                    <option value="right">
-                        <locale group="quiqqer/bricks" var="pdfPreview.settings.alignRight"/>
-                    </option>
-                    <defaultValue>left</defaultValue>
                 </setting>
             </settings>
         </brick>

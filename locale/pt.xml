@@ -732,14 +732,8 @@
         <locale name="pdfPreview.settings.downloadLabel.description">
             <pt><![CDATA[Deixe vazio para usar o texto padrão traduzido «Descarregar documento PDF».]]></pt>
         </locale>
-        <locale name="pdfPreview.settings.downloadAlignment">
-            <pt><![CDATA[Alinhamento do botão de transferência]]></pt>
-        </locale>
         <locale name="pdfPreview.settings.alignLeft">
             <pt><![CDATA[Esquerda]]></pt>
-        </locale>
-        <locale name="pdfPreview.settings.alignCenter">
-            <pt><![CDATA[Centro]]></pt>
         </locale>
         <locale name="pdfPreview.settings.alignRight">
             <pt><![CDATA[Direita]]></pt>
@@ -793,7 +787,7 @@
             <pt><![CDATA[Deixa vazio para usar o texto predefinido «Ver PDF».]]></pt>
         </locale>
         <locale name="pdfPreview.settings.openViewer">
-            <pt><![CDATA[Clicar na página abre o visualizador]]></pt>
+            <pt><![CDATA[Mostrar botão para abrir o visualizador em ecrã inteiro]]></pt>
         </locale>
         <locale name="pdfPreview.settings.openViewer.description">
             <pt><![CDATA[Abre o PDF em ecrã inteiro com folhear, zoom e vista geral das páginas.]]></pt>

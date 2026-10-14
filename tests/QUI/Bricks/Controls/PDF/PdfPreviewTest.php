@@ -46,7 +46,7 @@ class PdfPreviewTest extends TestCase
         $this->assertStringContainsString('&lt;b&gt;Report &amp; details&lt;/b&gt;', $body);
         $this->assertSame(1, $XPath->query('//a[@data-name="pdf-download"]/i[@aria-hidden="true"]')->length);
         $this->assertLessThan(strpos($body, 'data-name="pdf-download"'), strpos($body, '<p>Introduction</p>'));
-        $this->assertLessThan(strpos($body, 'data-name="pdf-preview-container"'), strpos($body, 'data-name="pdf-download"'));
+        $this->assertLessThan(strpos($body, 'data-name="pdf-download"'), strpos($body, 'data-name="preview"'));
     }
 
     public function testEmptyLabelUsesTranslatedDefault(): void
@@ -58,23 +58,6 @@ class PdfPreviewTest extends TestCase
         $label = \QUI::getLocale()->get('quiqqer/bricks', 'pdfPreview.download');
 
         $this->assertStringContainsString(htmlspecialchars($label, ENT_QUOTES), $Control->getBody());
-    }
-
-    public function testInvalidAlignmentFallsBackToLeft(): void
-    {
-        $Control = $this->createPreview(['downloadAlignment' => 'invalid']);
-        $Control->getBody();
-
-        $this->assertStringContainsString('--_q-controlConf-downloadAlignment:left', $Control->create());
-    }
-
-    public function testSupportedAlignmentsAreApplied(): void
-    {
-        foreach (['left', 'center', 'right'] as $alignment) {
-            $Control = $this->createPreview(['downloadAlignment' => $alignment]);
-            $Control->getBody();
-            $this->assertStringContainsString('--_q-controlConf-downloadAlignment:' . $alignment, $Control->create());
-        }
     }
 
     public function testStringFalseDoesNotEnableDownload(): void
@@ -256,32 +239,69 @@ class PdfPreviewTest extends TestCase
         $this->assertStringContainsString(htmlspecialchars($label, ENT_QUOTES), $Control->getBody());
     }
 
-    public function testOpenViewerOptionClassic(): void
-    {
-        $Control = $this->createPreview();
-
-        $this->assertStringContainsString('data-qui-options-openviewer="1"', $Control->getBody());
-
-        foreach (['0', false, 'false'] as $value) {
-            $Control = $this->createPreview(['openViewer' => $value]);
-
-            $this->assertStringContainsString('data-qui-options-openviewer="0"', $Control->getBody());
-        }
-    }
-
     public function testClassicOpenButtonFollowsOpenViewer(): void
     {
         $XPath = $this->createXPath($this->createPreview()->getBody());
 
         $this->assertSame(
             1,
-            $XPath->query('//*[@data-name="preview"]/button[@type="button"][@data-name="open"][@aria-label]')->length
+            $XPath->query('//*[@data-name="actions"]/button[@type="button"][@data-name="open"][@disabled]')->length
         );
-        $this->assertSame(1, $XPath->query('//button[@data-name="open"]/i[@aria-hidden="true"]')->length);
+        $this->assertSame(0, $XPath->query('//*[@data-name="preview"]//*[@data-name="open"]')->length);
 
+        foreach (['0', false, 'false'] as $value) {
+            $XPath = $this->createXPath($this->createPreview(['openViewer' => $value])->getBody());
+
+            $this->assertSame(0, $XPath->query('//*[@data-name="open"]')->length);
+        }
+    }
+
+    public function testClassicButtonsAreBelowThePreview(): void
+    {
+        $Control = $this->createPreview([
+            'showDownload' => true,
+            'sheetsNumber' => 2
+        ]);
+        $XPath = $this->createXPath($Control->getBody());
+        $Actions = $XPath->query('//*[@data-name="pdf-preview-container"]/*[@data-name="actions"]')->item(0);
+
+        $this->assertInstanceOf(\DOMElement::class, $Actions);
+        $this->assertSame(
+            ['pdf-download', 'open'],
+            array_map(
+                fn(\DOMElement $Button): string => $Button->getAttribute('data-name'),
+                iterator_to_array($XPath->query('./a | ./button', $Actions))
+            )
+        );
+        $this->assertSame(1, $XPath->query('//a[@data-name="pdf-download"][contains(@class, "btn-secondary")]')->length);
+        $this->assertSame(0, $XPath->query('//*[@data-name="preview"]//*[@data-name="pdf-download"]')->length);
+    }
+
+    public function testClassicDownloadIsPrimaryWithoutOpenButton(): void
+    {
+        $XPath = $this->createXPath($this->createPreview([
+            'showDownload' => true,
+            'openViewer' => false
+        ])->getBody());
+
+        $this->assertSame(
+            1,
+            $XPath->query('//*[@data-name="actions"]/a[@data-name="pdf-download"][contains(@class, "btn-primary")]')->length
+        );
+    }
+
+    public function testClassicWithoutButtonsHasNoActions(): void
+    {
         $XPath = $this->createXPath($this->createPreview(['openViewer' => false])->getBody());
 
-        $this->assertSame(0, $XPath->query('//button[@data-name="open"]')->length);
+        $this->assertSame(0, $XPath->query('//*[@data-name="actions"]')->length);
+    }
+
+    public function testClassicOpenLabelEscaped(): void
+    {
+        $body = $this->createPreview(['openLabel' => '<b>Open & read</b>'])->getBody();
+
+        $this->assertStringContainsString('&lt;b&gt;Open &amp; read&lt;/b&gt;', $body);
     }
 
     public function testTitleIsMarkedForTheViewer(): void
