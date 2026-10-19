@@ -2774,13 +2774,56 @@
             </description>
 
             <settings>
+                <setting name="layout" type="select"
+                         data-qui="package/quiqqer/core/bin/QUI/controls/settings/Dependency">
+                    <locale group="quiqqer/bricks" var="pdfPreview.settings.layout"/>
+                    <description>
+                        <locale group="quiqqer/bricks" var="pdfPreview.settings.layout.description"/>
+                    </description>
+                    <option value="classic">
+                        <locale group="quiqqer/bricks" var="pdfPreview.settings.layout.classic"/>
+                    </option>
+                    <option value="teaser">
+                        <locale group="quiqqer/bricks" var="pdfPreview.settings.layout.teaser"/>
+                    </option>
+                    <defaultValue>classic</defaultValue>
+                </setting>
+                <setting name="pdfPosition" type="select"
+                         data-dependency="layout"
+                         data-dependency-options="teaser">
+                    <locale group="quiqqer/bricks" var="pdfPreview.settings.pdfPosition"/>
+                    <option value="right">
+                        <locale group="quiqqer/bricks" var="pdfPreview.settings.alignRight"/>
+                    </option>
+                    <option value="left">
+                        <locale group="quiqqer/bricks" var="pdfPreview.settings.alignLeft"/>
+                    </option>
+                    <defaultValue>right</defaultValue>
+                </setting>
+                <setting name="openLabel" type="text">
+                    <locale group="quiqqer/bricks" var="pdfPreview.settings.openLabel"/>
+                    <description>
+                        <locale group="quiqqer/bricks" var="pdfPreview.settings.openLabel.description"/>
+                    </description>
+                </setting>
+                <setting name="openViewer" type="checkbox"
+                         data-dependency="layout"
+                         data-dependency-options="classic">
+                    <locale group="quiqqer/bricks" var="pdfPreview.settings.openViewer"/>
+                    <description>
+                        <locale group="quiqqer/bricks" var="pdfPreview.settings.openViewer.description"/>
+                    </description>
+                    <defaultValue>1</defaultValue>
+                </setting>
                 <setting name="pdfFile" data-qui="controls/projects/project/media/Input">
                     <locale group="quiqqer/bricks" var="brick.control.pdfView.file"/>
                     <description>
                         <locale group="quiqqer/bricks" var="brick.control.pdfView.file.description"/>
                     </description>
                 </setting>
-                <setting name="sheetsNumber" type="number">
+                <setting name="sheetsNumber" type="number"
+                         data-dependency="layout"
+                         data-dependency-options="classic">
                     <locale group="quiqqer/bricks" var="brick.control.pdfView.sheetsNumber"/>
                     <description>
                         <locale group="quiqqer/bricks" var="brick.control.pdfView.sheetsNumber.description"/>
@@ -2790,6 +2833,34 @@
                     <locale group="quiqqer/bricks" var="brick.control.pdfView.aspectRatio"/>
                     <description>
                         <locale group="quiqqer/bricks" var="brick.control.pdfView.aspectRatio.description"/>
+                    </description>
+                </setting>
+                <setting name="pageAnimation" type="select"
+                         data-dependency="layout"
+                         data-dependency-options="classic">
+                    <locale group="quiqqer/bricks" var="pdfPreview.settings.pageAnimation"/>
+                    <description>
+                        <locale group="quiqqer/bricks" var="pdfPreview.settings.pageAnimation.description"/>
+                    </description>
+                    <option value="none">
+                        <locale group="quiqqer/bricks" var="pdfPreview.settings.pageAnimation.none"/>
+                    </option>
+                    <option value="fade">
+                        <locale group="quiqqer/bricks" var="pdfPreview.settings.pageAnimation.fade"/>
+                    </option>
+                    <option value="zoom">
+                        <locale group="quiqqer/bricks" var="pdfPreview.settings.pageAnimation.zoom"/>
+                    </option>
+                    <defaultValue>fade</defaultValue>
+                </setting>
+                <setting name="showDownload" type="checkbox">
+                    <locale group="quiqqer/bricks" var="pdfPreview.settings.showDownload"/>
+                    <defaultValue>0</defaultValue>
+                </setting>
+                <setting name="downloadLabel" type="text">
+                    <locale group="quiqqer/bricks" var="pdfPreview.settings.downloadLabel"/>
+                    <description>
+                        <locale group="quiqqer/bricks" var="pdfPreview.settings.downloadLabel.description"/>
                     </description>
                 </setting>
             </settings>

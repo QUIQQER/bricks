@@ -27,7 +27,9 @@
         "quiqqer/slider": "^2.5",
         "quiqqer/sitetypes": "^2.1.0",
         "quiqqer/components": "^1",
-        "quiqqer-asset/gridstack": "^12"
+        "quiqqer-asset/gridstack": "^12",
+        "quiqqer-asset/pdfjs-dist": "^4.8",
+        "quiqqer-asset/page-flip": "^2.0"
     },
     "replace": {
         "quiqqer/bricks-rest": "*"
