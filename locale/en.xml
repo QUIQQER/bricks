@@ -686,7 +686,19 @@ This content does not replace the block content. You can still place the brick t
             <en><![CDATA[PDF Preview]]></en>
         </locale>
         <locale name="pdfPreview.brick.description">
-            <en><![CDATA[PDF Preview - Display a PDF in a block with sheet view]]></en>
+            <en><![CDATA[<p>This brick turns a PDF into an experience right on your website. Catalogues, brochures, price lists or magazines can be viewed and browsed without visitors having to download the file first.</p>
+<p>Choose between the classic view with a large page and page thumbnails or a compact teaser with text next to the cover. One click opens the PDF as a fullscreen flipbook that turns its pages just like a printed booklet.</p>
+<ul>
+    <li><strong>Two layouts:</strong> Classic with a large page and page thumbnails, or a teaser with text, cover page and buttons, with the PDF on the left or right.</li>
+    <li><strong>Fullscreen flipbook:</strong> Double pages on large screens, single pages on smartphones. Turn pages by dragging, swiping, clicking or with the keyboard.</li>
+    <li><strong>Zoom up to 400%:</strong> Zoom in with the mouse wheel, a double click or two fingers and read every detail in sharp quality.</li>
+    <li><strong>Find the right page fast:</strong> A page slider and a page overview with thumbnails take readers straight to the content they need.</li>
+    <li><strong>Share pages:</strong> Every page has its own link that can be sent via the device's share menu or copied with one click.</li>
+    <li><strong>Download on request:</strong> Optional download button with your own label, also available inside the flipbook.</li>
+    <li><strong>Fast and lightweight:</strong> The PDF only loads once the brick becomes visible, and even large documents stay smooth.</li>
+    <li><strong>Accessible to everyone:</strong> Fully keyboard operable, with screen reader support and respect for reduced motion settings.</li>
+</ul>
+<p>Present your documents as appealingly as in print and keep visitors on your page longer. Select a PDF, choose a layout, done.</p>]]></en>
         </locale>
         <locale name="brick.control.pdfView.file">
             <en><![CDATA[PDF File]]></en>
@@ -720,6 +732,117 @@ This content does not replace the block content. You can still place the brick t
         </locale>
         <locale name="window.title">
             <en><![CDATA[Content]]></en>
+        </locale>
+        <locale name="pdfPreview.download">
+            <en><![CDATA[Download PDF document]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.showDownload">
+            <en><![CDATA[Show download]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.downloadLabel">
+            <en><![CDATA[Button label]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.downloadLabel.description">
+            <en><![CDATA[Leave empty to use the translated default text “Download PDF document”.]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.alignLeft">
+            <en><![CDATA[Left]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.alignRight">
+            <en><![CDATA[Right]]></en>
+        </locale>
+        <locale name="pdfPreview.previous">
+            <en><![CDATA[Previous page]]></en>
+        </locale>
+        <locale name="pdfPreview.next">
+            <en><![CDATA[Next page]]></en>
+        </locale>
+        <locale name="pdfPreview.page">
+            <en><![CDATA[Page [page] of [total]]]></en>
+        </locale>
+        <locale name="pdfPreview.error">
+            <en><![CDATA[The PDF preview could not be loaded. Please try again.]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation">
+            <en><![CDATA[Page transition animation]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.description">
+            <en><![CDATA[Transition between fully rendered pages. Animations are disabled when the system setting for reduced motion is enabled.]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.none">
+            <en><![CDATA[None]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.fade">
+            <en><![CDATA[Fade (150 ms)]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.zoom">
+            <en><![CDATA[Zoom (250 ms)]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.layout">
+            <en><![CDATA[Layout]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.layout.description">
+            <en><![CDATA[Classic: large page with page thumbnails. Teaser: text next to the first page, a click opens the PDF in the fullscreen viewer.]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.layout.classic">
+            <en><![CDATA[Classic]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.layout.teaser">
+            <en><![CDATA[Teaser (text + first page)]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.pdfPosition">
+            <en><![CDATA[PDF position]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.openLabel">
+            <en><![CDATA["Open" button label]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.openLabel.description">
+            <en><![CDATA[Leave empty to use the default text "View PDF".]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.openViewer">
+            <en><![CDATA[Show button to open the fullscreen viewer]]></en>
+        </locale>
+        <locale name="pdfPreview.settings.openViewer.description">
+            <en><![CDATA[Opens the PDF fullscreen with page flipping, zoom and page overview.]]></en>
+        </locale>
+        <locale name="pdfPreview.open">
+            <en><![CDATA[View PDF]]></en>
+        </locale>
+        <locale name="pdfPreview.viewer.title">
+            <en><![CDATA[PDF view: [title]]]></en>
+        </locale>
+        <locale name="pdfPreview.viewer.close">
+            <en><![CDATA[Close]]></en>
+        </locale>
+        <locale name="pdfPreview.viewer.grid">
+            <en><![CDATA[Page overview]]></en>
+        </locale>
+        <locale name="pdfPreview.viewer.gridClose">
+            <en><![CDATA[Close page overview]]></en>
+        </locale>
+        <locale name="pdfPreview.viewer.zoomIn">
+            <en><![CDATA[Zoom in]]></en>
+        </locale>
+        <locale name="pdfPreview.viewer.zoomOut">
+            <en><![CDATA[Zoom out]]></en>
+        </locale>
+        <locale name="pdfPreview.viewer.share">
+            <en><![CDATA[Share page]]></en>
+        </locale>
+        <locale name="pdfPreview.viewer.shareCopied">
+            <en><![CDATA[Link copied.]]></en>
+        </locale>
+        <locale name="pdfPreview.viewer.fullscreen">
+            <en><![CDATA[Fullscreen]]></en>
+        </locale>
+        <locale name="pdfPreview.viewer.fullscreenExit">
+            <en><![CDATA[Exit fullscreen]]></en>
+        </locale>
+        <locale name="pdfPreview.viewer.slider">
+            <en><![CDATA[Choose page]]></en>
+        </locale>
+        <locale name="pdfPreview.viewer.pages">
+            <en><![CDATA[Pages [from]–[to] of [total]]]></en>
         </locale>
     </groups>
     <groups name="quiqqer/bricks" datatype="php">

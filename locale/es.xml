@@ -673,7 +673,19 @@
             <es><![CDATA[Vista previa de PDF]]></es>
         </locale>
         <locale name="pdfPreview.brick.description">
-            <es><![CDATA[Muestra un PDF en un bloque con vista por páginas.]]></es>
+            <es><![CDATA[<p>Con este bloque, un PDF se convierte en una experiencia directamente en tu sitio web. Catálogos, folletos, listas de precios o revistas se pueden ver y hojear sin que los visitantes tengan que descargar antes el archivo.</p>
+<p>Elige entre la vista clásica con una página grande y miniaturas o un avance compacto con texto junto a la portada. Un clic abre el PDF como libro hojeable a pantalla completa, con un paso de página como el de una revista impresa.</p>
+<ul>
+    <li><strong>Dos diseños:</strong> Clásico con página grande y miniaturas, o como avance con texto, portada y botones, con el PDF a la izquierda o a la derecha.</li>
+    <li><strong>Libro hojeable a pantalla completa:</strong> Páginas dobles en pantallas grandes y páginas sueltas en el smartphone. Se pasa de página arrastrando, deslizando, con un clic o con el teclado.</li>
+    <li><strong>Zoom hasta el 400 %:</strong> Amplía con la rueda del ratón, con doble clic o con dos dedos y lee cada detalle con total nitidez.</li>
+    <li><strong>Directo a la página correcta:</strong> Un control deslizante y una vista general con miniaturas llevan directamente al contenido deseado.</li>
+    <li><strong>Compartir páginas:</strong> Cada página tiene su propio enlace, que se puede enviar desde el menú para compartir del dispositivo o copiar con un clic.</li>
+    <li><strong>Descarga opcional:</strong> Botón de descarga opcional con texto propio, también disponible dentro del libro hojeable.</li>
+    <li><strong>Rápido y ligero:</strong> El PDF solo se carga cuando el bloque se hace visible, e incluso los documentos extensos funcionan con fluidez.</li>
+    <li><strong>Accesible para todos:</strong> Se puede manejar por completo con el teclado, es compatible con lectores de pantalla y respeta la preferencia de movimiento reducido.</li>
+</ul>
+<p>Así presentas tus documentos de forma tan atractiva como en papel y mantienes a los visitantes más tiempo en tu página. Elige el PDF, define el diseño y listo.</p>]]></es>
         </locale>
         <locale name="brick.control.pdfView.file">
             <es><![CDATA[Archivo PDF]]></es>
@@ -707,6 +719,117 @@
         </locale>
         <locale name="window.title">
             <es><![CDATA[Contenido]]></es>
+        </locale>
+        <locale name="pdfPreview.download">
+            <es><![CDATA[Descargar documento PDF]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.showDownload">
+            <es><![CDATA[Mostrar descarga]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.downloadLabel">
+            <es><![CDATA[Texto del botón]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.downloadLabel.description">
+            <es><![CDATA[Dejar vacío para usar el texto predeterminado traducido «Descargar documento PDF».]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.alignLeft">
+            <es><![CDATA[Izquierda]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.alignRight">
+            <es><![CDATA[Derecha]]></es>
+        </locale>
+        <locale name="pdfPreview.previous">
+            <es><![CDATA[Página anterior]]></es>
+        </locale>
+        <locale name="pdfPreview.next">
+            <es><![CDATA[Página siguiente]]></es>
+        </locale>
+        <locale name="pdfPreview.page">
+            <es><![CDATA[Página [page] de [total]]]></es>
+        </locale>
+        <locale name="pdfPreview.error">
+            <es><![CDATA[No se pudo cargar la vista previa del PDF. Inténtelo de nuevo.]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation">
+            <es><![CDATA[Animación al cambiar de página]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.description">
+            <es><![CDATA[Transición entre páginas ya renderizadas. Las animaciones se desactivan si está habilitada la opción del sistema para reducir el movimiento.]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.none">
+            <es><![CDATA[Ninguna]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.fade">
+            <es><![CDATA[Fundido (150 ms)]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.pageAnimation.zoom">
+            <es><![CDATA[Zoom (250 ms)]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.layout">
+            <es><![CDATA[Diseño]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.layout.description">
+            <es><![CDATA[Clásico: página grande con miniaturas de las páginas. Teaser: texto junto a la primera página; un clic abre el PDF en el visor a pantalla completa.]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.layout.classic">
+            <es><![CDATA[Clásico]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.layout.teaser">
+            <es><![CDATA[Teaser (texto + primera página)]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.pdfPosition">
+            <es><![CDATA[Posición del PDF]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.openLabel">
+            <es><![CDATA[Texto del botón «Abrir»]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.openLabel.description">
+            <es><![CDATA[Déjalo vacío para usar el texto predeterminado «Ver PDF».]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.openViewer">
+            <es><![CDATA[Mostrar botón para abrir el visor a pantalla completa]]></es>
+        </locale>
+        <locale name="pdfPreview.settings.openViewer.description">
+            <es><![CDATA[Abre el PDF a pantalla completa con paso de página, zoom y vista general de páginas.]]></es>
+        </locale>
+        <locale name="pdfPreview.open">
+            <es><![CDATA[Ver PDF]]></es>
+        </locale>
+        <locale name="pdfPreview.viewer.title">
+            <es><![CDATA[Vista PDF: [title]]]></es>
+        </locale>
+        <locale name="pdfPreview.viewer.close">
+            <es><![CDATA[Cerrar]]></es>
+        </locale>
+        <locale name="pdfPreview.viewer.grid">
+            <es><![CDATA[Vista general de páginas]]></es>
+        </locale>
+        <locale name="pdfPreview.viewer.gridClose">
+            <es><![CDATA[Cerrar vista general de páginas]]></es>
+        </locale>
+        <locale name="pdfPreview.viewer.zoomIn">
+            <es><![CDATA[Ampliar]]></es>
+        </locale>
+        <locale name="pdfPreview.viewer.zoomOut">
+            <es><![CDATA[Reducir]]></es>
+        </locale>
+        <locale name="pdfPreview.viewer.share">
+            <es><![CDATA[Compartir página]]></es>
+        </locale>
+        <locale name="pdfPreview.viewer.shareCopied">
+            <es><![CDATA[Enlace copiado.]]></es>
+        </locale>
+        <locale name="pdfPreview.viewer.fullscreen">
+            <es><![CDATA[Pantalla completa]]></es>
+        </locale>
+        <locale name="pdfPreview.viewer.fullscreenExit">
+            <es><![CDATA[Salir de pantalla completa]]></es>
+        </locale>
+        <locale name="pdfPreview.viewer.slider">
+            <es><![CDATA[Elegir página]]></es>
+        </locale>
+        <locale name="pdfPreview.viewer.pages">
+            <es><![CDATA[Páginas [from]–[to] de [total]]]></es>
         </locale>
     </groups>
     <groups name="quiqqer/bricks" datatype="php">
