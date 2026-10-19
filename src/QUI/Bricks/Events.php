@@ -39,15 +39,18 @@ class Events
      * Create site brick cache, for inheritance
      *
      * @param QUI\Interfaces\Projects\Site $Site
+     * @param QUI\Interfaces\Users\User|null $SaveUser
      * @throws QUI\Exception
      */
-    public static function onSiteSave(QUI\Interfaces\Projects\Site $Site): void
-    {
+    public static function onSiteSave(
+        QUI\Interfaces\Projects\Site $Site,
+        ?QUI\Interfaces\Users\User $SaveUser = null
+    ): void {
         if (isset(self::$saved[$Site->getId()])) {
             return;
         }
 
-        QUI\Permissions\Permission::checkPermission('quiqqer.bricks.assign');
+        QUI\Permissions\Permission::checkPermission('quiqqer.bricks.assign', $SaveUser);
 
         $areas = $Site->getAttribute('quiqqer.bricks.areas');
         $oldAreaString = $areas;
@@ -178,7 +181,7 @@ class Events
             $Site->setAttribute('quiqqer.bricks.areas', json_encode($areas));
 
             if (method_exists($Site, 'save')) {
-                $Site->save();
+                $Site->save($SaveUser);
             }
         }
     }
