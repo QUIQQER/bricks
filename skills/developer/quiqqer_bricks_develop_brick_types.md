@@ -14,8 +14,11 @@ Use this skill to build a brick type in a package. For editing brick instances i
 The following skills are provided by `quiqqer/core` and are expected to be available. Load them before
 editing the corresponding files; their rules override legacy patterns found in older bricks:
 
-- Always load `quiqqer_frontend_css_variables` for CSS or settings that affect styling. Use its complete
-  three-layer pattern, not only a direct CSS variable on the control.
+- Always load `quiqqer_frontend_css_variables` for CSS or settings that affect styling. First apply its
+  "Styling Ownership And Reuse" rules: bricks are reusable components, so inspect and reuse the template's
+  existing components before adding custom design. Additional styling needs a concrete reason; do not
+  recreate template defaults. For settings the brick intentionally owns, use the complete three-layer
+  pattern, not only a direct CSS variable on the control.
 - Always load `quiqqer_frontend_accessibility` when PHP, templates, or JavaScript produce or modify markup,
   including markup in backend setting controls.
 - Load `quiqqer_frontend_javascript` for every JavaScript change. Keep AMD and `new Class` as QUIQQER
