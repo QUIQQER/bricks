@@ -70,7 +70,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
 
             const field = form.elements.namedItem(name);
 
-            if (field && field.nodeName === 'INPUT' && field.type === 'hidden') {
+            if (field && field.nodeName === 'INPUT' && ['hidden', 'color'].includes(field.type)) {
                 formData[name] = JSON.stringify(value);
             }
         });

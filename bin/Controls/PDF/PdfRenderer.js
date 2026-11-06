@@ -10,8 +10,9 @@
 define('package/quiqqer/bricks/bin/Controls/PDF/PdfRenderer', function () {
     "use strict";
 
-    const PDFJS_URL = URL_OPT_DIR + 'bin/quiqqer-asset/pdfjs-dist/pdfjs-dist/build/pdf.mjs';
-    const PDFJS_WORKER_URL = URL_OPT_DIR + 'bin/quiqqer-asset/pdfjs-dist/pdfjs-dist/build/pdf.worker.min.mjs';
+    const PDFJS_BASE_URL = URL_OPT_DIR + 'bin/quiqqer-asset/pdfjs-dist/pdfjs-dist/';
+    const PDFJS_URL = PDFJS_BASE_URL + 'build/pdf.mjs';
+    const PDFJS_WORKER_URL = PDFJS_BASE_URL + 'build/pdf.worker.min.mjs';
 
     let libraryPromise = null;
     const documents = new Map();
@@ -50,7 +51,14 @@ define('package/quiqqer/bricks/bin/Controls/PDF/PdfRenderer', function () {
                         throw new Error('PDF document was released while loading.');
                     }
 
-                    entry.loadingTask = pdfjs.getDocument(url);
+                    entry.loadingTask = pdfjs.getDocument({
+                        url,
+                        cMapUrl: PDFJS_BASE_URL + 'cmaps/',
+                        cMapPacked: true,
+                        standardFontDataUrl: PDFJS_BASE_URL + 'standard_fonts/',
+                        wasmUrl: PDFJS_BASE_URL + 'wasm/',
+                        iccUrl: PDFJS_BASE_URL + 'iccs/'
+                    });
                     return entry.loadingTask.promise;
                 });
 
