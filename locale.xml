@@ -1,4 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<quiqqer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://www.quiqqer.com/docs/schemas/2.x/locale.xsd">
 <locales>
     <file file="/locale/de.xml"/>
     <file file="/locale/en.xml"/>
@@ -8,3 +10,4 @@
     <file file="/locale/it.xml"/>
     <file file="/locale/pl.xml"/>
 </locales>
+</quiqqer>
