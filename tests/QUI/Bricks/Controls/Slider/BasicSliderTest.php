@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use QUI;
 use QUI\Bricks\Controls\Slider\BasicSlider;
-use QUI\Cache\Parser\LazyLoading;
 use QUI\Smarty\Smarty4;
 use Smarty;
 
@@ -56,11 +55,6 @@ class BasicSliderTest extends TestCase
         }
 
         $this->assertImageLoading($html, count($sources), $prioritized);
-
-        if ($prioritized) {
-            $cachedHtml = LazyLoading::getInstance()->parse($html);
-            $this->assertImageLoading($cachedHtml, count($sources), true);
-        }
     }
 
     public static function imageLoadingOptions(): array
@@ -93,6 +87,7 @@ class BasicSliderTest extends TestCase
             $firstPrioritized = $prioritized && $index === 0;
             $this->assertSame($firstPrioritized ? 'eager' : 'lazy', $Image->getAttribute('loading'));
             $this->assertSame($firstPrioritized ? 'high' : '', $Image->getAttribute('fetchpriority'));
+            $this->assertSame($prioritized && $index > 0 ? '0' : '', $Image->getAttribute('data-cache-lazy'));
         }
     }
 
