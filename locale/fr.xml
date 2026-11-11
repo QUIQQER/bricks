@@ -483,6 +483,12 @@
         <locale name="brick.control.basicSlider.showDotNav">
             <fr><![CDATA[Afficher la navigation par points]]></fr>
         </locale>
+        <locale name="brick.control.basicSlider.prioritizeFirstImage">
+            <fr><![CDATA[Charger la première image en priorité]]></fr>
+        </locale>
+        <locale name="brick.control.basicSlider.prioritizeFirstImage.desc">
+            <fr><![CDATA[Charge uniquement la première image immédiatement et en priorité. À activer pour les diaporamas dans la partie de la page visible dès son ouverture. Les autres images restent chargées à la demande.]]></fr>
+        </locale>
         <locale name="brick.control.basicSlider.maxImageWidth">
             <fr><![CDATA[Largeur maximale des images (pixels)]]></fr>
         </locale>

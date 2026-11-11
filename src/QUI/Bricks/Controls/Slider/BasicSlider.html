@@ -21,10 +21,16 @@
 
     <div class="quiqqer-bricks-slider-basicSlider-control__sliderWrapper">
         <ul class="quiqqer-bricks-slider-basicSlider-control__slider" data-name="sliderList">
-            {assign var=showFirstImage value=true}
-            {foreach from=$images item=Image}
+            {foreach from=$images item=Image name=sliderImages}
                 <li>
-                    {image image=$Image width="$maxImageWidth" loading="lazy"}
+                    {if $prioritizeFirstImage && $smarty.foreach.sliderImages.first}
+                        {image image=$Image width="$maxImageWidth" loading="eager" fetchpriority="high"}
+                    {elseif $prioritizeFirstImage}
+                        {* Prevent cache auto-priority from selecting a hidden slide. *}
+                        {image image=$Image width="$maxImageWidth" loading="lazy" data-cache-lazy="0"}
+                    {else}
+                        {image image=$Image width="$maxImageWidth" loading="lazy"}
+                    {/if}
                 </li>
             {/foreach}
         </ul>

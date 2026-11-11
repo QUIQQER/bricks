@@ -494,6 +494,12 @@
         <locale name="brick.control.basicSlider.showDotNav">
             <en><![CDATA[Show dot navigation]]></en>
         </locale>
+        <locale name="brick.control.basicSlider.prioritizeFirstImage">
+            <en><![CDATA[Prioritize loading the first image]]></en>
+        </locale>
+        <locale name="brick.control.basicSlider.prioritizeFirstImage.desc">
+            <en><![CDATA[Loads only the first image immediately and with high priority. Enable for sliders in the initially visible part of the page. Other images remain lazy-loaded.]]></en>
+        </locale>
         <locale name="brick.control.basicSlider.maxImageWidth">
             <en><![CDATA[Maximum image width (in pixels)]]></en>
         </locale>
