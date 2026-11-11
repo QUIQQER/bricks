@@ -17,8 +17,9 @@ editing the corresponding files; their rules override legacy patterns found in o
 - Always load `quiqqer_frontend_css_variables` for CSS or settings that affect styling. First apply its
   "Styling Ownership And Reuse" rules: bricks are reusable components, so inspect and reuse the template's
   existing components before adding custom design. Additional styling needs a concrete reason; do not
-  recreate template defaults. For settings the brick intentionally owns, use the complete three-layer
-  pattern, not only a direct CSS variable on the control.
+  recreate template defaults. Follow Core's selector, variant, and value-selection rules as well.
+  Simple verified tokens may be used directly; needed fallbacks belong on the control root. For settings
+  the brick intentionally owns, use the complete three-layer pattern, not only a direct CSS variable.
 - Always load `quiqqer_frontend_accessibility` when PHP, templates, or JavaScript produce or modify markup,
   including markup in backend setting controls.
 - Load `quiqqer_frontend_javascript` for every JavaScript change. Keep AMD and `new Class` as QUIQQER
@@ -226,7 +227,8 @@ For every setting-backed style, implement all three layers from `quiqqer_fronten
 2. PHP-written config variable: `--_q-controlConf-gap`.
 3. CSS fallback: the stable default.
 
-Bind these once to a short private variable on the control root, then use only the short variable:
+Bind these once to a short private variable on the control root, then use that variable for this
+setting-backed property. This does not require aliases or public hooks for every other CSS value:
 
 ```css
 .vendor-package-bricks-featureGrid {
@@ -242,6 +244,8 @@ Bind these once to a short private variable on the control root, then use only t
 Map editor presets to validated CSS values in PHP and call `setStyle()` only through
 `--_q-controlConf-<name>`. Do not write the long theming variable from PHP. Let CSS own the theming hook and
 fallback. The config variable is placed on the outer control and inherits into the template markup.
+Responsive defaults must preserve the public-theme > config > default priority; use Core's responsive
+default pattern rather than replacing the resolved private alias with a literal at a breakpoint.
 
 ### Registration In bricks.xml
 

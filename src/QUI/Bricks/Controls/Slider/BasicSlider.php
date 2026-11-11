@@ -29,6 +29,7 @@ class BasicSlider extends QUI\Control
 
             'mediaFolder' => false,
             'showDotNav' => false,
+            'prioritizeFirstImage' => false,
             'delay' => 7000,
             'animationType' => 'hideSlideToLeftShowSlideFromLeft', // see js control options for possible values
             'imgLeft' => false,
@@ -130,6 +131,7 @@ class BasicSlider extends QUI\Control
             'maxImageWidth' => $maxImageWidth,
             'textPosition' => $textPosition,
             'showDotNav' => $this->getAttribute('showDotNav'),
+            'prioritizeFirstImage' => (bool)$this->getAttribute('prioritizeFirstImage'),
         ];
 
         $Engine->assign($options);
