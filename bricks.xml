@@ -292,6 +292,14 @@
                     <locale group="quiqqer/bricks" var="brick.control.basicSlider.showDotNav"/>
                 </setting>
 
+                <setting name="prioritizeFirstImage" type="checkbox">
+                    <locale group="quiqqer/bricks" var="brick.control.basicSlider.prioritizeFirstImage"/>
+                    <description>
+                        <locale group="quiqqer/bricks" var="brick.control.basicSlider.prioritizeFirstImage.desc"/>
+                    </description>
+                    <defaultValue>0</defaultValue>
+                </setting>
+
                 <setting name="delay" type="number" min="1000">
                     <locale group="quiqqer/bricks" var="brick.control.basicSlider.settings.delay"/>
                     <description>
