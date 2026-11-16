@@ -1989,6 +1989,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                 type: 'text',
                 'class': 'quiqqer-bricks-blockSlot-popupInput project-site',
                 'data-external': 1,
+                'data-qui-options-media': '1',
                 name: options.name || 'linkHref',
                 value: options.value || '',
                 styles: {
