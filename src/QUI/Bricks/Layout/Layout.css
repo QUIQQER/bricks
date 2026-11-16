@@ -19,7 +19,7 @@
     --_bgFit: var(--quiqqer-bricks-layout-background-fit, cover);
     --_bgPos: var(--quiqqer-bricks-layout-background-position, center center);
     --_bgOverlayColor: var(--quiqqer-bricks-layout-background-overlay-color, #000000);
-    --_bgOverlayOpacity: var(--quiqqer-bricks-layout-background-overlay-opacity, 0);
+    --_bgOverlayOpacity: var(--quiqqer-bricks-layout-background-overlay-opacity, 1);
     --_imgFit: var(--quiqqer-bricks-layout-image-fit, cover);
     --_imgWidth: var(--quiqqer-bricks-layout-image-width, 100%);
     --_imgHeight: var(--quiqqer-bricks-layout-image-height, none);

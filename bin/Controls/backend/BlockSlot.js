@@ -2,7 +2,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
 
     'qui/QUI',
     'qui/controls/Control',
-    'qui/controls/elements/ColorPicker',
+    'qui/controls/elements/ColorField',
     'qui/controls/windows/Confirm',
     'Locale',
     'utils/Controls',
@@ -10,7 +10,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
 
     'css!package/quiqqer/bricks/bin/Controls/backend/BlockSlot.css'
 
-], function (QUI, QUIControl, QUIColorPicker, QUIConfirm, QUILocale, ControlUtils, BrickSelectWindow) {
+], function (QUI, QUIControl, QUIColorField, QUIConfirm, QUILocale, ControlUtils, BrickSelectWindow) {
     "use strict";
 
     const lg = 'quiqqer/bricks';
@@ -132,6 +132,7 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
             this.$allowRemoveSlot = this.getAttribute('allowRemoveSlot') === true;
 
             this.$ensureAreaMode();
+            this.addEvent('destroy', () => this.$settingsWindow?.close());
         },
 
         create: function () {
@@ -453,42 +454,10 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
         },
 
         $getPreviewOverlayColor: function (area) {
-            const color = area.backgroundOverlayColor || '';
-
-            if (!color || !area.backgroundOverlayEnabled) {
+            if (!area.backgroundOverlayEnabled) {
                 return '';
             }
-
-            const opacity = Math.max(0, Math.min(100, parseInt(area.backgroundOverlayOpacity, 10) || 0));
-
-            if (opacity >= 100) {
-                return color;
-            }
-
-            const rgba = this.$hexToRgba(color, opacity / 100);
-
-            return rgba || color;
-        },
-
-        $hexToRgba: function (color, alpha) {
-            const match = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(color || '');
-
-            if (!match) {
-                return null;
-            }
-
-            let hex = match[1];
-
-            if (hex.length === 3) {
-                hex = hex.split('').map(function (part) {
-                    return part + part;
-                }).join('');
-            }
-
-            return 'rgba(' + parseInt(hex.slice(0, 2), 16) + ', '
-                + parseInt(hex.slice(2, 4), 16) + ', '
-                + parseInt(hex.slice(4, 6), 16) + ', '
-                + alpha + ')';
+            return area.backgroundOverlayColor || '';
         },
 
         $fillEditorPreview: function (PreviewButton, area) {
@@ -789,10 +758,13 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                 return;
             }
 
+            if (this.$settingsWindow) {
+                return;
+            }
             const area = this.$area;
             const activeMode = this.$getActiveMode(area);
 
-            new QUIConfirm({
+            this.$settingsWindow = new QUIConfirm({
                 icon: 'fa fa-cog',
                 title: this.$getLocale('settings.popup.title', {
                     title: area.title
@@ -800,6 +772,14 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                 maxWidth: 800,
                 maxHeight: 850,
                 events: {
+                    onCloseBegin: (Win) => {
+                        for (const Control of QUI.Controls.getControlsInElement(Win.getContent())) {
+                            if (Control.Type === 'qui/controls/elements/ColorField') {
+                                Control.destroy();
+                            }
+                        }
+                    },
+                    onClose: () => { this.$settingsWindow = null; },
                     onOpen: function (Win) {
                         const Content = Win.getContent();
 
@@ -1167,9 +1147,6 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                         const backgroundOverlayColorField = Content.getElement(
                             'input[data-name="backgroundOverlayColor"]'
                         );
-                        const backgroundOverlayOpacityField = Content.getElement(
-                            'input[data-name="backgroundOverlayOpacity"]'
-                        );
                         const backgroundColorEnabledField = Content.getElement(
                             'input[data-name="backgroundColorEnabled"]'
                         );
@@ -1193,9 +1170,6 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                         const subLayoutTileMinHeightValueField = Content.getElement(
                             'input[data-name="subLayoutTileMinHeightValue"]'
                         );
-                        const backgroundOverlayOpacity = backgroundOverlayOpacityField
-                            ? parseInt(backgroundOverlayOpacityField.value, 10)
-                            : area.backgroundOverlayOpacity;
 
                         area.mode = this.$normalizeMode(modeField ? modeField.value : area.mode);
 
@@ -1260,9 +1234,6 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                             area.backgroundOverlayColor = backgroundOverlayColorField
                                 ? backgroundOverlayColorField.value.trim()
                                 : '';
-                            area.backgroundOverlayOpacity = isNaN(backgroundOverlayOpacity)
-                                ? 100
-                                : Math.max(0, Math.min(100, backgroundOverlayOpacity));
                         }
 
                         if (this.$isSettingVisible('backgroundColor')) {
@@ -1314,7 +1285,8 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                         this.$onChange();
                     }.bind(this)
                 }
-            }).open();
+            });
+            this.$settingsWindow.open();
         },
 
         $createPopupSelectField: function (Parent, label, options, value, attrName, attrValue) {
@@ -1435,14 +1407,6 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
                 name: 'backgroundOverlayColor'
             });
 
-            this.$createPopupRangeField(OverlayOptions, {
-                label: this.$getLocale('backgroundOverlay.opacity'),
-                value: area.backgroundOverlayOpacity,
-                name: 'backgroundOverlayOpacity',
-                min: 0,
-                max: 100,
-                step: 1
-            });
 
             return {
                 enabledField: EnabledField,
@@ -1886,69 +1850,19 @@ define('package/quiqqer/bricks/bin/Controls/backend/BlockSlot', [
         },
 
         $createPopupColorField: function (Parent, options) {
-            const Field = this.$createPopupInputField(Parent, {
-                label: options.label,
-                type: 'color',
-                value: options.value,
-                name: options.name
-            });
-
-            const Input = Field.getElement('input[data-name="' + (options.name || '') + '"]');
-
-            if (Input) {
-                new QUIColorPicker().imports(Input);
-            }
-
-            return Field;
-        },
-
-        $createPopupRangeField: function (Parent, options) {
-            const Field = new Element('label', {
-                'class': 'quiqqer-bricks-blockSlot-popupField '
-                    + 'quiqqer-bricks-blockSlot-popupField--range'
-            }).inject(Parent);
-
-            const Header = new Element('div', {
-                'class': 'quiqqer-bricks-blockSlot-popupFieldHeader'
-            }).inject(Field);
-
-            new Element('span', {
-                'class': 'quiqqer-bricks-blockSlot-popupLabel',
-                text: options.label
-            }).inject(Header);
-
-            const Value = new Element('span', {
-                'class': 'quiqqer-bricks-blockSlot-popupRangeValue'
-            }).inject(Header);
-
-            const Input = new Element('input', {
-                type: 'range',
-                'class': 'quiqqer-bricks-blockSlot-popupInput',
-                value: options.value !== undefined ? options.value : ''
-            }).inject(Field);
-
-            Input.set('data-name', options.name || 'range');
-
-            if (options.min !== undefined) {
-                Input.set('min', options.min);
-            }
-
-            if (options.step) {
-                Input.set('step', options.step);
-            }
-
-            if (options.max !== undefined) {
-                Input.set('max', options.max);
-            }
-
-            const updateValue = function () {
-                Value.set('text', Input.value);
-            };
-
-            Input.addEvent('input', updateValue);
-            Input.addEvent('change', updateValue);
-            updateValue();
-
+            const Field = document.createElement('div');
+            Field.className = 'quiqqer-bricks-blockSlot-popupField';
+            const Label = document.createElement('span');
+            Label.className = 'quiqqer-bricks-blockSlot-popupLabel';
+            Label.textContent = options.label;
+            Field.appendChild(Label);
+            const Input = document.createElement('input');
+            Input.type = 'hidden';
+            Input.dataset.name = options.name;
+            Input.value = options.value ?? '';
+            Field.appendChild(Input);
+            Parent.appendChild(Field);
+            new QUIColorField({label: options.label}).imports(Input);
             return Field;
         },
 

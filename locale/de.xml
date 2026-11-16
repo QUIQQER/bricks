@@ -2572,9 +2572,6 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
         <locale name="blockSlot.backgroundOverlay.color" context="administration">
             <de><![CDATA[Farbe]]></de>
         </locale>
-        <locale name="blockSlot.backgroundOverlay.opacity" context="administration">
-            <de><![CDATA[Deckkraft]]></de>
-        </locale>
         <locale name="blockSlot.textColor.section" context="administration">
             <de><![CDATA[Textfarbe]]></de>
         </locale>

@@ -2562,9 +2562,6 @@ This content does not replace the block content. You can still place the brick t
         <locale name="blockSlot.backgroundOverlay.color" context="administration">
             <en><![CDATA[Color]]></en>
         </locale>
-        <locale name="blockSlot.backgroundOverlay.opacity" context="administration">
-            <en><![CDATA[Opacity]]></en>
-        </locale>
         <locale name="blockSlot.textColor.section" context="administration">
             <en><![CDATA[Text color]]></en>
         </locale>
