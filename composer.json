@@ -17,7 +17,7 @@
     "require": {
         "php": "^8.2",
         "quiqqer/core": "^2.18.2",
-        "quiqqer/qui": "^1",
+        "quiqqer/qui": "^1.15.1",
         "quiqqer/utils": "^2",
         "quiqqer/mobile-detection": "*",
         "quiqqer-asset/hammerjs": "^2",

@@ -486,9 +486,6 @@ class MultiLayout extends QUI\Control
             'backgroundOverlayColor' => isset($area['backgroundOverlayColor']) && is_string($area['backgroundOverlayColor'])
                 ? $area['backgroundOverlayColor']
                 : '#000000',
-            'backgroundOverlayOpacity' => isset($area['backgroundOverlayOpacity']) && is_numeric($area['backgroundOverlayOpacity'])
-                ? max(0, min(100, (int)$area['backgroundOverlayOpacity']))
-                : 100,
             'backgroundColorEnabled' => !empty($area['backgroundColorEnabled']),
             'backgroundColor' => isset($area['backgroundColor']) && is_string($area['backgroundColor'])
                 ? $area['backgroundColor']
@@ -737,9 +734,7 @@ class MultiLayout extends QUI\Control
 
         if (!empty($area['backgroundOverlayEnabled'])) {
             $style[] = '--quiqqer-bricks-layout-background-overlay-color: '
-                . $this->escapeStyleValue((string)$area['backgroundOverlayColor']);
-            $style[] = '--quiqqer-bricks-layout-background-overlay-opacity: '
-                . ((int)$area['backgroundOverlayOpacity'] / 100);
+                . $this->escapeStyleValue((string)$area['backgroundOverlayColor'] ?: 'transparent');
         }
 
         if (!empty($area['backgroundColorEnabled']) && !empty($area['backgroundColor'])) {

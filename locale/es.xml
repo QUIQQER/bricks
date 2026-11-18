@@ -2485,9 +2485,6 @@
         <locale name="blockSlot.backgroundOverlay.color" context="administration">
             <es><![CDATA[Color]]></es>
         </locale>
-        <locale name="blockSlot.backgroundOverlay.opacity" context="administration">
-            <es><![CDATA[Opacidad]]></es>
-        </locale>
         <locale name="blockSlot.textColor.section" context="administration">
             <es><![CDATA[Color del texto]]></es>
         </locale>
