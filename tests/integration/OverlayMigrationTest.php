@@ -37,40 +37,46 @@ class OverlayMigrationTest extends TestCase
         $invalid = '{"layoutAreas":"invalid json"}';
         $type = '\\QUI\\Bricks\\Controls\\MultiLayout';
         $DB->insert('bricks', ['id' => 1, 'type' => $type, 'settings' => $legacy, 'e_date' => 'keep']);
-        $DB->insert('bricks', ['id' => 2, 'type' => $type, 'settings' => $invalid]);
+        $DB->insert('bricks', ['id' => 0, 'type' => $type, 'settings' => $invalid]);
         $DB->insert('bricks', ['id' => 3, 'type' => $type, 'settings' => $opaque]);
         $DB->insert('bricks', ['id' => 4, 'type' => 'other', 'settings' => $legacy]);
+        $DB->insert('uids', ['uid' => 'bad', 'brickId' => 1, 'customfields' => $invalid]);
         $DB->insert('uids', ['uid' => 'u', 'brickId' => 1, 'customfields' => $legacy]);
         $extra = json_encode(['unrelated' => (object)[], 'quiqqer.bricks.areas' => json_encode([
-            'header' => [(object)['brickId' => 1, 'uid' => 'u', 'customfields' => $legacy]],
+            'header' => [
+                (object)['brickId' => 1, 'customfields' => $invalid],
+                (object)['brickId' => 1, 'uid' => 'u', 'customfields' => $legacy]
+            ],
             'footer' => [(object)['brickId' => 4, 'customfields' => $legacy]]
         ])]);
-        $DB->insert('sites', ['id' => 1, 'extra' => $extra, 'e_date' => 'keep']);
+        $nullAssignments = '{"quiqqer.bricks.areas":"null"}';
+        $DB->insert('sites', ['id' => 1, 'extra' => $nullAssignments]);
         $emptyAssignments = '{"quiqqer.bricks.areas":""}';
         $DB->insert('sites', ['id' => 2, 'extra' => $emptyAssignments]);
+        $invalidJson = '{"quiqqer.bricks.areas":"{"}';
+        $DB->insert('sites', ['id' => 3, 'extra' => $invalidJson]);
+        $DB->insert('sites', ['id' => 4, 'extra' => $extra, 'e_date' => 'keep']);
 
-        try {
-            OverlayMigration::migrate($DB, 'bricks', 'uids', ['sites']);
-            self::fail('Invalid data must fail the migration so setup cannot mark it complete.');
-        } catch (\RuntimeException $Exception) {
-            self::assertStringContainsString('[2]', $Exception->getMessage());
-        }
+        self::assertSame(3, OverlayMigration::migrate($DB, 'bricks', 'uids', ['sites']));
         $converted = $DB->fetchOne('SELECT settings FROM bricks WHERE id = 1');
         self::assertStringContainsString('#11223340', $converted);
-        $DB->update('bricks', ['settings' => $opaque], ['id' => 2]);
-        self::assertSame(2, OverlayMigration::migrate($DB, 'bricks', 'uids', ['sites']));
         self::assertSame(0, OverlayMigration::migrate($DB, 'bricks', 'uids', ['sites']));
         self::assertSame($converted, $DB->fetchOne('SELECT settings FROM bricks WHERE id = 1'));
-        self::assertSame($converted, $DB->fetchOne('SELECT customfields FROM uids'));
+        self::assertSame($invalid, $DB->fetchOne('SELECT settings FROM bricks WHERE id = 0'));
+        self::assertSame($invalid, $DB->fetchOne("SELECT customfields FROM uids WHERE uid = 'bad'"));
+        self::assertSame($converted, $DB->fetchOne("SELECT customfields FROM uids WHERE uid = 'u'"));
         self::assertSame($opaque, $DB->fetchOne('SELECT settings FROM bricks WHERE id = 3'));
         self::assertSame($legacy, $DB->fetchOne('SELECT settings FROM bricks WHERE id = 4'));
         self::assertSame('keep', $DB->fetchOne('SELECT e_date FROM bricks WHERE id = 1'));
-        self::assertSame('keep', $DB->fetchOne('SELECT e_date FROM sites'));
+        self::assertSame('keep', $DB->fetchOne('SELECT e_date FROM sites WHERE id = 4'));
+        self::assertSame($nullAssignments, $DB->fetchOne('SELECT extra FROM sites WHERE id = 1'));
         self::assertSame($emptyAssignments, $DB->fetchOne('SELECT extra FROM sites WHERE id = 2'));
-        $result = json_decode($DB->fetchOne('SELECT extra FROM sites'));
+        self::assertSame($invalidJson, $DB->fetchOne('SELECT extra FROM sites WHERE id = 3'));
+        $result = json_decode($DB->fetchOne('SELECT extra FROM sites WHERE id = 4'));
         $areas = json_decode($result->{'quiqqer.bricks.areas'});
         self::assertEquals((object)[], $result->unrelated);
-        self::assertSame($converted, $areas->header[0]->customfields);
+        self::assertSame($invalid, $areas->header[0]->customfields);
+        self::assertSame($converted, $areas->header[1]->customfields);
         self::assertSame($legacy, $areas->footer[0]->customfields);
         $DB->close();
     }

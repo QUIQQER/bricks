@@ -95,57 +95,69 @@ final class OverlayMigration
         }, ['brickId']);
 
         foreach (array_unique($siteTables) as $table) {
-            $changed += self::updateRows($DB, $table, 'id', 'extra', function ($value) use ($types) {
-                if (!is_string($value) || !str_contains($value, 'quiqqer.bricks.areas')) {
-                    return $value;
-                }
-
-                $extra = json_decode($value, false, 512, JSON_THROW_ON_ERROR);
-
-                if (!$extra instanceof stdClass || !isset($extra->{'quiqqer.bricks.areas'})) {
-                    return $value;
-                }
-
-                $original = $extra->{'quiqqer.bricks.areas'};
-                if (is_string($original) && trim($original) === '') {
-                    return $value;
-                }
-                $areas = is_string($original) ? json_decode($original, false, 512, JSON_THROW_ON_ERROR) : $original;
-                $changed = false;
-
-                if (!is_array($areas) && !$areas instanceof stdClass) {
-                    throw new RuntimeException('Invalid site brick assignments.');
-                }
-
-                $assignmentsByArea = $areas instanceof stdClass ? get_object_vars($areas) : $areas;
-
-                foreach ($assignmentsByArea as $assignments) {
-                    if (!is_array($assignments)) {
-                        continue;
-                    }
-                    foreach ($assignments as $assignment) {
-                        if (!$assignment instanceof stdClass || !isset($types[(string)($assignment->brickId ?? '')])) {
-                            continue;
-                        }
-                        $before = $assignment->customfields ?? null;
-                        $after = self::settings($before);
-                        if ($before !== $after) {
-                            $assignment->customfields = $after;
-                            $changed = true;
-                        }
-                    }
-                }
-
-                if (!$changed) {
-                    return $value;
-                }
-                $extra->{'quiqqer.bricks.areas'} = is_string($original)
-                    ? json_encode($areas, JSON_THROW_ON_ERROR) : $areas;
-                return json_encode($extra, JSON_THROW_ON_ERROR);
+            $changed += self::updateRows($DB, $table, 'id', 'extra', function ($value, $row) use ($types, $table) {
+                return self::siteExtra($value, $types, $table . ' [' . $row['id'] . ']');
             });
         }
 
         return $changed;
+    }
+
+    /** @param array<int|string, true> $types */
+    private static function siteExtra(mixed $value, array $types, string $site): mixed
+    {
+        if (!is_string($value) || !str_contains($value, 'quiqqer.bricks.areas')) {
+            return $value;
+        }
+
+        $extra = json_decode($value, false, 512, JSON_THROW_ON_ERROR);
+
+        if (!$extra instanceof stdClass || !isset($extra->{'quiqqer.bricks.areas'})) {
+            return $value;
+        }
+
+        $original = $extra->{'quiqqer.bricks.areas'};
+        if (is_string($original) && trim($original) === '') {
+            return $value;
+        }
+        $areas = is_string($original) ? json_decode($original, false, 512, JSON_THROW_ON_ERROR) : $original;
+        $changed = false;
+
+        if (!is_array($areas) && !$areas instanceof stdClass) {
+            throw new RuntimeException('Invalid site brick assignments.');
+        }
+
+        $assignmentsByArea = $areas instanceof stdClass ? get_object_vars($areas) : $areas;
+
+        foreach ($assignmentsByArea as $area => $assignments) {
+            if (!is_array($assignments)) {
+                continue;
+            }
+            foreach ($assignments as $index => $assignment) {
+                $brickId = $assignment->brickId ?? null;
+                if ((!is_int($brickId) && !is_string($brickId)) || !isset($types[$brickId])) {
+                    continue;
+                }
+                $before = $assignment->customfields ?? null;
+                try {
+                    $after = self::settings($before);
+                } catch (\JsonException | RuntimeException $Exception) {
+                    self::logSkipped("$site $area [$index], brick $brickId", $Exception);
+                    continue;
+                }
+                if ($before !== $after) {
+                    $assignment->customfields = $after;
+                    $changed = true;
+                }
+            }
+        }
+
+        if (!$changed) {
+            return $value;
+        }
+        $extra->{'quiqqer.bricks.areas'} = is_string($original)
+            ? json_encode($areas, JSON_THROW_ON_ERROR) : $areas;
+        return json_encode($extra, JSON_THROW_ON_ERROR);
     }
 
     /** Only rewrite a settings payload when a color actually requires conversion. */
@@ -227,6 +239,15 @@ final class OverlayMigration
         return $changed;
     }
 
+    private static function logSkipped(string $record, \Throwable $Exception): void
+    {
+        QUI\System\Log::write(
+            'MultiLayout overlay migration skipped ' . $record . ': ' . $Exception->getMessage(),
+            QUI\System\Log::LEVEL_WARNING,
+            force: true
+        );
+    }
+
     /**
      * Bounded reads and compare-and-swap writes: do not overwrite concurrent editor changes.
      * @param callable(mixed, array<string, mixed>): mixed $transform
@@ -256,6 +277,11 @@ final class OverlayMigration
                 [$id, $before] = $values;
                 try {
                     $after = $transform($before, $row);
+                } catch (\JsonException | RuntimeException $Exception) {
+                    self::logSkipped($table . ' [' . $id . ']', $Exception);
+                    continue;
+                }
+                try {
                     if ($after === $before) {
                         continue;
                     }

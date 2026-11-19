@@ -1,49 +1,59 @@
-# MultiLayout-Farben mit Alpha
+# MultiLayout colors and opacity
 
-MultiLayout verwendet `qui/controls/elements/ColorField` für Overlay-, Hintergrund-
-und Textfarben. Die Deckkraft gehört zum Farbwert; der separate Regler entfällt.
-Einzelfarben bleiben Strings (einschließlich HEX mit Alpha, `transparent` und
-Leerwerten). Palettenverknüpfungen und Hell-/Dunkelpaare werden nicht freigeschaltet.
-Benötigt wird `quiqqer/qui >= 1.15.1` innerhalb der Hauptversion 1.
+MultiLayout uses `qui/controls/elements/ColorField` for overlay, background, and
+text colors. The color's alpha channel replaces the separate opacity slider.
+Each field stores a single color as a string, including hex colors with alpha,
+`transparent`, and empty strings. Palette links and light/dark color pairs remain
+disabled. MultiLayout requires `quiqqer/qui` version 1.15.1 or later in the 1.x series.
 
-## Bestehende Werte
+## Migrating existing values
 
-Nach dem Bricks-Setup läuft einmalig die Migration
-`QUI\Bricks\Layout\OverlayMigration`. Sie verarbeitet zentrale MultiLayout-Bausteine,
-individuelle UID-Einstellungen und die zugehörigen Seitenzuweisungen, einschließlich
-Sublayouts und deaktivierter Bereiche. Andere Einstellungen und Bearbeitungsdaten
-bleiben erhalten. Historische Revisionen werden nicht verändert.
+The one-time `QUI\Bricks\Layout\OverlayMigration` migration runs at the end of
+Bricks package setup. It processes shared MultiLayout bricks, UID-specific
+settings, and the corresponding page assignments, including nested layouts and
+disabled areas. It preserves other settings, editing data, and historical revisions.
 
-Bei 100 % oder fehlender Deckkraft bleibt der Farbwert unverändert; ein solcher
-Datensatz wird allein dafür nicht neu gespeichert. Bei abweichender Deckkraft gilt
-`neues Alpha = vorhandenes Alpha × Deckkraft / 100`. Beispielsweise werden
-`#000000` und 66 % zu `#000000a8`. Die bisherige Ganzzahlbegrenzung auf 0–100 bleibt
-erhalten. Die Rundung auf 8-Bit-Alpha weicht höchstens etwa 0,2 Prozentpunkte ab.
+If opacity is 100% or absent, the migration keeps the color and skips writing
+the record unless another value needs conversion. For other opacity values, it
+uses `new alpha = existing alpha × opacity / 100`. For example, `#000000` at
+66% opacity becomes `#000000a8`. The migration applies the same integer range
+of 0–100 as before. Rounding to 8-bit alpha introduces a maximum error of about
+0.2 percentage points.
 
-Der Abschlussmarker liegt außerhalb des Caches:
+If brick settings, UID-specific settings, or a page assignment contain invalid
+data, the migration skips the affected entry. The warning log identifies the
+record and the reason. If the page's assignment list is readable, the migration
+continues with the remaining assignments on that page.
+
+After processing the records and clearing the caches, the migration writes its
+completion marker, even if it skipped individual entries. It stores the marker
+outside the cache at
 `var/package/quiqqer/bricks/migrations/multilayout-overlay-alpha-v1.done`.
-Er wird erst nach Verarbeitung und Cache-Invalidierung geschrieben. Ein Fehler
-nennt den betroffenen Datensatz und verhindert den Abschluss. Nach Behebung das
-Paket-Setup erneut ausführen; bereits konvertierte Farben werden nicht nochmals
-multipliziert. Den Marker beim Übertragen eines Systems zusammen mit der Datenbank
-behandeln. Editor und Frontend verwenden den gespeicherten Farbwert direkt;
-eine nachträglich wiederhergestellte separate Deckkraft wird nicht ausgewertet.
+If a database operation or write fails, fix the cause and rerun package setup.
+The migration applies opacity only once to each converted color. When moving
+an installation, transfer the marker together with the corresponding database.
 
-Nicht konvertierbare alte CSS-Farben mit eigener Deckkraft bleiben unverändert und
-werden vom Patch gemeldet. Eine bewusst geleerte Overlayfarbe bleibt transparent.
+The editor and frontend read the stored color directly. Restoring a separate
+opacity value later has no effect. If the migration cannot convert a legacy CSS
+color with a separate opacity value, it preserves the original data and logs a
+warning. An intentionally empty overlay color stays transparent.
 
-## CSS-Anpassungen
+## CSS overrides
 
-`--quiqqer-bricks-layout-background-overlay-opacity` bleibt mit Standard `1`
-als zusätzlicher Theme-Faktor bestehen. Die gespeicherte Deckkraft wird für
-konvertierte Farben nicht mehr in diese Variable geschrieben. Ein eigenes Override
-wirkt daher auf das bereits enthaltene Alpha; es ersetzt die frühere gespeicherte
-Deckkraft nicht mehr. Projektspezifische Overrides entsprechend prüfen.
+The `--quiqqer-bricks-layout-background-overlay-opacity` custom property defaults
+to `1` and acts as an additional theme multiplier. Converted colors already
+include the saved opacity in their alpha channel. Review project-specific
+overrides that previously replaced the saved opacity. They now multiply the
+alpha already present in the color.
 
-## Prüfung
+## Verification
 
-- Overlayfarbe mit Alpha wählen, Bereich übernehmen, Baustein speichern und erneut öffnen.
-- Farbdialog übernehmen, aber Bereichsdialog abbrechen: Bereich bleibt unverändert.
-- Hintergrund- und Textfarbe sowie Farbfelder in Sublayouts prüfen.
-- Overlayfarbe leeren: kein schwarzes Overlay; Escape schließt nur den Farbdialog.
-- Frontend und Vorschau vergleichen; Setup erneut ausführen: keine weiteren Datenänderungen.
+- Choose an overlay color with alpha, confirm the area changes, save the brick,
+  and reopen it. Verify that the color and opacity are preserved.
+- Confirm a color change in the color dialog, then cancel the area dialog.
+  Verify that the area retains its original settings.
+- Check background and text colors, including the color fields in nested layouts.
+- Clear the overlay color and verify that the overlay is transparent. With the
+  color dialog open, press Escape and verify that only that dialog closes.
+- Compare the frontend with the preview. Rerun package setup and verify that
+  it makes no further data changes.
