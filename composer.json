@@ -17,7 +17,7 @@
     "require": {
         "php": "^8.2",
         "quiqqer/core": "^2.18.2",
-        "quiqqer/qui": "^1",
+        "quiqqer/qui": "^1.15.1",
         "quiqqer/utils": "^2",
         "quiqqer/mobile-detection": "*",
         "quiqqer-asset/hammerjs": "^2",
@@ -25,7 +25,8 @@
         "ramsey/uuid": "^3|^4",
         "quiqqer-asset/glidejs-glide": "^3",
         "quiqqer/slider": "^2.5",
-        "quiqqer/sitetypes": "^2.1.0",
+        "quiqqer/sitetypes": "^2.11.0",
+        "quiqqer/tags": "^2.3.6",
         "quiqqer/components": "^1",
         "quiqqer-asset/gridstack": "^12",
         "quiqqer-asset/pdfjs-dist": "^4.8 || ^6",

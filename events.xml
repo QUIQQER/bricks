@@ -3,6 +3,7 @@
     <event on="onSiteSave" fire="\QUI\Bricks\Events::onSiteSave"/>
     <event on="onSmartyInit" fire="\QUI\Bricks\Events::onSmartyInit"/>
     <event on="onPackageSetup" fire="\QUI\Bricks\Events::onPackageSetup"/>
+    <event on="onPackageSetupEnd-quiqqer/bricks" fire="\QUI\Bricks\Layout\OverlayMigration::onSetup"/>
     <event on="onDeleteProject" fire="\QUI\Bricks\Events::onDeleteProject"/>
     <event on="onOutputParseEnd" fire="\QUI\Bricks\Events::onOutputParseEnd"/>
 </events>

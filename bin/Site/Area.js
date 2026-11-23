@@ -71,6 +71,7 @@ define('package/quiqqer/bricks/bin/Site/Area', [
             this.$brickIds = [];
             this.$onLoadBrickData = [];
             this.$brickCustomData = {};
+            this.$submittedRows = [];
             this.$groupNameCache = {};
 
 
@@ -983,11 +984,16 @@ define('package/quiqqer/bricks/bin/Site/Area', [
         },
 
         /**
-         * Return the brick list
+         * Return the brick list. Remember the submitted rows when updating the site.
          *
+         * @param {boolean} rememberRows
          * @returns {Array}
          */
-        getData: function () {
+        getData: function (rememberRows = false) {
+            if (rememberRows) {
+                this.$submittedRows = [];
+            }
+
             if (this.getAttribute('deactivate')) {
                 return [{
                     deactivate: 1
@@ -1009,6 +1015,10 @@ define('package/quiqqer/bricks/bin/Site/Area', [
                     uid = this.$brickCustomData[brickId].uid;
                 }
 
+                if (rememberRows) {
+                    this.$submittedRows.push(bricks[i]);
+                }
+
                 data.push({
                     brickId: bricks[i].value,
                     customfields: custom,
@@ -1017,6 +1027,19 @@ define('package/quiqqer/bricks/bin/Site/Area', [
             }
 
             return data;
+        },
+
+        applySavedPlacementIds: function (placements) {
+            this.$submittedRows.forEach((select, index) => {
+                const placement = placements[index];
+                if (!placement?.uid || !select.isConnected || select.value !== String(placement.brickId)) {
+                    return;
+                }
+
+                const rowId = select.parentElement.id;
+                this.$brickCustomData[rowId] ??= {customfields: ''};
+                this.$brickCustomData[rowId].uid = placement.uid;
+            });
         },
 
         /**
@@ -1456,26 +1479,6 @@ define('package/quiqqer/bricks/bin/Site/Area', [
                 return Promise.resolve();
             }
 
-            let areas = Site.getAttribute('quiqqer.bricks.areas');
-            areas = areas ? JSON.decode(areas) : {};
-
-            if (!areas || typeOf(areas) !== 'object') {
-                areas = {};
-            }
-
-            if (!Array.isArray(areas[areaName])) {
-                areas[areaName] = [];
-            }
-
-            if (areas[areaName][0] && 'deactivate' in areas[areaName][0]) {
-                areas[areaName] = [];
-            }
-
-            areas[areaName].push({
-                brickId: brickId
-            });
-
-            Site.setAttribute('quiqqer.bricks.areas', JSON.encode(areas));
             this.setAttribute('deactivate', false);
 
             return this.$refreshAvailableBricks().then(function () {
@@ -1483,6 +1486,9 @@ define('package/quiqqer/bricks/bin/Site/Area', [
                     brickId: brickId
                 });
             }.bind(this)).then(function () {
+                const areas = JSON.parse(Site.getAttribute('quiqqer.bricks.areas') || '{}');
+                const updated = Object.assign({}, areas, {[areaName]: this.getData(true)});
+                Site.setAttribute('quiqqer.bricks.areas', JSON.stringify(updated));
                 this.refresh();
             }.bind(this));
         },

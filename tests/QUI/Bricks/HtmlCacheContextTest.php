@@ -10,6 +10,41 @@ use QUI\Cache\Manager as CacheManager;
 
 class HtmlCacheContextTest extends TestCase
 {
+    public function testOuterBrickRendersDynamicChildOnEveryRequest(): void
+    {
+        $Child = new Brick(['type' => 'content', 'cacheable' => 0]);
+        $Parent = new Brick(['type' => 'content', 'uniqueId' => uniqid('phpunit-nested-')]);
+        $Control = new class extends QUI\Control {
+            public Brick $Child;
+
+            public function create(): string
+            {
+                return $this->Child->create();
+            }
+        };
+        $Control->Child = $Child;
+        $Parent->setAttribute('type', 'test-control');
+        (new \ReflectionProperty($Parent, 'Control'))->setValue($Parent, $Control);
+        $key = (new \ReflectionMethod($Parent, 'getCacheName'))->invoke($Parent, $Parent->getSettings());
+        $Config = CacheManager::getConfig();
+        $original = $Config->getSection('general');
+
+        try {
+            $Config->set('general', 'nocache', 0);
+            foreach (['first result', 'second result'] as $content) {
+                $Child->setAttribute('content', $content);
+                self::assertStringContainsString($content, $Parent->create());
+            }
+        } finally {
+            CacheManager::clear($key);
+            if (is_array($original)) {
+                $Config->setSection('general', $original);
+            } else {
+                $Config->del('general');
+            }
+        }
+    }
+
     /**
      * @return iterable<string, array{list<bool>}>
      */
@@ -56,7 +91,7 @@ class HtmlCacheContextTest extends TestCase
         try {
             $Config->set('general', 'nocache', 0);
             $firstKey = $getCacheName->invoke($Brick, $Brick->getSettings());
-            $legacyKey = explode('/html-v2/', $firstKey)[0];
+            $legacyKey = explode('/html-v3/', $firstKey)[0];
             $keys[] = $legacyKey;
             CacheManager::set($legacyKey, [
                 'html' => 'legacy HTML must not be reused',

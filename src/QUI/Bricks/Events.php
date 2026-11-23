@@ -13,7 +13,6 @@ use Smarty;
 use Smarty_Internal_Template;
 use SmartyException;
 
-use function array_flip;
 use function explode;
 use function is_array;
 use function is_string;
@@ -30,7 +29,7 @@ use function trim;
 class Events
 {
     /**
-     * @var array<int, bool>
+     * @var array<string, bool>
      */
     protected static array $saved = [];
 
@@ -46,7 +45,10 @@ class Events
         QUI\Interfaces\Projects\Site $Site,
         ?QUI\Interfaces\Users\User $SaveUser = null
     ): void {
-        if (isset(self::$saved[$Site->getId()])) {
+        $Project = $Site->getProject();
+        $siteKey = $Project->getName() . '/' . $Project->getLang() . '/' . $Site->getId();
+
+        if (isset(self::$saved[$siteKey])) {
             return;
         }
 
@@ -56,7 +58,7 @@ class Events
         $oldAreaString = $areas;
         $areas = json_decode($areas, true);
 
-        if (empty($areas)) {
+        if (!is_array($areas)) {
             return;
         }
 
@@ -66,65 +68,82 @@ class Events
             return;
         }
 
-        // get inheritance areas
-        $Project = $Site->getProject();
         $projectAreas = $Manager->getAreasByProject($Project);
         $projectTable = QUI::getDBProjectTableName(Manager::TABLE_CACHE, $Project);
 
         $uidTable = QUI\Bricks\Manager::getUIDTable();
-        $availableUniqueIds = [];
         $Connection = QUI::getDataBaseConnection();
 
-        foreach ($projectAreas as $area) {
-            if (!$area['inheritance']) {
+        $QueryBuilder = QUI::getQueryBuilder();
+        $unusedPlacements = $QueryBuilder
+            ->select('uid', QUI\Utils\Doctrine::quoteIdentifier('brickId'))
+            ->from(QUI\Utils\Doctrine::quoteIdentifier($uidTable))
+            ->where($QueryBuilder->expr()->eq('project', ':project'))
+            ->andWhere($QueryBuilder->expr()->eq('lang', ':lang'))
+            ->andWhere($QueryBuilder->expr()->eq(QUI\Utils\Doctrine::quoteIdentifier('siteId'), ':siteId'))
+            ->setParameter('project', $Project->getName())
+            ->setParameter('lang', $Project->getLang())
+            ->setParameter('siteId', $Site->getId())
+            ->executeQuery()
+            ->fetchAllKeyValue();
+
+        $inheritanceByArea = array_column($projectAreas, 'inheritance', 'name');
+
+        foreach ($areas as $areaName => $bricks) {
+            if (empty($bricks) || !is_array($bricks)) {
                 continue;
             }
 
-            if (!isset($areas[$area['name']])) {
-                continue;
-            }
+            $inherits = !empty($inheritanceByArea[$areaName]);
 
-            if (empty($areas[$area['name']])) {
-                continue;
-            }
-
-            $bricks = $areas[$area['name']];
-
-            // clear area and new data set
-            $Connection->delete(QUI\Utils\Doctrine::quoteIdentifier($projectTable), [
-                QUI\Utils\Doctrine::quoteIdentifier('id') => $Site->getId(),
-                QUI\Utils\Doctrine::quoteIdentifier('area') => $area['name']
-            ]);
-
-            // check if deactivated
-            if (isset($bricks[0]['deactivate'])) {
-                $Connection->insert(QUI\Utils\Doctrine::quoteIdentifier($projectTable), [
+            if ($inherits) {
+                $Connection->delete(QUI\Utils\Doctrine::quoteIdentifier($projectTable), [
                     QUI\Utils\Doctrine::quoteIdentifier('id') => $Site->getId(),
-                    QUI\Utils\Doctrine::quoteIdentifier('area') => $area['name'],
-                    QUI\Utils\Doctrine::quoteIdentifier('brick') => -1
+                    QUI\Utils\Doctrine::quoteIdentifier('area') => $areaName
                 ]);
+            }
+
+            if (isset($bricks[0]['deactivate'])) {
+                if ($inherits) {
+                    $Connection->insert(QUI\Utils\Doctrine::quoteIdentifier($projectTable), [
+                        QUI\Utils\Doctrine::quoteIdentifier('id') => $Site->getId(),
+                        QUI\Utils\Doctrine::quoteIdentifier('area') => $areaName,
+                        QUI\Utils\Doctrine::quoteIdentifier('brick') => -1
+                    ]);
+                }
 
                 continue;
             }
 
             foreach ($bricks as $bricksKey => $brick) {
+                if (!is_array($brick) || empty($brick['brickId'])) {
+                    continue;
+                }
+
                 try {
                     $Manager->getBrickById($brick['brickId']);
                 } catch (QUI\Exception) {
-                    unset($areas[$area['name']][$bricksKey]);
+                    unset($areas[$areaName][$bricksKey]);
                     continue;
                 }
 
-                try {
-                    $uid = $Manager->createUniqueSiteBrick($Site, $brick);
-                } catch (QUI\Exception) {
-                    unset($areas[$area['name']][$bricksKey]);
+                $uid = $brick['uid'] ?? '';
+                if (
+                    !is_string($uid)
+                    || !isset($unusedPlacements[$uid])
+                    || (int)$unusedPlacements[$uid] !== (int)$brick['brickId']
+                ) {
+                    unset($brick['uid']);
+                }
+
+                $uid = $Manager->createUniqueSiteBrick($Site, $brick);
+                $areas[$areaName][$bricksKey]['uid'] = $uid;
+                unset($unusedPlacements[$uid]);
+
+                if (!$inherits) {
                     continue;
                 }
 
-                $areas[$area['name']][$bricksKey]['uid'] = $uid;
-
-                $availableUniqueIds[] = $uid;
                 $customFields = [];
 
                 // Custom data cache
@@ -142,46 +161,30 @@ class Events
 
                 $Connection->insert(QUI\Utils\Doctrine::quoteIdentifier($projectTable), [
                     QUI\Utils\Doctrine::quoteIdentifier('id') => $Site->getId(),
-                    QUI\Utils\Doctrine::quoteIdentifier('area') => $area['name'],
+                    QUI\Utils\Doctrine::quoteIdentifier('area') => $areaName,
                     QUI\Utils\Doctrine::quoteIdentifier('brick') => (int)$brick['brickId']
                 ]);
             }
         }
 
-        // cleanup unique ids
-        $QueryBuilder = QUI::getQueryBuilder();
-        $uniquerIdsInDataBase = $QueryBuilder
-            ->select('uid')
-            ->from(QUI\Utils\Doctrine::quoteIdentifier($uidTable))
-            ->where($QueryBuilder->expr()->eq('project', ':project'))
-            ->andWhere($QueryBuilder->expr()->eq('lang', ':lang'))
-            ->andWhere($QueryBuilder->expr()->eq(QUI\Utils\Doctrine::quoteIdentifier('siteId'), ':siteId'))
-            ->setParameter('project', $Project->getName())
-            ->setParameter('lang', $Project->getLang())
-            ->setParameter('siteId', $Site->getId())
-            ->executeQuery()
-            ->fetchFirstColumn();
-
-        $availableUniqueIds = array_flip($availableUniqueIds);
-
-        foreach ($uniquerIdsInDataBase as $uid) {
-            if (isset($availableUniqueIds[$uid])) {
-                continue;
-            }
-
+        foreach (array_keys($unusedPlacements) as $uid) {
             $Connection->delete(QUI\Utils\Doctrine::quoteIdentifier($uidTable), [
                 QUI\Utils\Doctrine::quoteIdentifier('uid') => $uid
             ]);
         }
-
-        self::$saved[$Site->getId()] = true;
 
         // save bricks with unique ids
         if ($oldAreaString !== json_encode($areas)) {
             $Site->setAttribute('quiqqer.bricks.areas', json_encode($areas));
 
             if (method_exists($Site, 'save')) {
-                $Site->save($SaveUser);
+                self::$saved[$siteKey] = true;
+
+                try {
+                    $Site->save($SaveUser);
+                } finally {
+                    unset(self::$saved[$siteKey]);
+                }
             }
         }
     }

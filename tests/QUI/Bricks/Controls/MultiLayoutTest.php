@@ -101,8 +101,7 @@ class MultiLayoutTest extends TestCase
                             'backgroundImageFit' => 'cover',
                             'backgroundImagePosition' => 'center top',
                             'backgroundOverlayEnabled' => true,
-                            'backgroundOverlayColor' => '#112233',
-                            'backgroundOverlayOpacity' => 35,
+                            'backgroundOverlayColor' => '#11223359',
                             'backgroundColorEnabled' => true,
                             'backgroundColor' => '#445566',
                             'customMinHeightEnabled' => true,
@@ -189,8 +188,8 @@ class MultiLayoutTest extends TestCase
             $this->assertStringContainsString('/assets/inner.png', $html);
             $this->assertStringContainsString('--quiqqer-bricks-layout-background-fit: cover', $html);
             $this->assertStringContainsString('--quiqqer-bricks-layout-background-position: center top', $html);
-            $this->assertStringContainsString('--quiqqer-bricks-layout-background-overlay-color: #112233', $html);
-            $this->assertStringContainsString('--quiqqer-bricks-layout-background-overlay-opacity: 0.35', $html);
+            $this->assertStringContainsString('--quiqqer-bricks-layout-background-overlay-color: #11223359', $html);
+            $this->assertStringNotContainsString('--quiqqer-bricks-layout-background-overlay-opacity:', $html);
             $this->assertStringContainsString('--quiqqer-bricks-layout-area-background: #445566', $html);
             $this->assertStringContainsString('--quiqqer-bricks-layout-image-fit: contain', $html);
             $this->assertStringContainsString('--quiqqer-bricks-layout-image-width: 480px', $html);

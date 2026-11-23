@@ -1999,6 +1999,9 @@
             <it><![CDATA[Mostra gli articoli del blog e le notizie fissati in cima prima delle altre pagine. L’ordinamento selezionato viene mantenuto in entrambi i gruppi.]]></it>
         </locale>
         <!-- show pagination / sheets -->
+        <locale name="brick.list.filterPageSize" context="administration">
+            <it><![CDATA[Risultati filtrati per pagina (con paginazione attiva)]]></it>
+        </locale>
         <locale name="brick.showSheets" context="administration">
             <it><![CDATA[Mostra paginazione]]></it>
         </locale>
@@ -2484,9 +2487,6 @@
         </locale>
         <locale name="blockSlot.backgroundOverlay.color" context="administration">
             <it><![CDATA[Colore]]></it>
-        </locale>
-        <locale name="blockSlot.backgroundOverlay.opacity" context="administration">
-            <it><![CDATA[Opacità]]></it>
         </locale>
         <locale name="blockSlot.textColor.section" context="administration">
             <it><![CDATA[Colore del testo]]></it>

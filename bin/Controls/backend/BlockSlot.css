@@ -441,30 +441,10 @@
     gap: 0.45rem;
 }
 
-.quiqqer-bricks-blockSlot-popupFieldHeader {
-    align-items: center;
-    display: flex;
-    gap: 0.5rem;
-    justify-content: space-between;
-}
-
 .quiqqer-bricks-blockSlot-popupLabel {
     color: #253443;
     font-size: 0.92rem;
     font-weight: 600;
-}
-
-.quiqqer-bricks-blockSlot-popupRangeValue {
-    color: #52606d;
-    font-size: 0.82rem;
-    font-weight: 600;
-}
-
-/* the picker brings its own flex layout; only the spacing between swatch and
-   buttons is specific to this dialog */
-.quiqqer-bricks-blockSlot-popupField .qui-controls-colorpicker {
-    align-items: stretch;
-    gap: 0.5rem;
 }
 
 .quiqqer-bricks-blockSlot-popupSelect,

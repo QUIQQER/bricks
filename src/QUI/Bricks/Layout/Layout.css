@@ -19,7 +19,7 @@
     --_bgFit: var(--quiqqer-bricks-layout-background-fit, cover);
     --_bgPos: var(--quiqqer-bricks-layout-background-position, center center);
     --_bgOverlayColor: var(--quiqqer-bricks-layout-background-overlay-color, #000000);
-    --_bgOverlayOpacity: var(--quiqqer-bricks-layout-background-overlay-opacity, 0);
+    --_bgOverlayOpacity: var(--quiqqer-bricks-layout-background-overlay-opacity, 1);
     --_imgFit: var(--quiqqer-bricks-layout-image-fit, cover);
     --_imgWidth: var(--quiqqer-bricks-layout-image-width, 100%);
     --_imgHeight: var(--quiqqer-bricks-layout-image-height, none);
@@ -86,6 +86,9 @@
 }
 
 .quiqqer-bricks-layout__content {
+    /* Nested content must not inherit the enclosing tile's link elevation. */
+    --_q-layout-link-position: initial;
+    --_q-layout-link-z: initial;
     align-items: center;
     color: var(--_textColor);
     display: grid;
@@ -121,7 +124,12 @@
 .quiqqer-bricks-layout__link {
     inset: 0;
     position: absolute;
-    z-index: 5;
+    z-index: 1;
+}
+
+.quiqqer-bricks-layout__link ~ .quiqqer-bricks-layout__content {
+    --_q-layout-link-position: relative;
+    --_q-layout-link-z: 2;
 }
 
 /* hover effect for images, when url is set */
@@ -138,15 +146,20 @@
 }
 /* END hover effect for images, when url is set */
 
-.quiqqer-bricks-layout__content a,
-.quiqqer-bricks-layout__content button,
-.quiqqer-bricks-layout__content .btn,
-.quiqqer-bricks-layout__content input,
-.quiqqer-bricks-layout__content select,
-.quiqqer-bricks-layout__content textarea,
-.quiqqer-bricks-layout__content [role="button"] {
-    position: relative;
-    z-index: 10;
+/* Embedded controls keep their own positioning and stacking rules. */
+@layer quiqqer-bricks-layout-links {
+    .quiqqer-bricks-layout__content :is(
+        a,
+        button,
+        .btn,
+        input,
+        select,
+        textarea,
+        [role="button"]
+    ):not(.quiqqer-bricks-layout__link) {
+        position: var(--_q-layout-link-position, revert-layer);
+        z-index: var(--_q-layout-link-z, revert-layer);
+    }
 }
 
 .quiqqer-bricks-layout__area--image .quiqqer-bricks-layout__content > picture {

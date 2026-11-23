@@ -2064,6 +2064,9 @@ This content does not replace the block content. You can still place the brick t
             <en><![CDATA[Displays pinned blog and news posts before the other pages. The selected sort order is preserved within both groups.]]></en>
         </locale>
         <!-- show pagination / sheets -->
+        <locale name="brick.list.filterPageSize" context="administration">
+            <en><![CDATA[Filter results per page (when pagination is enabled)]]></en>
+        </locale>
         <locale name="brick.showSheets" context="administration">
             <en><![CDATA[Show sheets (pagination)]]></en>
         </locale>
@@ -2561,9 +2564,6 @@ This content does not replace the block content. You can still place the brick t
         </locale>
         <locale name="blockSlot.backgroundOverlay.color" context="administration">
             <en><![CDATA[Color]]></en>
-        </locale>
-        <locale name="blockSlot.backgroundOverlay.opacity" context="administration">
-            <en><![CDATA[Opacity]]></en>
         </locale>
         <locale name="blockSlot.textColor.section" context="administration">
             <en><![CDATA[Text color]]></en>

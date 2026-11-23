@@ -1582,14 +1582,6 @@ define('package/quiqqer/bricks/bin/Controls/backend/LayoutSettings', [
                 imagePosition = BACKGROUND_POSITION_CENTER;
             }
 
-            let backgroundOverlayOpacity = parseInt(area.backgroundOverlayOpacity, 10);
-
-            if (isNaN(backgroundOverlayOpacity)) {
-                backgroundOverlayOpacity = 100;
-            }
-
-            backgroundOverlayOpacity = Math.max(0, Math.min(100, backgroundOverlayOpacity));
-
             const link = this.$normalizeLink(area.link);
 
             const normalized = {
@@ -1612,10 +1604,10 @@ define('package/quiqqer/bricks/bin/Controls/backend/LayoutSettings', [
                 backgroundImageFit: backgroundImageFit,
                 backgroundImagePosition: backgroundImagePosition,
                 backgroundOverlayEnabled: !!area.backgroundOverlayEnabled,
-                backgroundOverlayColor: area.backgroundOverlayColor || '#000000',
-                backgroundOverlayOpacity: backgroundOverlayOpacity,
+                backgroundOverlayColor: typeof area.backgroundOverlayColor === 'string'
+                    ? area.backgroundOverlayColor : '#000000',
                 backgroundColorEnabled: !!area.backgroundColorEnabled,
-                backgroundColor: area.backgroundColor || '#000000',
+                backgroundColor: typeof area.backgroundColor === 'string' ? area.backgroundColor : '#000000',
                 textColor: area.textColor ? area.textColor.toString().trim() : '',
                 customMinHeightEnabled: !!area.customMinHeightEnabled,
                 customMinHeightPreset: this.$normalizeTileMinHeightPreset(area.customMinHeightPreset),

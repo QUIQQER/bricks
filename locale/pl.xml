@@ -2002,6 +2002,9 @@
             <pl><![CDATA[Wyświetla przypięte wpisy blogowe i aktualności przed pozostałymi stronami. Wybrana kolejność sortowania zostaje zachowana w obu grupach.]]></pl>
         </locale>
         <!-- show pagination / sheets -->
+        <locale name="brick.list.filterPageSize" context="administration">
+            <pl><![CDATA[Wyniki filtrowania na stronę (przy włączonej paginacji)]]></pl>
+        </locale>
         <locale name="brick.showSheets" context="administration">
             <pl><![CDATA[Pokaż paginację]]></pl>
         </locale>
@@ -2487,9 +2490,6 @@
         </locale>
         <locale name="blockSlot.backgroundOverlay.color" context="administration">
             <pl><![CDATA[Kolor]]></pl>
-        </locale>
-        <locale name="blockSlot.backgroundOverlay.opacity" context="administration">
-            <pl><![CDATA[Krycie]]></pl>
         </locale>
         <locale name="blockSlot.textColor.section" context="administration">
             <pl><![CDATA[Kolor tekstu]]></pl>
