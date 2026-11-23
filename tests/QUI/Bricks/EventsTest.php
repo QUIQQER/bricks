@@ -57,27 +57,33 @@ class EventsTest extends TestCase
         $Site = $this->createMock(\QUI\Interfaces\Projects\Site::class);
         $Site->method('getId')->willReturn(42);
 
+        $Project = $this->createMock(Project::class);
+        $Project->method('getName')->willReturn('test');
+        $Project->method('getLang')->willReturn('de');
+        $Site->method('getProject')->willReturn($Project);
+
         $Reflection = new \ReflectionClass(Events::class);
         $savedProperty = $Reflection->getProperty('saved');
         $savedProperty->setAccessible(true);
-        $savedProperty->setValue(null, [42 => true]);
+        $savedProperty->setValue(null, ['test/de/42' => true]);
 
         Events::onSiteSave($Site);
 
         $saved = $savedProperty->getValue();
         $this->assertIsArray($saved);
-        $this->assertArrayHasKey(42, $saved);
+        $this->assertArrayHasKey('test/de/42', $saved);
     }
 
-    /** @return iterable<string, array{bool}> */
+    /** @return iterable<string, array{bool, bool}> */
     public static function saveUserContexts(): iterable
     {
-        yield 'explicit user with anonymous session' => [true];
-        yield 'legacy call without user' => [false];
+        yield 'explicit user with anonymous session' => [true, true];
+        yield 'legacy call without user' => [false, true];
+        yield 'area without inheritance' => [true, false];
     }
 
     #[DataProvider('saveUserContexts')]
-    public function testOnSiteSavePreservesUserForPermissionAndNestedSave(bool $explicitUser): void
+    public function testOnSiteSavePreservesUserForPermissionAndNestedSave(bool $explicitUser, bool $inherits): void
     {
         $User = $this->createMock(QUI\Users\User::class);
         $User->method('isSU')->willReturn(true);
@@ -85,8 +91,10 @@ class EventsTest extends TestCase
         Permission::setUser($explicitUser ? $Nobody : $User);
 
         $Result = $this->createMock(Result::class);
-        $Result->method('fetchFirstColumn')->willReturn([]);
+        $Result->method('fetchAllKeyValue')->willReturn([]);
         $Connection = $this->createMock(Connection::class);
+        $Connection->expects(self::never())->method('insert');
+        $Connection->expects($inherits ? self::once() : self::never())->method('delete');
         $Connection->method('getDatabasePlatform')->willReturn(new SQLitePlatform());
         $Connection->method('executeQuery')->willReturn($Result);
         $Connection->method('createQueryBuilder')->willReturnCallback(
@@ -111,7 +119,7 @@ class EventsTest extends TestCase
 
         $Manager = $this->createMock(Manager::class);
         $Manager->method('getAreasByProject')->willReturn([
-            ['name' => 'content', 'inheritance' => true]
+            ['name' => 'content', 'inheritance' => $inherits]
         ]);
         $Manager->method('getBrickById')->willReturn($this->createMock(Brick::class));
         $Manager->method('createUniqueSiteBrick')->willReturn('phpunit-brick-uid');
