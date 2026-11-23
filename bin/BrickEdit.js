@@ -1311,8 +1311,7 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                 let i, c, len, cLen, attr, Row, text, description, Value, setting,
                     extraFieldId, dataAttributes;
 
-                const self = this,
-                    id = this.getId(),
+                const id = this.getId(),
                     Form = this.getContent().getElement('form');
 
                 // extra settings
@@ -1444,15 +1443,18 @@ define('package/quiqqer/bricks/bin/BrickEdit', [
                     Form
                 );
 
-                // parse controls
+                const brick = this.getAttribute('data').attributes;
+                const projectName = this.getAttribute('projectName') || brick.project;
+                const projectLang = this.getAttribute('projectLang') || brick.lang;
+                const Project = Projects.get(projectName, projectLang);
+                if (projectName && projectLang) {
+                    Form.dataset.projectName = projectName;
+                    Form.dataset.projectLang = projectLang;
+                }
+
                 QUI.parse(TableExtra).then(function () {
                     return ControlUtils.parse(TableExtra);
                 }).then(function () {
-                    const Project = Projects.get(
-                        self.getAttribute('projectName'),
-                        self.getAttribute('projectLang')
-                    );
-
                     // set project to the controls
                     TableExtra.getElements('[data-quiid]').each(function (Elm) {
                         const Control = QUI.Controls.getById(
