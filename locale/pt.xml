@@ -1999,6 +1999,9 @@
             <pt><![CDATA[Apresenta as publicações de blogue e notícias fixadas antes das restantes páginas. A ordenação selecionada é mantida em ambos os grupos.]]></pt>
         </locale>
         <!-- show pagination / sheets -->
+        <locale name="brick.list.filterPageSize" context="administration">
+            <pt><![CDATA[Resultados filtrados por página (com paginação ativa)]]></pt>
+        </locale>
         <locale name="brick.showSheets" context="administration">
             <pt><![CDATA[Mostrar paginação]]></pt>
         </locale>

@@ -37,6 +37,9 @@ use function trim;
  */
 class Brick extends QUI\QDOM
 {
+    /** Count dynamic brick renders so their enclosing HTML stays dynamic as well. */
+    private static int $dynamicRenders = 0;
+
     /**
      * internal brick id
      *
@@ -499,6 +502,11 @@ class Brick extends QUI\QDOM
 
         $cacheName = $this->getCacheName($settings);
 
+        if (!$this->getAttribute('cacheable')) {
+            self::$dynamicRenders++;
+        }
+        $beforeChildren = self::$dynamicRenders;
+
         if ($this->getAttribute('cacheable')) {
             try {
                 $data = QUI\Cache\Manager::get($cacheName);
@@ -574,7 +582,7 @@ class Brick extends QUI\QDOM
             // only write when the brick is actually cacheable; a render that
             // carries request specific settings would otherwise still mint an
             // entry, keyed by those settings
-            if ($this->getAttribute('cacheable')) {
+            if ($this->getAttribute('cacheable') && $beforeChildren === self::$dynamicRenders) {
                 QUI\Cache\Manager::set($cacheName, [
                     'html' => $result,
                     'cssClasses' => $this->cssClasses,
@@ -637,7 +645,7 @@ class Brick extends QUI\QDOM
 
         // see above: a non-cacheable render must not write either, otherwise
         // request specific settings end up in the shared cache
-        if ($this->getAttribute('cacheable')) {
+        if ($this->getAttribute('cacheable') && $beforeChildren === self::$dynamicRenders) {
             QUI\Cache\Manager::set($cacheName, [
                 'html' => $result,
                 'cssClasses' => $this->cssClasses,
@@ -711,7 +719,7 @@ class Brick extends QUI\QDOM
             . '/'
             . $this->hash
             . '/' . md5(serialize($settings))
-            . '/html-v2/' . md5(serialize($context));
+            . '/html-v3/' . md5(serialize($context));
     }
 
     protected function extendCustomCSS(string $result = ''): string

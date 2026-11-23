@@ -25,6 +25,7 @@ define('package/quiqqer/bricks/bin/Site/Category', [
 
         Binds: [
             '$onInject',
+            '$onSiteSave',
             '$onDestroy'
         ],
 
@@ -72,6 +73,8 @@ define('package/quiqqer/bricks/bin/Site/Category', [
             const self = this,
                 Site = this.getAttribute('Site'),
                 Project = Site.getProject();
+
+            Site.addEvent('save', this.$onSiteSave);
 
             let layout = Site.getAttribute('layout');
 
@@ -152,6 +155,7 @@ define('package/quiqqer/bricks/bin/Site/Category', [
          * event : on destroy
          */
         $onDestroy: function () {
+            this.getAttribute('Site').removeEvent('save', this.$onSiteSave);
             this.updateSite();
 
             // destroy areas
@@ -179,10 +183,17 @@ define('package/quiqqer/bricks/bin/Site/Category', [
             for (i = 0, len = this.areas.length; i < len; i++) {
                 AC = this.areas[i];
 
-                areas[AC.getAttribute('name')] = AC.getData();
+                areas[AC.getAttribute('name')] = AC.getData(true);
             }
 
             Site.setAttribute('quiqqer.bricks.areas', JSON.encode(areas));
+        },
+
+        $onSiteSave: function (Site) {
+            const areas = JSON.parse(Site.getAttribute('quiqqer.bricks.areas') || '{}');
+            for (const area of this.areas) {
+                area.applySavedPlacementIds(areas[area.getAttribute('name')] || []);
+            }
         },
 
         /**

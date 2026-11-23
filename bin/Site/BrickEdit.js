@@ -113,6 +113,7 @@ define('package/quiqqer/bricks/bin/Site/BrickEdit', [
             }
 
             const self = this;
+            const Project = this.getAttribute('Site').getProject();
 
             this.Loader.show();
 
@@ -129,15 +130,15 @@ define('package/quiqqer/bricks/bin/Site/BrickEdit', [
             }).then(function (html) {
                 self.getElm().set('html', html);
 
-                QUIFormUtils.setDataToForm(
-                    self.$globalBrickSettings,
-                    self.getElm().getElement('form')
-                );
+                const Form = self.getElm().getElement('form');
+                Form.dataset.projectName = Project.getName();
+                Form.dataset.projectLang = Project.getLang();
+                QUIFormUtils.setDataToForm(self.$globalBrickSettings, Form);
 
                 if (self.getAttribute('customfields')) {
                     QUIFormUtils.setDataToForm(
                         self.getAttribute('customfields'),
-                        self.getElm().getElement('form')
+                        Form
                     );
                 }
 
@@ -147,8 +148,7 @@ define('package/quiqqer/bricks/bin/Site/BrickEdit', [
             }).then(function () {
                 let i, len, Control;
 
-                const Project = self.getAttribute('Site').getProject(),
-                    controls = self.getElm().getElements('[data-quiid]'),
+                const controls = self.getElm().getElements('[data-quiid]'),
                     Visibility = self.getElm().getElement('[name="visibility"]');
 
                 for (i = 0, len = controls.length; i < len; i++) {

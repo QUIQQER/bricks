@@ -107,6 +107,66 @@ class DatabaseAccessTest extends TestCase
         parent::tearDown();
     }
 
+    public function testNonInheritablePlacementsKeepSeparateUuidsWhenReordered(): void
+    {
+        $areas = json_encode(['noSidebar' => [
+            ['brickId' => $this->brickId, 'customfields' => ['max' => 5, 'inheritance' => 1]],
+            ['brickId' => $this->brickId, 'customfields' => ['max' => 15]]
+        ]], JSON_THROW_ON_ERROR);
+        $Site = $this->createMock(QUI\Interfaces\Projects\Site::class);
+        $Site->method('getId')->willReturn(random_int(1800000000, 2000000000));
+        $Site->method('getProject')->willReturn($this->Project);
+        $Site->method('getAttribute')->with('quiqqer.bricks.areas')->willReturnCallback(
+            static function () use (&$areas): string {
+                return $areas;
+            }
+        );
+        $Site->method('setAttribute')->willReturnCallback(
+            static function ($name, $value) use (&$areas, $Site) {
+                $areas = $value;
+                return $Site;
+            }
+        );
+        $User = $this->createMock(QUI\Users\User::class);
+        $User->method('isSU')->willReturn(true);
+
+        $PreviousManager = Manager::$BrickManager;
+        $Manager = $this->getMockBuilder(Manager::class)
+            ->setConstructorArgs([true])
+            ->onlyMethods(['getAreasByProject'])
+            ->getMock();
+        $Manager->method('getAreasByProject')->willReturn([['name' => 'noSidebar', 'inheritance' => false]]);
+        $Connection = QUI::getDataBaseConnection();
+        $Connection->beginTransaction();
+        Manager::$BrickManager = $Manager;
+
+        try {
+            QUI\Bricks\Events::onSiteSave($Site, $User);
+            $placements = json_decode($areas, true, flags: JSON_THROW_ON_ERROR)['noSidebar'];
+            [$first, $second] = array_column($placements, 'uid');
+            self::assertTrue(\Ramsey\Uuid\Uuid::isValid($first));
+            self::assertTrue(\Ramsey\Uuid\Uuid::isValid($second));
+            self::assertNotSame($first, $second);
+
+            $areas = json_encode(['noSidebar' => array_reverse($placements)], JSON_THROW_ON_ERROR);
+            QUI\Bricks\Events::onSiteSave($Site, $User);
+            self::assertSame(
+                [$second, $first],
+                array_column(json_decode($areas, true, flags: JSON_THROW_ON_ERROR)['noSidebar'], 'uid')
+            );
+            self::assertSame('5', $Manager->getBrickByUID($first)->getSetting('max'));
+            self::assertSame('15', $Manager->getBrickByUID($second)->getSetting('max'));
+
+            $areas = '[]';
+            QUI\Bricks\Events::onSiteSave($Site, $User);
+            self::assertFalse($Manager->existsUniqueBrickId($first));
+            self::assertFalse($Manager->existsUniqueBrickId($second));
+        } finally {
+            Manager::$BrickManager = $PreviousManager;
+            $Connection->rollBack();
+        }
+    }
+
     public function testManagerReadsBrickAndUniqueIdThroughDbal(): void
     {
         $Brick = $this->Manager->getBrickById($this->brickId);
