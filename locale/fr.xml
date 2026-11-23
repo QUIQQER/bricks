@@ -1999,6 +1999,9 @@
             <fr><![CDATA[Affiche les articles de blog et les actualités épinglés avant les autres pages. Le tri choisi est conservé dans les deux groupes.]]></fr>
         </locale>
         <!-- show pagination / sheets -->
+        <locale name="brick.list.filterPageSize" context="administration">
+            <fr><![CDATA[Résultats filtrés par page (si la pagination est activée)]]></fr>
+        </locale>
         <locale name="brick.showSheets" context="administration">
             <fr><![CDATA[Afficher la pagination]]></fr>
         </locale>

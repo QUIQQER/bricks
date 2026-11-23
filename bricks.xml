@@ -1698,6 +1698,26 @@
                     <locale group="quiqqer/bricks" var="brick.control.setting.site"/>
                 </setting>
 
+                <setting name="filter" type="select" default="disabled">
+                    <locale group="quiqqer/sitetypes" var="quiqqer.sitetypes.list.settings.filter"/>
+                    <option value="disabled">
+                        <locale group="quiqqer/sitetypes" var="quiqqer.sitetypes.list.settings.filter.disabled"/>
+                    </option>
+                    <option value="input">
+                        <locale group="quiqqer/sitetypes" var="quiqqer.sitetypes.list.settings.filter.input"/>
+                    </option>
+                    <option value="tags">
+                        <locale group="quiqqer/sitetypes" var="quiqqer.sitetypes.list.settings.filter.tags"/>
+                    </option>
+                    <option value="all">
+                        <locale group="quiqqer/sitetypes" var="quiqqer.sitetypes.list.settings.filter.all"/>
+                    </option>
+                </setting>
+
+                <setting name="tags" data-qui="package/quiqqer/tags/bin/tags/Select" data-consider-max-amount="0">
+                    <locale group="quiqqer/sitetypes" var="quiqqer.sitetypes.list.settings.tags"/>
+                </setting>
+
                 <!-- order -->
                 <setting name="order" type="select">
                     <locale group="quiqqer/bricks" var="brick.control.setting.order"/>
@@ -1984,6 +2004,10 @@
                 <setting name="showSheets" type="checkbox">
                     <locale group="quiqqer/bricks"
                             var="brick.showSheets"/>
+                </setting>
+
+                <setting name="filterPageSize" type="number" min="1">
+                    <locale group="quiqqer/bricks" var="brick.list.filterPageSize"/>
                 </setting>
 
             </settings>

@@ -2074,6 +2074,9 @@ M&ouml;chten Sie die Bausteine aus der Bausteinzone entfernen?</p>]]></de>
             <de><![CDATA[Zeigt angeheftete Blog- und News-Beiträge vor den übrigen Seiten. Innerhalb beider Gruppen bleibt die gewählte Sortierung erhalten.]]></de>
         </locale>
         <!-- show pagination / sheets -->
+        <locale name="brick.list.filterPageSize" context="administration">
+            <de><![CDATA[Filterergebnisse pro Seite (bei aktiver Blätterfunktion)]]></de>
+        </locale>
         <locale name="brick.showSheets" context="administration">
             <de><![CDATA[Seitennummerierung anzeigen]]></de>
         </locale>
