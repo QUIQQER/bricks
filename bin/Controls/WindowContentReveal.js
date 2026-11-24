@@ -7,16 +7,16 @@ define('package/quiqqer/bricks/bin/Controls/WindowContentReveal', ['Locale'], fu
     return {
         /** Open immediately unless preparation was explicitly requested. */
         open: function (win, loadContent, openWindow) {
-            const opener = document.activeElement;
             const elm = win.getElm();
             const content = win.getContent();
             const closeButton = elm.querySelector('[name="close"]');
-            win.$contentOpener = opener;
+            const prepareContent = [true, 1, '1'].includes(win.getAttribute('prepareContent'));
+            if (prepareContent) {
+                win.$contentOpener = document.activeElement;
+            }
             win.setAttribute('contentCancelled', false);
             win.setAttribute('contentPending', true);
             content.setAttribute('aria-busy', 'true');
-            elm.setAttribute('role', 'dialog');
-            elm.setAttribute('aria-modal', 'true');
 
             if (!elm.getAttribute('aria-label')) {
                 elm.setAttribute('aria-label', win.getAttribute('title') || Locale.get('quiqqer/bricks', 'window.title'));
@@ -31,9 +31,14 @@ define('package/quiqqer/bricks/bin/Controls/WindowContentReveal', ['Locale'], fu
             }
 
             const keepLoadingFocus = (event) => {
-                if (event.key === 'Tab' && win.getAttribute('contentPending')) {
-                    event.preventDefault();
-                    closeButton?.focus({preventScroll: true});
+                if (event.key !== 'Tab' || event.defaultPrevented || !win.getAttribute('contentPending')) {
+                    return;
+                }
+
+                event.preventDefault();
+                closeButton?.focus({preventScroll: true});
+                if (document.activeElement !== closeButton) {
+                    elm.focus({preventScroll: true});
                 }
             };
             elm.addEventListener('keydown', keepLoadingFocus);
@@ -47,9 +52,6 @@ define('package/quiqqer/bricks/bin/Controls/WindowContentReveal', ['Locale'], fu
                     elm.removeEventListener('keydown', keepLoadingFocus);
                     win.removeEvent('closeBegin', cancel);
                     win.removeEvent('destroy', cancel);
-                    if (elm.contains(document.activeElement) && opener?.isConnected) {
-                        opener.focus({preventScroll: true});
-                    }
                     resolve();
                 };
                 win.addEvent('closeBegin', cancel);
@@ -70,7 +72,7 @@ define('package/quiqqer/bricks/bin/Controls/WindowContentReveal', ['Locale'], fu
                 content.replaceChildren(message);
             };
 
-            if ([true, 1, '1'].includes(win.getAttribute('prepareContent'))) {
+            if (prepareContent) {
                 const prepared = this.prepare(win, loadContent).then(() => {
                     if (!win.getAttribute('contentCancelled')) {
                         content.removeAttribute('aria-busy');
@@ -86,7 +88,6 @@ define('package/quiqqer/bricks/bin/Controls/WindowContentReveal', ['Locale'], fu
             }
 
             const opening = openWindow();
-            closeButton?.focus({preventScroll: true});
             // Keep loading independent of the opening promise: callers can release
             // their click lock once the window is visible, even on a slow request.
             Promise.resolve().then(loadContent).then(async () => {
