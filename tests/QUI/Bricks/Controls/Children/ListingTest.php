@@ -11,6 +11,19 @@ use QUI\Projects\Project;
 
 class ListingTest extends TestCase
 {
+    public function testSmallCardGapOptionUsesTheSitetypesPreset(): void
+    {
+        $document = new \DOMDocument();
+        self::assertTrue($document->load(dirname(__DIR__, 5) . '/bricks.xml'));
+
+        $xpath = new \DOMXPath($document);
+        $option = '/quiqqer/bricks/brick[@control="\\QUI\\Bricks\\Controls\\Children\\Listing"]'
+            . '/settings/setting[@name="cardGap"]/option'
+            . '[locale[@group="quiqqer/sitetypes" and @var="list.settings.cards.gap.s"]]';
+
+        self::assertSame('s', $xpath->evaluate('string(' . $option . '/@value)'));
+    }
+
     public function testSavedPlacementsResolveTheirOwnSettingsAndLegacyPlacementsUseNavigation(): void
     {
         $Project = $this->createMock(Project::class);

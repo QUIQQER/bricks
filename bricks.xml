@@ -1924,8 +1924,8 @@
                     <option value="xs">
                         <locale group="quiqqer/sitetypes" var="list.settings.cards.gap.xs"/>
                     </option>
-                    <option value="small">
-                        <locale group="quiqqer/sitetypes" var="list.settings.cards.gap.small"/>
+                    <option value="s">
+                        <locale group="quiqqer/sitetypes" var="list.settings.cards.gap.s"/>
                     </option>
                     <option value="normal">
                         <locale group="quiqqer/sitetypes" var="list.settings.cards.gap.normal"/>
